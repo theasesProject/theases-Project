@@ -1,23 +1,24 @@
 module.exports = (sequelize,DataTypes,connection)=>{
 const User= connection.define('User',{
-firstName:{
-    type:DataTypes.STRING,
-    allowNull:false
-},
-lastName:{
+userName:{
     type:DataTypes.STRING,
     allowNull:false
 },
 phoneNumber:{
     type:DataTypes.STRING,
-    allowNull:false
+    allowNull:false,
+    unique:true
+
 },
 password:{
     type:DataTypes.STRING,
-    allowNull:false},
+    allowNull:false
+},
 email:{
     type:DataTypes.STRING,
-    allowNull:false
+    allowNull:false,
+    unique:true
+
 },
 dateOfBirth:{
     type:DataTypes.Date,
@@ -29,8 +30,12 @@ avatar:{
 }
 ,
 type:{
-    type:DataTypes.STRING,
+    type:DataTypes.ENUM("client","agency"),
     defaultValue:"client"
+}, 
+idCard:{
+    type:DataTypes.STRING,
+    allowNull:false
 }
 
 

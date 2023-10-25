@@ -1,6 +1,6 @@
 const express=require('express')
 const http=require('http')
-require("./model/Model")
+require("./models")
 const cors=require('cors')
 const app=express()
 const port=5000

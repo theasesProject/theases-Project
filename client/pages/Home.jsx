@@ -8,7 +8,5 @@ function Home({ navigation }) {
     );
   }
   
-  Home.navigationOptions = {
-    title: 'Home',
-  };
+
   export default Home

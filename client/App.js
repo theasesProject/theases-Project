@@ -3,17 +3,28 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native'
 import Home from './pages/Home.jsx';
-const Stack = createStackNavigator();
+
+//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
+
+"DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT"
+
+import SignUp from "./pages/signUp.jsx";
+
+"DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT"
+
+//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
+
 import { createStackNavigator } from '@react-navigation/stack';
- function App() {
+const Stack = createStackNavigator();
+function App() {
 
   return (
     <NavigationContainer>
-       <Stack.Navigator    initialRouteName="Home">
-      <Stack.Screen name="Home" component={Home} />
-     
-    </Stack.Navigator>
-  </NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name='SignUp' component={SignUp} options={{headerShown:false}} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

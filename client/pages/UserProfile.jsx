@@ -1,10 +1,19 @@
-import { View, Text, Button, Image, StyleSheet,TouchableOpacity  } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  Button,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import img from "../assets/Untitled.jpg";
 import edpr from "../assets/edit.png";
-import car from "../assets/carselim.png";
-import etoile from "../assets/etoile.png";
+import profil from "../assets/profile.png";
 import React, { useState } from "react";
-import Modal from 'react-native-modal';
+import Modal from "react-native-modal";
+import UserProfilecard from "./UserProfileCard";
 function Userprofile({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -12,9 +21,8 @@ function Userprofile({ navigation }) {
     setModalVisible(!isModalVisible);
   };
   return (
-    <View style={{marginTop:20}}>
+    <View style={{ marginTop: 20 }}>
       <View style={{ display: "flex", flexDirection: "row" }}>
-
         <View>
           <Image source={img} style={styles.image} />
         </View>
@@ -24,98 +32,113 @@ function Userprofile({ navigation }) {
         </View>
 
         <View style={styles.editProfile}>
-          <Text> Edit Profile</Text> 
+          <Text> Edit Profile</Text>
           <TouchableOpacity onPress={toggleModal}>
-         <Image source={edpr} style={styles.edit}  />
-         </TouchableOpacity>
-         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-  
+            <Image source={edpr} style={styles.edit} />
+          </TouchableOpacity>
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Modal isVisible={isModalVisible}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    padding: 20,
+                    gap: 20,
+                    width: 200,
+                    height: 250,
+                    borderRadius: 25,
+                  }}
+                >
+                  <View>
+                 <Image source={profil}style={{width:20,height:20}}/>
+                   <Text style={{ fontSize: 20 }}>Profile</Text>
+                   </View>
 
-      <Modal isVisible={isModalVisible}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <View style={{ backgroundColor: 'white', padding: 20 ,gap:20,width:200,height:250, borderRadius: 25}}>
-     
-            <Text style={{fontSize:20 }}>Profile</Text>
-            <Text style={{fontSize:20 }}>My bookings</Text>
-            <Text style={{fontSize:20 }}>Settings</Text>
-            <Text style={{fontSize:20 }}>Logout</Text>
+                   
+                  <Text style={{ fontSize: 20 }}>My bookings</Text>
+                  <Text style={{ fontSize: 20 }}>Settings</Text>
+                  <Text style={{ fontSize: 20 }}>Logout</Text>
 
-            <Button title="close" style={{  borderRadius: 25}} onPress={toggleModal} />
+                  <Button
+                    title="close"
+                    style={{ borderRadius: 25 }}
+                    onPress={toggleModal}
+                  />
+                </View>
+              </View>
+            </Modal>
           </View>
         </View>
-      </Modal>
-
-    </View>  
-        </View>
-
       </View>
 
       <View style={styles.line} />
 
-      <View style={styles.card}>
-      <View>
-          <Image source={car} style={styles.car} />
-        </View>
-<View>
-  <Text style={styles.cartext}>CarName</Text>
-<Image source={etoile} style={styles.etoil}/>
-<Text style={styles.numetoile}>3 (75 reviews)</Text>
-<Text style={styles.price}>$220/day</Text>
-</View>
 
-    </View>
+      <ScrollView style={styles.scrollContainer}>
+   
+      <UserProfilecard/>
+        <UserProfilecard />
+        <UserProfilecard />
+        <UserProfilecard />
+        <UserProfilecard />   
+       
+<UserProfilecard/>
+        <UserProfilecard />
+        <UserProfilecard />
+        <UserProfilecard />
+        <UserProfilecard />
+      </ScrollView>
+
+
 
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  price:{
-    marginTop:20,
-    marginLeft:10
+  scrollContainer: {
+    height: "80%", // Adjust the height as needed
   },
-  numetoile:{
-    marginTop:-25,
-    marginLeft:40, 
-  }
-  ,cartext:{
-    marginTop:5,
-    marginLeft:5,
+  price: {
+    marginTop: 20,
+    marginLeft: 10,
   },
-  etoil:{
-    marginTop:5,
-    marginLeft:5,
-    width:30,
-    height:30,
+  numetoile: {
+    marginTop: -25,
+    marginLeft: 40,
   },
-car:{
-  width: 160,
-  height: 148,
-  borderRadius: 25,
-marginTop: -10,
-marginLeft:-10
-}, edit:{
-
+  cartext: {
+    marginTop: 5,
+    marginLeft: 5,
+  },
+  etoil: {
+    marginTop: 5,
+    marginLeft: 5,
     width: 30,
     height: 30,
-marginLeft: 160,
-marginTop:-25
   },
-  card:{
-    width: 333,
-    height: 150,
-    backgroundColor: 'white',
-
-    shadowColor: 'black', // Shadow color
-    padding: 10,
-    display: "flex", flexDirection: "row",
-    padding: 10,
+  car: {
+    width: 160,
+    height: 148,
     borderRadius: 25,
-    marginLeft: 15,
-    marginTop: 15,  
-
+    marginTop: -10,
+    marginLeft: -10,
   },
-  
+  edit: {
+    width: 30,
+    height: 30,
+    marginLeft: 160,
+    marginTop: -25,
+  },
+
   line: {
     borderBottomColor: "grey", // Change the color as needed
     borderBottomWidth: 1, // Change the width as needed
@@ -128,10 +151,9 @@ marginTop:-25
     width: 100,
     height: 100,
 
-    elevation: 5, // Controls the shadow depth
-    shadowColor: 'black', // Shadow color
+    shadowColor: "black", // Shadow color
     padding: 10,
- 
+
     padding: 10,
     borderRadius: 25,
     marginLeft: 15,

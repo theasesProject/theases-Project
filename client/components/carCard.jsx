@@ -45,42 +45,7 @@ const handleStarPress = () => {
   </View>
   
     </View>
-//         <View style={styles.comp}>
-// <View  style={styles.Card}>
-     
-   
-// <View style={styles.image}>
-// <TouchableOpacity onPress={handleHeartPress}>
-//      <Image source={heartImage} style={styles.emptyHeart} />
-//      </TouchableOpacity>
-//        <Image
-//         source={car2}  
-//   style={{ width: "83%", height: "70%",marginLeft:"8%"}}
-//  />
-//  </View>
 
-//  <View  style={styles.details}>
-   
-//  <View  style={styles.column}>
-//    <Text style={styles.name}>{oneCar.model}</Text>
-//    <Text style={styles.type}>{oneCar.typeOfFuel}</Text>
-//    </View>
-
-//  <View style={styles.column}> 
-//  <View style={styles.rev}>
-//  <TouchableOpacity onPress={handleStarPress}>
-//      <Image source={starImage} style={{ width: 32, height: 32 }} />
-//    </TouchableOpacity>
-//  <Text style={styles.review}>4.8(150Revieuw)</Text>
-//  </View>
-//    <Text style={styles.price}>${oneCar.price}/{oneCar.period}</Text>
-
-//    </View>
-
-//  </View>
-
-//  </View>
-//  </View>
     )
     }
 
@@ -124,7 +89,7 @@ const styles = StyleSheet.create({
   marginLeft:-10
   },
     card: {
-      width: 333,
+      width: "100%",
       height: 200,
       backgroundColor: 'white',
       shadowColor: 'black',
@@ -133,7 +98,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       padding: 10,
       borderRadius: 10,
-      marginLeft: 15,
+      // marginLeft: 15,
       marginTop: 15,
     },
 

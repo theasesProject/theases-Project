@@ -12,7 +12,8 @@ import { createStackNavigator } from '@react-navigation/stack';
     <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen  
+options={{ headerShown: false }} name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   </Provider>

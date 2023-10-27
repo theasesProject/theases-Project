@@ -1,10 +1,16 @@
-import { View ,Text} from "react-native";
+import { View ,Text, Button} from "react-native";
+import * as ReactNative from 'react-native';
 
 function Home({ navigation }) {
     return (
-     <View>
-        <Text>hi</Text>
-     </View>
+     <ReactNative.View>
+        <ReactNative.Button title="Go to Sign Up page" onPress={()=>navigation.navigate('SignUp')}></ReactNative.Button>
+        <Button
+      title="Go to Details"
+      onPress={() => navigation.navigate('Userprofile')}
+    />
+        <ReactNative.Button title="Login page"></ReactNative.Button>
+     </ReactNative.View>
     );
   }
   

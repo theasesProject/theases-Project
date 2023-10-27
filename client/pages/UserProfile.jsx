@@ -1,5 +1,5 @@
 import { View, Text, Button, Image, StyleSheet,TouchableOpacity  } from "react-native";
-import img from "../photos/Untitled.jpg";
+import img from "../assets/Untitled.jpg";
 import edpr from "../assets/edit.png";
 import car from "../assets/carselim.png";
 import etoile from "../assets/etoile.png";

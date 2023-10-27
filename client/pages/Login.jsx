@@ -4,10 +4,7 @@ function Login({ navigation }) {
     return (
      <View>
         <Text>hi</Text>
-        <Button
-      title="Go to Details"
-      onPress={() => navigation.navigate('Home')}
-    />
+     
      </View>
     );
   }

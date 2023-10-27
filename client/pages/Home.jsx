@@ -5,7 +5,10 @@ function Home({ navigation }) {
     return (
      <ReactNative.View>
         <ReactNative.Button title="Go to Sign Up page" onPress={()=>navigation.navigate('SignUp')}></ReactNative.Button>
-        
+        <Button
+      title="Go to Details"
+      onPress={() => navigation.navigate('Userprofile')}
+    />
         <ReactNative.Button title="Login page"></ReactNative.Button>
      </ReactNative.View>
     );

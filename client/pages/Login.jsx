@@ -1,10 +1,28 @@
-import { View, Text, Button, StyleSheet, Image, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import Logo from "../assets/tempLogo.png";
 import Google from "../assets/googleIcon.png";
 import Facebook from "../assets/facebookIcon.png";
+import IdentifierIcon from "../assets/Svg/user-normal.svg";
+import PasswordIcon from "../assets/Svg/lock.svg";
+import Open from "../assets/Svg/eyeOpen.svg";
+import Close from "../assets/Svg/eyeClose.svg";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
 
 function Login({ navigation }) {
+  const [color, setColor] = useState("#6C77BF");
+  const [color2, setColor2] = useState("#6C77BF");
+  const [eyeState, setEyeState] = useState(true);
+  const [isSecure, setIsSecure] = useState(true);
+
   return (
     <View style={styles.loginPage}>
       <View style={styles.headers}>
@@ -17,35 +35,74 @@ function Login({ navigation }) {
         </Text>
       </View>
       <View style={styles.loginForm}>
-        <TextInput
-          placeholder="email or phone number"
-          style={styles.identifierInput}
-        />
-        <TextInput
-          placeholder="password"
-          style={styles.passwordInput}
-          secureTextEntry={true}
-        />
+        <View style={styles.inputContainer}>
+          <IdentifierIcon style={styles.inputIcon} />
+          <TextInput
+            placeholder="email or phone number"
+            style={styles.identifierInput}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <PasswordIcon style={styles.inputIcon} />
+          <TextInput
+            placeholder="password"
+            style={styles.passwordInput}
+            secureTextEntry={isSecure}
+          />
+          {!eyeState ? (
+            <Open
+              style={styles.eye}
+              onPress={() => {
+                setEyeState(!eyeState), setIsSecure(!isSecure);
+              }}
+            />
+          ) : (
+            <Close
+              style={styles.eye}
+              onPress={() => {
+                setEyeState(!eyeState), setIsSecure(!isSecure);
+              }}
+            />
+          )}
+        </View>
       </View>
       <View style={styles.forgotPasswordContainer}>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        <Pressable
+          activeOpacity={0.8}
+          onPressIn={() => setColor2("darkblue")}
+          onPressOut={() => setColor2("#6C77BF")}
+        >
+          <Text style={{ color: color2, ...styles.forgotPassword }}>
+            Forgot Password?
+          </Text>
+        </Pressable>
       </View>
-      <View style={styles.loginBtnContainer}>
+      <TouchableOpacity
+        style={styles.loginBtnContainer}
+        activeOpacity={0.8}
+        onPress={() => {}}
+      >
         <LinearGradient
-          // colors={["rgba(80,129,195,1)", "rgba(56,135,200,1)"]}
-          // start={{ x: 0, y: 0.5 }}
-          // end={{ x: 1, y: 0.5 }}
           colors={["#6C77BF", "#4485C5"]}
           locations={[0, 1]}
           style={styles.loginBtn}
         >
           <Text style={styles.loginBtnContent}>Log In</Text>
         </LinearGradient>
-      </View>
+      </TouchableOpacity>
       <View style={styles.bottomSection}>
         <View style={styles.createAcc}>
           <Text>First time here?</Text>
-          <Text>Sign up</Text>
+          <Pressable
+            activeOpacity={0.8}
+            onPressIn={() => {
+              setColor("darkblue");
+              navigation.navigate("SignUp");
+            }}
+            onPressOut={() => setColor("#6C77BF")}
+          >
+            <Text style={{ color: color }}>Sign up</Text>
+          </Pressable>
         </View>
         <View style={styles.loginWith}>
           <View style={styles.line}></View>
@@ -53,24 +110,24 @@ function Login({ navigation }) {
           <View style={styles.line}></View>
         </View>
         <View style={styles.quickLoginContainer}>
-          <View style={styles.quickLogin}>
-            <View style={styles.icons}>
-              <Image source={Google} alt="google" style={styles.icons} />
+          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+            <View style={styles.quickLogin}>
+              <View style={styles.icons}>
+                <Image source={Google} alt="google" style={styles.icons} />
+              </View>
+              <Text>Google</Text>
             </View>
-            <Text>Google</Text>
-          </View>
-          <View style={styles.quickLogin}>
-            <View style={styles.icons}>
-              <Image source={Facebook} alt="facebook" style={styles.icons} />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+            <View style={styles.quickLogin}>
+              <View style={styles.icons}>
+                <Image source={Facebook} alt="facebook" style={styles.icons} />
+              </View>
+              <Text>Facebook</Text>
             </View>
-            <Text>Facebook</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
-      {/* <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate("Home")}
-      /> */}
     </View>
   );
 }
@@ -114,22 +171,44 @@ const styles = StyleSheet.create({
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    gap: 10,
+    gap: 20,
+  },
+  inputContainer: {
+    position: "relative",
+  },
+  inputIcon: {
+    position: "absolute",
+    top: 13,
+    left: "2%",
+    width: "10%",
+    height: 20,
+    zIndex: 1,
+  },
+  eye: {
+    position: "absolute",
+    top: 15,
+    right: "3%",
+    width: "10%",
+    height: 20,
+    zIndex: 1,
   },
   identifierInput: {
     backgroundColor: "#eef1f8",
     borderRadius: 5,
     height: 50,
-    padding: 10,
+    paddingLeft: 40,
+    zIndex: 0,
   },
   passwordInput: {
     backgroundColor: "#eef1f8",
     borderRadius: 5,
     height: 50,
-    padding: 10,
+    paddingLeft: 40,
+    zIndex: 0,
   },
   forgotPasswordContainer: {
     width: "100%",
+    marginTop: -20,
   },
   forgotPassword: {
     textAlign: "right",
@@ -185,17 +264,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    border: "solid",
-    borderColor: "#e5e6e8",
-    borderWidth: 1,
+    // border: "solid",
+    // borderColor: "#e5e6e8",
+    // borderWidth: 1,
+    backgroundColor: "#F3F4F6",
     borderRadius: 10,
     width: 150,
     height: 50,
     gap: 15,
   },
   icons: {
-    width: 20,
-    height: 20,
+    width: 25,
+    height: 25,
   },
 });
 export default Login;

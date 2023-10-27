@@ -1,4 +1,4 @@
-module.exports = (sequelize,DataTypes,connection)=>{
+module.exports = (DataTypes,connection)=>{
 
 const Admin= connection.define('Admin',{
     firstName:{
@@ -21,7 +21,7 @@ const Admin= connection.define('Admin',{
         allowNull:false
     },
     dateOfBirth:{
-        type:DataTypes.Date,
+        type:DataTypes.DATE ,
         allowNull:false
     },
     avatar:{
@@ -30,7 +30,7 @@ const Admin= connection.define('Admin',{
         allowNull:false
     }
     ,
-    type:{
+    role:{
         type:DataTypes.STRING,
         defaultValue:"Admin"
     }

@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes, connection) => {
+module.exports = ( DataTypes, connection) => {
   const Messages = connection.define("messages", {
     message: {
       type: DataTypes.STRING,

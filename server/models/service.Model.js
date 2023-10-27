@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes, connection) => {
+module.exports = (DataTypes, connection) => {
     const Service = connection.define("Service", {
     
       destination: {
@@ -6,11 +6,11 @@ module.exports = (sequelize, DataTypes, connection) => {
         allowNull: false,
       },
       startDate: {
-        type: DataTypes.Date,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       endDate: {
-        type: DataTypes.Date,
+        type: DataTypes.DATE,
         allowNull: false,
       },
 

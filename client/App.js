@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, View } from 'react-native';
-
+import { Provider } from 'react-redux';
+import store from './redux/store'
 import { NavigationContainer } from '@react-navigation/native'
 import Home from './pages/Home.jsx';
 const Stack = createStackNavigator();
@@ -8,12 +9,13 @@ import { createStackNavigator } from '@react-navigation/stack';
  function App() {
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
-       <Stack.Navigator    initialRouteName="Home">
-      <Stack.Screen name="Home" component={Home} />
-     
-    </Stack.Navigator>
-  </NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  </Provider>
   );
 }
 

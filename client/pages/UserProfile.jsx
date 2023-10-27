@@ -44,7 +44,7 @@ function Userprofile({ navigation }) {
           </View>
         </View>
       </Modal>
-      
+
     </View>  
         </View>
 
@@ -60,7 +60,7 @@ function Userprofile({ navigation }) {
   <Text style={styles.cartext}>CarName</Text>
 <Image source={etoile} style={styles.etoil}/>
 <Text style={styles.numetoile}>3 (75 reviews)</Text>
-<Text>$220/day</Text>
+<Text style={styles.price}>$220/day</Text>
 </View>
 
     </View>
@@ -70,6 +70,10 @@ function Userprofile({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  price:{
+    marginTop:20,
+    marginLeft:10
+  },
   numetoile:{
     marginTop:-25,
     marginLeft:40, 
@@ -101,7 +105,7 @@ marginTop:-25
     width: 333,
     height: 150,
     backgroundColor: 'white',
-    elevation: 5, // Controls the shadow depth
+
     shadowColor: 'black', // Shadow color
     padding: 10,
     display: "flex", flexDirection: "row",

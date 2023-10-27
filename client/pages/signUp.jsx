@@ -9,10 +9,14 @@ import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import { LinearGradient } from "expo-linear-gradient";
 const { width, height } = Rn.Dimensions.get("window");
-import GooglePng from "../assets/google.png";
-import FaceBookPng from "../assets/facebook.png";
+import GooglePng from "../assets/googleIcon.png";
+import FaceBookPng from "../assets/facebookIcon.png";
 const SignUp = ({ navigation, props }) => {
-  
+  const SignUp=(inputForm)=>{
+console.log(inputForm);
+console.log("ffffr");
+  }
+  const [inputForm,setInputForm]=useState({userName:"",email:"",password:""})
   const [color, setColor] = useState("#6C77BF");
   const [PassState, setPassState] = useState(true);
   const [PassState2, setPassState2] = useState(true);
@@ -27,11 +31,15 @@ const SignUp = ({ navigation, props }) => {
       <Rn.View style={styles.InputContainer}>
         <Rn.View style={styles.inputHolder}>
           <UserNormal style={styles.icon} />
-          <Rn.TextInput style={styles.input} placeholder="Username" />
+          <Rn.TextInput style={styles.input} placeholder="Username" onChangeText={(text)=>{
+            setInputForm({...inputForm,userName:text})
+          }} />
         </Rn.View>
         <Rn.View style={styles.inputHolder}>
           <Email style={styles.icon} />
-          <Rn.TextInput style={styles.input} placeholder="Email" />
+          <Rn.TextInput style={styles.input} placeholder="Email" onChangeText={(text)=>{
+            setInputForm({...inputForm,email:text})
+          }} />
         </Rn.View>
         <Rn.View style={styles.inputHolder}>
           <Lock style={styles.icon} />
@@ -40,6 +48,9 @@ const SignUp = ({ navigation, props }) => {
             style={styles.input}
             placeholder="Password"
             secureTextEntry={isSecure}
+            onChangeText={(text)=>{
+              setInputForm({...inputForm,password:text})
+            }} 
           />
           {!PassState?<Open  style={styles.eyes} onPress={()=>{
             setPassState(!PassState),setIsecure(!isSecure)
@@ -69,7 +80,9 @@ const SignUp = ({ navigation, props }) => {
           locations={[0, 1]}
           style={styles.buttonContainer}
         >
-          <Rn.Text style={styles.buttonText}>{"Sign Up"}</Rn.Text>
+          <Rn.Text style={styles.buttonText} onPress={()=>{
+            SignUp(inputForm)
+          }}>{"Sign Up"}</Rn.Text>
         </LinearGradient>
       </Rn.TouchableOpacity>
       <Rn.Pressable
@@ -144,13 +157,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     padding: 15,
-    width: width * 0.35,
+    width: width * 0.38,
     borderWidth: 0,
     borderColor: "grey",
     borderRadius: 10,
     // overflow: "hidden",
     flexDirection: "row",
-    gap: width * 0.009,
+    gap: width * 0.01,
     backgroundColor: "#F3F4F6",
   },
   extraSignContainer: {
@@ -159,12 +172,12 @@ const styles = StyleSheet.create({
     gap: 22,
   },
   GoogleCss: {
-    height: height * 0.03,
-    width: width * 0.059,
+    height: height * 0.038,
+    width: width * 0.069,
   },
   FacebookCss: {
-    height: height * 0.04,
-    width: width * 0.086,
+    height: height * 0.036,
+    width: width * 0.07,
   },
   separatorContainer: {
     display: "flex",

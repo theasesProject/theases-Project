@@ -1,18 +1,18 @@
 import { View ,Text, StyleSheet,Image,TouchableOpacity} from "react-native";
 import {useState} from "react"
-import car2 from "../assets/car2.png"
+import car from "../assets/car2.png"
 import emptyStar from "../assets/etoile.png"
-import purpleHeart from "../assets/etoile.png"
-import filledStar from "../assets/etoile.png"
-
-import heartBleu from "../assets/heartBleu.png"
-function CardCar({oneCar,onPress}) {
+import star from "../assets/star.jpg"
+import heartBleu from "../assets/filledPurpleHeart.png"
+import emptyHeart from "../assets/emptyHeart.png"
+function CardCar({onPress}) {
    const [starSelected, setStarSelected] = useState(false)
    const [heartSelected, setHeartSelected] = useState(false)
-   const starImage=starSelected ? filledStar :emptyStar;
-   const heartImage=heartSelected? heartBleu : purpleHeart;
+   const starImage=starSelected ? star :emptyStar;
+   const heartImage=heartSelected? heartBleu : emptyHeart;
 const handleStarPress = () => {
           setStarSelected(!starSelected);
+          console.log("etoile")
        };
    const handleHeartPress =()=>{
       setHeartSelected(!heartSelected)
@@ -25,172 +25,118 @@ const handleStarPress = () => {
    
     return (
       <View style={styles.card}>
-      <View>
-      <TouchableOpacity onPress={handleHeartPress}>
-   <Image source={heartImage} style={styles.emptyHeart} />
-     </TouchableOpacity>
-          <Image source={car2} style={styles.car} />
-   
-        </View>
-  <View>
-  <Text style={styles.cartext}>Automatic</Text>
-  <TouchableOpacity onPress={handleStarPress}>
-  <Image source={starImage} style={{ width: 32, height: 32,marginLeft:-290 }} />
-    </TouchableOpacity>
-  <Text style={styles.numetoile}>3 (75 reviews)</Text>
-  
-
-  <Text style={styles.price}>$550/day</Text>
-  <Text style={styles.type}>Fuel</Text>
-  </View>
-  
+        
+        <View   style={styles.barText}>
+    <Text   style={styles.AllCars} >All Cars</Text>
+    <Text    style={styles.ViewAll} >View All</Text>
     </View>
-
+    <View style={styles.Image}>
+    <Image style={styles.carImage}  source={car} ></Image>
+    <TouchableOpacity   onPress={ handleHeartPress}>
+    <Image style={styles.heart}   source={heartImage} ></Image>
+    </TouchableOpacity>
+    </View>
+    <View style={styles.carDetails}>
+    <View   style={styles.NameAvaib}>
+    <Text style={styles.carName}>Maserti  976</Text>
+    <Text style={styles.avaible}>Avaibility</Text>
+    </View>
+    <View    style={styles.PriceStar} >
+   <View   style={styles.reviews} >
+    <TouchableOpacity  onPress={ handleStarPress} >
+    <Image    style={styles.heart}  source={starImage} ></Image>
+    </TouchableOpacity>
+    <Text style={styles.avaible}>(150 review)</Text>
+    </View>
+    <Text style={styles.carPrice}>$540/day</Text>
+   
+    </View>
+    </View>
+    </View>
     )
     }
 
 
 
 const styles = StyleSheet.create({
-   price: {
-      marginTop: -19,
-      marginLeft: -87,
-      fontSize: 18,
-          fontWeight: "bold",
-      color: "rgb(72, 76, 173)",
-    },
-    type: {
-      marginTop: -50,
-      fontSize: 14,
-         color: "rgb(130, 124, 140)",
-         marginLeft: -50,
-    
-   
-    },
-    numetoile:{
-      marginTop:-25,
-      marginLeft:-250, 
-      fontSize: 12,
-    color: "rgb(130, 124, 140)"
-    }
-    ,  cartext: {
-      marginTop: 110,
-      marginLeft: -290,
-      fontSize: 18,
-     fontWeight: "bold",
-        color: "black"
-      
-    },
-     car:{
-    width: 300,
-    height: 148,
-    borderRadius: 25,
-  marginTop: -45,
-  marginLeft:-10
+  card:{
+    backgroundColor:"white",
+    width:"100%",
+    height:250,
+    borderRadius:10,
+    alignItems:"center"
+
   },
-    card: {
-      width: "100%",
-      height: 200,
-      backgroundColor: 'white',
-      shadowColor: 'black',
-      padding: 10,
-      display: 'flex',
-      flexDirection: 'row',
-      padding: 10,
-      borderRadius: 10,
-      // marginLeft: 15,
-      marginTop: 15,
-    },
-
-    emptyHeart:{
-        width: 160,
-       height: 30,
-    marginLeft:"93%",
-    position:"absolute",
-   marginTop:"3%",
-   padding:5,
-   backgroundColor:"bleu"
- 
-     }
+  barText:{
+    width:360,
+    height:35,
+    borderRadius:10,
+flexDirection:"row",
+justifyContent:"space-between"
+},
+AllCars:{
+    fontWeight: "bold",
+    fontSize:20
+},
+ViewAll:{
+   color: "grey",
+    fontSize:18,
    
-  
-    
-  
-   //  comp:{
-   //      width: '90%',
-   //      height: '90%',
-   //      backgroundColor: 'white',
-   //      borderRadius: 7,
-   //  },
-   //  Card:{
-   //     width: "90%",
-   //     height: "80%",
-   //     backgroundColor: 'white',
-   //     borderRadius:7,
-   //     justifyContent: 'center',
-    
-    
-   //  },
-   //  // details:{
-   //  // flex:2,
-   //  //  backgroundColor: "yellow",
-   //  //  paddingTop:"20%",
-   //  //  marginTop:"10%"
+},
+carImage:{
 
-     
-   //  // },
-   //  star:{
-   //     width: 20,
-   //     height: 20,
-   //     marginRight: 5
-   //  },
-   //  column:{
-   //     minHeight:20,
-   //     flex:1,
-   //     flexDirection: "row",
-   //     justifyContent:"space-between",
+    width:300,
+    height:150,
+},
+heart:{
   
-    
-   //  },
-   //  name:{
-   //     fontSize: 18,
-   //     fontWeight: "bold",
-   //     color: "black",
-   //     marginLeft:"4%"
-   //  },
-   //  type:{
-   //     fontSize: 14,
-   //     color: "rgb(130, 124, 140)",
-   //     marginRight:"5%"
-    
-   //  },
-   //  price:{
-   //     fontSize: 18,
-   //     fontWeight: "bold",
-   //     color: "rgb(172, 133, 234)",
-   //     marginRight:"5%"
-   //  },
-   //  review:{
-   //     fontSize: 12,
-   //     color: "rgb(130, 124, 140)",
-   //     paddingTop:"1%",
-   //     marginRight:"5%"
-     
-   //  },
-   //  rev:{
-   //     flexDirection: "row",
-   //     paddingTop:"1%",
-   //     marginRight:"5%"
-       
-     
-   //  },
-   //  emptyHeart:{
-   //     width: 20,
-   //     height: 10,
-   //   marginLeft:"89%",
-   //   paddingTop:"6%",
-   //   marginTop:"1%"
-   //  },
+  width:30,
+  height:28,
+
+},
+Image:{
+  flexDirection:"row",
+  justifyContent:"space-around",
+  alignItems:"flex-start",
+gap:10,
+  height:150,
+
+
+},
+NameAvaib:{
+  flexDirection:"row",
+  justifyContent:"space-between",
+  gap:180,
+
+},
+PriceStar:{
+  flexDirection:"row",
+  justifyContent:"space-between",
+ 
+},
+reviews:{
+  flexDirection:"row",
+  justifyContent:"space-around",
+  alignItems:"center",
+  gap:10,
+},
+carName:{
+       fontSize: 18,
+       fontWeight: "bold",
+       color: "black",
+   
+    },
+    avaible:{
+    fontSize: 14,
+  color: "rgb(130, 124, 140)",
+    },
+    carPrice:{
+      fontSize: 18,
+       fontWeight: "bold",
+          color: "rgb(172, 133, 234)"
+    }
+
+
   })
 
 

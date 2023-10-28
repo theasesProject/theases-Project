@@ -1,6 +1,6 @@
 
 import { View, Text, StyleSheet, ScrollView,TextInput,TouchableOpacity ,Image} from 'react-native';
-import iconfilter from "../assets/car1.jpg"
+import filter from "../assets/filter.png"
 
 function SearchBar(){
 
@@ -10,56 +10,21 @@ return (
 <View style={styles.searchDetails}>
 <Text style={styles.FirstText}>Select or search your</Text>
 <Text style={styles.FirstText}>favourite location</Text>
+<View  style={styles.inputAndButton}  >
 <TextInput   style={styles.input}   placeholder='Search'></TextInput>
-
+<View  style={styles.filterImage} >
+<Image source={filter}  style={styles.filter}></Image>
+</View    >
 
 </View>
 </View>
-
+</View>
 
 )
 
-
-
-
 }
 const styles = StyleSheet.create({
-    // searchBar:{
-    //     width:"100%",
-    //     height:"6%",
-    //     // marginLeft:"5%",
-    //    backgroundColor:"red",
-    //     borderRadius:8,
-    //     alignItems:"center"
-    // },
-    // firstText:{
-    //     marginTop:"2%",
-    //     fontWeight: "bold",
-    //     fontSize:20
-    // },
-    // secondText:{
-    //     fontWeight: "bold",
-    //     fontSize:20,
-     
-    // },
-    // input:{
 
-    //     borderColor:"rgb(130, 124, 140)",
-    //     borderWidth:1,
-    //     borderRadius:5,
-    //     width:"60%",
-    //     height:"28%",
-    //     marginLeft:"-20%",
-    //     marginTop:"8%",
-    //     padding:10,
-    //     backgroundColor:"blue"
-    // },
-    // search:{
-    //     marginTop:"-15%",
-    //     marginLeft:"70%",
-    //     borderRadius:10
-     
-    // }
     searchBar:{
         backgroundColor:"white",
         width:"100%",
@@ -75,16 +40,37 @@ const styles = StyleSheet.create({
 
     },
     searchDetails:{
- flex:1,
- flexDirection:"column",
- justifyContent:"space-around",
- alignItems:"center",
+    flex:1,
+    flexDirection:"column",
+    justifyContent:"space-around",
+    alignItems:"center",
 
     },
     FirstText:{
-         fontWeight: "bold",
-           fontSize:20
+              fontWeight: "bold",
+            fontSize:20
+    },
+    filterImage:{
+        width:50,
+        height:50,
+        backgroundColor :"rgb(106,119,197)",
+        borderRadius:10,
+     justifyContent:"center",
+        alignItems:"center"
+    },
+    inputAndButton:{
+        flex:1,
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        gap:20
+      
+    },
+    filter:{
+        width:20,
+        height:20,
     }
+
 })
 
 export default SearchBar

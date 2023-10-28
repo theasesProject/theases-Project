@@ -21,6 +21,10 @@ function Home({ navigation }) {
       <CardCar />
       <CardCar />
       <CardCar />
+        <Button
+        title="Go to frst"
+        onPress={() => navigation.navigate("LoadingScreen")}
+      />
       </ScrollView>
     </View>
   );

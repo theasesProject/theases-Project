@@ -4,6 +4,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import LoadingScreen from "./pages/Loading.jsx"
+
+//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
+
+("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
 
 
@@ -14,12 +20,31 @@ function App() {
 
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen  options={{ headerShown: false }} name="Home" component={Home} />
+        <Stack.Screen name="Home" component={Home} />
 
-      
-       
-       
-      
+        <Stack.Screen
+          name="LoadingScreen"
+          component={LoadingScreen}
+          options={{ headerShown: false }}
+        />
+        
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Userprofile"
+          component={Userprofile}
+          options={{ headerShown: false }}
+        />
+   
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{ headerShown: false }}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
 

@@ -5,6 +5,8 @@ import Userprofile from "./pages/UserProfile.jsx";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
+import LoadingScreen from "./pages/Loading.jsx"
+
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
@@ -23,6 +25,12 @@ function App() {
         <Stack.Screen name="Home" component={Home} />
 
         <Stack.Screen
+          name="LoadingScreen"
+          component={LoadingScreen}
+          options={{ headerShown: false }}
+        />
+        
+        <Stack.Screen
           name="Login"
           component={Login}
           options={{ headerShown: false }}
@@ -32,11 +40,7 @@ function App() {
           component={Userprofile}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Map"
-          component={Map}
-          options={{ headerShown: false }}
-        />
+   
         <Stack.Screen
           name="SignUp"
           component={SignUp}

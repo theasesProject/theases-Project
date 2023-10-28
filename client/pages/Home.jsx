@@ -12,6 +12,10 @@ function Home({ navigation }) {
         title="Go to Details"
         onPress={() => navigation.navigate("Userprofile")}
       />
+        <Button
+        title="Go to frst"
+        onPress={() => navigation.navigate("LoadingScreen")}
+      />
       <ReactNative.Button
         title="Login page"
         onPress={() => navigation.navigate("Login")}

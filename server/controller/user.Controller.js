@@ -1,17 +1,22 @@
-const { User } = require("../models/index"); // Import the User model
+const { db } = require("../models/index");
+const User = db.User;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 // Controller methods for User
 module.exports = {
   // Create a new user
   signUp: async (req, res) => {
     // ToRBaGa made this temp controller to add users, jiji make your changes
     try {
-      const hashedPassword = bcrypt.hash(req.body.password);
-      const response = await User.create({ ...req.body, hashedPassword });
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      const response = await User.create({
+        ...req.body,
+        password: hashedPassword,
+      });
       res.status(201).json(response);
     } catch (err) {
-      throw err;
+      res.status(500).send(err);
     }
   },
 
@@ -22,13 +27,13 @@ module.exports = {
       if (!user) {
         return res.status(404).json("user does not exist");
       }
-      if (!bcrypt.compare(user.password, req.body.password)) {
-        return res.status().json("wrong password");
+      if (!(await bcrypt.compare(req.body.password, user.password))) {
+        return res.status(401).json("wrong password");
       }
-      const response = jwt.sign(user, "SECRET_KEY");
-      res.send(response);
+      const token = jwt.sign(user.dataValues, process.env.JWT_SECRET_KEY);
+      res.send(token);
     } catch (err) {
-      throw err;
+      res.status(500).send(err);
     }
   },
 
@@ -41,13 +46,24 @@ module.exports = {
       if (!user) {
         return res.status(404).json("user does not exist");
       }
-      if (!bcrypt.compare(user.password, req.body.password)) {
-        return res.status().json("wrong password");
+      if (!(await bcrypt.compare(req.body.password, user.password))) {
+        return res.status(401).json("wrong password");
       }
-      const response = jwt.sign(user, "SECRET_KEY");
-      res.send(response);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+      const token = jwt.sign(user.dataValues, process.env.JWT_SECRET_KEY);
+      res.send(token);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
+
+  // gets users token from the front to verify it and sends it back to front
+  handleToken: async (req, res) => {
+    try {
+      const response = jwt.verify(req.body.token, process.env.JWT_SECRET_KEY);
+      delete response.password;
+      res.status(200).json(response);
+    } catch (err) {
+      res.status(500).send(err);
     }
   },
 
@@ -56,8 +72,8 @@ module.exports = {
     try {
       const users = await User.findAll();
       res.json(users);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    } catch (err) {
+      throw err;
     }
   },
 
@@ -71,8 +87,8 @@ module.exports = {
       } else {
         res.status(404).json({ message: "User not found" });
       }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    } catch (err) {
+      throw err;
     }
   },
 
@@ -89,8 +105,8 @@ module.exports = {
       } else {
         res.status(404).json({ message: "User not found" });
       }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    } catch (err) {
+      throw err;
     }
   },
 
@@ -106,8 +122,8 @@ module.exports = {
       } else {
         res.status(404).json({ message: "User not found" });
       }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    } catch (err) {
+      throw err;
     }
   },
 };

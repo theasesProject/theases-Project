@@ -6,16 +6,18 @@ const {
   signUp,
   emailLogin,
   phoneLogin,
+  handleToken,
   getAllUsers,
   getUserById,
   updateUser,
   deleteUser,
-} = require("../controllers/user.Controller");
+} = require("../controller/user.Controller");
 
 // Define routes for user operations
 router.post("/signup", signUp);
 router.post("/emailLogin", emailLogin);
 router.post("/phoneLogin", phoneLogin);
+router.post("/token", handleToken);
 router.get("/getAll", getAllUsers);
 router.get("/getOne/:id", getUserById);
 router.put("/update/:id", updateUser);

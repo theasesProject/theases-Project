@@ -16,6 +16,11 @@ import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { fetchUser } from "../store/userSlice";
+import { useDispatch } from "react-redux";
+// require("dotenv").config();
+// ${process.env.DOMAIN_NAME}
 
 function Login({ navigation }) {
   const [color, setColor] = useState("#6C77BF");
@@ -27,6 +32,8 @@ function Login({ navigation }) {
     password: "",
   });
   const [formChecked, setFormChecked] = useState(false);
+  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   const formValidation = () => {
     if (!form.identifier || !form.password) {
@@ -50,10 +57,6 @@ function Login({ navigation }) {
     });
   };
 
-  useEffect(() => {
-    formValidation();
-  }, [form]);
-
   const identifierValidation = (identifier) => {
     // Regular expression for email
     const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
@@ -62,13 +65,49 @@ function Login({ navigation }) {
     const phonePattern = /^[\d\+\-]+$/;
 
     if (emailPattern.test(identifier)) {
-      console.log("Email");
+      return "email";
     } else if (phonePattern.test(identifier)) {
-      console.log("Phone Number");
-    } else {
-      console.log("Neither");
+      return "phoneNumber";
     }
   };
+
+  const handleLogin = async () => {
+    try {
+      let checkedIdentifier = null;
+      let endPoint = null;
+      if (identifierValidation(form.identifier) === "email") {
+        checkedIdentifier = "email";
+        endPoint = "emailLogin";
+      } else if (identifierValidation(form.identifier) === "phoneNumber") {
+        checkedIdentifier = "phoneNumber";
+        endPoint = "phoneLogin";
+      } else {
+        return setError("please provide an email or a phone number");
+      }
+      const response = await axios.post(
+        `http://192.168.54.213:5000/api/users/${endPoint}`,
+        {
+          [checkedIdentifier]: form.identifier,
+          password: form.password,
+        }
+      );
+      setError(null);
+      dispatch(fetchUser(response.data));
+      navigation.navigate("Home");
+    } catch (err) {
+      if (err.response.status == "404") {
+        setError("user does not exist");
+      } else if (err.response.status == "401") {
+        setError("incorrect password");
+      } else {
+        console.error(err.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    formValidation();
+  }, [form, error]);
 
   return (
     <View style={styles.loginPage}>
@@ -90,6 +129,14 @@ function Login({ navigation }) {
             placeholder="email or phone number"
             style={styles.identifierInput}
           />
+        </View>
+        <View style={styles.identifierErrorContainer}>
+          <Text style={styles.error}>
+            {error === "user does not exist" ||
+            error === "please provide an email or a phone number"
+              ? error
+              : null}
+          </Text>
         </View>
         <View style={styles.inputContainer}>
           <PasswordIcon style={styles.inputIcon} />
@@ -118,6 +165,11 @@ function Login({ navigation }) {
         </View>
       </View>
       <View style={styles.forgotPasswordContainer}>
+        <View style={styles.passwordErrorContainer}>
+          <Text style={styles.error}>
+            {error === "incorrect password" ? error : null}
+          </Text>
+        </View>
         <Pressable
           activeOpacity={0.8}
           onPressIn={() => setColor2("darkblue")}
@@ -131,9 +183,7 @@ function Login({ navigation }) {
       <TouchableOpacity
         style={styles.loginBtnContainer}
         activeOpacity={0.8}
-        onPress={() => {
-          identifierValidation(form.identifier);
-        }}
+        onPress={handleLogin}
         disabled={!formChecked}
       >
         <LinearGradient
@@ -225,7 +275,7 @@ const styles = StyleSheet.create({
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    gap: 20,
+    gap: 5,
   },
   inputContainer: {
     position: "relative",
@@ -262,7 +312,20 @@ const styles = StyleSheet.create({
   },
   forgotPasswordContainer: {
     width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginTop: -20,
+  },
+  identifierErrorContainer: {
+    textAlign: "left",
+  },
+  passwordErrorContainer: {
+    textAlign: "left",
+  },
+  error: {
+    color: "red",
   },
   forgotPassword: {
     textAlign: "right",

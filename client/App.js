@@ -10,12 +10,9 @@ import LoadingScreen from "./pages/Loading.jsx";
 import store from "./store/store";
 import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
-import SignUp from "./pages/signUp.jsx";
-
 
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
-
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
 const Stack = createStackNavigator();

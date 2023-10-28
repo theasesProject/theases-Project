@@ -1,6 +1,6 @@
 module.exports = (DataTypes, connection) => {
-    const bcrypt = require("bcryptjs");
-    const saltRounds = 10;
+    const bcrypt = require("bcrypt");
+    const saltRounds = bcrypt.genSaltSync(10);
     const User = connection.define('User', {
         userName: {
             type: DataTypes.STRING,

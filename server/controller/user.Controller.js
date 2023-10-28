@@ -5,21 +5,54 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 // Controller methods for User
 module.exports = {
-  // Create a new user
-  signUp: async (req, res) => {
-    // ToRBaGa made this temp controller to add users, jiji make your changes
+  bringUsersData: async (req, res,next) => {
     try {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      const response = await User.create({
-        ...req.body,
-        password: hashedPassword,
-      });
-      res.status(201).json(response);
-    } catch (err) {
-      res.status(500).send(err);
+        const Users = await db.User.findAll({
+        })
+        res.json(Users)
+    } catch (error) {
+         next(error)
     }
-  },
-
+},
+SignUpUser:async(req,res,next)=>{
+    const NameCheck= await db.User.findAll({
+        where:{
+            userName:req.body.userName
+        }
+    })
+    const emailCheck= await db.User.findAll({
+        where:{
+            email:req.body.email
+        }
+    })
+    if (NameCheck[0]||emailCheck[0]) {
+        if (NameCheck[0]) {
+            return res.status(403).send({
+                status: "Blocked",
+                message: "This UserName Already Exists",
+                found:NameCheck
+              })
+        }
+        if (emailCheck[0]) {
+           return  res.status(403).send({
+                status: "Blocked",
+                message: "This Email Already Exists",
+                found:emailCheck
+              })
+        }
+    }else{
+        const User = await db.User.create(req.body);
+        res.status(201).send({
+          status: "success",
+          message: "user added successfully!!!",
+          data: User,
+        });
+    }
+    try {
+    } catch (err) {
+        next(err)
+    }
+},
   // checks if a user exists using email
   emailLogin: async (req, res) => {
     try {
@@ -67,15 +100,6 @@ module.exports = {
     }
   },
 
-  // Get a list of all users
-  getAllUsers: async (req, res) => {
-    try {
-      const users = await User.findAll();
-      res.json(users);
-    } catch (err) {
-      throw err;
-    }
-  },
 
   // Get a specific user by ID
   getUserById: async (req, res) => {

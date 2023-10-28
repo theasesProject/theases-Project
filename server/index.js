@@ -4,6 +4,7 @@ require("./models")
 const cors = require('cors')
 const app = express()
 const port = 5000
+const http = require("http");
 const dotenv = require("dotenv")
 const bodyparser = require("body-parser");
 const logger = require("morgan");
@@ -29,13 +30,12 @@ app.listen(5000, function () {
 })
 app.use(function (err, req, res, next) {
    console.log(err);
- 
+
    if (err.status === 404)
-     res.status(404).json({ message: "Not found" });
+      res.status(404).json({ message: "Not found" });
    else
-     res.status(500).json({ message: "Something looks wrong :( !!!" });
- });
-const http = require("http");
+      res.status(500).json({ message: "Something looks wrong :( !!!" });
+});
 
 
 

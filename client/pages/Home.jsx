@@ -26,7 +26,10 @@ function Home({ navigation }) {
         title="Go to frst"
         onPress={() => navigation.navigate("LoadingScreen")}
       />
-
+ <Button
+        title="Go to log"
+        onPress={() => navigation.navigate("Login")}
+      />
     </View>
   );
 }

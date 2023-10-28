@@ -1,27 +1,34 @@
 import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Userprofile from "./pages/UserProfile.jsx";
+
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
-//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
-
-("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
-
+import LoadingScreen from "./pages/Loading.jsx"
+import Userprofile from "./pages/UserProfile.jsx";
 import SignUp from "./pages/signUp.jsx";
+//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
-//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
+
+
 
 const Stack = createStackNavigator();
 function App() {
   return (
+
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
 
+        <Stack.Screen
+          name="LoadingScreen"
+          component={LoadingScreen}
+          options={{ headerShown: false }}
+        />
+        
         <Stack.Screen
           name="Login"
           component={Login}
@@ -32,11 +39,7 @@ function App() {
           component={Userprofile}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Map"
-          component={Map}
-          options={{ headerShown: false }}
-        />
+   
         <Stack.Screen
           name="SignUp"
           component={SignUp}
@@ -45,6 +48,7 @@ function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
 

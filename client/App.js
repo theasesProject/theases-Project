@@ -5,15 +5,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 
-// import { Provider } from 'react-redux';
-// import {store} from "./redux/store.jsx"
-//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
+
 
 
 const Stack = createStackNavigator();
 function App() {
   return (
-    // <Provider store={store}>
+
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen  options={{ headerShown: false }} name="Home" component={Home} />
@@ -24,7 +22,7 @@ function App() {
       
       </Stack.Navigator>
     </NavigationContainer>
-    // </Provider>
+
   );
 }
 

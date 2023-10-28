@@ -26,7 +26,7 @@ return (
 const styles = StyleSheet.create({
 
     searchBar:{
-        backgroundColor:"white",
+        backgroundColor:"rgb(237, 238, 247)",
         width:"100%",
         height:150,
         borderRadius:10,

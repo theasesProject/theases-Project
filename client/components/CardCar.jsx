@@ -1,8 +1,8 @@
 import { View ,Text, StyleSheet,Image,TouchableOpacity} from "react-native";
 import {useState} from "react"
 import car from "../assets/car2.png"
-import emptyStar from "../assets/etoile.png"
-import star from "../assets/star.jpg"
+import emptyStar from "../assets/eto.png"
+import star from "../assets/star1.png"
 import heartBleu from "../assets/filledPurpleHeart.png"
 import emptyHeart from "../assets/emptyHeart.png"
 function CardCar({onPress}) {
@@ -60,7 +60,7 @@ const handleStarPress = () => {
 
 const styles = StyleSheet.create({
   card:{
-    backgroundColor:"white",
+    backgroundColor:"rgb(237, 238, 247)",
     width:"100%",
     height:250,
     borderRadius:10,

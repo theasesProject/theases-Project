@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
 
     },
     brandDetails:{
-        backgroundColor:"white",
+        backgroundColor:"rgb(237, 238, 247)",
     flex:1,
     flexDirection:"column",
     justifyContent:"space-around",

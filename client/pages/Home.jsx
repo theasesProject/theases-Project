@@ -1,19 +1,16 @@
-import React, { useEffect } from 'react';
+
+import React, { useEffect } from "react";
+
 import { View, Text, StyleSheet, ScrollView, Button ,TouchableOpacity} from 'react-native';
+import CardCar from "../components/CardCar.jsx";
+import BrandBar from "../components/brandBar.jsx";
 
-import CardCar from '../components/CardCar.jsx'
-import BrandBar from '../components/brandBar.jsx';
-
-import ProfileLandingPage from '../components/NavBarLandingPage.jsx';
-import SearchBar from "../components/searchBar.jsx"
-
+import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
+import SearchBar from "../components/searchBar.jsx";
 
 function Home({ navigation }) {
-
-
   return (
     <View style={styles.homePage}>
-  
       <ScrollView contentContainerStyle={styles.scrollContent}>
       <TouchableOpacity  onPress={() => navigation.navigate("Userprofile")}>
       <ProfileLandingPage     />
@@ -29,6 +26,7 @@ function Home({ navigation }) {
         title="Go to frst"
         onPress={() => navigation.navigate("LoadingScreen")}
       />
+
     </View>
   );
 }
@@ -36,17 +34,14 @@ function Home({ navigation }) {
 const styles = StyleSheet.create({
   homePage: {
     flex: 1,
-    backgroundColor: 'rgb(219, 217, 224)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop:"15%",
-    
+    backgroundColor: "rgb(219, 217, 224)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "15%",
   },
-  scrollContent:{
- gap:20
- 
-  }
-
+  scrollContent: {
+    gap: 20,
+  },
 });
 
 export default Home;

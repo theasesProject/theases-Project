@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import UserNormal from "../assets/Svg/user-normal.svg";
 import Email from "../assets/Svg/email.svg";
+import Phone from "../assets/Svg/phone.svg";
 import Lock from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
@@ -14,6 +15,7 @@ import FaceBookPng from "../assets/facebookIcon.png";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
+  const inputRefPhone = useRef();
   const inputRefPassword = useRef();
   const inputRefConfirmed = useRef();
   const [checkUp, setCheckUp] = useState(true);
@@ -26,10 +28,12 @@ const SignUp = ({ navigation, props }) => {
   const [inputForm, setInputForm] = useState({
     userName: "",
     email: "",
+    phone:"",
     password: "",
   });
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmedError, setConfirmedError] = useState("");
 
@@ -40,41 +44,65 @@ const SignUp = ({ navigation, props }) => {
   const [isSecure2, setIsecure2] = useState(true);
 
   const checkInput = (value, placeholder) => {
+    // Clear all errors
+    setNameError("");
+    setEmailError("");
+    setPhoneError("");
+    setPasswordError("");
+    setConfirmedError("");
+
     if (value === "") {
       if (placeholder === "Username") {
         setNameError("Username cannot be empty.");
+        return;
       } else if (placeholder === "Email") {
         setEmailError("Email cannot be empty.");
+        return;
+      } else if (placeholder === "Phone") {
+        setPhoneError("Phone Number cannot be empty.");
+        return;
       } else if (placeholder === "Password") {
         setPasswordError("Password cannot be empty.");
+        return;
       } else if (placeholder === "Confirm Your Password") {
         setConfirmedError("Please confirm your password.");
+        return;
       }
     } else {
       if (placeholder === "Username") {
         if (value.length < 3 || value.length > 30) {
           setNameError("Username should be between 3 and 30 characters long.");
+          return;
         } else if (!/^[a-z0-9_-]+$/i.test(value)) {
           setNameError(
             "Username should only contain alphanumeric characters, hyphens, and underscores."
           );
+          return;
         } else {
           setNameError("");
         }
-        // For uniqueness check, you need to implement a function that checks the username against a database of existing usernames.
       } else if (placeholder === "Email") {
         const emailRegex =
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]*@[a-zA-Z0-9-]*\.com$/;
 
         if (!emailRegex.test(value.trim())) {
           setEmailError("Email should match the email format.");
+          return;
         } else {
           setEmailError("");
         }
-        // For uniqueness check, you need to implement a function that checks the email against a database of existing emails.
+      } else if (placeholder === "Phone") {
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(value.trim())) {
+          setPhoneError("Phone number should be 10 digits long.");
+          return;
+        } else {
+          setPhoneError("");
+        }
       } else if (placeholder === "Password") {
         if (value.length < 8) {
           setPasswordError("Password should be at least 8 characters long.");
+          return;
         }
         const passwordRegex =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/;
@@ -82,18 +110,22 @@ const SignUp = ({ navigation, props }) => {
           setPasswordError(
             "Password should include a mix of uppercase letters, lowercase letters, numbers, and special characters."
           );
+          return;
         } else {
           setPasswordError("");
         }
       } else if (placeholder === "Confirm Your Password") {
         if (inputForm.password !== confirm) {
           setConfirmedError("Your Password Does not match .");
+          return;
         } else {
           setConfirmedError("");
         }
       }
     }
   };
+
+
 
   return (
     <Rn.ScrollView style={styles.container}>
@@ -120,6 +152,7 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!text &&
                     !!inputForm.email &&
+                    !!inputForm.phone&&
                     !!inputForm.password &&
                     !!confirm
                 );
@@ -129,6 +162,7 @@ const SignUp = ({ navigation, props }) => {
           {nameError ? (
             <Rn.Text style={{ color: "red" }}>{nameError}</Rn.Text>
           ) : null}
+         
           <Rn.View style={styles.inputHolder}>
             <Email style={styles.icon} />
             <Rn.TextInput
@@ -145,6 +179,7 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!text &&
+                    !!inputForm.phone&&
                     !!inputForm.password &&
                     !!confirm
                 );
@@ -153,6 +188,32 @@ const SignUp = ({ navigation, props }) => {
           </Rn.View>
           {emailError ? (
             <Rn.Text style={{ color: "red" }}>{emailError}</Rn.Text>
+          ) : null}
+           <Rn.View style={styles.inputHolder}>
+            <Phone style={styles.icon} />
+            <Rn.TextInput
+              ref={inputRefPhone}
+              value={inputForm.phone}
+              onBlur={() => {
+                checkInput(inputForm.phone, "Phone");
+              }}
+              autoCapitalize="none"
+              style={styles.input}
+              placeholder="Phone"
+              onChangeText={(text) => {
+                setInputForm({ ...inputForm, phone: text.trim() });
+                setCheckUp(
+                  !!inputForm.userName &&
+                    !!text &&
+                    !!inputForm.email&&
+                    !!inputForm.password &&
+                    !!confirm
+                );
+              }}
+            />
+          </Rn.View>
+          {phoneError ? (
+            <Rn.Text style={{ color: "red" }}>{phoneError}</Rn.Text>
           ) : null}
           <Rn.View style={styles.inputHolder}>
             <Lock style={styles.icon} />
@@ -172,6 +233,7 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!inputForm.email &&
+                    !!inputForm.phone&&
                     !!text &&
                     !!confirm
                 );
@@ -214,6 +276,7 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!inputForm.email &&
+                    !!inputForm.phone&&
                     !!inputForm.password &&
                     !!text
                 );
@@ -312,8 +375,10 @@ const styles = StyleSheet.create({
     // width: width * 0.01,
   },
   SignUpContainer: {
-    height: height,
-    // flex: 1,
+    // height: height,
+    flex: 1,
+    paddingTop:50,
+    paddingBottom:50,
     // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -337,7 +402,7 @@ const styles = StyleSheet.create({
     width: width * 0.38,
     borderWidth: 0,
     borderColor: "grey",
-    borderRadius: 10,
+    borderRadius: 5,
     // overflow: "hidden",
     flexDirection: "row",
     gap: width * 0.01,

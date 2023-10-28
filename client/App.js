@@ -7,8 +7,8 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import LoadingScreen from "./pages/Loading.jsx"
 import Userprofile from "./pages/UserProfile.jsx";
-import SignUp from "./pages/signUp.jsx";
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
+import SignUp from "./pages/signUp.jsx";
 
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
@@ -20,7 +20,7 @@ function App() {
   return (
 
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="SignUp">
         <Stack.Screen name="Home" component={Home} />
 
         <Stack.Screen

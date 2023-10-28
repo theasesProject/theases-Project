@@ -6,7 +6,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import LoadingScreen from "./pages/Loading.jsx"
-
+import Userprofile from "./pages/UserProfile.jsx";
+import SignUp from "./pages/signUp.jsx";
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");

@@ -1,4 +1,4 @@
-module.exports = (sequelize,DataTypes,connection)=>{
+module.exports = (DataTypes,connection)=>{
 const User= connection.define('User',{
 userName:{
     type:DataTypes.STRING,
@@ -21,7 +21,7 @@ email:{
 
 },
 dateOfBirth:{
-    type:DataTypes.Date,
+    type:DataTypes.DATE,
     allowNull:false
 },
 avatar:{

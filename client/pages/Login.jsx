@@ -15,13 +15,60 @@ import PasswordIcon from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Login({ navigation }) {
   const [color, setColor] = useState("#6C77BF");
   const [color2, setColor2] = useState("#6C77BF");
   const [eyeState, setEyeState] = useState(true);
   const [isSecure, setIsSecure] = useState(true);
+  const [form, setForm] = useState({
+    identifier: "",
+    password: "",
+  });
+  const [formChecked, setFormChecked] = useState(false);
+
+  const formValidation = () => {
+    if (!form.identifier || !form.password) {
+      setFormChecked(false);
+    } else {
+      setFormChecked(true);
+    }
+  };
+
+  const handleChangeIdentifier = (content) => {
+    setForm({
+      ...form,
+      identifier: content.trim(),
+    });
+  };
+
+  const handleChangePassword = (content) => {
+    setForm({
+      ...form,
+      password: content,
+    });
+  };
+
+  useEffect(() => {
+    formValidation();
+  }, [form]);
+
+  const identifierValidation = (identifier) => {
+    // Regular expression for email
+    const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
+
+    // Regular expression for phone number (this example assumes a simple format)
+    const phonePattern = /^[\d\+\-]+$/;
+
+    if (emailPattern.test(identifier)) {
+      console.log("Email");
+    } else if (phonePattern.test(identifier)) {
+      console.log("Phone Number");
+    } else {
+      console.log("Neither");
+    }
+  };
 
   return (
     <View style={styles.loginPage}>
@@ -38,6 +85,8 @@ function Login({ navigation }) {
         <View style={styles.inputContainer}>
           <IdentifierIcon style={styles.inputIcon} />
           <TextInput
+            autoCapitalize="none"
+            onChangeText={(content) => handleChangeIdentifier(content)}
             placeholder="email or phone number"
             style={styles.identifierInput}
           />
@@ -45,6 +94,8 @@ function Login({ navigation }) {
         <View style={styles.inputContainer}>
           <PasswordIcon style={styles.inputIcon} />
           <TextInput
+            autoCapitalize="none"
+            onChangeText={(content) => handleChangePassword(content)}
             placeholder="password"
             style={styles.passwordInput}
             secureTextEntry={isSecure}
@@ -80,10 +131,13 @@ function Login({ navigation }) {
       <TouchableOpacity
         style={styles.loginBtnContainer}
         activeOpacity={0.8}
-        onPress={() => {}}
+        onPress={() => {
+          identifierValidation(form.identifier);
+        }}
+        disabled={!formChecked}
       >
         <LinearGradient
-          colors={["#6C77BF", "#4485C5"]}
+          colors={formChecked ? ["#6C77BF", "#4485C5"] : ["#88b4e2", "#88b4e2"]}
           locations={[0, 1]}
           style={styles.loginBtn}
         >
@@ -264,9 +318,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    // border: "solid",
-    // borderColor: "#e5e6e8",
-    // borderWidth: 1,
     backgroundColor: "#F3F4F6",
     borderRadius: 10,
     width: 150,

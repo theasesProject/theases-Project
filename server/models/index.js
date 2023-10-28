@@ -1,4 +1,4 @@
-const { Sequelize, Datatype } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 
 const connection = new Sequelize("rent", "root", "root", {
   host: "localhost",
@@ -19,17 +19,18 @@ const db = {};
 db.connection = connection;
 db.Sequelize = Sequelize;
 
-db.Admin = require("./admin.Model");
-db.User = require("./user.Model");
-db.Car = require("./car.Model");
-db.Message = require("./messages.Model");
-db.Agency = require("./agency.Model");
-db.MediaCar = require("./mediaCar.Model");
-db.Review = require("./reviews.Model");
-db.RoomChat = require("./roomChat.Model");
-db.History = require("./history.Model");
-db.Service=require("./service.Model")
-db.BookMark=require("./bookMarks.Model")
+db.Admin = require("./admin.Model") (DataTypes,connection)
+db.User = require("./user.Model") (DataTypes,connection)
+db.Car = require("./car.Model")(DataTypes,connection)
+db.Message = require("./messages.Model")(DataTypes,connection)
+db.Agency = require("./agency.Model")(DataTypes,connection)
+db.MediaCar = require("./mediaCar.Model")(DataTypes,connection)
+db.Review = require("./reviews.Model")(DataTypes,connection)
+db.RoomChat = require("./roomChat.Model")(DataTypes,connection)
+db.History = require("./history.Model")(DataTypes,connection)
+db.Service=require("./service.Model")(DataTypes,connection)
+db.Report = require("./reports.Model")(DataTypes,connection)
+db.BookMark=require("./bookMarks.Model")(DataTypes,connection)
   
 db.User.hasOne(db.Agency);
 db.Agency.belongsTo(db.User);

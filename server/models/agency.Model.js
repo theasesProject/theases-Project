@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes, connection) => {
+module.exports = ( DataTypes, connection) => {
   const Agency = connection.define("Agency", {
     papers: {
       type: DataTypes.STRING,
@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes, connection) => {
       allowNull: false,
     },
     verificationStatus: {
-      type: DataTypes.Boolean,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
@@ -18,16 +18,16 @@ module.exports = (sequelize, DataTypes, connection) => {
       allowNull: false,
     },
     deposit: {
-      type: DataTypes.Number,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     stateBlocked: {
-      type: DataTypes.Boolean,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
     transportation: {
-      type: DataTypes.Boolean,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },

@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes, connection) => {
+module.exports = ( DataTypes, connection) => {
   const Car = connection.define("Car", {
     model: {
       type: DataTypes.STRING,
@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes, connection) => {
       allowNull: false,
     },
     price: {
-      type: DataTypes.Number,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     period: {
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes, connection) => {
       allowNull: true,
     },
     deposit: {
-      type: DataTypes.Number,
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     acceptation:{

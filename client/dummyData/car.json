@@ -1,0 +1,40 @@
+[
+    {
+      "model": "Civic",
+      "brand": "Honda",
+      "price": 50,
+      "period": "daily",
+      "status": "available",
+      "horsePower": "120 HP",
+      "typeOfFuel": "Gasoline",
+      "description": "A compact and fuel-efficient car.",
+      "warrantyInsurance": "1-year warranty included",
+      "deposit": 500,
+      "acceptation": "accepted"
+    },
+    {
+      "model": "Corolla",
+      "brand": "Toyota",
+      "price": 60,
+      "period": "weekly",
+      "status": "available",
+      "horsePower": "140 HP",
+      "typeOfFuel": "Gasoline",
+      "description": "A reliable and spacious sedan.",
+      "warrantyInsurance": "2-year warranty included",
+      "deposit": 700,
+      "acceptation": "accepted"
+    },
+    {
+      "model": "Model 3",
+      "brand": "Tesla",
+      "price": 100,
+      "period": "monthly",
+      "status": "rented",
+      "horsePower": "450 HP",
+      "typeOfFuel": "Electric",
+      "description": "An electric luxury sedan.",
+      "warrantyInsurance": "3-year warranty included",
+      "deposit": 1000,
+      "acceptation": "pending"
+    }]

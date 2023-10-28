@@ -1,26 +1,45 @@
-import { View, Text, Button } from "react-native";
-import * as ReactNative from "react-native";
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+
+import CardCar from '../components/CardCar.jsx'
+import BrandBar from '../components/brandBar.jsx';
+
+import ProfileLandingPage from '../components/NavBarLandingPage.jsx';
+import SearchBar from "../components/searchBar.jsx"
+
 
 function Home({ navigation }) {
+
+
   return (
-    <ReactNative.View>
-      <ReactNative.Button
-        title="Go to Sign Up page"
-        onPress={() => navigation.navigate("SignUp")}
-      ></ReactNative.Button>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate("Userprofile")}
-      />
-      <ReactNative.Button
-        title="Login page"
-        onPress={() => navigation.navigate("Login")}
-      ></ReactNative.Button>
-    </ReactNative.View>
+    <View style={styles.homePage}>
+  
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ProfileLandingPage/>
+      <SearchBar/>
+      <BrandBar/>
+      <CardCar />
+      <CardCar />
+      <CardCar />
+      </ScrollView>
+    </View>
   );
 }
 
-Home.navigationOptions = {
-  title: "Home",
-};
+const styles = StyleSheet.create({
+  homePage: {
+    flex: 1,
+    backgroundColor: 'rgb(219, 217, 224)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop:"15%",
+    
+  },
+  scrollContent:{
+ gap:20
+ 
+  }
+
+});
+
 export default Home;

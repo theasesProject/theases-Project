@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes, connection) => {
+module.exports = (DataTypes, connection) => {
     const BookMark = connection.define("booMmark", {
     });
     return BookMark;

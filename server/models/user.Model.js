@@ -19,7 +19,7 @@ module.exports = (DataTypes, connection) => {
       unique: true,
     },
     dateOfBirth: {
-      type: DataTypes.Date,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     avatar: {

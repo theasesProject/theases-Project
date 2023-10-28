@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
-import { Button, View, Text, StyleSheet, ScrollView } from "react-native";
 
+import React, { useEffect } from "react";
+
+import { View, Text, StyleSheet, ScrollView, Button ,TouchableOpacity} from 'react-native';
 import CardCar from "../components/CardCar.jsx";
 import BrandBar from "../components/brandBar.jsx";
 
@@ -11,17 +12,21 @@ function Home({ navigation }) {
   return (
     <View style={styles.homePage}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <ProfileLandingPage />
-        <SearchBar />
-        <BrandBar />
-        <CardCar />
-        <CardCar />
-        <CardCar />
+      <TouchableOpacity  onPress={() => navigation.navigate("Userprofile")}>
+      <ProfileLandingPage     />
+      </TouchableOpacity>
+      <SearchBar/>
+      <BrandBar/>
+      <CardCar />
+      <CardCar />
+      <CardCar />
+     
+      </ScrollView> 
         <Button
-          title="Go to frst"
-          onPress={() => navigation.navigate("LoadingScreen")}
-        />
-      </ScrollView>
+        title="Go to frst"
+        onPress={() => navigation.navigate("LoadingScreen")}
+      />
+
     </View>
   );
 }

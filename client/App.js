@@ -5,11 +5,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
+
 import LoadingScreen from "./pages/Loading.jsx";
 import store from "./store/store";
 import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import SignUp from "./pages/signUp.jsx";
+
 
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 

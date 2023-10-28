@@ -14,11 +14,13 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cors())
 app.use(express.json())
 const carRouter = require("./router/carRouter")
-const UserRouter = require("./router/userRouter")
+// const UserRouter = require("./router/userRouter")
+const userRouter = require("./router/user.Route");
 
 //!routers
-app.use("/api/User",UserRouter)
+// app.use("/api/User",UserRouter)
 app.use("/api/car", carRouter)
+app.use("/api/users", userRouter);
 
 
 
@@ -33,3 +35,7 @@ app.use(function (err, req, res, next) {
    else
      res.status(500).json({ message: "Something looks wrong :( !!!" });
  });
+const http = require("http");
+
+
+

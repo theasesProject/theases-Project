@@ -5,7 +5,7 @@ import edpr from "../assets/edit.png";
 import profil from "../assets/profile.png";
 import React, { useState } from "react";
 import Modal from "react-native-modal";
-import UserProfilecard from "./UserProfileCard";
+import UserProfilecard from "../components/UserProfileCard";
 import bkg from "../assets/bkg.png";
 import stg from "../assets/settings.png";
 import lgt from "../assets/logout.png";

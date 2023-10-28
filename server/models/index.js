@@ -28,9 +28,9 @@ db.MediaCar = require("./mediaCar.Model");
 db.Review = require("./reviews.Model");
 db.RoomChat = require("./roomChat.Model");
 db.History = require("./history.Model");
-db.Service=require("./service.Model")
-db.BookMark=require("./bookMarks.Model")
-  
+db.Service = require("./service.Model");
+db.BookMark = require("./bookMarks.Model");
+
 db.User.hasOne(db.Agency);
 db.Agency.belongsTo(db.User);
 
@@ -70,9 +70,9 @@ db.History.belongsTo(db.User);
 db.Car.hasMany(db.History);
 db.History.belongsTo(db.Car);
 
-db.User.hasMany(db.BookMark)
-db.BookMark.belongsTo(db.User)
+db.User.hasMany(db.BookMark);
+db.BookMark.belongsTo(db.User);
 
-db.BookMark.hasMany(db.Car)
-db.Car.belongsTo(db.BookMark)
+db.BookMark.hasMany(db.Car);
+db.Car.belongsTo(db.BookMark);
 module.exports.db = db;

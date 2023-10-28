@@ -29,7 +29,7 @@ navBar:{
 locationImage:{
   width:50,
   height:40,
-  justifyContent:"flex",
+  // justifyContent:"flex",
   alignItems:"center",
  
 },

@@ -18,7 +18,9 @@ const SignUp = ({ navigation, props }) => {
   const inputRefConfirmed = useRef();
   const [checkUp, setCheckUp] = useState(true);
   const SignUp = (inputForm) => {
-    inputForm.password === confirm && !checkUp ? console.log(inputForm) : null;
+    if (inputForm.password === confirm && !checkUp) {
+      console.log(inputForm);
+    }
   };
   const [confirm, setConfirm] = useState("");
   const [inputForm, setInputForm] = useState({

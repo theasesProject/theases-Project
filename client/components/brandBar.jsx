@@ -1,5 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ScrollView } from "react-native";
 import porche from "../assets/Porsche.png"
+import Honda from "../assets/Honda.jpg"
+import Hyundai from "../assets/Hyundai.jpg"
+import Toyota from "../assets/Toyota.png"
+import Ford from "../assets/ford.png"
 
 
 
@@ -20,27 +24,27 @@ return (
            <Text   style={styles.brandName} >porch</Text>
            </View>
            <View  style={styles.brandDetails} >
-           <Image style={styles.brandLogo}  source={porche} ></Image>
-           <Text   style={styles.brandName} >porch</Text>
+           <Image style={styles.brandLogo}  source={Ford} ></Image>
+           <Text   style={styles.brandName} >Ford</Text>
            </View>
            <View  style={styles.brandDetails} >
-           <Image style={styles.brandLogo}  source={porche} ></Image>
-           <Text   style={styles.brandName} >porch</Text>
+           <Image style={styles.brandLogo}  source={Toyota} ></Image>
+           <Text   style={styles.brandName} >Toyota</Text>
            </View>
            <View  style={styles.brandDetails} >
-           <Image style={styles.brandLogo}  source={porche} ></Image>
-           <Text   style={styles.brandName} >porch</Text>
+           <Image style={styles.brandLogo}  source={Hyundai} ></Image>
+           <Text   style={styles.brandName} >Hyundai</Text>
            </View>
            <View  style={styles.brandDetails} >
-           <Image style={styles.brandLogo}  source={porche} ></Image>
-           <Text   style={styles.brandName} >porch</Text>
+           <Image style={styles.brandLogo}  source={Honda} ></Image>
+           <Text   style={styles.brandName} >Honda</Text>
            </View>
            <View  style={styles.brandDetails} >
            <Image style={styles.brandLogo}  source={porche} ></Image>
            <Text   style={styles.brandName} >porch</Text>
            </View>
 
-         
+        
            </ScrollView> 
     </View>
 )

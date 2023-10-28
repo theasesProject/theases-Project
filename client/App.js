@@ -15,10 +15,6 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen  options={{ headerShown: false }} name="Home" component={Home} />
-
-      
-       
-       
       
       </Stack.Navigator>
     </NavigationContainer>

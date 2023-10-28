@@ -15,21 +15,9 @@ module.exports={
         
         }
      },
-     getCarByBrand:async function (req,res){
-try{
-  const carByBrand=await db.Car.findOne({
+  
 
-    where:{brand:req.params.brand}
-
-  })
-
-  res.status(200).send(carByBrand)
-} catch (error) {
-    throw error
-
-}
-
-     },
+     
      CreateCar:async function (req,res){
         try{
           const newCar=await db.Car.create({
@@ -70,7 +58,19 @@ try{
               
               }
            },
-          
+           filterCarByBrand: async function (req,res){
+            try{
+              const carByBrand=await db.Car.findAll({
+            
+                where:{brand:req.params.brand}
+            
+              })
+            
+              res.status(200).send(carByBrand)
+            } catch (error) {
+                throw error
+         }
+        } 
 
 
 

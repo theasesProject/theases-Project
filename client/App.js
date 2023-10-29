@@ -11,7 +11,8 @@ import store from "./store/store";
 import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import SignUp from "./pages/signUp.jsx";
-
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 
@@ -50,6 +51,18 @@ function App() {
           <Stack.Screen
             name="SignUp"
             component={SignUp}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="forgotPassword"
+            component={ForgotPassword}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="confirmIdentity"
+            component={ConfirmIdentity}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

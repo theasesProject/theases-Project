@@ -1,5 +1,8 @@
-// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import axios from "axios";
+
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { DOMAIN_NAME } from "../env";
+
 
 // // Define an initial state for the user slice
 // const initialState = {
@@ -8,21 +11,22 @@
 //   error: null,
 // };
 
-// // Define an async thunk to fetch a user from the database
-// const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
-//   try {
-//     // Replace this with your actual API call to fetch the user
-//     const response = await axios.post(
-//       "http://192.168.0.10:5000/api/users/token",
-//       {
-//         token: token,
-//       }
-//     );
-//     return response.data;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// });
+
+// Define an async thunk to fetch a user from the database
+const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
+  try {
+    // Replace this with your actual API call to fetch the user
+    const response = await axios.post(
+      `http://${DOMAIN_NAME}:5000/api/users/token`,
+      {
+        token: token,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 // const userSlice = createSlice({
 //   name: "user",

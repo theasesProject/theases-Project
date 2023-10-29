@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { DOMAIN_NAME } from "../env";
 
 const initialState = {
   allCars: [],
@@ -9,7 +10,7 @@ const initialState = {
 
 export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
   try {
-    const response = await axios.get("http://192.168.0.10:5000/api/car/allCars");
+    const response = await axios.get(`http://${DOMAIN_NAME}:5000/api/car/allCars`);
     console.log(response.data,"data")
     return response.data;
   } catch (error) {

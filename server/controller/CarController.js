@@ -59,17 +59,17 @@ module.exports={
               }
            },
            filterCarByBrand: async function (req,res){
-            try{
-              const carByBrand=await db.Car.findAll({
+            // try{
+        //       const carByBrand=await db.Car.findAll({
             
-                where:{brand:req.params.brand}
+        //         where:{brand:req.params.brand}
             
-              })
+        //       })
             
-              res.status(200).send(carByBrand)
-            } catch (error) {
-                throw error
-         }
+        //       res.status(200).send(carByBrand)
+        //     } catch (error) {
+        //         throw error
+        //  }
         } ,
 
         searchCarByModel : async function (req,res){

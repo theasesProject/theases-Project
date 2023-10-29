@@ -1,51 +1,51 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// import axios from "axios";
 
-// Define an initial state for the user slice
-const initialState = {
-  data: null,
-  status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
-  error: null,
-};
+// // Define an initial state for the user slice
+// const initialState = {
+//   data: null,
+//   status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
+//   error: null,
+// };
 
-// Define an async thunk to fetch a user from the database
-const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
-  try {
-    // Replace this with your actual API call to fetch the user
-    const response = await axios.post(
-      "http://192.168.56.51:5000/api/users/token",
-      {
-        token: token,
-      }
-    );
-    return response.data;
-  } catch (err) {
-    console.error(err);
-  }
-});
+// // Define an async thunk to fetch a user from the database
+// const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
+//   try {
+//     // Replace this with your actual API call to fetch the user
+//     const response = await axios.post(
+//       "http://192.168.0.10:5000/api/users/token",
+//       {
+//         token: token,
+//       }
+//     );
+//     return response.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
 
-const userSlice = createSlice({
-  name: "user",
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUser.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = action.payload;
-      })
-      .addCase(fetchUser.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
-      });
-  },
-});
+// const userSlice = createSlice({
+//   name: "user",
+//   initialState,
+//   reducers: {},
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(fetchUser.pending, (state) => {
+//         state.status = "loading";
+//       })
+//       .addCase(fetchUser.fulfilled, (state, action) => {
+//         state.status = "succeeded";
+//         state.data = action.payload;
+//       })
+//       .addCase(fetchUser.rejected, (state, action) => {
+//         state.status = "failed";
+//         state.error = action.error.message;
+//       });
+//   },
+// });
 
-export default userSlice.reducer;
-export const selectUser = (state) => state.user.data;
+// export default userSlice.reducer;
+// export const selectUser = (state) => state.user.data;
 
-// Export the async thunk for use in components
-export { fetchUser };
+// // Export the async thunk for use in components
+// export { fetchUser };

@@ -9,7 +9,7 @@ const initialState = {
 
 export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
   try {
-    const response = await axios.get("http://192.168.160.51:5000/api/car/allCars");
+    const response = await axios.get("http://192.168.0.10:5000/api/car/allCars");
     console.log(response.data,"data")
     return response.data;
   } catch (error) {

@@ -1,8 +1,8 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 
 import { View, Text, StyleSheet, ScrollView, Button ,TouchableOpacity} from 'react-native';
-import CardCar from "../components/cardCar.jsx"
+import CardCar from "../components/CardCar.jsx"
 import BrandBar from "../components/brandBar.jsx";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCars } from '../store/carFetch';
@@ -17,7 +17,7 @@ function Home({ navigation }) {
 
   useEffect(() => {
     dispatch(getAllCars());
-  }, [dispatch]);
+  }, []);
 
 
   const updateFilteredCars = (filteredCarData) => {
@@ -48,6 +48,7 @@ function Home({ navigation }) {
 
 const styles = StyleSheet.create({
   homePage: {
+    marginTop:"10%",
     flex: 1,
     backgroundColor: "rgb(219, 217, 224)",
     alignItems: "center",

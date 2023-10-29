@@ -2,10 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import localisation from "../assets/localisation1.png";
 import User from "../assets/OIP.jpg";
 import { useNavigation } from '@react-navigation/native'; 
-function ProfileLandingPage({navigation}) {
+function ProfileLandingPage() {
   const navigation = useNavigation();
 
-
+// 
   return (
 
     <View   style={styles.navBar}>

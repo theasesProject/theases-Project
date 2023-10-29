@@ -1,12 +1,12 @@
-const sequalize =require('sequelize')
-const {db}=require("../models/index")
 
+const {db}=require("../models/index")
+const { Sequelize, Op } = require('sequelize')
 
 module.exports={
     getAllCars: async function (req,res){
         try {
             const allCars= await db.Car.findAll({
-             include: { all: true, nested: true }
+              include: { model: db.CarMedia, as: 'CarMedia' }
             })
  
             res.status(200).send(allCars)
@@ -15,21 +15,9 @@ module.exports={
         
         }
      },
-     getCarByBrand:async function (req,res){
-try{
-  const carByBrand=await db.Car.findOne({
+  
 
-    where:{brand:req.params.brand}
-
-  })
-
-  res.status(200).send(carByBrand)
-} catch (error) {
-    throw error
-
-}
-
-     },
+     
      CreateCar:async function (req,res){
         try{
           const newCar=await db.Car.create({
@@ -59,9 +47,9 @@ try{
              },
              createImage: async function (req,res){
               try {
-                  const image= await db.MediaCar.create({
+                  const image= await db.CarMedia.create({
                     media:req.body.media,
-                    CardId:req.body.CardId
+                    CarId:req.body.CarId
                   })
        
                   res.status(200).send(image)
@@ -70,7 +58,41 @@ try{
               
               }
            },
+           filterCarByBrand: async function (req,res){
+            try{
+              const carByBrand=await db.Car.findAll({
+            
+                where:{brand:req.params.brand}
+            
+              })
+            
+              res.status(200).send(carByBrand)
+            } catch (error) {
+                throw error
+         }
+        } ,
+
+        searchCarByModel : async function (req,res){
+          const model = req.query.model;
+          try{
+            const carSearched=await db.Car.findAll({
           
+              where: {
+                model: {
+                  [Op.like]: `%${model}%`,
+                },
+              },
+            })
+          
+           
+          
+            res.status(200).send(carSearched)
+          } catch (error) {
+              throw error
+       }
+      } ,
+
+
 
 
 

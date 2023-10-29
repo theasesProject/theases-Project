@@ -1,8 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import localisation from "../assets/localisation1.png";
 import User from "../assets/OIP.jpg";
+import { useNavigation } from '@react-navigation/native'; 
+function ProfileLandingPage({navigation}) {
+  const navigation = useNavigation();
 
-function ProfileLandingPage() {
+
   return (
 
     <View   style={styles.navBar}>
@@ -15,7 +18,9 @@ function ProfileLandingPage() {
       <Text style={styles.UserAdress}>Norvey,User </Text>
       </View>
       </View>
+      <TouchableOpacity   onPress={() => navigation.navigate("Userprofile")}> 
       <Image  source={User}  style={styles.UserImage} ></Image>
+      </TouchableOpacity>
       </View>
     </View>
   )
@@ -29,7 +34,6 @@ navBar:{
 locationImage:{
   width:50,
   height:40,
-  // justifyContent:"flex",
   alignItems:"center",
  
 },

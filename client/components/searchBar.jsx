@@ -1,17 +1,34 @@
 
 import { View, Text, StyleSheet, ScrollView,TextInput,TouchableOpacity ,Image} from 'react-native';
 import filter from "../assets/filter.png"
+import {useState} from "react"
+function SearchBar({onSearch}){
+    const [searchedCar, setSearchedCar] = useState('')
+   
 
-function SearchBar(){
+    const handleSearch=(text)=>{
+        setSearchedCar(text)
+        searchCarsByModel(text)
+    }
 
+
+    const searchCarsByModel = async (model) => {
+        try {
+          const response = await axios.get(`http://192.168.160.51:3000/searchName/${model}`)
+          onSearch(response.data)
+        } catch (error) {
+            console.error('Error:', error);
+          }
+        
+        }
+    
 return (
-
 <View    style={styles.searchBar}>
 <View style={styles.searchDetails}>
 <Text style={styles.FirstText}>Select or search your</Text>
 <Text style={styles.FirstText}>favourite location</Text>
 <View  style={styles.inputAndButton}  >
-<TextInput   style={styles.input}   placeholder='Search'></TextInput>
+<TextInput  onChangeText={handleSearch} style={styles.input} value={searchedCar}  placeholder='Search'></TextInput>
 <View  style={styles.filterImage} >
 <Image source={filter}  style={styles.filter}></Image>
 </View    >

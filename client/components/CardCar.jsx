@@ -5,18 +5,22 @@ import emptyStar from "../assets/eto.png"
 import star from "../assets/star1.png"
 import heartBleu from "../assets/filledPurpleHeart.png"
 import emptyHeart from "../assets/emptyHeart.png"
-function CardCar({onPress}) {
+
+
+
+function CardCar({onPress,oneCar}) {
+
    const [starSelected, setStarSelected] = useState(false)
    const [heartSelected, setHeartSelected] = useState(false)
    const starImage=starSelected ? star :emptyStar;
    const heartImage=heartSelected? heartBleu : emptyHeart;
 const handleStarPress = () => {
           setStarSelected(!starSelected);
-          console.log("etoile")
+       
        };
    const handleHeartPress =()=>{
       setHeartSelected(!heartSelected)
-      console.log("etoile")
+   
    }
  
 
@@ -26,20 +30,17 @@ const handleStarPress = () => {
     return (
       <View style={styles.card}>
         
-        <View   style={styles.barText}>
-    <Text   style={styles.AllCars} >All Cars</Text>
-    <Text    style={styles.ViewAll} >View All</Text>
-    </View>
+      
     <View style={styles.Image}>
-    <Image style={styles.carImage}  source={car} ></Image>
+    <Image style={styles.carImage}  source={oneCar.CarMedia.media} ></Image>
     <TouchableOpacity   onPress={ handleHeartPress}>
     <Image style={styles.heart}   source={heartImage} ></Image>
     </TouchableOpacity>
     </View>
     <View style={styles.carDetails}>
     <View   style={styles.NameAvaib}>
-    <Text style={styles.carName}>Maserti  976</Text>
-    <Text style={styles.avaible}>Avaibility</Text>
+    <Text style={styles.carName}>{oneCar.model}</Text>
+    <Text style={styles.avaible}>{oneCar.status}</Text>
     </View>
     <View    style={styles.PriceStar} >
    <View   style={styles.reviews} >
@@ -48,7 +49,7 @@ const handleStarPress = () => {
     </TouchableOpacity>
     <Text style={styles.avaible}>(150 review)</Text>
     </View>
-    <Text style={styles.carPrice}>$540/day</Text>
+    <Text style={styles.carPrice}>${oneCar.price}/{oneCar.period}</Text>
    
     </View>
     </View>
@@ -60,11 +61,13 @@ const handleStarPress = () => {
 
 const styles = StyleSheet.create({
   card:{
+
     backgroundColor:"rgb(237, 238, 247)",
     width:"100%",
     height:250,
     borderRadius:10,
-    alignItems:"center"
+    alignItems:"center",
+    justifyContent:"center"
 
   },
   barText:{
@@ -74,15 +77,7 @@ const styles = StyleSheet.create({
 flexDirection:"row",
 justifyContent:"space-between"
 },
-AllCars:{
-    fontWeight: "bold",
-    fontSize:20
-},
-ViewAll:{
-   color: "grey",
-    fontSize:18,
-   
-},
+
 carImage:{
 
     width:300,

@@ -13,7 +13,7 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   try {
     // Replace this with your actual API call to fetch the user
     const response = await axios.post(
-      "http://192.168.54.213:5000/api/users/token",
+      "http://192.168.56.51:5000/api/users/token",
       {
         token: token,
       }

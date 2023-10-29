@@ -25,6 +25,9 @@ function App() {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} />
 
+
+      
+   
           <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}

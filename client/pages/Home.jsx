@@ -2,34 +2,46 @@
 import React, { useEffect } from "react";
 
 import { View, Text, StyleSheet, ScrollView, Button ,TouchableOpacity} from 'react-native';
-import CardCar from "../components/CardCar.jsx";
+import CardCar from "../components/cardCar.jsx"
 import BrandBar from "../components/brandBar.jsx";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCars } from '../store/carFetch';
 import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
 import SearchBar from "../components/searchBar.jsx";
 
 function Home({ navigation }) {
+  const dispatch = useDispatch();
+  const allCars = useSelector((state) => state.car.allCars);
+  const loading = useSelector((state) => state.car.loading);
+  const [filteredCars, setFilteredCars] = useState(allCars)
+
+  useEffect(() => {
+    dispatch(getAllCars());
+  }, [dispatch]);
+
+
+  const updateFilteredCars = (filteredCarData) => {
+    setFilteredCars(filteredCarData);
+  }
+
+
   return (
-    <View style={styles.homePage}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-      <TouchableOpacity  onPress={() => navigation.navigate("Userprofile")}>
+    <View   options={{ headerShown: true }}  style={styles.homePage}>
+      <ScrollView >
+     
       <ProfileLandingPage     />
-      </TouchableOpacity>
-      <SearchBar/>
-      <BrandBar/>
-      <CardCar />
-      <CardCar />
-      <CardCar />
+     
+      <SearchBar     onSearch={updateFilteredCars} />
+      <BrandBar   onFilterByBrand={updateFilteredCars} />
+      {filteredCars.map((element, i) => (
+        <View style={styles.allcars}>
+          <CardCar key={i} oneCar={element} />
+          </View>
+       ) )}
+   
      
       </ScrollView> 
-        <Button
-        title="Go to frst"
-        onPress={() => navigation.navigate("LoadingScreen")}
-      />
- <Button
-        title="Go to log"
-        onPress={() => navigation.navigate("Login")}
-      />
+        
     </View>
   );
 }
@@ -40,11 +52,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(219, 217, 224)",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "15%",
+  gap:10
   },
-  scrollContent: {
-    gap: 20,
-  },
+  allcars:{
+   paddingBottom:20
+  }
+ 
 });
 
 export default Home;

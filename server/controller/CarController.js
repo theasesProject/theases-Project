@@ -79,7 +79,7 @@ module.exports={
           
               where: {
                 model: {
-                  [Sequelize.Op.like]: `%${model}%`,
+                  [Op.like]: `%${model}%`,
                 },
               },
             })

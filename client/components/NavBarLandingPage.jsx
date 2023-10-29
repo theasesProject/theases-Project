@@ -1,8 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import localisation from "../assets/localisation1.png";
 import User from "../assets/OIP.jpg";
-
+import { useNavigation } from '@react-navigation/native'; 
 function ProfileLandingPage({navigation}) {
+  const navigation = useNavigation();
+
+
   return (
 
     <View   style={styles.navBar}>
@@ -31,7 +34,6 @@ navBar:{
 locationImage:{
   width:50,
   height:40,
-  // justifyContent:"flex",
   alignItems:"center",
  
 },

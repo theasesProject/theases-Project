@@ -2,9 +2,9 @@
 import { View, Text, StyleSheet, ScrollView,TextInput,TouchableOpacity ,Image} from 'react-native';
 import filter from "../assets/filter.png"
 import {useState} from "react"
-function SearchBar(){
+function SearchBar({onSearch}){
     const [searchedCar, setSearchedCar] = useState('')
-    const [search,setSearch]=useState([])
+   
 
     const handleSearch=(text)=>{
         setSearchedCar(text)
@@ -14,8 +14,8 @@ function SearchBar(){
 
     const searchCarsByModel = async (model) => {
         try {
-          const response = await axios.get(`http://192.168.56.51:3000/searchName/${model}`)
-    setSearch(response.data)
+          const response = await axios.get(`http://192.168.160.51:3000/searchName/${model}`)
+          onSearch(response.data)
         } catch (error) {
             console.error('Error:', error);
           }

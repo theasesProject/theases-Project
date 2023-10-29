@@ -13,10 +13,16 @@ function Home({ navigation }) {
   const dispatch = useDispatch();
   const allCars = useSelector((state) => state.car.allCars);
   const loading = useSelector((state) => state.car.loading);
-console.log(allCars, loading);
+  const [filteredCars, setFilteredCars] = useState(allCars)
+
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
+
+
+  const updateFilteredCars = (filteredCarData) => {
+    setFilteredCars(filteredCarData);
+  }
 
 
   return (
@@ -25,9 +31,9 @@ console.log(allCars, loading);
      
       <ProfileLandingPage     />
      
-      <SearchBar/>
-      <BrandBar/>
-      {allCars.map((element, i) => (
+      <SearchBar     onSearch={updateFilteredCars} />
+      <BrandBar   onFilterByBrand={updateFilteredCars} />
+      {filteredCars.map((element, i) => (
         <View style={styles.allcars}>
           <CardCar key={i} oneCar={element} />
           </View>

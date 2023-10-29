@@ -6,7 +6,7 @@ carRouter.get('/allCars',getAllCars)
 carRouter.get("/byBrand/:brand",filterCarByBrand)
 carRouter.post('/newCar',CreateCar)
 carRouter.post("/imageCar",createImage)
-carRouter.get('/searchName:model',searchCarByModel)
+carRouter.get('/searchName/:model',searchCarByModel)
 
 
 

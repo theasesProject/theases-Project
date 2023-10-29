@@ -24,7 +24,7 @@ function Home({ navigation }) {
       </ScrollView> 
         <Button
         title="Go to frst"
-        onPress={() => navigation.navigate("LoadingScreen")}
+        onPress={() => navigation.navigate("Carousel")}
       />
  <Button
         title="Go to log"

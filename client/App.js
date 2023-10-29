@@ -23,7 +23,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Home" component={Home}   options={{ headerShown: false }}/>
 
 
@@ -50,6 +50,11 @@ function App() {
           <Stack.Screen
             name="SignUp"
             component={SignUp}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
             options={{ headerShown: false }}
           />
 

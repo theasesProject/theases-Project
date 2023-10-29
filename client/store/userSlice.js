@@ -4,12 +4,12 @@ import axios from "axios";
 import { DOMAIN_NAME } from "../env";
 
 
-// // Define an initial state for the user slice
-// const initialState = {
-//   data: null,
-//   status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
-//   error: null,
-// };
+// Define an initial state for the user slice
+const initialState = {
+  data: null,
+  status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
+  error: null,
+};
 
 
 // Define an async thunk to fetch a user from the database

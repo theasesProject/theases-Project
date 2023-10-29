@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
-
+import Carousel from "./pages/Carousel.jsx";
 import LoadingScreen from "./pages/Loading.jsx";
 import store from "./store/store";
 import { Provider } from "react-redux";
@@ -23,20 +23,25 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
+        
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Home" component={Home}   options={{ headerShown: false }}/>
 
+
+      
+   
           <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
           />
 
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
+
+          {/* <Stack.Screen
+            name="Carousel"
+            component={Carousel}
+        
+          /> */}
           <Stack.Screen
             name="Userprofile"
             component={UserProfile}

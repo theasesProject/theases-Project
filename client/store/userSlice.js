@@ -1,13 +1,16 @@
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { DOMAIN_NAME } from "../env";
 
-// Define an initial state for the user slice
-const initialState = {
-  data: null,
-  status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
-  error: null,
-};
+
+// // Define an initial state for the user slice
+// const initialState = {
+//   data: null,
+//   status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
+//   error: null,
+// };
+
 
 // Define an async thunk to fetch a user from the database
 const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
@@ -25,28 +28,28 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   }
 });
 
-const userSlice = createSlice({
-  name: "user",
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUser.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = action.payload;
-      })
-      .addCase(fetchUser.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
-      });
-  },
-});
+// const userSlice = createSlice({
+//   name: "user",
+//   initialState,
+//   reducers: {},
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(fetchUser.pending, (state) => {
+//         state.status = "loading";
+//       })
+//       .addCase(fetchUser.fulfilled, (state, action) => {
+//         state.status = "succeeded";
+//         state.data = action.payload;
+//       })
+//       .addCase(fetchUser.rejected, (state, action) => {
+//         state.status = "failed";
+//         state.error = action.error.message;
+//       });
+//   },
+// });
 
-export default userSlice.reducer;
-export const selectUser = (state) => state.user.data;
+// export default userSlice.reducer;
+// export const selectUser = (state) => state.user.data;
 
-// Export the async thunk for use in components
-export { fetchUser };
+// // Export the async thunk for use in components
+// export { fetchUser };

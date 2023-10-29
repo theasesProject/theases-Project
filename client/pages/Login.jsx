@@ -86,7 +86,9 @@ function Login({ navigation }) {
         return setError("please provide an email or a phone number");
       }
       const response = await axios.post(
+
         `http://${DOMAIN_NAME}:5000/api/users/${endPoint}`,
+
         {
           [checkedIdentifier]: form.identifier,
           password: form.password,

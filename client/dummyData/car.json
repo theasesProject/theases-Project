@@ -27,7 +27,7 @@
     },
     {
       "model": "Model 3",
-      "brand": "Tesla",
+      "brand": "Ford",
       "price": 100,
       "period": "monthly",
       "status": "rented",

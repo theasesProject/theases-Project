@@ -101,6 +101,34 @@ SignUpUser:async(req,res,next)=>{
   },
 
 
+  // Get user by email
+  getUserByEmail: async (req, res) => {
+    try {
+      const user = await User.findOne({ where: { email: req.params.email } });
+      if (!user) {
+        return res.status(404).json("user does not exist");
+      }
+      res.status(200).send("user exists");
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  // Get user by phone number
+  getUserByPhoneNumber: async (req, res) => {
+    try {
+      const user = await User.findOne({
+        where: { phoneNumber: req.params.phoneNumber },
+      });
+      if (!user) {
+        return res.status(404).json("user does not exist");
+      }
+      res.status(200).send("user exists");
+    } catch (err) {
+      throw err;
+    }
+  },
+
   // Get a specific user by ID
   getUserById: async (req, res) => {
     const userId = req.params.id;

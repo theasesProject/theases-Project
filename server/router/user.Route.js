@@ -6,6 +6,8 @@ const {
   // signUp,
   emailLogin,
   phoneLogin,
+  getUserByEmail,
+  getUserByPhoneNumber,
   handleToken,
   getUserById,
   updateUser,
@@ -20,6 +22,9 @@ router.post("/phoneLogin", phoneLogin);
 router.post("/token", handleToken);
 router.get('/BringUserData',bringUsersData)
 router.post('/SignUpUser',SignUpUser)
+router.get("/getOneByEmail/:email", getUserByEmail);
+router.get("/getOneByPhone/:phoneNumber", getUserByPhoneNumber);
+// router.get("/getAll", getAllUsers);
 router.get("/getOne/:id", getUserById);
 router.put("/update/:id", updateUser);
 router.delete("/delete/:id", deleteUser);

@@ -26,6 +26,9 @@ function App() {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home}   options={{ headerShown: false }}/>
 
+
+      
+   
           <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}

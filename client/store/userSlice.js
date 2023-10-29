@@ -23,7 +23,15 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
     console.error(err);
   }
 });
-
+export const SignUpClick = createAsyncThunk("user/SignUp", async (inputForm,) => {
+  try {
+    console.log(inputForm);
+    const task = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`, inputForm)
+    return task.data
+  } catch (er) {
+    console.error(JSON.stringify(er));
+  }
+})
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -40,7 +48,8 @@ const userSlice = createSlice({
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+
   },
 });
 

@@ -8,28 +8,37 @@ import Phone from "../assets/Svg/phone.svg";
 import Lock from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
+import Calendar from "../assets/Svg/calendar.svg";
 import { LinearGradient } from "expo-linear-gradient";
 const { width, height } = Rn.Dimensions.get("window");
 import GooglePng from "../assets/googleIcon.png";
 import FaceBookPng from "../assets/facebookIcon.png";
+import { SignUpClick } from "../store/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import DateTimePicker from "@react-native-community/datetimepicker";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
   const inputRefPhone = useRef();
   const inputRefPassword = useRef();
   const inputRefConfirmed = useRef();
-  const [checkUp, setCheckUp] = useState(true);
-  const SignUp = (inputForm) => {
-    if (inputForm.password === confirm && !checkUp) {
+  const [checkUp, setCheckUp] = useState(false);
+  // const [dateOfBirth, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+  const SignUpHandle = (inputForm) => {
+    if (inputForm.password === confirm) {
       console.log(inputForm);
+      dispatch(SignUpClick(inputForm));
     }
   };
   const [confirm, setConfirm] = useState("");
   const [inputForm, setInputForm] = useState({
     userName: "",
     email: "",
-    phone:"",
+    phoneNumber: "",
     password: "",
+    dateOfBirth: new Date(),
   });
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -92,7 +101,7 @@ const SignUp = ({ navigation, props }) => {
           setEmailError("");
         }
       } else if (placeholder === "Phone") {
-        const phoneRegex = /^[0-9]{10}$/;
+        const phoneRegex = /^[0-9]{8}$/;
         if (!phoneRegex.test(value.trim())) {
           setPhoneError("Phone number should be 10 digits long.");
           return;
@@ -124,8 +133,15 @@ const SignUp = ({ navigation, props }) => {
       }
     }
   };
+  const showDatepicker = () => {
+    setShow(true);
+  };
 
-
+  const onChangeDate = (selectedDate) => {
+    // const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setInputForm({ ...inputForm, dateOfBirth: selectedDate });
+  };
 
   return (
     <Rn.ScrollView style={styles.container}>
@@ -152,9 +168,10 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!text &&
                     !!inputForm.email &&
-                    !!inputForm.phone&&
+                    !!inputForm.phoneNumber &&
                     !!inputForm.password &&
-                    !!confirm
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
@@ -162,7 +179,7 @@ const SignUp = ({ navigation, props }) => {
           {nameError ? (
             <Rn.Text style={{ color: "red" }}>{nameError}</Rn.Text>
           ) : null}
-         
+
           <Rn.View style={styles.inputHolder}>
             <Email style={styles.icon} />
             <Rn.TextInput
@@ -179,9 +196,10 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!text &&
-                    !!inputForm.phone&&
+                    !!inputForm.phoneNumber &&
                     !!inputForm.password &&
-                    !!confirm
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
@@ -189,25 +207,26 @@ const SignUp = ({ navigation, props }) => {
           {emailError ? (
             <Rn.Text style={{ color: "red" }}>{emailError}</Rn.Text>
           ) : null}
-           <Rn.View style={styles.inputHolder}>
+          <Rn.View style={styles.inputHolder}>
             <Phone style={styles.icon} />
             <Rn.TextInput
               ref={inputRefPhone}
-              value={inputForm.phone}
+              value={inputForm.phoneNumber}
               onBlur={() => {
-                checkInput(inputForm.phone, "Phone");
+                checkInput(inputForm.phoneNumber, "Phone");
               }}
               autoCapitalize="none"
               style={styles.input}
               placeholder="Phone"
               onChangeText={(text) => {
-                setInputForm({ ...inputForm, phone: text.trim() });
+                setInputForm({ ...inputForm, phoneNumber: text.trim() });
                 setCheckUp(
                   !!inputForm.userName &&
                     !!text &&
-                    !!inputForm.email&&
+                    !!inputForm.email &&
                     !!inputForm.password &&
-                    !!confirm
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
@@ -233,9 +252,10 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!inputForm.email &&
-                    !!inputForm.phone&&
+                    !!inputForm.phoneNumber &&
                     !!text &&
-                    !!confirm
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
@@ -276,9 +296,10 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!inputForm.email &&
-                    !!inputForm.phone&&
+                    !!inputForm.phoneNumber &&
                     !!inputForm.password &&
-                    !!text
+                    !!text &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
@@ -302,11 +323,35 @@ const SignUp = ({ navigation, props }) => {
             <Rn.Text style={{ color: "red" }}>{confirmedError}</Rn.Text>
           ) : null}
         </Rn.View>
+        <Rn.View style={{display:"flex" , flexDirection:"row",alignContent:"center"}}>
+          <Rn.TouchableOpacity onPress={showDatepicker}>
+            <Calendar  style={styles.icon}/>
+            <LinearGradient
+              colors={["#EFEFF9", "#EFEFF9"]}
+              locations={[0, 1]}
+              style={styles.buttonContainer2}
+            >
+              <Rn.Text>Date of Birth</Rn.Text>
+            </LinearGradient>
+          </Rn.TouchableOpacity>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={inputForm.dateOfBirth}
+              mode="date"
+              is24Hour={true}
+              display="default"
+              onChangeText={(text) => {
+                onChangeDate(text);
+              }}
+            />
+          )}
+        </Rn.View>
         <Rn.TouchableOpacity
           disabled={!checkUp}
           activeOpacity={0.8}
           onPress={() => {
-            inputForm.password === confirm ? SignUp(inputForm) : null;
+            inputForm.password === confirm ? SignUpHandle(inputForm) : null;
           }}
         >
           <LinearGradient
@@ -319,7 +364,10 @@ const SignUp = ({ navigation, props }) => {
         </Rn.TouchableOpacity>
         <Rn.Pressable
           activeOpacity={0.8}
-          onPressIn={() => setColor("darkblue")}
+          onPressIn={() => {
+            setColor("darkblue");
+            navigation.navigate("Login");
+          }}
           onPressOut={() => setColor("#6C77BF")}
         >
           <Rn.Text>
@@ -377,8 +425,8 @@ const styles = StyleSheet.create({
   SignUpContainer: {
     // height: height,
     flex: 1,
-    paddingTop:50,
-    paddingBottom:50,
+    paddingTop: 50,
+    paddingBottom: 50,
     // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -386,7 +434,7 @@ const styles = StyleSheet.create({
   separator: {
     marginVertical: 30,
     backgroundColor: "lightgrey",
-    height: 0.5,
+    height: 1.0,
     width: "70%",
   },
   googleText: {
@@ -491,6 +539,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 15,
     width: width * 0.8,
+  },
+  buttonContainer2: {
+    // backgroundColor: "red",
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+    marginTop: 15,
+    width: width * 0.3,
   },
   buttonText: {
     fontSize: 18,

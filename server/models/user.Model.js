@@ -9,7 +9,7 @@ module.exports = (DataTypes, connection) => {
         },
         phoneNumber: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
             unique: true
 
         },
@@ -25,7 +25,8 @@ module.exports = (DataTypes, connection) => {
         },
         dateOfBirth: {
             type: DataTypes.DATE,
-            allowNull: true
+            allowNull: false,
+            // defaultValue:"Sun Oct 29 2023 13:44:49 GMT+0100 (West Africa Standard Time)"
         },
         avatar: {
             type: DataTypes.STRING,

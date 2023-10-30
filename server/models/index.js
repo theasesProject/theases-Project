@@ -13,7 +13,7 @@ connection
     console.error("error connecting to database", err);
   });
 
-// connection.sync({ force: true });
+// connection.sync({ alter: true });
 
 const db = {};
 db.connection = connection;

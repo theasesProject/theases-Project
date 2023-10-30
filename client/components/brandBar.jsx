@@ -6,13 +6,13 @@ import Toyota from "../assets/Toyota.png"
 import Ford from "../assets/ford.png"
 import {useState} from "react"
 import axios from "axios"
-
+import { DOMAIN_NAME } from "../env";
 function BrandBar({onPress,onFilterByBrand}){
     const [carByBrand,setCarByBrand]=useState([])
     const [error,setError]=useState(false)
 
     const handleFilterByBrand=(brandName)=>{
-    axios.get(`http://192.168.56.51:5000/api/car/byBrand/${brandName}`).then((response)=>{
+    axios.get(`http://${DOMAIN_NAME}:5000/api/car/byBrand/${brandName}`).then((response)=>{
         onFilterByBrand(response.data)
     }).catch(error=>{
         setError(true)

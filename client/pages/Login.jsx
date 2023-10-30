@@ -19,6 +19,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
+import { DOMAIN_NAME } from "../env";
+
 // require("dotenv").config();
 // ${process.env.DOMAIN_NAME}
 
@@ -85,7 +87,9 @@ function Login({ navigation }) {
         return setError("please provide an email or a phone number");
       }
       const response = await axios.post(
-        `http://192.168.160.51:5000/api/users/${endPoint}`,
+
+        `http://${DOMAIN_NAME}:5000/api/users/${endPoint}`,
+
         {
           [checkedIdentifier]: form.identifier,
           password: form.password,
@@ -93,7 +97,7 @@ function Login({ navigation }) {
       );
       setError(null);
       dispatch(fetchUser(response.data));
-      navigation.navigate("Home");
+      navigation.navigate('Home');
     } catch (err) {
       if (err.response.status == "404") {
         setError("user does not exist");
@@ -174,6 +178,7 @@ function Login({ navigation }) {
           activeOpacity={0.8}
           onPressIn={() => setColor2("darkblue")}
           onPressOut={() => setColor2("#6C77BF")}
+          onPress={() => navigation.navigate("forgotPassword")}
         >
           <Text style={{ color: color2, ...styles.forgotPassword }}>
             Forgot Password?

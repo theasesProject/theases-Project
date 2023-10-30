@@ -4,30 +4,58 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import UserNormal from "../assets/Svg/user-normal.svg";
 import Email from "../assets/Svg/email.svg";
+import Phone from "../assets/Svg/phone.svg";
 import Lock from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
+import Calendar from "../assets/Svg/calendar.svg";
 import { LinearGradient } from "expo-linear-gradient";
 const { width, height } = Rn.Dimensions.get("window");
 import GooglePng from "../assets/googleIcon.png";
 import FaceBookPng from "../assets/facebookIcon.png";
+import { SignUpClick } from "../store/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import DateTimePicker from "@react-native-community/datetimepicker";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
+  const inputRefPhone = useRef();
   const inputRefPassword = useRef();
   const inputRefConfirmed = useRef();
-  const [checkUp, setCheckUp] = useState(true);
-  const SignUp = (inputForm) => {
-    inputForm.password === confirm && !checkUp ? console.log(inputForm) : null;
+  const [checkUp, setCheckUp] = useState(false);
+  // const [dateOfBirth, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+  const SignUpHandle = (inputFor) => {
+    if (inputForm.password === confirm) {
+      console.log(inputForm);
+      dispatch(SignUpClick(inputForm))
+        .then((response) => {
+          // Check if the dispatch was successful
+          console.log("THIS IS THE FUCKING RESPONSE",response.meta);
+          if (response.meta.requestStatus==="fulfilled") {
+            // Navigate to the desired location
+            navigation.navigate('Home');
+          }
+        })
+        .catch((error) => {
+          // Handle any errors from the dispatch here
+          console.error(error);
+        });
+    }
   };
+  
   const [confirm, setConfirm] = useState("");
   const [inputForm, setInputForm] = useState({
     userName: "",
     email: "",
+    phoneNumber: "",
     password: "",
+    dateOfBirth: new Date(),
   });
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmedError, setConfirmedError] = useState("");
 
@@ -38,41 +66,65 @@ const SignUp = ({ navigation, props }) => {
   const [isSecure2, setIsecure2] = useState(true);
 
   const checkInput = (value, placeholder) => {
+    // Clear all errors
+    setNameError("");
+    setEmailError("");
+    setPhoneError("");
+    setPasswordError("");
+    setConfirmedError("");
+
     if (value === "") {
       if (placeholder === "Username") {
         setNameError("Username cannot be empty.");
+        return;
       } else if (placeholder === "Email") {
         setEmailError("Email cannot be empty.");
+        return;
+      } else if (placeholder === "Phone") {
+        setPhoneError("Phone Number cannot be empty.");
+        return;
       } else if (placeholder === "Password") {
         setPasswordError("Password cannot be empty.");
+        return;
       } else if (placeholder === "Confirm Your Password") {
         setConfirmedError("Please confirm your password.");
+        return;
       }
     } else {
       if (placeholder === "Username") {
         if (value.length < 3 || value.length > 30) {
           setNameError("Username should be between 3 and 30 characters long.");
+          return;
         } else if (!/^[a-z0-9_-]+$/i.test(value)) {
           setNameError(
             "Username should only contain alphanumeric characters, hyphens, and underscores."
           );
+          return;
         } else {
           setNameError("");
         }
-        // For uniqueness check, you need to implement a function that checks the username against a database of existing usernames.
       } else if (placeholder === "Email") {
         const emailRegex =
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]*@[a-zA-Z0-9-]*\.com$/;
 
         if (!emailRegex.test(value.trim())) {
           setEmailError("Email should match the email format.");
+          return;
         } else {
           setEmailError("");
         }
-        // For uniqueness check, you need to implement a function that checks the email against a database of existing emails.
+      } else if (placeholder === "Phone") {
+        const phoneRegex = /^[0-9]{8}$/;
+        if (!phoneRegex.test(value.trim())) {
+          setPhoneError("Phone number should be 10 digits long.");
+          return;
+        } else {
+          setPhoneError("");
+        }
       } else if (placeholder === "Password") {
         if (value.length < 8) {
           setPasswordError("Password should be at least 8 characters long.");
+          return;
         }
         const passwordRegex =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/;
@@ -80,17 +132,28 @@ const SignUp = ({ navigation, props }) => {
           setPasswordError(
             "Password should include a mix of uppercase letters, lowercase letters, numbers, and special characters."
           );
+          return;
         } else {
           setPasswordError("");
         }
       } else if (placeholder === "Confirm Your Password") {
         if (inputForm.password !== confirm) {
           setConfirmedError("Your Password Does not match .");
+          return;
         } else {
           setConfirmedError("");
         }
       }
     }
+  };
+  const showDatepicker = () => {
+    setShow(true);
+  };
+
+  const onChangeDate = (selectedDate) => {
+    // const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setInputForm({ ...inputForm, dateOfBirth: selectedDate });
   };
 
   return (
@@ -118,8 +181,10 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!text &&
                     !!inputForm.email &&
+                    !!inputForm.phoneNumber &&
                     !!inputForm.password &&
-                    !!confirm
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
@@ -127,6 +192,7 @@ const SignUp = ({ navigation, props }) => {
           {nameError ? (
             <Rn.Text style={{ color: "red" }}>{nameError}</Rn.Text>
           ) : null}
+
           <Rn.View style={styles.inputHolder}>
             <Email style={styles.icon} />
             <Rn.TextInput
@@ -143,14 +209,43 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!text &&
+                    !!inputForm.phoneNumber &&
                     !!inputForm.password &&
-                    !!confirm
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
           </Rn.View>
           {emailError ? (
             <Rn.Text style={{ color: "red" }}>{emailError}</Rn.Text>
+          ) : null}
+          <Rn.View style={styles.inputHolder}>
+            <Phone style={styles.icon} />
+            <Rn.TextInput
+              ref={inputRefPhone}
+              value={inputForm.phoneNumber}
+              onBlur={() => {
+                checkInput(inputForm.phoneNumber, "Phone");
+              }}
+              autoCapitalize="none"
+              style={styles.input}
+              placeholder="Phone"
+              onChangeText={(text) => {
+                setInputForm({ ...inputForm, phoneNumber: text.trim() });
+                setCheckUp(
+                  !!inputForm.userName &&
+                    !!text &&
+                    !!inputForm.email &&
+                    !!inputForm.password &&
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
+                );
+              }}
+            />
+          </Rn.View>
+          {phoneError ? (
+            <Rn.Text style={{ color: "red" }}>{phoneError}</Rn.Text>
           ) : null}
           <Rn.View style={styles.inputHolder}>
             <Lock style={styles.icon} />
@@ -170,8 +265,10 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!inputForm.email &&
+                    !!inputForm.phoneNumber &&
                     !!text &&
-                    !!confirm
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
@@ -212,8 +309,10 @@ const SignUp = ({ navigation, props }) => {
                 setCheckUp(
                   !!inputForm.userName &&
                     !!inputForm.email &&
+                    !!inputForm.phoneNumber &&
                     !!inputForm.password &&
-                    !!text
+                    !!text &&
+                    inputForm.dateOfBirth !== new Date()
                 );
               }}
             />
@@ -237,11 +336,35 @@ const SignUp = ({ navigation, props }) => {
             <Rn.Text style={{ color: "red" }}>{confirmedError}</Rn.Text>
           ) : null}
         </Rn.View>
+        <Rn.View style={{display:"flex" , flexDirection:"row",alignContent:"center"}}>
+          <Rn.TouchableOpacity onPress={showDatepicker}>
+            <Calendar  style={styles.icon}/>
+            <LinearGradient
+              colors={["#EFEFF9", "#EFEFF9"]}
+              locations={[0, 1]}
+              style={styles.buttonContainer2}
+            >
+              <Rn.Text>Date of Birth</Rn.Text>
+            </LinearGradient>
+          </Rn.TouchableOpacity>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={inputForm.dateOfBirth}
+              mode="date"
+              is24Hour={true}
+              display="default"
+              onChangeText={(text) => {
+                onChangeDate(text);
+              }}
+            />
+          )}
+        </Rn.View>
         <Rn.TouchableOpacity
           disabled={!checkUp}
           activeOpacity={0.8}
           onPress={() => {
-            inputForm.password === confirm ? SignUp(inputForm) : null;
+            inputForm.password === confirm ? SignUpHandle(inputForm) : null;
           }}
         >
           <LinearGradient
@@ -254,7 +377,10 @@ const SignUp = ({ navigation, props }) => {
         </Rn.TouchableOpacity>
         <Rn.Pressable
           activeOpacity={0.8}
-          onPressIn={() => setColor("darkblue")}
+          onPressIn={() => {
+            setColor("darkblue");
+            navigation.navigate("Login");
+          }}
           onPressOut={() => setColor("#6C77BF")}
         >
           <Rn.Text>
@@ -310,8 +436,10 @@ const styles = StyleSheet.create({
     // width: width * 0.01,
   },
   SignUpContainer: {
-    height: height,
-    // flex: 1,
+    // height: height,
+    flex: 1,
+    paddingTop: 50,
+    paddingBottom: 50,
     // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -319,7 +447,7 @@ const styles = StyleSheet.create({
   separator: {
     marginVertical: 30,
     backgroundColor: "lightgrey",
-    height: 0.5,
+    height: 1.0,
     width: "70%",
   },
   googleText: {
@@ -335,7 +463,7 @@ const styles = StyleSheet.create({
     width: width * 0.38,
     borderWidth: 0,
     borderColor: "grey",
-    borderRadius: 10,
+    borderRadius: 5,
     // overflow: "hidden",
     flexDirection: "row",
     gap: width * 0.01,
@@ -424,6 +552,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 15,
     width: width * 0.8,
+  },
+  buttonContainer2: {
+    // backgroundColor: "red",
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+    marginTop: 15,
+    width: width * 0.3,
   },
   buttonText: {
     fontSize: 18,

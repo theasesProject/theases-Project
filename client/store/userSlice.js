@@ -1,5 +1,8 @@
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { DOMAIN_NAME } from "../env";
+
 
 // Define an initial state for the user slice
 const initialState = {
@@ -8,12 +11,13 @@ const initialState = {
   error: null,
 };
 
+
 // Define an async thunk to fetch a user from the database
 const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   try {
     // Replace this with your actual API call to fetch the user
     const response = await axios.post(
-      "http://192.168.56.51:5000/api/users/token",
+      `http://${DOMAIN_NAME}:5000/api/users/token`,
       {
         token: token,
       }
@@ -23,7 +27,16 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
     console.error(err);
   }
 });
-
+export const SignUpClick = createAsyncThunk("user/SignUp", async (inputForm,) => {
+  try {
+    console.log(inputForm);
+    const task = await axios.post(`http://192.168.1.13:5000/api/users/SignUpUser`, inputForm)
+// console.log(task.data.status==="success");
+    return task.data
+  } catch (er) {
+    console.error(JSON.stringify(er));
+  }
+})
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -40,7 +53,8 @@ const userSlice = createSlice({
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+
   },
 });
 

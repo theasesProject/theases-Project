@@ -23,8 +23,7 @@ const handleStarPress = () => {
    
    }
  
-
-
+  
 
    
     return (
@@ -32,9 +31,9 @@ const handleStarPress = () => {
         
       
     <View style={styles.Image}>
-    <Image style={styles.carImage}  source={oneCar.CarMedia[0].media} ></Image>
+    <Image style={styles.carImage}  source={car} />
     <TouchableOpacity   onPress={ handleHeartPress}>
-    <Image style={styles.heart}   source={heartImage} ></Image>
+    <Image style={styles.heart}   source={heartImage} />
     </TouchableOpacity>
     </View>
     <View style={styles.carDetails}>

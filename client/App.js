@@ -15,6 +15,7 @@ import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
+// import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
 const Stack = createStackNavigator();
@@ -23,7 +24,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="SignUp">
           <Stack.Screen name="Home" component={Home}   options={{ headerShown: false }}/>
 
 
@@ -63,7 +64,11 @@ function App() {
             component={ForgotPassword}
             options={{ headerShown: false }}
           />
-
+  {/* <Stack.Screen
+            name="Remobg"
+            component={Remobg}
+            options={{ headerShown: false }}
+          /> */}
           <Stack.Screen
             name="confirmIdentity"
             component={ConfirmIdentity}
@@ -78,7 +83,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
   },

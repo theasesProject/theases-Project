@@ -31,7 +31,7 @@ export const SignUpClick = createAsyncThunk("user/SignUp", async (inputForm,) =>
   try {
     console.log(inputForm);
     const task = await axios.post(`http://192.168.1.13:5000/api/users/SignUpUser`, inputForm)
-
+// console.log(task.data.status==="success");
     return task.data
   } catch (er) {
     console.error(JSON.stringify(er));

@@ -35,19 +35,15 @@ function App() {
             component={LoadingScreen}
             options={{ headerShown: false }}
           />
-
-
           {/* <Stack.Screen
             name="Carousel"
             component={Carousel}
-        
           /> */}
           <Stack.Screen
             name="Userprofile"
             component={UserProfile}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="SignUp"
             component={SignUp}
@@ -58,7 +54,6 @@ function App() {
             component={Login}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="forgotPassword"
             component={ForgotPassword}
@@ -79,7 +74,6 @@ function App() {
     </Provider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

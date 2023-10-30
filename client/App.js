@@ -17,14 +17,17 @@ import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import SignUp from "./pages/signUp.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
+import { YellowBox } from 'react-native';
 
+  YellowBox.ignoreWarnings(['Warning: ViewPropTypes has been']);
 const Stack = createStackNavigator();
 function App() {
   return (
+  
     <Provider store={store}>
       <NavigationContainer>
         
-        <Stack.Navigator initialRouteName="SignUp">
+        <Stack.Navigator initialRouteName="Carousel">
           <Stack.Screen name="Home" component={Home}   options={{ headerShown: false }}/>
 
 
@@ -35,10 +38,12 @@ function App() {
             component={LoadingScreen}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="Carousel"
             component={Carousel}
-          /> */}
+            options={{ headerShown: false }}
+
+          />
           <Stack.Screen
             name="Userprofile"
             component={UserProfile}

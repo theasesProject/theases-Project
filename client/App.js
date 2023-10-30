@@ -12,38 +12,37 @@ import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
-
+import AdvancedSearch from "./pages/AdvancedSearch.jsx"
+import FiltredCar from "./pages/filtredCar.jsx"
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
-import { YellowBox } from 'react-native';
+import { AppRegistry } from 'react-native';
+// import App from './App'; // Replace 'App' with the name of your main application component
+import { theases as theases } from './app.json';
 
-  YellowBox.ignoreWarnings(['Warning: ViewPropTypes has been']);
+AppRegistry.registerComponent(theases, () => App);
+
 const Stack = createStackNavigator();
 function App() {
   return (
   
     <Provider store={store}>
       <NavigationContainer>
-        
-        <Stack.Navigator initialRouteName="Carousel">
-          <Stack.Screen name="Home" component={Home}   options={{ headerShown: false }}/>
-
-
-      
-   
+        <Stack.Navigator initialRouteName="AdvancedSearch">
+          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
           <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Carousel"
             component={Carousel}
             options={{ headerShown: false }}
 
-          />
+          /> */}
           <Stack.Screen
             name="Userprofile"
             component={UserProfile}
@@ -72,6 +71,16 @@ function App() {
           <Stack.Screen
             name="confirmIdentity"
             component={ConfirmIdentity}
+            options={{ headerShown: false }}
+          />
+             <Stack.Screen
+            name="AdvancedSearch"
+            component={AdvancedSearch}
+            options={{ headerShown: false }}
+          />
+               <Stack.Screen
+            name="FiltredCar"
+            component={FiltredCar}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

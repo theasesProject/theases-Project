@@ -46,7 +46,12 @@ module.exports = ( DataTypes, connection) => {
       allowNull:false,
       defaultValue:"pending"
     },
-    
+    typevehicle:{
+      type:DataTypes.ENUM("Economical","Luxury","Sports","Commercial")
+    },
+    characteristics:{
+      type:DataTypes.ENUM("Automatic","Manual","Semi-Automatic")
+    }
   });
   return Car;
 };

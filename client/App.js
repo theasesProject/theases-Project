@@ -13,16 +13,16 @@ import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import AdvancedSearch from "./pages/AdvancedSearch.jsx"
-import FiltredCar from "./pages/filtredCar.jsx"
+import FiltredCar from "./pages/FiltredCar.jsx"
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
-import { AppRegistry } from 'react-native';
-// import App from './App'; // Replace 'App' with the name of your main application component
-import { theases as theases } from './app.json';
+// import { AppRegistry } from 'react-native';
+// // import App from './App'; // Replace 'App' with the name of your main application component
+// import { theases as theases } from './app.json';
 
-AppRegistry.registerComponent(theases, () => App);
+// AppRegistry.registerComponent(theases, () => App);
 
 const Stack = createStackNavigator();
 function App() {
@@ -30,13 +30,13 @@ function App() {
   
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="AdvancedSearch">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
-          />
+          /> */}
           {/* <Stack.Screen
             name="Carousel"
             component={Carousel}

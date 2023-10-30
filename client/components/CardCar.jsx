@@ -32,7 +32,7 @@ const handleStarPress = () => {
         
       
     <View style={styles.Image}>
-    <Image style={styles.carImage}  source={oneCar.CarMedia.media} ></Image>
+    <Image style={styles.carImage}  source={oneCar.CarMedia[0].media} ></Image>
     <TouchableOpacity   onPress={ handleHeartPress}>
     <Image style={styles.heart}   source={heartImage} ></Image>
     </TouchableOpacity>

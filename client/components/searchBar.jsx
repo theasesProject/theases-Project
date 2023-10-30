@@ -14,7 +14,7 @@ function SearchBar({onSearch}){
 
     const searchCarsByModel = async (model) => {
         try {
-          const response = await axios.get(`http://192.168.160.51:3000/searchName/${model}`)
+          const response = await axios.get(`http://192.168.160.51:5000/searchName/${model}`)
           onSearch(response.data)
         } catch (error) {
             console.error('Error:', error);

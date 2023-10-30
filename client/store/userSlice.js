@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { DOMAIN_NAME } from "../env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // Define an initial state for the user slice
@@ -11,7 +12,16 @@ const initialState = {
   error: null,
 };
 
-
+// async function fetchUserFromServer(token) {
+//   // Replace this with your actual API call to fetch the user
+//   const response = await axios.post(
+//     `http://${DOMAIN_NAME}:5000/api/users/token`,
+//     {
+//       token: token,
+//     }
+//   );
+//   return response.data;
+// }
 // Define an async thunk to fetch a user from the database
 const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   try {
@@ -27,16 +37,37 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
     console.error(err);
   }
 });
-export const SignUpClick = createAsyncThunk("user/SignUp", async (inputForm,) => {
+
+
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const SignUpClick = createAsyncThunk("user/SignUp", async (inputForm, thunkAPI) => {
   try {
     console.log(inputForm);
-    const task = await axios.post(`http://192.168.1.13:5000/api/users/SignUpUser`, inputForm)
-// console.log(task.data.status==="success");
+    const task = await axios.post(`http://${DOMAIN_NAME}:5000/api/users/SignUpUser`, inputForm)
+    const response = await axios.post(
+      `http://${DOMAIN_NAME}:5000/api/users/emailLogin`,
+      {
+        email: inputForm.email,
+        password: inputForm.password,
+      }
+    );
+    thunkAPI.dispatch(fetchUser(response.data));
+
+    // Store the token in AsyncStorage
+    try {
+      await AsyncStorage.setItem('UserToken', response.data);
+    } catch (e) {
+      console.error(e);
+    }
+    
     return task.data
   } catch (er) {
-    console.error(JSON.stringify(er));
+    console.error("error coming from sign function", er);
   }
 })
+
+
 const userSlice = createSlice({
   name: "user",
   initialState,

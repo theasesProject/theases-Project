@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCars } from "../store/carFetch";
 import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
 import SearchBar from "../components/searchBar.jsx";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Home({ navigation }) {
   const dispatch = useDispatch();
@@ -28,7 +29,19 @@ function Home({ navigation }) {
   const updateFilteredCars = (filteredCarData) => {
     setFilteredCars(filteredCarData);
   };
-
+  const retrieveToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem("UserToken");
+      if (value !== null) {
+        console.log(value);
+      }
+    } catch (e) {
+      console.error("error coming from home",e);
+    }
+  };
+  useEffect(() => {
+    retrieveToken();
+  }, []);
   return (
     <View style={styles.homePage}>
       <ScrollView>

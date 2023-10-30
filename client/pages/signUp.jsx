@@ -23,7 +23,6 @@ const SignUp = ({ navigation, props }) => {
   const inputRefPassword = useRef();
   const inputRefConfirmed = useRef();
   const [checkUp, setCheckUp] = useState(false);
-  // const [dateOfBirth, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const SignUpHandle = (inputFor) => {
@@ -114,9 +113,9 @@ const SignUp = ({ navigation, props }) => {
           setEmailError("");
         }
       } else if (placeholder === "Phone") {
-        const phoneRegex = /^[0-9]{8}$/;
+        const phoneRegex = /^[\d\+\-]+$/;
         if (!phoneRegex.test(value.trim())) {
-          setPhoneError("Phone number should be 10 digits long.");
+          setPhoneError("Phone number should be a valid number ");
           return;
         } else {
           setPhoneError("");

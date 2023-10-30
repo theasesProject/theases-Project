@@ -22,19 +22,18 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Home" component={Home}   options={{ headerShown: false }}/>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
 
-
-      
-   
           <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
           />
-
 
           {/* <Stack.Screen
             name="Carousel"

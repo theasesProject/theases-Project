@@ -22,31 +22,22 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Home" component={Home}   options={{ headerShown: false }}/>
-
-
-      
-   
+          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
           <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
           />
-
-
           {/* <Stack.Screen
             name="Carousel"
             component={Carousel}
-        
           /> */}
           <Stack.Screen
             name="Userprofile"
             component={UserProfile}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="SignUp"
             component={SignUp}
@@ -57,13 +48,11 @@ function App() {
             component={Login}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="forgotPassword"
             component={ForgotPassword}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="confirmIdentity"
             component={ConfirmIdentity}
@@ -74,7 +63,6 @@ function App() {
     </Provider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

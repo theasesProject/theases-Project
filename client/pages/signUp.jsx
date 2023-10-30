@@ -26,12 +26,25 @@ const SignUp = ({ navigation, props }) => {
   // const [dateOfBirth, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
-  const SignUpHandle = (inputForm) => {
+  const SignUpHandle = (inputFor) => {
     if (inputForm.password === confirm) {
       console.log(inputForm);
-      dispatch(SignUpClick(inputForm));
+      dispatch(SignUpClick(inputForm))
+        .then((response) => {
+          // Check if the dispatch was successful
+          console.log("THIS IS THE FUCKING RESPONSE",response.meta);
+          if (response.meta.requestStatus==="fulfilled") {
+            // Navigate to the desired location
+            navigation.navigate('Home');
+          }
+        })
+        .catch((error) => {
+          // Handle any errors from the dispatch here
+          console.error(error);
+        });
     }
   };
+  
   const [confirm, setConfirm] = useState("");
   const [inputForm, setInputForm] = useState({
     userName: "",

@@ -3,7 +3,6 @@ import {View,Text,StyleSheet,TouchableOpacity} from "react-native"
 import RangeSlider from 'rn-range-slider'
 import Slider from '@react-native-community/slider'
 import { useDispatch ,useSelector} from "react-redux";
-
 import {useState,useEffect} from 'react'
 import { getAllCars ,fetchFilteredCars} from "../store/carFetch";
 import { useNavigation } from '@react-navigation/native'
@@ -24,7 +23,7 @@ function AdvancedSearch() {
       "typevehicle":typeVehicule,
       "characteristics":chara}
 
-   
+  
     dispatch(getAllCars());
     dispatch(fetchFilteredCars(filterCriteria))
     prices()
@@ -108,7 +107,7 @@ for (const car of allCars) {
       <Text  style={styles.title1}>Manual</Text>
       </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Userprofile")}>
+      <TouchableOpacity onPress={() => navigation.navigate("filtredcar")}>
       <Text  style={styles.title1}>ShowResults</Text>
       </TouchableOpacity>
     </View>

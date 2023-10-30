@@ -1,13 +1,13 @@
 
-import {View,Text} from "react-native"
-import CardCar from '../../components/CardCar.jsx'
+import {View,Text,StyleSheet} from "react-native"
+import CardCar from "../components/CardCar.jsx"
 import { useDispatch ,useSelector} from "react-redux";
 
 
 
 function FiltredCar(){
     const filteredCars = useSelector((state) => state.car.carFiltred)
-
+console.log(FiltredCar,"aaa")
 return (
 
 <View   style={styles.homePage}>

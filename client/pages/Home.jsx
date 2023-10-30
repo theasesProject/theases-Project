@@ -13,17 +13,19 @@ import { getAllCars } from "../store/carFetch";
 import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
 import SearchBar from "../components/searchBar.jsx";
 import { useDispatch ,useSelector} from "react-redux";
+
 function Home({ navigation }) {
   const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(getAllCars());
+  }, [dispatch]);
   const allCars = useSelector((state) => state.car.allCars);
   const loading = useSelector((state) => state.car.loading);
   const [filteredCars, setFilteredCars] = useState(allCars);
 
-  useEffect(() => {
-    dispatch(getAllCars());
-  }, [dispatch]);
 
-
+console.log("car",allCars)
   const updateFilteredCars = (filteredCarData) => {
     setFilteredCars(filteredCarData);
   };

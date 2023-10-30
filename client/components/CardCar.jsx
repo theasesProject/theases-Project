@@ -128,7 +128,8 @@ carName:{
       fontSize: 18,
        fontWeight: "bold",
           color: "rgb(172, 133, 234)"
-    }
+    },
+    
 
 
   })

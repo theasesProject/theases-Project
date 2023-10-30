@@ -13,7 +13,7 @@ import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import AdvancedSearch from "./pages/AdvancedSearch.jsx"
-import FiltredCar from "./pages/filtredCar.jsx"
+import FiltredCar from "./pages/FiltredCar.jsx"
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");

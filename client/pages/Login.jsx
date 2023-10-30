@@ -20,6 +20,7 @@ import axios from "axios";
 import { fetchUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { DOMAIN_NAME } from "../env";
+
 // require("dotenv").config();
 // ${process.env.DOMAIN_NAME}
 
@@ -96,7 +97,7 @@ function Login({ navigation }) {
       );
       setError(null);
       dispatch(fetchUser(response.data));
-      navigation.navigate("Home");
+      navigation.navigate('Home');
     } catch (err) {
       if (err.response.status == "404") {
         setError("user does not exist");

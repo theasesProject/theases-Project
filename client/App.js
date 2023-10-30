@@ -12,7 +12,8 @@ import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
-
+import AdvancedSearch from "./pages/AdvancedSearch.jsx"
+import FiltredCar from "./pages/filtredCar.jsx"
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
@@ -22,7 +23,7 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="AdvancedSearch">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
           <Stack.Screen
             name="LoadingScreen"
@@ -56,6 +57,16 @@ function App() {
           <Stack.Screen
             name="confirmIdentity"
             component={ConfirmIdentity}
+            options={{ headerShown: false }}
+          />
+             <Stack.Screen
+            name="AdvancedSearch"
+            component={AdvancedSearch}
+            options={{ headerShown: false }}
+          />
+               <Stack.Screen
+            name="FiltredCar"
+            component={FiltredCar}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -33,7 +33,9 @@ module.exports={
                 description: req.body.description,
                 warrantyInsurance: req.body.warrantyInsurance,
                 deposit: req.body.deposit,
-                acceptation: "pending"
+                acceptation: "pending",
+                typevehicle:req.body.typevehicle,
+                characteristics:req.body.characteristics
               
         
           })
@@ -59,17 +61,17 @@ module.exports={
               }
            },
            filterCarByBrand: async function (req,res){
-            // try{
-        //       const carByBrand=await db.Car.findAll({
+            try{
+              const carByBrand=await db.Car.findAll({
             
-        //         where:{brand:req.params.brand}
+                where:{brand:req.params.brand}
             
-        //       })
+              })
             
-        //       res.status(200).send(carByBrand)
-        //     } catch (error) {
-        //         throw error
-        //  }
+              res.status(200).send(carByBrand)
+            } catch (error) {
+                throw error
+         }
         } ,
 
         searchCarByModel : async function (req,res){
@@ -91,15 +93,32 @@ module.exports={
               throw error
        }
       } ,
+      filtredCar : async function (req,res){
 
+  const filters = req.body;
+  const { price, typevehicle, characteristics } = filters;
 
-
-
-
-
-    }
-
-
+  const where = {
+    price: {
+      [Op.between]: price,
+    },
+    typevehicle:typevehicle,
+ 
+      characteristics: characteristics,
+    
+  };
+try {
+  const filtredOne=  await db.Car.findAll({
+    where,
+  })
+  
+      res.json(filtredOne);
+}
+    catch (error) {
+      throw error
+}
+  
+  }}
 
 
 

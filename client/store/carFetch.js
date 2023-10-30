@@ -4,6 +4,7 @@ import { DOMAIN_NAME } from "../env";
 
 const initialState = {
   allCars: [],
+  carFiltred:[],
   loading: false,
   error: null,
 };
@@ -14,7 +15,7 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     console.log(response.data,"response")
     return response.data;
   } catch (error) {
-    throw error
+  console.log(error)
   }
 });
 
@@ -34,44 +35,43 @@ export const fetchFilteredCars = createAsyncThunk(
 );
 
 const carSlice = createSlice({
+  
   name: "car",
   initialState,
-  reducers: {
-    logoutCar: (state) => {
-      state.loading = false;
-      state.error = null; 
-      state.allCars = [];
-      state.carFiltred=[]
-    },
-  },
+  reducers: {},
+  
   extraReducers: (builder) => {
+
     builder.addCase(getAllCars.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
     builder.addCase(getAllCars.fulfilled, (state, action) => {
+      console.log('Fetched data:', action.payload)
       state.loading = false;
       state.allCars = action.payload;
+
     });
     builder.addCase(getAllCars.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message; 
     });
-  },
-  extraReducers: (builder) => {
-    builder.addCase(filtredCar.pending, (state) => {
+ 
+ 
+    builder.addCase(fetchFilteredCars.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(filtredCar.fulfilled, (state, action) => {
+    builder.addCase(fetchFilteredCars.fulfilled, (state, action) => {
       state.loading = false;
       state.filteredCars = action.payload; // Set filtered cars in the state
     });
-    builder.addCase(filtredCar.rejected, (state, action) => {
+    builder.addCase(fetchFilteredCars.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
-    });}
+    });
+  }
 });
 
-export const { logoutCar } = carSlice.actions;
 export default carSlice.reducer;
+

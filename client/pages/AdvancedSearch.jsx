@@ -1,21 +1,21 @@
 
 import {View,Text,StyleSheet,TouchableOpacity} from "react-native"
-import RangeSlider from 'rn-range-slider'
 import Slider from '@react-native-community/slider'
 import { useDispatch ,useSelector} from "react-redux";
-
 import {useState,useEffect} from 'react'
 import { getAllCars ,fetchFilteredCars} from "../store/carFetch";
 import { useNavigation } from '@react-navigation/native'
+
 function AdvancedSearch() {
   const navigation = useNavigation()
   const allCars = useSelector((state) => state.car.allCars);
   
-  const [sliderValue, setSliderValue] = useState(minPrice);
-  const [sliderValue2, setSliderValue2] = useState(maxPrice)
+  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue2, setSliderValue2] = useState(0)
+  const [priceSearched, setPriceSearched] = useState(0)
   const [typeVehicule, setTypeVehicule] = useState("")
   const [chara, setChar] = useState("")
-
+  const [isPressed, setIsPressed] = useState(false)
   
   const dispatch = useDispatch();
   useEffect(() => {
@@ -24,7 +24,7 @@ function AdvancedSearch() {
       "typevehicle":typeVehicule,
       "characteristics":chara}
 
-   
+  
     dispatch(getAllCars());
     dispatch(fetchFilteredCars(filterCriteria))
     prices()
@@ -37,51 +37,57 @@ function AdvancedSearch() {
 
 
   const handleSliderChange = (value) => {
-    setSliderValue(value);
+    setPriceSearched(value);
   };
 
   const handleButtonPress = (value) => {
-    setSliderValue(value);
+    setPriceSearched(value);
   };
 
   const handleTypeVehcule = (value) => {
     setTypeVehicule(value);
+    setIsPressed(true)
   };
   const handleChara = (value) => {
     setChar(value);
+    setIsPressed(!isPressed)
+  
+    
   };
-  let minPrice = allCars[0].price;
-  let maxPrice = allCars[0].price
+ 
+  console.log(allCars,sliderValue,sliderValue,"allcars")
 const prices=()=>{
+  let minPrice = allCars[0].price
+  let maxPrice = allCars[0].price
 for (const car of allCars) {
   const price = car.price;
   if (price < minPrice) {
-    minPrice = price;
+    setSliderValue(price);
   }
   if (price > maxPrice) {
-    maxPrice = price;
+    setSliderValue2(price);
   }
 }}
 
   return (
     <View>
       <Text  style={styles.title}>All Cars</Text>
-      <TouchableOpacity  style={styles.buttonStart} onPress={() => handleButtonPress(minPrice)}>
-       <Text>{sliderValue}</Text>
+      <TouchableOpacity  style={styles.buttonStart} onPress={() => handleButtonPress(sliderValue)}>
+       <Text>{priceSearched}</Text>
       </TouchableOpacity   >
       <Slider style={styles.slider}
         step={10}
         onValueChange={handleSliderChange}
-        minimumValue={minPrice}
-        maximumValue={maxPrice}
+        minimumValue={sliderValue}
+        maximumValue={sliderValue2}
       />
       {/* <TouchableOpacity onPress={() => handleButtonPress(maxPrice)}>
    
       </TouchableOpacity> */}
       <Text  style={styles.title}>Types</Text>
       <View style={styles.allTypes}>
-      <TouchableOpacity    onPress={() => handleTypeVehcule("Commercial")} >
-      <Text  style={styles.title1}>Commercial</Text>
+      <TouchableOpacity    style={[styles.button, isPressed && styles.pressedButton]} onPress={() => handleTypeVehcule("Commercial")} >
+      <Text style={styles.buttonText}>Commercial</Text>
        </TouchableOpacity>
        <TouchableOpacity    onPress={() => handleTypeVehcule("Sports")} >
       <Text  style={styles.title1}>Sports</Text>
@@ -108,8 +114,8 @@ for (const car of allCars) {
       <Text  style={styles.title1}>Manual</Text>
       </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Userprofile")}>
-      <Text  style={styles.title1}>ShowResults</Text>
+      <TouchableOpacity>
+      <Text onPress={() => navigation.navigate("filtredcar")} style={styles.title1}>ShowResults</Text>
       </TouchableOpacity>
     </View>
   );
@@ -133,8 +139,8 @@ const styles = StyleSheet.create({
     color:"black",
     backgroundColor :"rgb(106,110,197)",
     borderRadius:7,
-   width:112,
-     height :40,
+   width:150,
+     height :50,
      textAlign:"center"
   },
   allTypes:{
@@ -155,7 +161,18 @@ const styles = StyleSheet.create({
   },
   buttonStart:{
     backgroundColor :"rgb(106,110,197)"
-  }
+  },
+  button: {
+    backgroundColor: 'blue', // Initial background color
+    padding: 10,
+    borderRadius: 5,
+  },
+  pressedButton: {
+    backgroundColor: 'red', // Background color when pressed
+  },
+  buttonText: {
+    color: 'white',
+  },
 
 
 

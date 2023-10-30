@@ -30,7 +30,7 @@ function Home({ navigation }) {
   };
 
   return (
-    <View style={styles.homePage}>
+    <View options={{ headerShown: true }} style={styles.homePage}>
       <ScrollView>
         <ProfileLandingPage />
         <SearchBar onSearch={updateFilteredCars} />

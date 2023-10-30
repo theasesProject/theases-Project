@@ -1,16 +1,14 @@
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { DOMAIN_NAME } from "../env";
 
-
 // Define an initial state for the user slice
 const initialState = {
   data: null,
+  loggedIn: false,
   status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
   error: null,
 };
-
 
 // Define an async thunk to fetch a user from the database
 const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
@@ -27,20 +25,34 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
     console.error(err);
   }
 });
-export const SignUpClick = createAsyncThunk("user/SignUp", async (inputForm,) => {
-  try {
-    console.log(inputForm);
-    const task = await axios.post(`http://192.168.1.13:5000/api/users/SignUpUser`, inputForm)
-// console.log(task.data.status==="success");
-    return task.data
-  } catch (er) {
-    console.error(JSON.stringify(er));
+export const SignUpClick = createAsyncThunk(
+  "user/SignUp",
+  async (inputForm) => {
+    try {
+      console.log(inputForm);
+      const task = await axios.post(
+        `http://192.168.1.13:5000/api/users/SignUpUser`,
+        inputForm
+      );
+      // console.log(task.data.status==="success");
+      return task.data;
+    } catch (er) {
+      console.error(JSON.stringify(er));
+    }
   }
-})
+);
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    // Add a logout action that resets the user state
+    logoutUser: (state) => {
+      state.status = "idle";
+      state.data = null;
+      state.loggedIn = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (state) => {
@@ -49,17 +61,17 @@ const userSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
+        state.loggedIn = true;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      })
-
+      });
   },
 });
 
 export default userSlice.reducer;
 export const selectUser = (state) => state.user.data;
-
-// Export the async thunk for use in components
+export const logStatus = (state) => state.user.loggedIn;
 export { fetchUser };
+export const { logoutUser } = userSlice.actions;

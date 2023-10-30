@@ -9,57 +9,35 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import profil from "../assets/profile.png";
 import React, { useState } from "react";
 import bkg from "../assets/bkg.png";
 import stg from "../assets/settings.png";
-import lgt from "../assets/logout.png";
-import { useSelector } from "react-redux";
-import { selectUser } from "../store/userSlice";
-import { useDispatch } from "react-redux";
-import { logoutUser } from "../store/userSlice";
-import UserProfileMain from "../components/UserProfileMain.jsx";
-
-// temp photo
-import photo from "../assets/profile.png";
 
 function Userprofile({ navigation }) {
-  const activeUser = useSelector(selectUser);
-  const dispatch = useDispatch();
-
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    navigation.navigate("Home");
-  };
-
   return (
-    <View style={styles.userProfilePage}>
-      <View style={styles.topSection}>
-        <View style={styles.userInfo}>
-          {/* <Image source={activeUser?.avatar} style={styles.profilePic} /> */}
-          <Image source={photo} style={styles.profilePic} />
-
-          <View style={styles.userNameContainer}>
-            {/* <Text style={styles.userName}>{activeUser?.userName}</Text> */}
-            <Text style={styles.userName}>{"Mohamed"}</Text>
-          </View>
-        </View>
-        <View style={styles.editProfileContainer}>
-          <Text style={styles.editProfile}>Edit Profile</Text>
-        </View>
-      </View>
-
-      {/*  */}
-
-      <UserProfileMain />
-
-      {/*  */}
-
-      <View style={styles.logoutBtnContainer}>
-        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-          <Image source={lgt} style={styles.icon} />
-          <Text>Logout</Text>
+    <View style={styles.bottomSection}>
+      <View style={styles.profileOptions}>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => console.log("profile")}
+        >
+          <Image source={profil} style={styles.icon} />
+          <Text>Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => console.log("my bookings")}
+        >
+          <Image style={styles.icon} source={bkg} />
+          <Text>My bookings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => console.log("settings")}
+        >
+          <Image source={stg} style={styles.icon} />
+          <Text>Settings</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -70,7 +48,6 @@ const styles = StyleSheet.create({
   userProfilePage: {
     flex: 1,
     padding: 20,
-    position: "relative",
   },
   topSection: {
     display: "flex",
@@ -120,10 +97,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "black",
   },
   logoutBtnContainer: {
-    position: "absolute",
-    bottom: 10,
-    left: 20,
-    width: "100%",
     borderTopColor: "black",
     borderTopWidth: 1,
     paddingTop: 20,

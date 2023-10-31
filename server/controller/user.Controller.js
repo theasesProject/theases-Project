@@ -2,57 +2,57 @@ const { db } = require("../models/index");
 const User = db.User;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { trace } = require("../router/user.Route");
 require("dotenv").config();
 // Controller methods for User
 module.exports = {
-  bringUsersData: async (req, res,next) => {
+  bringUsersData: async (req, res, next) => {
     try {
-        const Users = await db.User.findAll({
-        })
-        res.json(Users)
+      const Users = await db.User.findAll({});
+      res.json(Users);
     } catch (error) {
-         next(error)
+      next(error);
     }
-},
-SignUpUser:async(req,res,next)=>{
-    const NameCheck= await db.User.findAll({
-        where:{
-            userName:req.body.userName
-        }
-    })
-    const emailCheck= await db.User.findAll({
-        where:{
-            email:req.body.email
-        }
-    })
-    if (NameCheck[0]||emailCheck[0]) {
-        if (NameCheck[0]) {
-            return res.status(403).send({
-                status: "Blocked",
-                message: "This UserName Already Exists",
-                found:NameCheck
-              })
-        }
-        if (emailCheck[0]) {
-           return  res.status(403).send({
-                status: "Blocked",
-                message: "This Email Already Exists",
-                found:emailCheck
-              })
-        }
-    }else{
-        const User = await db.User.create(req.body);
-        res.status(201).send({
-          status: "success",
-          message: "user added successfully!!!",
-          data: User,
+  },
+  SignUpUser: async (req, res, next) => {
+    const NameCheck = await db.User.findAll({
+      where: {
+        userName: req.body.userName,
+      },
+    });
+    const emailCheck = await db.User.findAll({
+      where: {
+        email: req.body.email,
+      },
+    });
+    if (NameCheck[0] || emailCheck[0]) {
+      if (NameCheck[0]) {
+        return res.status(403).send({
+          status: "Blocked",
+          message: "This UserName Already Exists",
+          found: NameCheck,
         });
+      }
+      if (emailCheck[0]) {
+        return res.status(403).send({
+          status: "Blocked",
+          message: "This Email Already Exists",
+          found: emailCheck,
+        });
+      }
+    } else {
+      const User = await db.User.create(req.body);
+      res.status(201).send({
+        status: "success",
+        message: "user added successfully!!!",
+        data: User,
+      });
     }
     try {
     } catch (err) {
-        next(err)
+      next(err);
     }
-},
+  },
   // checks if a user exists using email
   emailLogin: async (req, res) => {
     try {
@@ -100,7 +100,6 @@ SignUpUser:async(req,res,next)=>{
     }
   },
 
-
   // Get user by email
   getUserByEmail: async (req, res) => {
     try {
@@ -110,7 +109,7 @@ SignUpUser:async(req,res,next)=>{
       }
       res.status(200).send("user exists");
     } catch (err) {
-      throw err;
+      res.status(500).json(err);
     }
   },
 
@@ -125,7 +124,7 @@ SignUpUser:async(req,res,next)=>{
       }
       res.status(200).send("user exists");
     } catch (err) {
-      throw err;
+      res.status(500).json(err);
     }
   },
 
@@ -146,19 +145,28 @@ SignUpUser:async(req,res,next)=>{
 
   // Update a user by ID
   updateUser: async (req, res) => {
-    const userId = req.params.id;
     try {
-      const [updated] = await User.update(req.body, {
-        where: { id: userId },
-      });
-      if (updated) {
-        const updatedUser = await User.findByPk(userId);
-        res.json(updatedUser);
+      const userId = req.params.id;
+      if (req.body.hasOwnProperty("password")) {
+        const { password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await User.update(
+          { ...req.body, password: hashedPassword },
+          {
+            where: { id: userId },
+          }
+        );
       } else {
-        res.status(404).json({ message: "User not found" });
+        await User.update(req.body, {
+          where: { id: userId },
+        });
       }
+      const user = await User.findByPk(userId, {
+        attributes: { exclude: "password" },
+      });
+      res.status(201).send(user);
     } catch (err) {
-      throw err;
+      res.status(500).json(err);
     }
   },
 
@@ -176,6 +184,23 @@ SignUpUser:async(req,res,next)=>{
       }
     } catch (err) {
       throw err;
+    }
+  },
+
+  // I made this controller just to get a password and compare it with the one in the data base and check if it's true or not
+  checkPassword: async (req, res) => {
+    try {
+      const { password } = req.body;
+      const { id } = req.params;
+      const user = await User.findOne({ where: { id: id } });
+      const response = await bcrypt.compare(password, user.password);
+      console.log(response);
+      if (!response) {
+        return res.send("no match");
+      }
+      return res.status(200).send("match");
+    } catch (err) {
+      res.status(500).json(err);
     }
   },
 };

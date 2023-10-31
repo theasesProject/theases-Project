@@ -12,7 +12,9 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-  SignUpUser, bringUsersData
+  SignUpUser,
+  bringUsersData,
+  checkPassword,
 } = require("../controller/user.Controller");
 
 // Define routes for user operations
@@ -20,13 +22,14 @@ const {
 router.post("/emailLogin", emailLogin);
 router.post("/phoneLogin", phoneLogin);
 router.post("/token", handleToken);
-router.get('/BringUserData',bringUsersData)
-router.post('/SignUpUser',SignUpUser)
+router.get("/BringUserData", bringUsersData);
+router.post("/SignUpUser", SignUpUser);
 router.get("/getOneByEmail/:email", getUserByEmail);
 router.get("/getOneByPhone/:phoneNumber", getUserByPhoneNumber);
 // router.get("/getAll", getAllUsers);
 router.get("/getOne/:id", getUserById);
 router.put("/update/:id", updateUser);
 router.delete("/delete/:id", deleteUser);
+router.post("/passwordCheck/:id", checkPassword);
 
 module.exports = router;

@@ -78,8 +78,8 @@ function App() {
             component={AdvancedSearch}
             options={{ headerShown: false }}
           />
-               <Stack.Screen
-            name="FiltredCar"
+            <Stack.Screen
+            name="filtredCar"
             component={FiltredCar}
             options={{ headerShown: false }}
           />

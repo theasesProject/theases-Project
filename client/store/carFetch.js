@@ -12,7 +12,7 @@ const initialState = {
 export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
   try {
     const response = await axios.get(`http://${DOMAIN_NAME}:5000/api/car/allCars`);
-    console.log(response.data,"response")
+   
     return response.data;
   } catch (error) {
   console.log(error)
@@ -27,6 +27,8 @@ export const fetchFilteredCars = createAsyncThunk(
         `http://${DOMAIN_NAME}:5000/api/car/filtredCar`,
         filterCriteria
       );
+      console.log(filterCriteria,"aaa")
+      console.log(response.data,"filteredCars")
       return response.data;
     } catch (error) {
       throw error;
@@ -47,7 +49,7 @@ const carSlice = createSlice({
       state.error = null;
     });
     builder.addCase(getAllCars.fulfilled, (state, action) => {
-      console.log('Fetched data:', action.payload)
+    
       state.loading = false;
       state.allCars = action.payload;
 

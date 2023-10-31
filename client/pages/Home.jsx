@@ -25,11 +25,11 @@ function Home({ navigation }) {
   const [filteredCars, setFilteredCars] = useState(allCars);
 
 
-console.log("car",allCars)
+
   const updateFilteredCars = (filteredCarData) => {
     setFilteredCars(filteredCarData);
   };
-console.log(allCars,"allCars")
+
   return (
     <View style={styles.homePage}>
      <ScrollView>

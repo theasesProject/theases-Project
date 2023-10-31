@@ -17,17 +17,16 @@ function SearchBar({onSearch}){
         searchCarsByModel(text)
     }
 
+  
+
+
     const searchCarsByModel = async (model) => {
-     
-
-     
-
 
 
         try { 
             
           const response = await axios.get(`http://${DOMAIN_NAME}:5000/api/car/searchName/${model}`)
-         console.log('xxxxx')
+       
           onSearch(response.data)
         } catch (error) {
             console.error('Error222:', error);

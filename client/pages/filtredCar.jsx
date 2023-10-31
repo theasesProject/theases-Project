@@ -18,11 +18,12 @@ return (
         <Image     style={styles.backImage} source={back}></Image>
       </TouchableOpacity>
  <ScrollView>
-       {filteredCars.map((element, i) => ( 
+       {filteredCars
+       ?filteredCars.map((element, i) => ( 
        <View style={styles.all}>
          <CardCar key={i} oneCar={element} />
           </View>
-         ))}
+         )):null}
     </ScrollView>
 
 </View>
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
     backImage:{
       width:22,
       height:20,
+      justifyContent:"flex-start"
      
     }
   

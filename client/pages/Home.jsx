@@ -23,7 +23,7 @@ function Home({ navigation }) {
   const allCars = useSelector((state) => state.car.allCars);
   const loading = useSelector((state) => state.car.loading);
   const [filteredCars, setFilteredCars] = useState(allCars);
-
+console.log("allCars", allCars);
 
 
   const updateFilteredCars = (filteredCarData) => {
@@ -39,7 +39,7 @@ function Home({ navigation }) {
      
        {filteredCars.map((element, i) => ( 
        <View style={styles.all}>
-         <CardCar key={i} oneCar={element} />
+         <CardCar  key={i} oneCar={element}  />
           </View>
          ))}
     </ScrollView>

@@ -100,8 +100,8 @@ console.log(typeVehicule,"typeVehicule")
  
  
 const prices=()=>{
-  let minPrice = allCars[0].price
-  let maxPrice = allCars[0].price
+  let minPrice = allCars.length!==0?allCars[0].price:50
+  let maxPrice = allCars.length!==0?allCars[0].price:50
 for (const car of allCars) {
   const price = car.price;
   if (price < minPrice) {

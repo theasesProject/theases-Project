@@ -64,7 +64,7 @@ module.exports={
             try{
               const carByBrand=await db.Car.findAll({
             
-                where:{brand:req.params.brand}
+                where:{brand:req.body.brand}
             
               })
             

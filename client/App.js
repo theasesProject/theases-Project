@@ -23,7 +23,7 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="AdvancedSearch">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
           <Stack.Screen
             name="LoadingScreen"

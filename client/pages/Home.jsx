@@ -17,6 +17,7 @@ import BrandBar from "../components/brandBar.jsx";
 import { getAllCars } from "../store/carFetch";
 import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
 import SearchBar from "../components/searchBar.jsx";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from "react-redux";
 
 function Home({ navigation }) {
@@ -33,7 +34,19 @@ function Home({ navigation }) {
   const updateFilteredCars = (filteredCarData) => {
     setFilteredCars(filteredCarData);
   };
-  console.log(allCars, "allCars");
+  const retrieveToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem("UserToken");
+      if (value !== null) {
+        console.log(value);
+      }
+    } catch (e) {
+      console.error("error coming from home",e);
+    }
+  };
+  useEffect(() => {
+    retrieveToken();
+  }, []);
   return (
     <View style={styles.homePage}>
       <ScrollView>

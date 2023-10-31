@@ -8,29 +8,34 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+import axios from "axios";
+
 import CardCar from "../components/CardCar.jsx";
+
 import BrandBar from "../components/brandBar.jsx";
-import { useDispatch, useSelector } from "react-redux";
+
 import { getAllCars } from "../store/carFetch";
 import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
 import SearchBar from "../components/searchBar.jsx";
+import { useDispatch, useSelector } from "react-redux";
 
 function Home({ navigation }) {
   const dispatch = useDispatch();
-  const allCars = useSelector((state) => state.car.allCars);
-  const loading = useSelector((state) => state.car.loading);
-  const [filteredCars, setFilteredCars] = useState(allCars);
 
   useEffect(() => {
     dispatch(getAllCars());
   }, [dispatch]);
+  const allCars = useSelector((state) => state.car.allCars);
+  const loading = useSelector((state) => state.car.loading);
+  const [filteredCars, setFilteredCars] = useState(allCars);
 
+  console.log("car", allCars);
   const updateFilteredCars = (filteredCarData) => {
     setFilteredCars(filteredCarData);
   };
-
+  console.log(allCars, "allCars");
   return (
-    <View options={{ headerShown: true }} style={styles.homePage}>
+    <View style={styles.homePage}>
       <ScrollView>
         <ProfileLandingPage />
         <View style={styles.searchContainer}>

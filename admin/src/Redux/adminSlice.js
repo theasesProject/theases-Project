@@ -1,26 +1,41 @@
-import { createSlice,createAsyncThunk } from "@reduxjs/toolkit"
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios";
 
 
 const initialState = {
     admin: {},
     adminToken: "",
+    reviews: [],
     loggedIn: false,
 };
-const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
+export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
     try {
-      // Replace this with your actual API call to fetch the user
-      const response = await axios.post(
-        `http://localhost:5000/api/admin/token`,
-        {
-          token: token,
-        }
-      );
-      return response.data;
+        const response = await axios.get(
+            `http://localhost:5000/api/review/BringData`
+        )
+        return response.data;
     } catch (err) {
-      console.error(err);
+        console.error(err);
     }
-  });
+});
+export const Login = createAsyncThunk("user/Login", async (endPoint, { checkedIdentifier, identifier }) => {
+    try {
+        const data = { checkedIdentifier, identifier }
+        const response = await axios.post(
+
+            `http://localhost:5000/api/admin/${endPoint}`,
+
+            {
+                [data.checkedIdentifier]: data.identifier,
+                password: form.password,
+            }
+        )
+        localStorage.setItem("Token", response.data)
+        return response.data;
+    } catch (err) {
+        console.error(err);
+    }
+});
 export const adminSlicer = createSlice({
     name: "admin",
     initialState,
@@ -40,10 +55,15 @@ export const adminSlicer = createSlice({
             state.adminToken = token;
             state.loggedIn = loggedIn;
         }
+    }, extraReducers: (builder) => {
+        builder.addCase(fetchReviews.fulfilled, (state, action) => {
+            state.reviews = action.payload
+        })
     }
 })
 
 export const { setAdmin, logout, setLoggedIn } = adminSlicer.actions;
-export const selectAdmin =(state)=> state.admin.admin;
-export const selectLoggedIn =(state)=> state.admin.loggedIn;
+export const selectAdmin = (state) => state.Admin.admin;
+export const selectReviews = (state) => state.Admin.reviews;
+export const selectLoggedIn = (state) => state.Admin.loggedIn;
 export default adminSlicer.reducer;

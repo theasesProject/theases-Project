@@ -4,12 +4,14 @@ import { useRouter } from 'next/navigation';
 import "../styles/login/page.css";
 import Head from 'next/head';
 import axios from 'axios';
-
+import { Login } from '@/Redux/adminSlice';
+import { useSelector, useDispatch } from "react-redux";
 export default function LoginPage() {
   // const [username, setUsername] = useState('');
   // const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [formChecked, setFormChecked] = useState(false);
+  const dispatch = useDispatch()
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState({
@@ -65,26 +67,19 @@ export default function LoginPage() {
         return setError("please provide an email or a phone number");
       }
       console.log(endPoint);
-      const response = await axios.post(
-
-        `http://localhost:5000/api/admin/${endPoint}`,
-
-        {
-          [checkedIdentifier]: form.identifier,
-          password: form.password,
-        }
-      );
+      dispatch(Login(endPoint, checkedIdentifier, form.identifier))
       setError(null);
-      // dispatch(fetchUser(response.data));
-      router.push('DashBoard');
+      router.push('/DashBoard');
+        // dispatch(fetchUser(response.data));
     } catch (err) {
-      if (err.response.status == "404") {
-        setError("user does not exist");
-      } else if (err.response.status == "401") {
-        setError("incorrect password");
-      } else {
-        console.error(err.message);
-      }
+      console.log(err);
+      // if (err.response.status == "404") {
+      //   setError("user does not exist");
+      // } else if (err.response.status == "401") {
+      //   setError("incorrect password");
+      // } else {
+      console.error(err.message);
+      // }
     }
   };
 
@@ -141,7 +136,7 @@ export default function LoginPage() {
       </Head>
       <div id="mainButton" className={isOpen ? 'active' : ''}>
 
-        <div  className="btn-text" onClick={openForm}>Sign In</div>
+        <div className="btn-text" onClick={openForm}>Sign In</div>
         {isOpen && (
           <div className="modal">
             <div className="close-button" onClick={closeForm}>x</div>

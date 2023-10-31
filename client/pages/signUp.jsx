@@ -31,7 +31,7 @@ const SignUp = ({ navigation, props }) => {
       dispatch(SignUpClick(inputForm))
         .then((response) => {
           // Check if the dispatch was successful
-          console.log("THIS IS THE FUCKING RESPONSE",response.meta);
+          console.log("RESPONSE§§§",response.meta);
           if (response.meta.requestStatus==="fulfilled") {
             // Navigate to the desired location
             navigation.navigate('Home');

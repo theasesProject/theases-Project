@@ -1,6 +1,15 @@
-import React from 'react';
+"use client"
+import React, { useEffect } from 'react';
 import "../../styles/dashboard/page.css"
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchReviews,selectReviews } from '@/Redux/adminSlice';
 const Dashboard = () => {
+    const dispatch=useDispatch()
+    const ReviewData = useSelector( selectReviews)
+    console.log(ReviewData);
+    useEffect(()=>{
+        dispatch(fetchReviews())
+    },[dispatch])
     return (
         <div className="container">
             <h1 className="title">Dashboard</h1>

@@ -16,23 +16,32 @@ import AdvancedSearch from "./pages/AdvancedSearch.jsx"
 import FiltredCar from "./pages/FiltredCar.jsx"
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
+// import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
+// import { AppRegistry } from 'react-native';
+// // import App from './App'; // Replace 'App' with the name of your main application component
+// import { theases as theases } from './app.json';
+
+// AppRegistry.registerComponent(theases, () => App);
 
 const Stack = createStackNavigator();
 function App() {
   return (
+  
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="AdvancedSearch">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
-          />
+          /> */}
           {/* <Stack.Screen
             name="Carousel"
             component={Carousel}
+            options={{ headerShown: false }}
+
           /> */}
           <Stack.Screen
             name="Userprofile"
@@ -54,6 +63,11 @@ function App() {
             component={ForgotPassword}
             options={{ headerShown: false }}
           />
+  {/* <Stack.Screen
+            name="Remobg"
+            component={Remobg}
+            options={{ headerShown: false }}
+          /> */}
           <Stack.Screen
             name="confirmIdentity"
             component={ConfirmIdentity}
@@ -77,7 +91,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
   },

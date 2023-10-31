@@ -7,7 +7,7 @@ require("dotenv").config();
 module.exports = {
   bringAdminData: async (req, res,next) => {
     try {
-        const Admin = await db.Admin.findAll({
+        const admin = await Admin.findAll({
         })
         res.json(Admin)
     } catch (error) {
@@ -15,12 +15,12 @@ module.exports = {
     }
 },
 SignUpAdmin:async(req,res,next)=>{
-    const NameCheck= await db.Admin.findAll({
+    const NameCheck= await Admin.findAll({
         where:{
-            AdminName:req.body.AdminName
+            Name:req.body.Name
         }
     })
-    const emailCheck= await db.Admin.findAll({
+    const emailCheck= await Admin.findAll({
         where:{
             email:req.body.email
         }
@@ -41,11 +41,11 @@ SignUpAdmin:async(req,res,next)=>{
               })
         }
     }else{
-        const Admin = await db.Admin.create(req.body);
+        const admin = await Admin.create(req.body);
         res.status(201).send({
           status: "success",
           message: "Admin added successfully!!!",
-          data: Admin,
+          data: admin,
         });
     }
     try {
@@ -56,24 +56,25 @@ SignUpAdmin:async(req,res,next)=>{
   // checks if a Admin exists using email
   emailLogin: async (req, res) => {
     try {
-      const Admin = await Admin.findOne({ where: { email: req.body.email } });
-      if (!Admin) {
+      const admin = await Admin.findOne({ where: { email: req.body.email } });
+      if (!admin.dataValues) {
         return res.status(404).json("Admin does not exist");
       }
-      if (!(await bcrypt.compare(req.body.password, Admin.password))) {
+      if (!(await bcrypt.compare(req.body.password, admin.dataValues.password))) {
+        console.log(await bcrypt.compare(req.body.password, admin.dataValues.password));
         return res.status(401).json("wrong password");
       }
-      const token = jwt.sign(Admin.dataValues, process.env.JWT_SECRET_KEY);
+      const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
       res.send(token);
     } catch (err) {
-      res.status(500).send(err);
+      throw(err)
     }
   },
 
   // checks if a Admin exists using phone number
   phoneLogin: async (req, res) => {
     try {
-      const Admin = await Admin.findOne({
+      const admin = await Admin.findOne({
         where: { phoneNumber: req.body.phoneNumber },
       });
       if (!Admin) {

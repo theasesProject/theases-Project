@@ -15,7 +15,7 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cors())
 app.use(express.json())
 const carRouter = require("./router/carRouter")
-const adminRouter = require("./router/ADMIN")
+const adminRouter = require("./router/adminRouter")
 const userRouter = require("./router/user.Route");
 
 //!routers

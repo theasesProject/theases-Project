@@ -1,5 +1,6 @@
 module.exports = (DataTypes, connection) => {
-
+    const bcrypt = require("bcrypt");
+    const saltRounds = bcrypt.genSaltSync(10);
     const Admin = connection.define('Admin', {
         Name: {
             type: DataTypes.STRING,
@@ -19,8 +20,13 @@ module.exports = (DataTypes, connection) => {
         },
         avatar: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         }
+        
+    })
+    Admin.beforeCreate((Admin, options) => {
+        Admin.password = bcrypt.hashSync(Admin.password, saltRounds);
     });
+    ;
     return Admin
 }

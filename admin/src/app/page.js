@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import "../styles/login/page.css";
 import Head from 'next/head';
+import axios from 'axios';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  // const [username, setUsername] = useState('');
+  // const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [formChecked, setFormChecked] = useState(false);
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState({
@@ -62,9 +64,10 @@ export default function LoginPage() {
       } else {
         return setError("please provide an email or a phone number");
       }
+      console.log(endPoint);
       const response = await axios.post(
 
-        `http://${DOMAIN_NAME}:5000/api/admin/${endPoint}`,
+        `http://localhost:5000/api/admin/${endPoint}`,
 
         {
           [checkedIdentifier]: form.identifier,
@@ -72,8 +75,8 @@ export default function LoginPage() {
         }
       );
       setError(null);
-      dispatch(fetchUser(response.data));
-      router.push('Home');
+      // dispatch(fetchUser(response.data));
+      router.push('DashBoard');
     } catch (err) {
       if (err.response.status == "404") {
         setError("user does not exist");
@@ -84,15 +87,15 @@ export default function LoginPage() {
       }
     }
   };
-  
+
   const openForm = () => {
     setIsOpen(true);
   };
-  
+
   const closeForm = () => {
     setIsOpen(false);
   };
-  
+
   const checkInput = (input) => {
     if (input.value.length > 0) {
       input.className = 'active';
@@ -121,6 +124,7 @@ export default function LoginPage() {
   //   }
   // };
   useEffect(() => {
+    formValidation()
     const handleKeyUp = (e) => {
       if (e.keyCode === 27 || e.keyCode === 13) {
         closeForm();
@@ -136,20 +140,25 @@ export default function LoginPage() {
         <link href='https://fonts.googleapis.com/css?family=Raleway:400,500,300' rel='stylesheet' />
       </Head>
       <div id="mainButton" className={isOpen ? 'active' : ''}>
-        <div className="btn-text" onClick={openForm}>Sign In</div>
+
+        <div  className="btn-text" onClick={openForm}>Sign In</div>
         {isOpen && (
           <div className="modal">
             <div className="close-button" onClick={closeForm}>x</div>
             <div className="form-title">Sign In</div>
             <div className="input-group">
-              <input type="text" id="name" onBlur={(e) => checkInput(e.target)} />
+              <input type="text" id="name" onChange={(e) => {
+                handleChangeIdentifier(e.target.value)
+              }} onBlur={(e) => checkInput(e.target)} />
               <label htmlFor="name">Username</label>
             </div>
             <div className="input-group">
-              <input type="password" id="password" onBlur={(e) => checkInput(e.target)} />
+              <input type="password" id="password" onChange={(e) => {
+                handleChangePassword(e.target.value)
+              }} onBlur={(e) => checkInput(e.target)} />
               <label htmlFor="password">Password</label>
             </div>
-            <div className="form-button" onClick={handleLogin}>Go</div>
+            <div className="form-button" style={{ pointerEvents: formChecked ? 'none' : 'auto' }} onClick={handleLogin}>Go</div>
             <div className="codepen-by">PLEASE LEAVE IF YOU ARE NOT AN ADMIN!!</div>
           </div>
         )}

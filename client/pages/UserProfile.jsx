@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import profil from "../assets/profile.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import bkg from "../assets/bkg.png";
 import stg from "../assets/settings.png";
 import lgt from "../assets/logout.png";
@@ -20,9 +20,6 @@ import { selectUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import UserProfileMain from "../components/UserProfileMain.jsx";
-
-// temp photo
-import photo from "../assets/profile.png";
 
 function Userprofile({ navigation }) {
   const activeUser = useSelector(selectUser);
@@ -37,17 +34,17 @@ function Userprofile({ navigation }) {
     <View style={styles.userProfilePage}>
       <View style={styles.topSection}>
         <View style={styles.userInfo}>
-          {/* <Image source={activeUser?.avatar} style={styles.profilePic} /> */}
-          <Image source={photo} style={styles.profilePic} />
-
+          <Image source={activeUser?.avatar} style={styles.profilePic} />
           <View style={styles.userNameContainer}>
-            {/* <Text style={styles.userName}>{activeUser?.userName}</Text> */}
-            <Text style={styles.userName}>{"Mohamed"}</Text>
+            <Text style={styles.userName}>{activeUser?.userName}</Text>
           </View>
         </View>
-        <View style={styles.editProfileContainer}>
+        <Pressable
+          style={styles.editProfileContainer}
+          onPress={() => navigation.navigate("editProfile")}
+        >
           <Text style={styles.editProfile}>Edit Profile</Text>
-        </View>
+        </Pressable>
       </View>
 
       {/*  */}
@@ -57,9 +54,15 @@ function Userprofile({ navigation }) {
       {/*  */}
 
       <View style={styles.logoutBtnContainer}>
-        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-          <Image source={lgt} style={styles.icon} />
-          <Text>Logout</Text>
+        <TouchableOpacity onPress={handleLogout}>
+          <LinearGradient
+            colors={["#6C77BF", "#4485C5"]}
+            locations={[0, 1]}
+            style={styles.logoutBtn}
+          >
+            <Image source={lgt} style={styles.icon} />
+            <Text style={styles.logoutText}>Logout</Text>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
     </View>
@@ -77,7 +80,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomWidth: 1,
-    borderBottomColor: "black",
+    borderBottomColor: "#e5e6e8",
     height: "15%",
   },
   userInfo: {
@@ -117,14 +120,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 30,
     borderBottomWidth: 1,
-    borderBottomColor: "black",
+    borderBottomColor: "#e5e6e8",
   },
   logoutBtnContainer: {
     position: "absolute",
     bottom: 10,
     left: 20,
     width: "100%",
-    borderTopColor: "black",
+    borderTopColor: "#e5e6e8",
     borderTopWidth: 1,
     paddingTop: 20,
   },
@@ -134,12 +137,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 20,
-    backgroundColor: "white",
     borderRadius: 10,
   },
   icon: {
     width: 20,
     height: 20,
+  },
+  logoutText: {
+    color: "white",
   },
 });
 export default Userprofile;

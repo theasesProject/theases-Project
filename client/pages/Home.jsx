@@ -33,7 +33,9 @@ function Home({ navigation }) {
     <View options={{ headerShown: true }} style={styles.homePage}>
       <ScrollView>
         <ProfileLandingPage />
-        <SearchBar onSearch={updateFilteredCars} />
+        <View style={styles.searchContainer}>
+          <SearchBar onSearch={updateFilteredCars} />
+        </View>
         <BrandBar onFilterByBrand={updateFilteredCars} />
         {filteredCars.map((element, i) => (
           <View style={styles.allcars}>
@@ -53,6 +55,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 10,
+  },
+  searchContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   allcars: {
     paddingBottom: 20,

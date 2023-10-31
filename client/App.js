@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
+import EditProfile from "./pages/EditProfile.jsx";
 
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
@@ -62,6 +63,12 @@ function App() {
           <Stack.Screen
             name="confirmIdentity"
             component={ConfirmIdentity}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="editProfile"
+            component={EditProfile}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

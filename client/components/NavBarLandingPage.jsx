@@ -9,20 +9,25 @@ function ProfileLandingPage() {
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
 
-  console.log(activeUser);
+  console.log("active user: ", activeUser);
 
   return (
     <View style={styles.navBar}>
       <View style={styles.allAdress}>
-        <Image style={styles.locationImage} source={localisation}></Image>
+        <Image style={styles.locationImage} source={localisation} />
         <View style={styles.adress}>
           <Text style={styles.yourLocation}>Your Location </Text>
           <Text style={styles.UserAdress}>Norvey,User </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Userprofile")}>
-        {!loggedIn ? (
-          <Image source={activeUser?.avatar} style={styles.UserImage} />
+      <View>
+        {loggedIn ? (
+          <Image
+            source={activeUser?.avatar}
+            alt="userPic"
+            style={styles.UserImage}
+            onPress={() => navigation.navigate("Userprofile")}
+          />
         ) : (
           <View style={styles.authBtnsContainer}>
             <TouchableOpacity
@@ -39,7 +44,7 @@ function ProfileLandingPage() {
             </TouchableOpacity>
           </View>
         )}
-      </TouchableOpacity>
+      </View>
     </View>
   );
 }

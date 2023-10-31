@@ -10,76 +10,59 @@ import {
   Pressable,
 } from "react-native";
 import profil from "../assets/profile.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import bkg from "../assets/bkg.png";
 import stg from "../assets/settings.png";
+import UserRentHistory from "../components/UserRentHistory.jsx";
+import UserProfileSettings from "../components/UserProfileSettings.jsx";
 
 function Userprofile({ navigation }) {
-  return (
-    <View style={styles.bottomSection}>
-      <View style={styles.profileOptions}>
-        <TouchableOpacity
-          style={styles.profileOption}
-          onPress={() => console.log("profile")}
-        >
-          <Image source={profil} style={styles.icon} />
-          <Text>Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.profileOption}
-          onPress={() => console.log("my bookings")}
-        >
-          <Image style={styles.icon} source={bkg} />
-          <Text>My bookings</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.profileOption}
-          onPress={() => console.log("settings")}
-        >
-          <Image source={stg} style={styles.icon} />
-          <Text>Settings</Text>
-        </TouchableOpacity>
+  const [view, setView] = useState("main");
+
+  const changeView = (newView) => setView(newView);
+
+  //   useEffect(() => {
+  //     render();
+  //   }, [view]);
+
+  const render = () => {
+    if (view === "history") {
+      return <UserRentHistory />;
+    } else if (view === "settings") {
+      return <UserProfileSettings />;
+    }
+    return (
+      <View style={styles.bottomSection}>
+        <View style={styles.profileOptions}>
+          {/* <TouchableOpacity
+            style={styles.profileOption}
+            onPress={() => changeView("profile")}
+          >
+            <Image source={profil} style={styles.icon} />
+            <Text>Profile</Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity
+            style={styles.profileOption}
+            onPress={() => changeView("history")}
+          >
+            <Image style={styles.icon} source={bkg} />
+            <Text>My bookings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.profileOption}
+            onPress={() => changeView("settings")}
+          >
+            <Image source={stg} style={styles.icon} />
+            <Text>Settings</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
+  return render();
 }
 
 const styles = StyleSheet.create({
-  userProfilePage: {
-    flex: 1,
-    padding: 20,
-  },
-  topSection: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: "black",
-    height: "15%",
-  },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    gap: 10,
-  },
-  profilePic: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-  },
-  userName: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  editProfileContainer: {
-    justifyContent: "center",
-  },
-  editProfile: {
-    fontSize: 12,
-    color: "#6C77BF",
-  },
   bottomSection: {
     height: "75%",
     display: "flex",
@@ -94,22 +77,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 30,
     borderBottomWidth: 1,
-    borderBottomColor: "black",
+    borderBottomColor: "#e5e6e8",
   },
-  logoutBtnContainer: {
-    borderTopColor: "black",
-    borderTopWidth: 1,
-    paddingTop: 20,
-  },
-  logoutBtn: {
-    flexDirection: "row",
-    gap: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-  },
+
   icon: {
     width: 20,
     height: 20,

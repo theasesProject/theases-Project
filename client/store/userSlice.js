@@ -31,7 +31,7 @@ export const SignUpClick = createAsyncThunk(
     try {
       console.log(inputForm);
       const task = await axios.post(
-        `http://192.168.1.13:5000/api/users/SignUpUser`,
+        `http://${DOMAIN_NAME}:5000/api/users/SignUpUser`,
         inputForm
       );
       // console.log(task.data.status==="success");
@@ -51,6 +51,9 @@ const userSlice = createSlice({
       state.data = null;
       state.loggedIn = false;
       state.error = null;
+    },
+    setUser: (state, action) => {
+      state.data = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -74,4 +77,4 @@ export default userSlice.reducer;
 export const selectUser = (state) => state.user.data;
 export const logStatus = (state) => state.user.loggedIn;
 export { fetchUser };
-export const { logoutUser } = userSlice.actions;
+export const { logoutUser, setUser } = userSlice.actions;

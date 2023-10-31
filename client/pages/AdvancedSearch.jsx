@@ -5,6 +5,7 @@ import { useDispatch ,useSelector} from "react-redux";
 import {useState,useEffect} from 'react'
 import { getAllCars ,fetchFilteredCars} from "../store/carFetch";
 import { useNavigation } from '@react-navigation/native'
+import { LinearGradient } from "expo-linear-gradient";
 
 function AdvancedSearch() {
   const navigation = useNavigation()
@@ -86,37 +87,97 @@ for (const car of allCars) {
       </TouchableOpacity> */}
       <Text  style={styles.title}>Types</Text>
       <View style={styles.allTypes}>
-      <TouchableOpacity    style={[styles.button, isPressed && styles.pressedButton]} onPress={() => handleTypeVehcule("Commercial")} >
-      <Text style={styles.buttonText}>Commercial</Text>
-       </TouchableOpacity>
-       <TouchableOpacity    onPress={() => handleTypeVehcule("Sports")} >
-      <Text  style={styles.title1}>Sports</Text>
-      </TouchableOpacity>
-      <TouchableOpacity   onPress={() => handleTypeVehcule("Luxury")}  >
-      <Text  style={styles.title1}>Luxury</Text>
-      </TouchableOpacity>
+      
+      <TouchableOpacity onPress={()=>handleTypeVehcule("Commercial")}>
+           
+            <LinearGradient
+              colors={["#6C77BF", "#4485C5"]}
+              locations={[0, 1]}
+              style={styles.buttonContainer}
+            >
+              <Text>Commercial</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>handleTypeVehcule("Sports")}>
+           
+           <LinearGradient
+             colors={["#6C77BF", "#4485C5"]}
+             locations={[0, 1]}
+             style={styles.buttonContainer}
+           >
+             <Text>Sports</Text>
+           </LinearGradient>
+         </TouchableOpacity>
+         <TouchableOpacity onPress={()=>handleTypeVehcule("Luxury")}>
+           
+           <LinearGradient
+             colors={["#6C77BF", "#4485C5"]}
+             locations={[0, 1]}
+             style={styles.buttonContainer}
+           >
+             <Text>Luxury</Text>
+           </LinearGradient>
+         </TouchableOpacity>
+     
       </View>
        <View style={styles.allTypes}>
-      <TouchableOpacity   onPress={() => handleTypeVehcule("Economical")} style ={styles.cardType2}>
-      <Text  style={styles.title1}>Economical</Text>
-      </TouchableOpacity>
+       <TouchableOpacity onPress={()=>handleTypeVehcule("Economical")}>
+           
+           <LinearGradient
+             colors={["#6C77BF", "#4485C5"]}
+             locations={[0, 1]}
+             style={styles.buttonContainer}
+           >
+             <Text>Economical</Text>
+           </LinearGradient>
+         </TouchableOpacity>
+ 
 </View>
 <Text  style={styles.title}>Vehicle characteristics</Text>
 
 <View style={styles.allTypes}>
-      <TouchableOpacity    onPress={() => handleChara("Automatic")}>
-      <Text  style={styles.title1}>Automatic</Text>
-       </TouchableOpacity>
-       <TouchableOpacity  onPress={() => handleChara("Semi-Automatic")}  >
-      <Text  style={styles.title1}>Semi-Automatic</Text>
-      </TouchableOpacity>
-      <TouchableOpacity     onPress={() => handleChara("Manual")}>
-      <Text  style={styles.title1}>Manual</Text>
-      </TouchableOpacity>
+<TouchableOpacity onPress={()=>handleTypeVehcule("Automatic")}>
+           
+           <LinearGradient
+             colors={["#6C77BF", "#4485C5"]}
+             locations={[0, 1]}
+             style={styles.buttonContainer}
+           >
+             <Text>Automatic</Text>
+           </LinearGradient>
+         </TouchableOpacity>
+         <TouchableOpacity onPress={()=>handleTypeVehcule("Semi-Automatic")}>
+           
+           <LinearGradient
+             colors={["#6C77BF", "#4485C5"]}
+             locations={[0, 1]}
+             style={styles.buttonContainer}
+           >
+             <Text>Semi-Automatic</Text>
+           </LinearGradient>
+         </TouchableOpacity>
+         <TouchableOpacity onPress={()=>handleTypeVehcule("Manual")}>
+           
+           <LinearGradient
+             colors={["#6C77BF", "#4485C5"]}
+             locations={[0, 1]}
+             style={styles.buttonContainer}
+           >
+             <Text>Manual</Text>
+           </LinearGradient>
+         </TouchableOpacity>
       </View>
-      <TouchableOpacity>
-      <Text onPress={() => navigation.navigate("filtredcar")} style={styles.title1}>ShowResults</Text>
-      </TouchableOpacity>
+
+       <TouchableOpacity onPress={() => navigation.navigate("FiltredCar")}>
+           
+           <LinearGradient
+             colors={["#6C77BF", "#4485C5"]}
+             locations={[0, 1]}
+             style={styles.buttonContainer}
+           >
+             <Text>ShowResults</Text>
+           </LinearGradient>
+         </TouchableOpacity>
     </View>
   );
 }
@@ -124,7 +185,6 @@ for (const car of allCars) {
 const styles = StyleSheet.create({
   slider:{
     height:50,
-    backgroundColor:"yellow",
     width:390
 
   },
@@ -160,7 +220,7 @@ const styles = StyleSheet.create({
 
   },
   buttonStart:{
-    backgroundColor :"rgb(106,110,197)"
+    // backgroundColor :"rgb(106,110,197)"
   },
   button: {
     backgroundColor: 'blue', // Initial background color
@@ -172,6 +232,14 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+  },
+  buttonContainer: {
+    // backgroundColor: "red",
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+    marginVertical: 15,
+    width: 100,
   },
 
 

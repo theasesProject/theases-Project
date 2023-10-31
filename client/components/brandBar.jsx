@@ -10,16 +10,17 @@ import { DOMAIN_NAME } from "../env";
 function BrandBar({onPress,onFilterByBrand}){
     const [carByBrand,setCarByBrand]=useState([])
     const [error,setError]=useState(false)
-
     const handleFilterByBrand= (brandName)=>{
-        
-    axios.post(`http://${DOMAIN_NAME}:5000/api/car/byBrand`,{"brand":brandName}).then((response)=>{
-        onFilterByBrand(response.data)
-    }).catch(error=>{
-        setError(true)
-    })
-
-    }
+console.log("1111")
+        axios.post(`http://${DOMAIN_NAME}:5000/api/car/byBrand`,{"brand":brandName}).then((response)=>{
+            console.log('selim',response.data) 
+            onFilterByBrand(response.data)
+           
+        }).catch(error=>{
+            console.log('error',error)
+        })
+    
+        }
 
 
 
@@ -34,42 +35,42 @@ return (
     <ScrollView horizontal={true}  
     style={styles.allBrandImage} >
           <View  style={styles.brandDetails} >
-            <TouchableOpacity     onPress={handleFilterByBrand("Porch")}>
+        <TouchableOpacity     onPress={()=>handleFilterByBrand("Porche")}>
            <Image style={styles.brandLogo}  source={porche} ></Image>
-           <Text   style={styles.brandName} >Porch</Text>
-           </TouchableOpacity>
+           <Text   style={styles.brandName} >Porche</Text>
+           </TouchableOpacity> 
 
            </View>
            <View  style={styles.brandDetails} >
-           <TouchableOpacity     onPress={handleFilterByBrand("Ford")}>
+           <TouchableOpacity     onPress={()=>handleFilterByBrand("Ford")}>
            <Image style={styles.brandLogo}  source={Ford} ></Image>
            <Text   style={styles.brandName} >Ford</Text>
            </TouchableOpacity>
            </View>
            <View  style={styles.brandDetails} >
-           <TouchableOpacity     onPress={handleFilterByBrand("Toyota")}>
+           <TouchableOpacity     onPress={()=>handleFilterByBrand("Toyota")}>
            <Image style={styles.brandLogo}  source={Toyota} ></Image>
            <Text   style={styles.brandName} >Toyota</Text>
            </TouchableOpacity>
            </View>
            <View  style={styles.brandDetails} >
-           <TouchableOpacity     onPress={handleFilterByBrand("Hyundai")}>
+           <TouchableOpacity     onPress={()=>handleFilterByBrand("Hyundai")}>
            <Image style={styles.brandLogo}  source={Hyundai} ></Image>
            <Text   style={styles.brandName} >Hyundai</Text>
            </TouchableOpacity>
            </View>
            <View  style={styles.brandDetails} >
-           <TouchableOpacity     onPress={handleFilterByBrand("Honda")}>
+           <TouchableOpacity     onPress={()=>handleFilterByBrand("Honda")}>
            <Image style={styles.brandLogo}  source={Honda} ></Image>
            <Text   style={styles.brandName} >Honda</Text>
            </TouchableOpacity>
            </View>
            <View  style={styles.brandDetails} >
-           <TouchableOpacity     onPress={handleFilterByBrand("Porch")}>
+           {/* <TouchableOpacity     onPress={()=>handleFilterByBrand("Porche")}>
            <Image style={styles.brandLogo}  source={porche} ></Image>
-           <Text   style={styles.brandName} >Porch</Text>
-           </TouchableOpacity>
-           </View>
+           <Text   style={styles.brandName} >Porche</Text>
+           </TouchableOpacity> */}
+           </View> 
 
         
            </ScrollView> 

@@ -35,7 +35,7 @@ const SignUp = ({ navigation, props }) => {
           console.log("THIS IS THE FUCKING RESPONSE",response.meta);
           if (response.meta.requestStatus==="fulfilled") {
             // Navigate to the desired location
-            navigation.navigate('Home');
+            navigation.navigate('Login');
           }
         })
         .catch((error) => {

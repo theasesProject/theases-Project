@@ -1,5 +1,5 @@
 
-import {View,Text,StyleSheet} from "react-native"
+import {View,Text,StyleSheet,ScrollView} from "react-native"
 import CardCar from "../components/CardCar.jsx"
 import { useDispatch ,useSelector} from "react-redux";
 

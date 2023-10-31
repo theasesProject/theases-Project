@@ -36,6 +36,7 @@ console.log(allCars,"allCars")
        <ProfileLandingPage />
        <SearchBar onSearch={updateFilteredCars} />
        <BrandBar onFilterByBrand={updateFilteredCars} />
+     
        {filteredCars.map((element, i) => ( 
        <View style={styles.all}>
          <CardCar key={i} oneCar={element} />

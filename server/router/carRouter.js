@@ -3,7 +3,7 @@ const express = require('express')
 const carRouter = express.Router()
 
 carRouter.get('/allCars',getAllCars)
-carRouter.get("/byBrand/:brand",filterCarByBrand)
+carRouter.post("/byBrand",filterCarByBrand)
 carRouter.post('/newCar',CreateCar)
 carRouter.post("/imageCar",createImage)
 carRouter.get('/searchName/:model',searchCarByModel)

@@ -31,7 +31,7 @@ export const SignUpClick = createAsyncThunk(
     try {
       console.log(inputForm);
       const task = await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/users/SignUpUser`,
+        `http://192.168.1.13:5000/api/users/SignUpUser`,
         inputForm
       );
       // console.log(task.data.status==="success");

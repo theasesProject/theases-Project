@@ -5,6 +5,7 @@ import { DOMAIN_NAME } from "../env";
 // Define an initial state for the user slice
 const initialState = {
   data: null,
+  loggedIn: false,
   status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
   error: null,
 };
@@ -30,7 +31,7 @@ export const SignUpClick = createAsyncThunk(
     try {
       console.log(inputForm);
       const task = await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/users/SignUpUser`,
+        `http://192.168.1.13:5000/api/users/SignUpUser`,
         inputForm
       );
       // console.log(task.data.status==="success");
@@ -43,7 +44,18 @@ export const SignUpClick = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    // Add a logout action that resets the user state
+    logoutUser: (state) => {
+      state.status = "idle";
+      state.data = null;
+      state.loggedIn = false;
+      state.error = null;
+    },
+    setUser: (state, action) => {
+      state.data = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (state) => {
@@ -52,6 +64,7 @@ const userSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
+        state.loggedIn = true;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = "failed";
@@ -62,6 +75,6 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 export const selectUser = (state) => state.user.data;
-
-// Export the async thunk for use in components
+export const logStatus = (state) => state.user.loggedIn;
 export { fetchUser };
+export const { logoutUser, setUser } = userSlice.actions;

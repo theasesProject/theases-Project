@@ -12,8 +12,10 @@ import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
-import AdvancedSearch from "./pages/AdvancedSearch.jsx"
-import FiltredCar from "./pages/FiltredCar.jsx"
+import EditProfile from "./pages/EditProfile.jsx";
+
+import AdvancedSearch from "./pages/AdvancedSearch.jsx";
+import FiltredCar from "./pages/FiltredCar.jsx";
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
@@ -24,25 +26,32 @@ import SignUp from "./pages/signUp.jsx";
 
 // AppRegistry.registerComponent(theases, () => App);
 
-
 const Stack = createStackNavigator();
 function App() {
   return (
-  
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Carou">
-          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-          {/* <Stack.Screen
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
+          />
+
+          {/* <Stack.Screen
+            name="Carousel"
+            component={Carousel}
           /> */}
           <Stack.Screen
             name="Carou"
             component={Carou}
             options={{ headerShown: false }}
-
           />
           <Stack.Screen
             name="Userprofile"
@@ -64,7 +73,7 @@ function App() {
             component={ForgotPassword}
             options={{ headerShown: false }}
           />
-  {/* <Stack.Screen
+          {/* <Stack.Screen
             name="Remobg"
             component={Remobg}
             options={{ headerShown: false }}
@@ -74,12 +83,18 @@ function App() {
             component={ConfirmIdentity}
             options={{ headerShown: false }}
           />
-             <Stack.Screen
+
+          <Stack.Screen
+            name="editProfile"
+            component={EditProfile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="AdvancedSearch"
             component={AdvancedSearch}
             options={{ headerShown: false }}
           />
-               <Stack.Screen
+          <Stack.Screen
             name="FiltredCar"
             component={FiltredCar}
             options={{ headerShown: false }}

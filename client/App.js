@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, LogBox, StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
-import Carousel from "./pages/Carousel.jsx";
+import Carou from "./pages/Carou.jsx";
 import LoadingScreen from "./pages/Loading.jsx";
 import store from "./store/store";
 import { Provider } from "react-redux";
@@ -24,25 +24,26 @@ import SignUp from "./pages/signUp.jsx";
 
 // AppRegistry.registerComponent(theases, () => App);
 
+
 const Stack = createStackNavigator();
 function App() {
   return (
   
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Carou">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
           {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
           /> */}
-          {/* <Stack.Screen
-            name="Carousel"
-            component={Carousel}
+          <Stack.Screen
+            name="Carou"
+            component={Carou}
             options={{ headerShown: false }}
 
-          /> */}
+          />
           <Stack.Screen
             name="Userprofile"
             component={UserProfile}

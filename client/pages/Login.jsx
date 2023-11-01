@@ -20,6 +20,7 @@ import axios from "axios";
 import { fetchUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { DOMAIN_NAME } from "../env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // require("dotenv").config();
 // ${process.env.DOMAIN_NAME}
@@ -36,6 +37,35 @@ function Login({ navigation }) {
   const [formChecked, setFormChecked] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+
+  const storeData = async (key, value) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch (error) {
+      console.error("Error storing data:", error);
+    }
+  };
+
+  const retrieveData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value !== null) {
+        return value;
+      } else {
+        return "Data not found";
+      }
+    } catch (error) {
+      console.error("Error retrieving data:", error);
+    }
+  };
+
+  const removeData = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (error) {
+      console.error("Error removing data:", error);
+    }
+  };
 
   const formValidation = () => {
     if (!form.identifier || !form.password) {
@@ -94,6 +124,8 @@ function Login({ navigation }) {
         }
       );
       setError(null);
+      storeData("token", response.data);
+      console.log("token: ", retrieveData("token"));
       dispatch(fetchUser(response.data));
       navigation.navigate("Home");
     } catch (err) {

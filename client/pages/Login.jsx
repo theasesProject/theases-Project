@@ -87,9 +87,7 @@ function Login({ navigation }) {
         return setError("please provide an email or a phone number");
       }
       const response = await axios.post(
-
         `http://${DOMAIN_NAME}:5000/api/users/${endPoint}`,
-
         {
           [checkedIdentifier]: form.identifier,
           password: form.password,
@@ -97,7 +95,7 @@ function Login({ navigation }) {
       );
       setError(null);
       dispatch(fetchUser(response.data));
-      navigation.navigate('Home');
+      navigation.navigate("Home");
     } catch (err) {
       if (err.response.status == "404") {
         setError("user does not exist");

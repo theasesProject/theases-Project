@@ -15,12 +15,14 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cors())
 app.use(express.json())
 const carRouter = require("./router/carRouter")
+const adminRouter = require("./router/adminRouter")
 const userRouter = require("./router/user.Route");
-
+const reviewRouter = require("./router/Review")
 //!routers
 app.use("/api/car", carRouter)
 app.use("/api/users", userRouter);
-
+app.use("/api/admin", adminRouter);
+app.use("/api/review",reviewRouter)
 
 
 app.listen(5000, function () {

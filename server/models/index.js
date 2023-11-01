@@ -76,5 +76,4 @@ db.BookMark.belongsTo(db.User);
 
 db.BookMark.hasMany(db.Car);
 db.Car.belongsTo(db.BookMark);
-
 module.exports.db = db;

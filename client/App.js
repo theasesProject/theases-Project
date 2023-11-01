@@ -31,7 +31,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="CarDetails">
-          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+          <Stack.Screen name="Home" component={FiltredCar} options={{ headerShown: false }}/>
           {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}

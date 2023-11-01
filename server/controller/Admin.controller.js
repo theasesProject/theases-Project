@@ -9,7 +9,7 @@ module.exports = {
     try {
         const admin = await Admin.findAll({
         })
-        res.json(Admin)
+        res.json(admin)
     } catch (error) {
          next(error)
     }

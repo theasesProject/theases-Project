@@ -30,7 +30,7 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const SignUpClick = createAsyncThunk("user/SignUp", async (inputForm, thunkAPI) => {
+export const SignUpClick = createAsyncThunk("user/SignUps", async (inputForm, thunkAPI) => {
   try {
     console.log(inputForm);
     const task = await axios.post(`http://${DOMAIN_NAME}:5000/api/users/SignUpUser`, inputForm)
@@ -47,7 +47,7 @@ export const SignUpClick = createAsyncThunk("user/SignUp", async (inputForm, thu
     try {
       await AsyncStorage.setItem('UserToken', response.data);
     } catch (e) {
-      console.error(e);
+      console.error(JSON.stringify(e));
     }
     
     return task.data

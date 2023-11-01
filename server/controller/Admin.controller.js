@@ -67,7 +67,7 @@ SignUpAdmin:async(req,res,next)=>{
       const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
       res.send(token);
     } catch (err) {
-      throw(err)
+      res.json(err)
     }
   },
 
@@ -111,7 +111,7 @@ SignUpAdmin:async(req,res,next)=>{
       }
       res.status(200).send("Admin exists");
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -126,7 +126,7 @@ SignUpAdmin:async(req,res,next)=>{
       }
       res.status(200).send("Admin exists");
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -141,7 +141,7 @@ SignUpAdmin:async(req,res,next)=>{
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -159,7 +159,7 @@ SignUpAdmin:async(req,res,next)=>{
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -176,7 +176,7 @@ SignUpAdmin:async(req,res,next)=>{
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 };

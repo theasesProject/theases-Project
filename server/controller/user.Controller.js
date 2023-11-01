@@ -104,7 +104,7 @@ module.exports = {
         res.status(200).json(response);
       }
     } catch (err) {
-      throw(err);
+      res.json(err);
     }
   },
 
@@ -147,7 +147,7 @@ module.exports = {
         res.status(404).json({ message: "User not found" });
       }
     } catch (err) {
-      throw err;
+      res.json( err);
     }
   },
 
@@ -191,7 +191,7 @@ module.exports = {
         res.status(404).json({ message: "User not found" });
       }
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 

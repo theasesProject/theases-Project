@@ -1,3 +1,5 @@
+const express = require("express");
+const router = express.Router();
 const {
   emailLogin,
   phoneLogin,
@@ -7,13 +9,9 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-  getAllUsers,
   SignUpAdmin,
-  updateOneUserblockState,
   bringUsersData,
 } = require("../controller/Admin.controller");
-const express = require("express");
-const router = express.Router();
 
 router.post("/emailLogin", emailLogin);
 router.post("/phoneLogin", phoneLogin);

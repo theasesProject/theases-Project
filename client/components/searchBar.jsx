@@ -37,8 +37,9 @@ function SearchBar({ onSearch }) {
   return (
     <View style={styles.searchBar}>
       <View style={styles.searchDetails}>
-        <Text style={styles.FirstText}>Select or search your</Text>
-        <Text style={styles.FirstText}>favourite location</Text>
+        {/* <Text style={styles.FirstText}>Select or search your</Text>
+        REMOVE THIS PLEASE
+        <Text style={styles.FirstText}>favourite location</Text> */}
         <View style={styles.inputAndButton}>
           <TextInput
             onChangeText={(text) => handleSearch(text)}
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(237, 238, 247)",
     width: "90%",
     alignItems: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingVertical: 10,
     flexDirection: "row",
     borderRadius: 10,

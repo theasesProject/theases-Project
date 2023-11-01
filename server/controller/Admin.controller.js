@@ -8,7 +8,7 @@ module.exports = {
   bringAdminData: async (req, res, next) => {
     try {
       const admin = await Admin.findAll({});
-      res.json(Admin);
+      res.json(admin);
     } catch (error) {
       next(error);
     }
@@ -70,7 +70,7 @@ module.exports = {
       const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
       res.send(token);
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -113,7 +113,7 @@ module.exports = {
       }
       res.status(200).send("Admin exists");
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -128,7 +128,7 @@ module.exports = {
       }
       res.status(200).send("Admin exists");
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -143,7 +143,7 @@ module.exports = {
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -161,7 +161,7 @@ module.exports = {
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
 
@@ -178,7 +178,7 @@ module.exports = {
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      throw err;
+      res.json(err);
     }
   },
   getAllUsers: async (req, res) => {

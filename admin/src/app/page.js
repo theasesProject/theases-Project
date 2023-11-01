@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 export default function LoginPage() {
   // const [username, setUsername] = useState('');
   // const [password, setPassword] = useState('');
-  // const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
   const [formChecked, setFormChecked] = useState(false);
   const dispatch = useDispatch()
   const router = useRouter();
@@ -67,7 +67,8 @@ export default function LoginPage() {
         return setError("please provide an email or a phone number");
       }
       console.log(endPoint);
-      dispatch(Login(endPoint, checkedIdentifier, form.identifier))
+      console.log(endPoint, {checkedIdentifier: checkedIdentifier, password: form.password, identifier: form.identifier});
+      dispatch(Login({endPoint,checkedIdentifier: checkedIdentifier, password: form.password, identifier: form.identifier}));
       setError(null);
       router.push('/DashBoard');
         // dispatch(fetchUser(response.data));
@@ -98,26 +99,6 @@ export default function LoginPage() {
       input.className = '';
     }
   };
-
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const res = await fetch('/api/login', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ username, password }),
-  //     });
-
-  //     if (res.status === 200) {
-  //       router.push('/dashboard');
-  //     } else {
-  //       throw new Error(await res.text());
-  //     }
-  //   } catch (error) {
-  //     console.error('An unexpected error happened:', error);
-  //     setError(error.message);
-  //   }
-  // };
   useEffect(() => {
     formValidation()
     const handleKeyUp = (e) => {

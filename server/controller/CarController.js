@@ -10,7 +10,7 @@ module.exports = {
 
       res.status(200).send(allCars);
     } catch (error) {
-      throw error;
+      res.json(error);
     }
   },
 
@@ -34,7 +34,7 @@ module.exports = {
 
       res.status(200).send(newCar);
     } catch (error) {
-      throw error;
+      res.json(error);
     }
   },
   createImage: async function (req, res) {
@@ -46,7 +46,7 @@ module.exports = {
 
       res.status(200).send(image);
     } catch (error) {
-      throw error;
+      res.json(error);
     }
   },
   filterCarByBrand: async function (req, res) {
@@ -57,7 +57,7 @@ module.exports = {
 
       res.status(200).send(carByBrand);
     } catch (error) {
-      throw error;
+      res.json(error);
     }
   },
 
@@ -74,7 +74,7 @@ module.exports = {
 
       res.status(200).send(carSearched);
     } catch (error) {
-      throw error;
+      res.json(error);
     }
   },
   filtredCar: async function (req, res) {
@@ -96,7 +96,7 @@ module.exports = {
 
       res.json(filtredOne);
     } catch (error) {
-      throw error;
+      res.json(error);
     }
   },
  searchCarById:async function (req, res) {

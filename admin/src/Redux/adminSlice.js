@@ -18,17 +18,13 @@ export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
         console.error(err);
     }
 });
-export const Login = createAsyncThunk("user/Login", async (endPoint, { checkedIdentifier, identifier }) => {
+export const Login = createAsyncThunk("user/Login", async ({endPoint, checkedIdentifier, password, identifier}) => {
     try {
-        const data = { checkedIdentifier, identifier }
+        const data = {[checkedIdentifier]: identifier, password};
+        console.log(data);
         const response = await axios.post(
-
             `http://localhost:5000/api/admin/${endPoint}`,
-
-            {
-                [data.checkedIdentifier]: data.identifier,
-                password: form.password,
-            }
+            data
         )
         localStorage.setItem("Token", response.data)
         return response.data;
@@ -36,6 +32,8 @@ export const Login = createAsyncThunk("user/Login", async (endPoint, { checkedId
         console.error(err);
     }
 });
+
+
 export const adminSlicer = createSlice({
     name: "admin",
     initialState,

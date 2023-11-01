@@ -5,7 +5,6 @@ module.exports = (DataTypes, connection) => {
     userName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     phoneNumber: {
       type: DataTypes.STRING,
@@ -40,11 +39,6 @@ module.exports = (DataTypes, connection) => {
       type: DataTypes.STRING,
       allowNull: true,
       defaultValue: "123456789",
-    },
-    stateBlocked: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
     },
   });
   User.beforeCreate((User, options) => {

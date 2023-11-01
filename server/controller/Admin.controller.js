@@ -5,54 +5,53 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 // Controller methods for Admin
 module.exports = {
-  bringAdminData: async (req, res,next) => {
+  bringAdminData: async (req, res, next) => {
     try {
-        const admin = await Admin.findAll({
-        })
-        res.json(Admin)
+      const admin = await Admin.findAll({});
+      res.json(Admin);
     } catch (error) {
-         next(error)
+      next(error);
     }
-},
-SignUpAdmin:async(req,res,next)=>{
-    const NameCheck= await Admin.findAll({
-        where:{
-            Name:req.body.Name
-        }
-    })
-    const emailCheck= await Admin.findAll({
-        where:{
-            email:req.body.email
-        }
-    })
-    if (NameCheck[0]||emailCheck[0]) {
-        if (NameCheck[0]) {
-            return res.status(403).send({
-                status: "Blocked",
-                message: "This AdminName Already Exists",
-                found:NameCheck
-              })
-        }
-        if (emailCheck[0]) {
-           return  res.status(403).send({
-                status: "Blocked",
-                message: "This Email Already Exists",
-                found:emailCheck
-              })
-        }
-    }else{
-        const admin = await Admin.create(req.body);
-        res.status(201).send({
-          status: "success",
-          message: "Admin added successfully!!!",
-          data: admin,
+  },
+  SignUpAdmin: async (req, res, next) => {
+    const NameCheck = await Admin.findAll({
+      where: {
+        Name: req.body.Name,
+      },
+    });
+    const emailCheck = await Admin.findAll({
+      where: {
+        email: req.body.email,
+      },
+    });
+    if (NameCheck[0] || emailCheck[0]) {
+      if (NameCheck[0]) {
+        return res.status(403).send({
+          status: "Blocked",
+          message: "This AdminName Already Exists",
+          found: NameCheck,
         });
+      }
+      if (emailCheck[0]) {
+        return res.status(403).send({
+          status: "Blocked",
+          message: "This Email Already Exists",
+          found: emailCheck,
+        });
+      }
+    } else {
+      const admin = await Admin.create(req.body);
+      res.status(201).send({
+        status: "success",
+        message: "Admin added successfully!!!",
+        data: admin,
+      });
     }
     try {
     } catch (err) {
-        next(err)
+      next(err);
     }
-},
+  },
   // checks if a Admin exists using email
   emailLogin: async (req, res) => {
     try {
@@ -60,14 +59,18 @@ SignUpAdmin:async(req,res,next)=>{
       if (!admin.dataValues) {
         return res.status(404).json("Admin does not exist");
       }
-      if (!(await bcrypt.compare(req.body.password, admin.dataValues.password))) {
-        console.log(await bcrypt.compare(req.body.password, admin.dataValues.password));
+      if (
+        !(await bcrypt.compare(req.body.password, admin.dataValues.password))
+      ) {
+        console.log(
+          await bcrypt.compare(req.body.password, admin.dataValues.password)
+        );
         return res.status(401).json("wrong password");
       }
       const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
       res.send(token);
     } catch (err) {
-      throw(err)
+      throw err;
     }
   },
 
@@ -100,7 +103,6 @@ SignUpAdmin:async(req,res,next)=>{
       res.status(500).send(err);
     }
   },
-
 
   // Get Admin by email
   getAdminByEmail: async (req, res) => {
@@ -177,6 +179,30 @@ SignUpAdmin:async(req,res,next)=>{
       }
     } catch (err) {
       throw err;
+    }
+  },
+  getAllUsers: async (req, res) => {
+    try {
+      const allUsers = await db.User.findAll();
+      res.send(allUsers);
+    } catch (error) {
+      throw error;
+    }
+  },
+  updateOneUserblockState: async (req, res) => {
+    try {
+      const user = await db.User.findOne({ where: { id: req.params.id } });
+      const oneUser = await db.User.update(
+        { stateBlocked: !user.stateBlocked },
+        {
+          where: {
+            id: user.id,
+          },
+        }
+      );
+      res.send(oneUser);
+    } catch (error) {
+      throw error;
     }
   },
 };

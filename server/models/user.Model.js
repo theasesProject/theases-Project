@@ -4,8 +4,7 @@ module.exports = (DataTypes, connection) => {
     const User = connection.define('User', {
         userName: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique:true
+            allowNull: false
         },
         phoneNumber: {
             type: DataTypes.STRING,

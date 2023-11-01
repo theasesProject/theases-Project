@@ -23,19 +23,18 @@ const SignUp = ({ navigation, props }) => {
   const inputRefPassword = useRef();
   const inputRefConfirmed = useRef();
   const [checkUp, setCheckUp] = useState(false);
-  // const [dateOfBirth, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
-  const SignUpHandle = (inputFor) => {
+  const SignUpHandle = (inputForm) => {
     if (inputForm.password === confirm) {
       console.log(inputForm);
       dispatch(SignUpClick(inputForm))
         .then((response) => {
           // Check if the dispatch was successful
-          console.log("THIS IS THE FUCKING RESPONSE",response.meta);
+          console.log("RESPONSE§§§",response.meta);
           if (response.meta.requestStatus==="fulfilled") {
             // Navigate to the desired location
-            navigation.navigate('Login');
+            navigation.navigate('Home');
           }
         })
         .catch((error) => {
@@ -114,9 +113,9 @@ const SignUp = ({ navigation, props }) => {
           setEmailError("");
         }
       } else if (placeholder === "Phone") {
-        const phoneRegex = /^[0-9]{8}$/;
+        const phoneRegex = /^[\d\+\-]+$/;
         if (!phoneRegex.test(value.trim())) {
-          setPhoneError("Phone number should be 10 digits long.");
+          setPhoneError("Phone number should be a valid number ");
           return;
         } else {
           setPhoneError("");

@@ -15,13 +15,16 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cors())
 app.use(express.json())
 const carRouter = require("./router/carRouter")
+const adminRouter = require("./router/adminRouter")
 const userRouter = require("./router/user.Route");
-
+const reviewRouter = require("./router/Review")
+const agencyRouter = require("./router/Agency")
 //!routers
 app.use("/api/car", carRouter)
 app.use("/api/users", userRouter);
-
-
+app.use("/api/admin", adminRouter);
+app.use("/api/review",reviewRouter)
+app.use("/api/agency",agencyRouter)
 
 app.listen(5000, function () {
    console.log("Server is running on port 5000", port)

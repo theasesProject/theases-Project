@@ -29,7 +29,7 @@ export const fetchFilteredCars = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      throw error;
+      console.error(error);
     }
   }
 );

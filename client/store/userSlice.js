@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { DOMAIN_NAME } from "../env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define an initial state for the user slice
 const initialState = {
@@ -25,22 +26,37 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
     console.error(err);
   }
 });
-export const SignUpClick = createAsyncThunk(
-  "user/SignUp",
-  async (inputForm) => {
+
+
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const SignUpClick = createAsyncThunk("user/SignUps", async (inputForm, thunkAPI) => {
+  try {
+    console.log(inputForm);
+    const task = await axios.post(`http://${DOMAIN_NAME}:5000/api/users/SignUpUser`, inputForm)
+    const response = await axios.post(
+      `http://${DOMAIN_NAME}:5000/api/users/emailLogin`,
+      {
+        email: inputForm.email,
+        password: inputForm.password,
+      }
+    );
+    thunkAPI.dispatch(fetchUser(response.data));
+
+    // Store the token in AsyncStorage
     try {
-      console.log(inputForm);
-      const task = await axios.post(
-        `http://192.168.1.13:5000/api/users/SignUpUser`,
-        inputForm
-      );
-      // console.log(task.data.status==="success");
-      return task.data;
-    } catch (er) {
-      console.error(JSON.stringify(er));
+      await AsyncStorage.setItem('UserToken', response.data);
+    } catch (e) {
+      console.error(JSON.stringify(e));
     }
+    
+    return task.data
+  } catch (er) {
+    console.error("error coming from sign function", JSON.stringify(er));
   }
-);
+})
+
+
 const userSlice = createSlice({
   name: "user",
   initialState,

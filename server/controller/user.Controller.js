@@ -2,7 +2,6 @@ const { db } = require("../models/index");
 const User = db.User;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { trace } = require("../router/user.Route");
 require("dotenv").config();
 // Controller methods for User
 module.exports = {
@@ -17,7 +16,7 @@ module.exports = {
   SignUpUser: async (req, res, next) => {
     const NameCheck = await db.User.findAll({
       where: {
-        userName: req.body.userName,
+        phoneNumber: req.body.phoneNumber,
       },
     });
     const emailCheck = await db.User.findAll({
@@ -94,9 +93,18 @@ module.exports = {
     try {
       const response = jwt.verify(req.body.token, process.env.JWT_SECRET_KEY);
       delete response.password;
-      res.status(200).json(response);
+      console.log(response.type);
+      if (response.type === "agency") {
+        const task = await User.findOne({ where: { email: response.email }, include: ["Agency"] })
+        if (task) {
+          delete task.password
+        }  
+         res.json(task)
+      } else {
+        res.status(200).json(response);
+      }
     } catch (err) {
-      res.status(500).send(err);
+      throw(err);
     }
   },
 

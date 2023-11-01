@@ -10,7 +10,7 @@ module.exports = ( DataTypes, connection) => {
     },
     verificationStatus: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false,
     },
     companyNumber: {
@@ -23,7 +23,7 @@ module.exports = ( DataTypes, connection) => {
     },
     stateBlocked: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false,
     },
     transportation: {

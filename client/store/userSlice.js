@@ -52,7 +52,7 @@ export const SignUpClick = createAsyncThunk("user/SignUps", async (inputForm, th
     
     return task.data
   } catch (er) {
-    console.error("error coming from sign function", er);
+    console.error("error coming from sign function", JSON.stringify(er));
   }
 })
 

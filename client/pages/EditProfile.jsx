@@ -14,13 +14,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { DOMAIN_NAME } from "../env";
 import { useDispatch } from "react-redux";
-// import PasswordIcon from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
+import cloudinaryUpload from "../HelperFunctions/Cloudinary";
+import * as ImagePicker from "expo-image-picker";
 
 const EditProfile = ({ navigation }) => {
   const activeUser = useSelector(selectUser);
-
   const [color, setColor] = useState("#6C77BF");
   const [form, setForm] = useState({});
   const [currentPassword, setCurrentPassword] = useState("");
@@ -34,8 +34,38 @@ const EditProfile = ({ navigation }) => {
   const [error, setError] = useState(null);
   const [matchingError, setMatchingError] = useState(null);
   const [formChecked, setFormChecked] = useState(false);
+  const [img, setImg] = useState(activeUser?.avatar);
 
   const dispatch = useDispatch();
+
+  const selectImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (status !== "granted") {
+      console.log("Permission to access media library denied");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+    });
+
+    if (!result.canceled) {
+      // Use the selected assets from the "assets" array
+      const selectedAsset = result.assets[0];
+      try {
+        const cloudinaryResponse = await cloudinaryUpload(selectedAsset.uri);
+        // cloudinaryResponse is the link of the img ready to be pushed in database
+        console.log("img link: ", cloudinaryResponse);
+        setImg(cloudinaryResponse);
+        setForm({ ...form, avatar: cloudinaryResponse });
+      } catch (err) {
+        console.error("Cloudinary Upload Error:", err);
+      }
+    }
+  };
 
   const handleChangeUserName = (content) => {
     if (!content) {
@@ -110,9 +140,17 @@ const EditProfile = ({ navigation }) => {
 
   return (
     <View style={styles.editProfilePage}>
-      <View style={styles.profilePictureContainer}>
-        <Image source={activeUser?.avatar} style={styles.profilePicture} />
-      </View>
+      <TouchableOpacity
+        style={styles.profilePictureContainer}
+        onPress={selectImage}
+      >
+        <Image
+          source={{
+            uri: img,
+          }}
+          style={styles.profilePicture}
+        />
+      </TouchableOpacity>
       <TextInput
         style={styles.input}
         placeholder={activeUser?.userName}
@@ -273,6 +311,9 @@ const styles = StyleSheet.create({
   profilePicture: {
     width: 100,
     height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#6a78c1",
   },
   input: {
     width: "100%",

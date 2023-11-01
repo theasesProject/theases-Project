@@ -25,7 +25,7 @@ const SignUp = ({ navigation, props }) => {
   const [checkUp, setCheckUp] = useState(false);
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
-  const SignUpHandle = (inputFor) => {
+  const SignUpHandle = (inputForm) => {
     if (inputForm.password === confirm) {
       console.log(inputForm);
       dispatch(SignUpClick(inputForm))
@@ -34,7 +34,7 @@ const SignUp = ({ navigation, props }) => {
           console.log("RESPONSE§§§",response.meta);
           if (response.meta.requestStatus==="fulfilled") {
             // Navigate to the desired location
-            navigation.navigate('Login');
+            navigation.navigate('Home');
           }
         })
         .catch((error) => {

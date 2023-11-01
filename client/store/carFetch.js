@@ -34,7 +34,7 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     console.log(error, "aa");
   }
 });
-getAllCars();
+
 export const fetchFilteredCars = createAsyncThunk(
   "car/fetchFilteredCars",
   async (filterCriteria, { getState, dispatch }) => {

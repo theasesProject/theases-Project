@@ -8,7 +8,7 @@ module.exports = {
   bringAdminData: async (req, res, next) => {
     try {
       const admin = await Admin.findAll({});
-      res.json(admin);
+      res.json(Admin);
     } catch (error) {
       next(error);
     }
@@ -70,7 +70,7 @@ module.exports = {
       const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
       res.send(token);
     } catch (err) {
-      res.json(err);
+      throw err;
     }
   },
 

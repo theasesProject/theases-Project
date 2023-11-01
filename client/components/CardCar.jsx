@@ -49,7 +49,7 @@ const handleStarPress = () => {
     <Text style={styles.avaible}>(150 review)</Text>
     </View>
     <Text style={styles.carPrice}>${oneCar.price}/{oneCar.period}</Text>
-   
+   <TouchableOpacity><Text>book</Text></TouchableOpacity>
     </View>
     </View>
     </View>

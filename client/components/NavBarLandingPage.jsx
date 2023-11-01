@@ -22,12 +22,15 @@ function ProfileLandingPage() {
       </View>
       <View>
         {loggedIn ? (
+          <TouchableOpacity onPress={() => navigation.navigate("Userprofile")}>
           <Image
-            source={activeUser?.avatar}
+          source={{
+            uri:`${activeUser?.avatar}` ,
+          }}
             alt="userPic"
             style={styles.UserImage}
-            onPress={() => navigation.navigate("Userprofile")}
-          />
+           
+          /></TouchableOpacity>
         ) : (
           <View style={styles.authBtnsContainer}>
             <TouchableOpacity

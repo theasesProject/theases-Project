@@ -38,11 +38,11 @@ function App() {
             options={{ headerShown: false }}
           />
 
-          <Stack.Screen
+          {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
-          />
+          /> */}
 
           {/* <Stack.Screen
             name="Carousel"

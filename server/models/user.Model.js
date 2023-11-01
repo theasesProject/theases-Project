@@ -43,8 +43,6 @@ module.exports = (DataTypes, connection) => {
             allowNull: true,
             defaultValue:"123456789"
         }
-
-
     });
     User.beforeCreate((User, options) => {
         User.password = bcrypt.hashSync(User.password, saltRounds);

@@ -17,7 +17,7 @@ function ProfileLandingPage() {
         <Image style={styles.locationImage} source={localisation} />
         <View style={styles.adress}>
           <Text style={styles.yourLocation}>Your Location </Text>
-          <Text style={styles.UserAdress}>Norvey,User </Text>
+          <Text style={styles.UserAdress}>Norvey,{activeUser?.userName} </Text>
         </View>
       </View>
       <View>

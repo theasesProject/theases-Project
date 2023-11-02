@@ -13,6 +13,7 @@ import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
+import Favorites from "./pages/Favorites.jsx";
 
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
@@ -31,18 +32,23 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Userprofile">
+        <Stack.Navigator initialRouteName="favorites">
           <Stack.Screen
             name="Home"
             component={Home}
             options={{ headerShown: false }}
           />
+          <Stack.Screen 
+           name="favorites"
+           component={Favorites}
+            options={{headerShown: false}}
+          />
 
-          <Stack.Screen
+          {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
-          />
+          /> */}
 
           {/* <Stack.Screen
             name="Carousel"

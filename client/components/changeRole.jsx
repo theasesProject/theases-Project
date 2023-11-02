@@ -153,9 +153,9 @@ function ChangeRole() {
         </TouchableOpacity>
       </View>
       <Button
-        onPress={() => {
-          createNewAgency;
-        }}
+        onPress={
+          createNewAgency
+        }
         title="submit"
       />
     </View>

@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { Button, LogBox, StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import CarDetails from "./components/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
@@ -58,6 +58,7 @@ function App() {
             component={UserProfile}
             options={{ headerShown: false }}
           />
+
           <Stack.Screen
             name="SignUp"
             component={SignUp}
@@ -97,6 +98,11 @@ function App() {
           <Stack.Screen
             name="FiltredCar"
             component={FiltredCar}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CarDetails"
+            component={CarDetails}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

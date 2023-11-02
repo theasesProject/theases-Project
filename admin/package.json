@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@nextui-org/react": "^2.1.13",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.0",
     "next": "14.0.0",

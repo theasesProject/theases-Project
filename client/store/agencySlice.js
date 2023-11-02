@@ -15,7 +15,7 @@ export const CreateAgency = createAsyncThunk(
         `http://${DOMAIN_NAME}:5000/api/agency/addAgency`,
         body
       );
-
+      console.log(body, "body");
       return response.data;
     } catch (error) {
       console.log(error);

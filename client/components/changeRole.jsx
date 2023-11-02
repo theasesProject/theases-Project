@@ -103,9 +103,9 @@ function ChangeRole() {
   //   }
   // };
 
-  // const handleDropdownSelect = (index, value) => {
-  //   setSelectedValue(value);
-  // };
+  const handleDropdownSelect = (index, value) => {
+    setSelectedValue(value);
+  };
 
   return (
     <View style={styles.editProfilePage}>
@@ -152,12 +152,7 @@ function ChangeRole() {
           />
         </TouchableOpacity>
       </View>
-      <Button
-        onPress={
-          createNewAgency
-        }
-        title="submit"
-      />
+      <Button onPress={createNewAgency} title="submit" />
     </View>
   );
 }

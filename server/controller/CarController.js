@@ -99,16 +99,15 @@ module.exports = {
       res.json(error);
     }
   },
- searchCarById:async function (req, res) {
+  searchCarById: async function (req, res) {
     try {
       const carById = await db.Car.findOne({
-        where: { id: req.params.id*1 },
+        where: { id: req.params.id * 1 },
       });
-console.log( carById,)
+      console.log(carById);
       res.status(200).send(carById);
     } catch (error) {
       throw error;
     }
-  }
- 
+  },
 };

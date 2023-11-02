@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define an initial state for the user slice
 const initialState = {
-  data: null,
+  data: {},
   loggedIn: false,
   status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
   error: null,

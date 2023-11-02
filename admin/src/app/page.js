@@ -5,7 +5,7 @@ import "../styles/login/page.css";
 import Head from 'next/head';
 import axios from 'axios';
 import { Login } from '@/Redux/adminSlice';
-import { useSelector, useDispatch } from "react-redux";
+import {  useDispatch } from "react-redux";
 export default function LoginPage() {
   // const [username, setUsername] = useState('');
   // const [password, setPassword] = useState('');

@@ -27,10 +27,9 @@ function Home({ navigation }) {
     dispatch(getAllCars());
   }, [dispatch]);
   const allCars = useSelector((state) => state.car.allCars);
-  const loading = useSelector((state) => state.car.loading);
+  // const loading = useSelector((state) => state.car.loading);
   const [filteredCars, setFilteredCars] = useState(allCars);
   console.log("allCars", allCars);
-
   console.log("car", allCars);
   const updateFilteredCars = (filteredCarData) => {
     setFilteredCars(filteredCarData);
@@ -56,7 +55,7 @@ function Home({ navigation }) {
           <SearchBar onSearch={updateFilteredCars} />
         </View>
         <BrandBar onFilterByBrand={updateFilteredCars} />
-        {filteredCars.map((element, i) => (
+        {filteredCars?.map((element, i) => (
           <View style={styles.allcars}>
             <CardCar key={i} oneCar={element} />
           </View>

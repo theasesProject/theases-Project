@@ -1,4 +1,4 @@
-module.exports = ( DataTypes, connection) => {
+module.exports = (DataTypes, connection) => {
   const Agency = connection.define("Agency", {
     papers: {
       type: DataTypes.STRING,
@@ -10,7 +10,7 @@ module.exports = ( DataTypes, connection) => {
     },
     verificationStatus: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false,
     },
     companyNumber: {
@@ -20,11 +20,6 @@ module.exports = ( DataTypes, connection) => {
     deposit: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    stateBlocked: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
     },
     transportation: {
       type: DataTypes.BOOLEAN,

@@ -12,7 +12,7 @@ function Favorites() {
   const { user } = useSelector((state) => state);
   const fetch = async function () {
     const patched = await axios.get(
-      `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${user.id}`
+      `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${user.data.id}`
     ).then(response => {
       setAll(response.data)
       console.log(response.data)

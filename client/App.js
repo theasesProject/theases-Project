@@ -14,6 +14,7 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import Favorites from "./pages/Favorites.jsx";
+import Messages from "./pages/Messages.jsx";
 
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
@@ -32,7 +33,7 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="favorites">
+        <Stack.Navigator initialRouteName="Messages">
           <Stack.Screen
             name="Home"
             component={Home}
@@ -43,7 +44,11 @@ function App() {
            component={Favorites}
             options={{headerShown: false}}
           />
-
+          <Stack.Screen 
+            name="Messages"
+            component={Messages}
+            options={{headerShown: false}}
+          />
           {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}

@@ -14,7 +14,7 @@ module.exports.getAll = async function (req, res) {
   try {
     const all = await db.BookMark.findAll({
       where: {
-        UserId: req.body.UserId,
+        UserId: req.params.id,
       },
     });
     res.json(all);

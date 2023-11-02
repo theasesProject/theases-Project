@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { View, ViewBase , StyleSheet } from "react-native";
 import { Text } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
+import CardCar from "../components/CardCar.jsx";
 
 function Favorites() {
   const [all, setAll] = useState([]);
@@ -11,18 +12,30 @@ function Favorites() {
   const { user } = useSelector((state) => state);
   const fetch = async function () {
     const patched = await axios.get(
-      `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll`,
-      {UserId:user.id}
-    ).then(response => setAll(response.data))
+      `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${user.id}`
+    ).then(response => {
+      setAll(response.data)
+      console.log(response.data)
+    })
   };
   useEffect(() => {
+    console.log(user.data);
     fetch();
-    console.log(all);
+    console.log(all)
   }, []);
 
-  return <View>
-    <Text>hi</Text>
+  return <View style={styles.container}>
+    {all.map(car => {
+      <CardCar oneCar={car}/>
+    })}
   </View>;
 }
+const styles = StyleSheet.create({
+  container:{
+    display : 'flex',
+    flexDirection: 'column',
+    gap:3,
+  }
+})
 
 export default Favorites;

@@ -16,11 +16,15 @@ import * as DocumentPicker from "expo-document-picker";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateAgency } from "../store/agencySlice";
 import axios from "axios";
-
+import cloudinaryUpload from "../HelperFunctions/Cloudinary";
+import * as ImagePicker from "expo-image-picker";
+import user from "../assets/user.jpg";
 function ChangeRole() {
   const transporation = ["accept", "refuse"];
   const [isChecked, setCheck] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [selectedDocument, setSelectedDocument] = useState(
+    "https://th.bing.com/th/id/OIP.6nsKk7mIkSKvYZD_APa8-AHaFk?pid=ImgDet&rs=1"
+  );
   const [adress, setAdress] = useState("");
   const [companyNumber, setCompanyNumber] = useState("");
   const [selectedValue, setSelectedValue] = useState(null);
@@ -59,48 +63,49 @@ function ChangeRole() {
     setCompanyNumber(input);
   };
 
-  const pickDocument = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync();
+  const selectImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      const image = cloudinaryUpload(result.uri);
-
-      setSelectedDocument(image);
-    } catch (error) {
-      console.log(error);
+    if (status !== "granted") {
+      console.log("Permission to access media library denied");
+      return;
     }
-  };
 
-  const handleDropdownSelect = (index, value) => {
-    setSelectedValue(value);
-  };
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+    });
 
-  const cloudinaryUpload = async (imageUri) => {
-    const cloudName = "torbaga";
-    const myUploadPreset = "zpsqdpwt";
-
-    try {
-      const formData = new FormData();
-      formData.append("file", {
-        uri: imageUri,
-        type: "image/jpeg",
-        name: "my_image.jpg",
-      });
-
-      formData.append("upload_preset", myUploadPreset);
-      const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        formData
-      );
-      if (response.status === 200) {
-        return response.data.secure_url;
-      } else {
-        console.error("Image upload failed");
+    if (!result.canceled) {
+      // Use the selected assets from the "assets" array
+      const selectedAsset = result.assets[0];
+      try {
+        const cloudinaryResponse = await cloudinaryUpload(selectedAsset.uri);
+        // cloudinaryResponse is the link of the img ready to be pushed in database
+        console.log("img link: ", cloudinaryResponse);
+        setSelectedDocument(cloudinaryResponse);
+      } catch (err) {
+        console.error("Cloudinary Upload Error:", err);
       }
-    } catch (error) {
-      console.error("Cloudinary upload error:", JSON.stringify(error));
     }
   };
+
+  // const pickDocument = async () => {
+  //   try {
+  //     const result = await DocumentPicker.getDocumentAsync();
+
+  //     const image = cloudinaryUpload(result.uri);
+
+  //     setSelectedDocument(image);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const handleDropdownSelect = (index, value) => {
+  //   setSelectedValue(value);
+  // };
 
   return (
     <View style={styles.editProfilePage}>
@@ -138,18 +143,14 @@ function ChangeRole() {
       </View>
       <View style={styles.line} />
       <View>
-        <Button
-          style={styles.input}
-          title="Enter your Papier"
-          onPress={pickDocument}
-        />
-        {selectedDocument && (
-          <View>
-            <Text>Selected Document:</Text>
-            <Text>Name: {selectedDocument.name}</Text>
-            <Text>Size: {selectedDocument.size} bytes</Text>
-          </View>
-        )}
+        <TouchableOpacity style={styles.input} onPress={selectImage}>
+          <Image
+            source={{
+              uri: selectedDocument,
+            }}
+            style={styles.input}
+          />
+        </TouchableOpacity>
       </View>
       <Button
         onPress={() => {

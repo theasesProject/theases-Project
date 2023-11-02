@@ -18,12 +18,14 @@ const carRouter = require("./router/carRouter")
 const adminRouter = require("./router/adminRouter")
 const userRouter = require("./router/user.Route");
 const reviewRouter = require("./router/Review")
+const bookMarksRouter = require("./router/BookMark.router")
 const agencyRouter = require("./router/Agency")
 //!routers
 app.use("/api/car", carRouter)
 app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/review",reviewRouter)
+app.use("/api/bookmarks", bookMarksRouter);
 app.use("/api/agency",agencyRouter)
 
 app.listen(5000, function () {

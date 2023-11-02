@@ -36,11 +36,11 @@ db.Request = require("./request.Model")(DataTypes, connection);
 db.User.hasOne(db.Agency);
 db.Agency.belongsTo(db.User);
 
-db.User.hasOne(db.Request)
-db.Request.belongsTo(db.User)
+db.User.hasOne(db.Request);
+db.Request.belongsTo(db.User);
 
-db.Request.hasMany(db.CarMedia)
-db.CarMedia.belongsTo(db.Request)
+db.Request.hasMany(db.CarMedia);
+db.CarMedia.belongsTo(db.Request);
 
 db.Agency.hasMany(db.Car);
 db.Car.belongsTo(db.Agency);

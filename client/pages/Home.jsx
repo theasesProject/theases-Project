@@ -17,7 +17,7 @@ import BrandBar from "../components/brandBar.jsx";
 import { getAllCars } from "../store/carFetch";
 import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
 import SearchBar from "../components/searchBar.jsx";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 
 function Home({ navigation }) {
@@ -29,6 +29,7 @@ function Home({ navigation }) {
   const allCars = useSelector((state) => state.car.allCars);
   const loading = useSelector((state) => state.car.loading);
   const [filteredCars, setFilteredCars] = useState(allCars);
+  console.log("allCars", allCars);
 
   console.log("car", allCars);
   const updateFilteredCars = (filteredCarData) => {
@@ -41,7 +42,7 @@ function Home({ navigation }) {
         console.log(value);
       }
     } catch (e) {
-      console.error("error coming from home",e);
+      console.error("error coming from home", e);
     }
   };
   useEffect(() => {
@@ -68,6 +69,7 @@ function Home({ navigation }) {
 const styles = StyleSheet.create({
   homePage: {
     marginTop: "10%",
+
     flex: 1,
     backgroundColor: "rgb(219, 217, 224)",
     alignItems: "center",

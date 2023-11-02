@@ -1,21 +1,36 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { DOMAIN_NAME } from "../env";
+import { DOMAIN_NAME } from "../env.js";
 
 const initialState = {
   allCars: [],
-  carFiltred:[],
+  carFiltred: [],
   loading: false,
   error: null,
+  OneCar: {},
 };
+export const getOnecarById = createAsyncThunk(
+  "car/getOnecarById",
+  async (id) => {
+    try {
+      const response = await axios.get(
+        `http://${DOMAIN_NAME}:5000/api/car/carById/${id}`
+      );
 
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
   try {
-    const response = await axios.get(`http://${DOMAIN_NAME}:5000/api/car/allCars`);
-    console.log(response.data,"response")
+    const response = await axios.get(
+      `http://${DOMAIN_NAME}:5000/api/car/allCars`
+    );
     return response.data;
   } catch (error) {
-  console.log(error)
+    console.log(JSON.stringify(error), "aaa"); // Rethrow the error to trigger the rejected action
   }
 });
 
@@ -27,6 +42,7 @@ export const fetchFilteredCars = createAsyncThunk(
         `http://${DOMAIN_NAME}:5000/api/car/filtredCar`,
         filterCriteria
       );
+
       return response.data;
     } catch (error) {
       console.error(error);
@@ -35,29 +51,24 @@ export const fetchFilteredCars = createAsyncThunk(
 );
 
 const carSlice = createSlice({
-  
   name: "car",
   initialState,
   reducers: {},
-  
-  extraReducers: (builder) => {
 
+  extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
     builder.addCase(getAllCars.fulfilled, (state, action) => {
-      console.log('Fetched data:', action.payload)
       state.loading = false;
       state.allCars = action.payload;
-
     });
     builder.addCase(getAllCars.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message; 
+      state.error = action.error.message;
     });
- 
- 
+
     builder.addCase(fetchFilteredCars.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -70,8 +81,19 @@ const carSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
-  }
+    builder.addCase(getOnecarById.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getOnecarById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.OneCar = action.payload; // Set filtered cars in the state
+    });
+    builder.addCase(getOnecarById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+  },
 });
 
 export default carSlice.reducer;
-

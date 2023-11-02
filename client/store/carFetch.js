@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { DOMAIN_NAME } from "../env";
+import { DOMAIN_NAME } from "../env.js";
 
 const initialState = {
   allCars: [],
@@ -14,7 +14,7 @@ export const getOnecarById = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(
-        `http://192.168.20.51:5000/api/car/carById/${id}`
+        `http://${DOMAIN_NAME}:5000/api/car/carById/${id}`
       );
 
       return response.data;
@@ -26,12 +26,11 @@ export const getOnecarById = createAsyncThunk(
 export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
   try {
     const response = await axios.get(
-      `http://192.168.20.51:5000/api/car/allCars`
+      `http://${DOMAIN_NAME}:5000/api/car/allCars`
     );
-    console.log("all", response.data);
     return response.data;
   } catch (error) {
-    console.log(error, "aa");
+    console.log(JSON.stringify(error), "aaa"); // Rethrow the error to trigger the rejected action
   }
 });
 
@@ -43,8 +42,7 @@ export const fetchFilteredCars = createAsyncThunk(
         `http://${DOMAIN_NAME}:5000/api/car/filtredCar`,
         filterCriteria
       );
-      console.log(filterCriteria, "aaa");
-      console.log(response.data, "filteredCars");
+
       return response.data;
     } catch (error) {
       console.error(error);

@@ -62,8 +62,9 @@ function Home({ navigation }) {
             <CardCar key={i} oneCar={element} />
           </View>
         ))}
-        <NavBar/>
+        
       </ScrollView>
+      <NavBar/>
     </View>
   );
 }

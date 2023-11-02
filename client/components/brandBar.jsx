@@ -11,9 +11,9 @@ function BrandBar({onPress,onFilterByBrand}){
     const [carByBrand,setCarByBrand]=useState([])
     const [error,setError]=useState(false)
     const handleFilterByBrand= (brandName)=>{
-console.log("1111")
+
         axios.post(`http://${DOMAIN_NAME}:5000/api/car/byBrand`,{"brand":brandName}).then((response)=>{
-            console.log('selim',response.data) 
+          
             onFilterByBrand(response.data)
            
         }).catch(error=>{

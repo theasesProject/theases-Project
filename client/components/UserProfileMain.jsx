@@ -15,7 +15,8 @@ import bkg from "../assets/bkg.png";
 import stg from "../assets/settings.png";
 import UserRentHistory from "../components/UserRentHistory.jsx";
 import UserProfileSettings from "../components/UserProfileSettings.jsx";
-
+import change from "../assets/change.png";
+import ChangeRole from "./changeRole";
 function Userprofile({ navigation }) {
   const [view, setView] = useState("main");
 
@@ -30,6 +31,8 @@ function Userprofile({ navigation }) {
       return <UserRentHistory />;
     } else if (view === "settings") {
       return <UserProfileSettings />;
+    } else if (view === "changeRole") {
+      return <ChangeRole />;
     }
     return (
       <View style={styles.bottomSection}>
@@ -54,6 +57,13 @@ function Userprofile({ navigation }) {
           >
             <Image source={stg} style={styles.icon} />
             <Text>Settings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.profileOption}
+            onPress={() => changeView("changeRole")}
+          >
+            <Image source={change} style={styles.icon} />
+            <Text>Become an Agency</Text>
           </TouchableOpacity>
         </View>
       </View>

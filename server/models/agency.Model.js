@@ -1,4 +1,4 @@
-module.exports = ( DataTypes, connection) => {
+module.exports = (DataTypes, connection) => {
   const Agency = connection.define("Agency", {
     papers: {
       type: DataTypes.STRING,
@@ -20,11 +20,6 @@ module.exports = ( DataTypes, connection) => {
     deposit: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    stateBlocked: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-      defaultValue: false,
     },
     transportation: {
       type: DataTypes.BOOLEAN,

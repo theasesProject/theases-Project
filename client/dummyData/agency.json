@@ -1,10 +1,11 @@
-[{
+[
+  {
     "papers": "License and Registration",
     "address": "123 Main St, Anytown, USA",
     "verificationStatus": true,
     "companyNumber": "ABC123",
-    "deposit": 10000,
-    "stateBlocked": false,
+    "deposit": 10,
+
     "transportation": true
   },
   {
@@ -12,7 +13,8 @@
     "address": "456 Elm St, Othertown, USA",
     "verificationStatus": false,
     "companyNumber": "XYZ456",
-    "deposit": 7500,
-    "stateBlocked": true,
+    "deposit": 10,
+
     "transportation": false
-  }]
+  }
+]

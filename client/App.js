@@ -34,7 +34,7 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Messages">
           <Stack.Screen
             name="Home"
             component={Home}

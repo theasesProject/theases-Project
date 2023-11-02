@@ -3,6 +3,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from "react-native-check-box";
 import { useState } from "react";
+import { createCar } from "../store/carFetch";
 function AddAgencyCar() {
   const [model, setModel] = useState("");
   const [brandCar, setBrandCar] = useState("");
@@ -12,10 +13,12 @@ function AddAgencyCar() {
   const [char, setChar] = useState("");
   const [periodRent, setPeriodRent] = useState("");
   const [price, setPrice] = useState("");
+  const [description, setDesciption] = useState("");
   const [warranty, setWarrranty] = useState(false);
   const [img, setImg] = useState(
     "https://th.bing.com/th/id/R.2f63300883a685b3fe0dc893aa8e3e93?rik=8ZIIKX95eIpBOA&pid=ImgRaw&r=0"
   );
+
   const brand = [
     { label: "Toyota", value: "Toyota" },
     { label: "Ford", value: "Ford" },
@@ -60,11 +63,10 @@ function AddAgencyCar() {
     });
 
     if (!result.canceled) {
-      // Use the selected assets from the "assets" array
       const selectedAsset = result.assets[0];
       try {
         const cloudinaryResponse = await cloudinaryUpload(selectedAsset.uri);
-        // cloudinaryResponse is the link of the img ready to be pushed in database
+
         console.log("img link: ", cloudinaryResponse);
         setImg(cloudinaryResponse);
       } catch (err) {
@@ -91,6 +93,12 @@ function AddAgencyCar() {
   const handleFuel = (fuel) => {
     setFuel(fuel);
   };
+  const handleDescription = (des) => {
+    setDesciption(des);
+  };
+  const handleType = (type) => {
+    setType(type);
+  };
 
   return (
     <View style={styles.editProfilePage}>
@@ -99,21 +107,21 @@ function AddAgencyCar() {
       </Text>
 
       <TextInput
-        // value={adress}
-        // onChangeText={handleAdress}
+        value={model}
+        onChangeText={handleModel}
         placeholder="Enter Your Car Model"
         style={styles.input}
       />
       <TextInput
-        // value={adress}
-        // onChangeText={handleAdress}
+        value={description}
+        onChangeText={handleDescription}
         placeholder="Enter Same description for your Car"
         style={styles.input}
       />
 
       <TextInput
-        // value={adress}
-        // onChangeText={handleAdress}
+        value={price}
+        onChangeText={handlePrice}
         placeholder="rental price by period"
         style={styles.input}
       />
@@ -123,32 +131,33 @@ function AddAgencyCar() {
           value: null,
         }}
         items={period}
-        onValueChange={(value) => console.log(value)}
+        onValueChange={handlePeriode}
       />
 
       <TextInput
-        // value={adress}
-        // onChangeText={handleAdress}
+        value={horse}
+        onChangeText={handleHorse}
         placeholder="Enter horse power for your car "
         style={styles.input}
       />
       <View style={styles.selectedItem}>
-        {/* <Text style={styles.dropdownTitle}> Select Brand</Text> */}
         <RNPickerSelect
           placeholder={{
             label: "Select Brand for your car ",
             value: null,
           }}
           items={brand}
-          onValueChange={(value) => console.log(value)}
+          value={brandCar}
+          onValueChange={(value) => handleBrand(value)}
         />
         <RNPickerSelect
           placeholder={{
             label: "Select type of Fuel ",
             value: null,
           }}
+          value={fuel}
           items={typeOfFuel}
-          onValueChange={(value) => console.log(value)}
+          onValueChange={(value) => handleFuel(value)}
         />
         <RNPickerSelect
           placeholder={{
@@ -156,14 +165,13 @@ function AddAgencyCar() {
             value: null,
           }}
           items={characteristics}
-          onValueChange={(value) => console.log(value)}
+          onValueChange={(value) => handleType(value)}
         />
 
         <CheckBox
           style={styles.input}
           onClick={() => {
             setWarrranty(!warranty);
-            console.log(warranty);
           }}
           leftText={"warranty Insurance"}
           leftTextStyle={{

@@ -14,7 +14,7 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import Favorites from "./pages/Favorites.jsx";
-
+import AddAgencyCar from "./pages/AddAgencyCar.jsx";
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
@@ -38,10 +38,10 @@ function App() {
             component={Home}
             options={{ headerShown: false }}
           />
-          <Stack.Screen 
-           name="favorites"
-           component={Favorites}
-            options={{headerShown: false}}
+          <Stack.Screen
+            name="favorites"
+            component={Favorites}
+            options={{ headerShown: false }}
           />
 
           {/* <Stack.Screen
@@ -109,6 +109,11 @@ function App() {
           <Stack.Screen
             name="CarDetails"
             component={CarDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddAgencyCar"
+            component={AddAgencyCar}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

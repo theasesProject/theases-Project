@@ -152,9 +152,9 @@ function ChangeRole() {
         )}
       </View>
       <Button
-        onPress={() => {
-          createNewAgency;
-        }}
+        onPress={
+          createNewAgency
+        }
         title="submit"
       />
     </View>

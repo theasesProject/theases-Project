@@ -39,8 +39,8 @@ module.exports = (DataTypes, connection) => {
         },
         idCard: {
             type: DataTypes.STRING,
-            allowNull: true,
-            defaultValue:"123456789"
+            allowNull: false,
+            
         }
 
 

@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon index.js",
-    "Reviewseed": "node  seeds/reviews.js",
+    "Review": "node  seeds/reviews.js",
+    "users": "node  seeds/users.js",
+    "cars": "node  seeds/cars.js",
     "start": "nodemon index.js"
   },
   "keywords": [],

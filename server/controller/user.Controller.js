@@ -16,7 +16,7 @@ module.exports = {
   SignUpUser: async (req, res, next) => {
     const NameCheck = await db.User.findAll({
       where: {
-        phoneNumber: req.body.phoneNumber,
+        userName: req.body.userName,
       },
     });
     const emailCheck = await db.User.findAll({

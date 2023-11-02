@@ -34,7 +34,12 @@ function Userprofile({ navigation }) {
     <View style={styles.userProfilePage}>
       <View style={styles.topSection}>
         <View style={styles.userInfo}>
-          <Image source={activeUser?.avatar} style={styles.profilePic} />
+          <Image
+            source={{
+              uri: activeUser?.avatar,
+            }}
+            style={styles.profilePic}
+          />
           <View style={styles.userNameContainer}>
             <Text style={styles.userName}>{activeUser?.userName}</Text>
           </View>
@@ -94,6 +99,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#6a78c1",
   },
   userName: {
     fontSize: 18,

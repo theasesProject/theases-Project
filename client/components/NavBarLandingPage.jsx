@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Pressable,
+} from "react-native";
 import localisation from "../assets/localisation1.png";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
@@ -22,15 +29,18 @@ function ProfileLandingPage() {
       </View>
       <View>
         {loggedIn ? (
-          <TouchableOpacity onPress={() => navigation.navigate("Userprofile")}>
-          <Image
-          source={{
-            uri:`${activeUser?.avatar}` ,
-          }}
-            alt="userPic"
-            style={styles.UserImage}
-           
-          /></TouchableOpacity>
+          <Pressable
+            onPress={() => navigation.navigate("Userprofile")}
+            style={styles.userAvatar}
+          >
+            <Image
+              source={{
+                uri: activeUser?.avatar,
+              }}
+              alt="userPic"
+              style={styles.UserImage}
+            />
+          </Pressable>
         ) : (
           <View style={styles.authBtnsContainer}>
             <TouchableOpacity
@@ -88,10 +98,15 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     gap: 1,
   },
+  userAvatar: {
+    padding: 10,
+  },
   UserImage: {
     width: 50,
     height: 50,
-    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#6a78c1",
+    borderRadius: 50,
   },
   yourLocation: {
     fontSize: 14,

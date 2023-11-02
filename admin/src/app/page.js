@@ -99,26 +99,6 @@ export default function LoginPage() {
       input.className = '';
     }
   };
-
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const res = await fetch('/api/login', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ username, password }),
-  //     });
-
-  //     if (res.status === 200) {
-  //       router.push('/dashboard');
-  //     } else {
-  //       throw new Error(await res.text());
-  //     }
-  //   } catch (error) {
-  //     console.error('An unexpected error happened:', error);
-  //     setError(error.message);
-  //   }
-  // };
   useEffect(() => {
     formValidation()
     const handleKeyUp = (e) => {

@@ -58,8 +58,8 @@ function AdvancedSearch() {
  
   console.log(allCars,sliderValue,sliderValue,"allcars")
 const prices=()=>{
-  let minPrice = allCars[0].price
-  let maxPrice = allCars[0].price
+  let minPrice = allCars[0]?.price||0
+  let maxPrice = allCars[0]?.price||1000
 for (const car of allCars) {
   const price = car.price;
   if (price < minPrice) {

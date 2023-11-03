@@ -19,6 +19,7 @@ import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
+import ChangeRole from "./pages/changeRole.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 // import { AppRegistry } from 'react-native';
@@ -32,16 +33,22 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="favorites">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
             name="Home"
             component={Home}
             options={{ headerShown: false }}
           />
-          <Stack.Screen 
-           name="favorites"
-           component={Favorites}
-            options={{headerShown: false}}
+          <Stack.Screen
+            name="favorites"
+            component={Favorites}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="changeRole"
+            component={ChangeRole}
+            options={{ headerShown: false }}
           />
 
           {/* <Stack.Screen

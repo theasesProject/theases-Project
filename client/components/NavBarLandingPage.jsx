@@ -16,6 +16,8 @@ function ProfileLandingPage() {
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
 
+  // Helper console.log (to know who's the user we're using or if we even have one while testing anything)
+  console.log("NavBarLandingPage/Line 19");
   console.log("active user: ", activeUser);
 
   return (

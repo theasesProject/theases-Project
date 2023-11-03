@@ -34,7 +34,7 @@ function ProfileLandingPage() {
           const nearestAddress = nearestAddressResponse[0];
           const place=`${nearestAddress.region}, ${nearestAddress.country}`
           const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`; 
-          setUserAddress(place);
+          setUserAddress(fullNearestAddress);
         }
       }
     }
@@ -91,7 +91,7 @@ function ProfileLandingPage() {
 const styles = StyleSheet.create({
   navBar: {
     width: "100%",
-    height: 60,
+    height: 75,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -108,14 +108,14 @@ const styles = StyleSheet.create({
   },
   authBtn: {
     borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 5,
     backgroundColor: "white",
   },
   locationImage: {
     width: 45,
     height: 40,
-    alignItems: "center",
+    // alignItems: "center",
   },
   allAdress: {
     flex: 1,
@@ -136,13 +136,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   yourLocation: {
-    fontSize: 14,
+    fontSize: 12,
     color: "rgb(130, 124, 140)",
   },
   UserAdress: {
-    fontSize: 16,
+    fontSize: 14,
     color: "black",
     fontWeight: "bold",
+    width: 180,
   },
 });
 

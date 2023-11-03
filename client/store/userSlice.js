@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define an initial state for the user slice
 const initialState = {
-  data: null,
+  data: {},
   loggedIn: false,
   status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
   error: null,
@@ -20,8 +20,11 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
       {
         token: token,
       }
-    );
+    )
+
+
     return response.data;
+
   } catch (err) {
     console.error(err);
   }
@@ -49,12 +52,21 @@ export const SignUpClick = createAsyncThunk("user/SignUps", async (inputForm, th
     } catch (e) {
       console.error(JSON.stringify(e));
     }
-    
+
     return task.data
   } catch (er) {
     console.error("error coming from sign function", JSON.stringify(er));
   }
 })
+export const logUserOut = createAsyncThunk("user/logout", async () => {
+  try {
+    await AsyncStorage.removeItem("UserToken");
+    console.log("UserToken removed");
+  } catch (e) {
+    console.error("error coming from home", e);
+  }
+}
+)
 
 
 const userSlice = createSlice({
@@ -86,6 +98,9 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       });
+      builder.addCase(logUserOut.fulfilled,(state)=>{
+        state.loggedIn=false
+      })
   },
 });
 

@@ -30,6 +30,7 @@ module.exports = {
         acceptation: "pending",
         typevehicle: req.body.typevehicle,
         characteristics: req.body.characteristics,
+        AgencyId: req.body.AgencyId,
       });
 
       res.status(200).send(newCar);

@@ -23,10 +23,6 @@ function ProfileLandingPage() {
     let status = await Location.requestForegroundPermissionsAsync();
     // if (status === 'granted') {
 
-    // Helper console.log (to know who's the user we're using or if we even have one while testing anything)
-    console.log("NavBarLandingPage/Line 19");
-    console.log("active user: ", activeUser);
-
     let location = await Location.getCurrentPositionAsync({});
     if (location) {
       const { coords } = location;
@@ -43,6 +39,7 @@ function ProfileLandingPage() {
     }
   };
   // };
+  console.log("active user: ", activeUser);
 
   return (
     <View style={styles.navBar}>

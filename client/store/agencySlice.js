@@ -21,7 +21,7 @@ export const CreateAgency = createAsyncThunk(
         `http://${DOMAIN_NAME}:5000/api/media/add/request/${requestId}`,
         params.media
       );
-
+      console.log(body, "body");
       return response.data;
     } catch (error) {
       console.log(error);

@@ -19,6 +19,7 @@ import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
 import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
+import NavBar from "../components/NavBar.jsx";
 
 function Home({ navigation }) {
   const dispatch = useDispatch();
@@ -61,7 +62,9 @@ function Home({ navigation }) {
             <CardCar key={i} oneCar={element} />
           </View>
         ))}
+        
       </ScrollView>
+      <NavBar/>
     </View>
   );
 }

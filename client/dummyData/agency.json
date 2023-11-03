@@ -14,7 +14,7 @@
     "verificationStatus": false,
     "companyNumber": "XYZ456",
     "deposit": 10,
-
-    "transportation": false
+    "transportation": false,
+    "UserId": 1
   }
 ]

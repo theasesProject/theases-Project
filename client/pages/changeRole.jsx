@@ -181,8 +181,8 @@ function ChangeRole({ navigation }) {
       </Pressable>
       <View style={styles.imgsContainer}>
         {selectedDocuments.map((uri, index) => (
-          <View style={styles.imgContainer}>
-            <Pressable key={index} onPress={() => handleDelete(uri)}>
+          <View key={index} style={styles.imgContainer}>
+            <Pressable onPress={() => handleDelete(uri)}>
               <Image source={xBtn} style={styles.xBtn} />
             </Pressable>
             <Image source={{ uri }} style={styles.img} />

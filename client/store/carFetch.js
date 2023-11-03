@@ -8,6 +8,7 @@ const initialState = {
   loading: false,
   error: null,
   OneCar: {},
+
 };
 export const getOnecarById = createAsyncThunk(
   "car/getOnecarById",
@@ -49,7 +50,32 @@ export const fetchFilteredCars = createAsyncThunk(
     }
   }
 );
+export const createCar = createAsyncThunk("car/createCar", async (id) => {
+  try {
+    const response = await axios.post(
+      `http://${DOMAIN_NAME}:5000/api/car/newCar`
+    );
 
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const createImgeForCar = createAsyncThunk(
+  "car/createImgeForCar",
+  async (id) => {
+    try {
+      const response = await axios.post(
+        `http://${DOMAIN_NAME}:5000/api/car/imageCar`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 const carSlice = createSlice({
   name: "car",
   initialState,
@@ -90,6 +116,34 @@ const carSlice = createSlice({
       state.OneCar = action.payload; // Set filtered cars in the state
     });
     builder.addCase(getOnecarById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+  
+    builder.addCase(createCar.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    builder.addCase(createCar.fulfilled, (state, action) => {
+      state.loading = false;
+     // Set filtered cars in the state
+    });
+    
+    builder.addCase(createCar.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    
+    builder.addCase(createImgeForCar.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(createImgeForCar.fulfilled, (state, action) => {
+      state.loading = false;
+      // Set filtered cars in the state
+    });
+    builder.addCase(createImgeForCar.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

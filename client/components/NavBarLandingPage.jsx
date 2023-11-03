@@ -10,23 +10,52 @@ import localisation from "../assets/localisation1.png";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectUser, logStatus } from "../store/userSlice";
+import { useEffect, useState } from "react";
+import * as Location from "expo-location";
 
 function ProfileLandingPage() {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
+  const [userAddress, setUserAddress] = useState("Norvey ");
 
-  // Helper console.log (to know who's the user we're using or if we even have one while testing anything)
-  console.log("NavBarLandingPage/Line 19");
-  console.log("active user: ", activeUser);
+  const getUserLocationAndNearestAddress = async () => {
+    let status = await Location.requestForegroundPermissionsAsync();
+    // if (status === 'granted') {
+
+    // Helper console.log (to know who's the user we're using or if we even have one while testing anything)
+    console.log("NavBarLandingPage/Line 19");
+    console.log("active user: ", activeUser);
+
+    let location = await Location.getCurrentPositionAsync({});
+    if (location) {
+      const { coords } = location;
+      const nearestAddressResponse = await Location.reverseGeocodeAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+      if (nearestAddressResponse.length > 0) {
+        const nearestAddress = nearestAddressResponse[0];
+        const place = `${nearestAddress.region}, ${nearestAddress.country}`;
+        const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
+        setUserAddress(place);
+      }
+    }
+  };
+  // };
 
   return (
     <View style={styles.navBar}>
       <View style={styles.allAdress}>
-        <Image style={styles.locationImage} source={localisation} />
+        <Pressable onPress={() => getUserLocationAndNearestAddress()}>
+          <Image style={styles.locationImage} source={localisation} />
+        </Pressable>
         <View style={styles.adress}>
           <Text style={styles.yourLocation}>Your Location </Text>
-          <Text style={styles.UserAdress}>Norvey,{activeUser?.userName} </Text>
+
+          <Text style={styles.UserAdress}>
+            {userAddress},{activeUser?.userName}{" "}
+          </Text>
         </View>
       </View>
       <View>
@@ -88,7 +117,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   locationImage: {
-    width: 50,
+    width: 45,
     height: 40,
     alignItems: "center",
   },

@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   allcars: {
+    padding:20,
     paddingBottom: 20,
   },
 });

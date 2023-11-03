@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   locationImage: {
+    marginLeft:30,
     width: 45,
     height: 40,
     alignItems: "center",
@@ -146,7 +147,6 @@ const styles = StyleSheet.create({
   allAdress: {
     flex: 1,
     flexDirection: "row",
-
     width: 200,
     justifyContent: "flex-start",
     gap: 1,
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   UserImage: {
+    marginRight:20,
     width: 50,
     height: 50,
     borderWidth: 2,
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
     fontWeight: "bold",
-  },
+  }
 });
 
 export default ProfileLandingPage;

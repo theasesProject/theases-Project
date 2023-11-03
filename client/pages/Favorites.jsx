@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { View, ViewBase , StyleSheet } from "react-native";
-import { Text } from "react-native-svg";
+import { View, ViewBase , StyleSheet,Text } from "react-native";
+// import { Text } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 import CardCar from "../components/CardCar.jsx";
 
@@ -31,9 +31,9 @@ function Favorites() {
 
   return <View style={styles.container}>
     <Text>My Favourite Vehicules</Text>
-    {/* {all.map(car => {
+    {all.map(car => {
       <CardCar oneCar={car}/>
-    })} */}
+    })}
   </View>;
 }
 const styles = StyleSheet.create({

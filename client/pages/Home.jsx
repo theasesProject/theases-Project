@@ -7,20 +7,18 @@ import {
   ScrollView,
   Button,
   TouchableOpacity,
+  Dimensions
 } from "react-native";
 import axios from "axios";
-
 import CardCar from "../components/CardCar.jsx";
-
 import BrandBar from "../components/brandBar.jsx";
-
 import { getAllCars } from "../store/carFetch";
 import ProfileLandingPage from "../components/NavBarLandingPage.jsx";
 import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
-
+const{height,width} = Dimensions.get("screen")
 function Home({ navigation }) {
   const dispatch = useDispatch();
 
@@ -64,17 +62,20 @@ function Home({ navigation }) {
         ))}
         
       </ScrollView>
+      {/* <View style={styles.NavBar}> */}
       <NavBar/>
+      {/* </View> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  NavBar:{
+    height:height*0.05
+  },
   homePage: {
-    marginTop: "10%",
-
     flex: 1,
-    backgroundColor: "rgb(219, 217, 224)",
+    backgroundColor: "rgb(233, 231, 238)",
     alignItems: "center",
     justifyContent: "center",
     gap: 10,

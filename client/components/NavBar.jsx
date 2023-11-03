@@ -1,79 +1,108 @@
+import React, { useState } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    View,
-    Text,
-    Button,
-    Image,
-    StyleSheet,
-    TouchableOpacity,
-    Pressable,
-  } from "react-native";
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  Button,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+  Dimensions,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Svg, { Path } from 'react-native-svg';
+import Hm from ".././assets/Svg/house-solid.svg";
+import Ms from ".././assets/Svg/envelope-solid.svg";
+import Fa from ".././assets/Svg/heart-solid.svg";
+import Pr from ".././assets/Svg/user-nav.svg";
+const { height, width } = Dimensions.get("screen");
 
-  import Hm from ".././assets/Svg/house-solid.svg"
-  import Ms from ".././assets/Svg/envelope-solid.svg"
-  import Fa from ".././assets/Svg/heart-solid.svg"
-  import Pr from  ".././assets/Svg/circle-user-regular.svg"
-  function NavBar({}){
+function NavBar({ style }) {
   const navigation = useNavigation();
+  const [activeIcon, setActiveIcon] = useState(null);
 
-    return (
-        <View style={styles.footer}>
-            <TouchableOpacity style={styles.quarter} onPress={() => navigation.navigate("Home")}>
+  const handlePress = (iconName) => {
+    setActiveIcon(iconName);
+  };
+
+  return (
+    <View  style={[styles.navBar, style]}>
+      <TouchableOpacity
+        style={styles.quarter}
+        onPress={() => {
+          navigation.navigate("Home");
+          handlePress('home');
+        }}
+      >
         <View style={styles.hm}>
-            <Hm ></Hm>
-        <Text>Home</Text>
+          <Hm fill={activeIcon === 'home' ? '#6C77BF' : 'grey'} />
+          <Text style={{color: activeIcon === 'home' ? '#6C77BF' : 'grey'}}>Home</Text>
         </View>
-        </TouchableOpacity>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.quarter} onPress={() => navigation.navigate("Mape")}>
+      <TouchableOpacity
+        style={styles.quarter}
+        onPress={() => {
+          navigation.navigate("Mape");
+          handlePress('mape');
+        }}
+      >
         <View style={styles.hm}>
-            <Ms ></Ms>
-        <Text>Messeges</Text>
+          <Ms fill={activeIcon === 'mape' ? '#6C77BF' : 'grey'} />
+          <Text style={{color: activeIcon === 'mape' ? '#6C77BF' : 'grey'}}>Messeges</Text>
         </View>
-        </TouchableOpacity>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.quarter} onPress={() => navigation.navigate("favorites")}>
+      <TouchableOpacity
+        style={styles.quarter}
+        onPress={() => {
+          navigation.navigate("favorites");
+          handlePress('favorites');
+        }}
+      >
         <View style={styles.hm}>
-        <Fa></Fa>
-        <Text>Favorites</Text>
+          <Fa fill={activeIcon === 'favorites' ? '#6C77BF' : 'grey'} />
+          <Text style={{color: activeIcon === 'favorites' ? '#6C77BF' : 'grey'}}>Favorites</Text>
         </View>
-        
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.quarter} onPress={() => navigation.navigate("Userprofile")}>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.quarter}
+        onPress={() => {
+          navigation.navigate("Userprofile");
+          handlePress('userprofile');
+        }}
+      >
         <View style={styles.hm}>
-            <Pr></Pr>
-        <Text>Profile</Text>
+          <Pr fill={activeIcon === 'userprofile' ? '#6C77BF' : 'grey'} />
+          <Text style={{color: activeIcon === 'userprofile' ? '#6C77BF' : 'grey'}}>Profile</Text>
         </View>
-        </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
-      </View>
-    )
-  }
-  const styles = StyleSheet.create({
-    footer: {
-        backgroundColor:"white",
-    
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      
-   
-      alignItems: "center",
- 
-    },
-    quarter: {
-      flex: 1,
-  
-      justifyContent:'center',
-      alignItems: "center",
-    },
-  hm:{
-    alignItems: "center",
-  justifyContent:'center'
+// ... rest of your code
 
+const styles = StyleSheet.create({
+  navBar: {
+    borderTopColor:"lightgrey",
+    borderTopWidth:1,
+    backgroundColor: "white",
+    height: height * 0.07,
+    flexDirection: "row",
+    justifyContent: "space-around", // Distribute items evenly along the row
+    alignItems: "center", // Center items vertically
   },
- 
-  });
-  
-  export default NavBar
+  quarter: {
+    flex: 1,
+    justifyContent: "center", // Center items vertically
+    alignItems: "center", // Center items horizontally
+  },
+  hm: {
+    alignItems: "center", // Center items horizontally
+  },
+});
+
+export default NavBar;

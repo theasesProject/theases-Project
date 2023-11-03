@@ -36,7 +36,7 @@ function ProfileLandingPage() {
       });
       if (nearestAddressResponse.length > 0) {
         const nearestAddress = nearestAddressResponse[0];
-        const place = `${nearestAddress.region}, ${nearestAddress.country}`;
+        const place = ` ${nearestAddress.city}`;
         const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
         setUserAddress(place);
       }
@@ -76,7 +76,7 @@ function ProfileLandingPage() {
           <Text style={styles.yourLocation}>Your Location </Text>
 
           <Text style={styles.UserAdress}>
-            {userAddress},{activeUser?.userName}{" "}
+            {userAddress}
           </Text>
         </View>
       </View>
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
   navBar: {
     width: "100%",
     height: 60,
+    // paddingHorizontal:,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",

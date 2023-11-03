@@ -58,7 +58,7 @@ function Home({ navigation }) {
         </View>
         <BrandBar onFilterByBrand={updateFilteredCars} />
         {filteredCars.map((element, i) => (
-          <View style={styles.allcars}>
+          <View style={styles.allcars} key={i}>
             <CardCar key={i} oneCar={element} />
           </View>
         ))}

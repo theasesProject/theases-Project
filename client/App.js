@@ -1,12 +1,11 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, LogBox, StyleSheet, Text, View } from "react-native";
+import { StyleSheet} from "react-native";
+import { LogBox } from 'react-native';
 import { createStackNavigator } from "@react-navigation/stack";
 import CarDetails from "./components/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Carou from "./pages/Carou.jsx";
-import LoadingScreen from "./pages/Loading.jsx";
 import store from "./store/store";
 import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
@@ -19,10 +18,12 @@ import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
-import ChangeRole from "./pages/changeRole.jsx";
+import ChangeRole from "./pages/ChangeRole.jsx";
 import Mape from "./pages/Mape.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
+LogBox.ignoreLogs(['ViewPropTypes will be removed']);
+LogBox.ignoreLogs(['Warning: ...']);
 // import { AppRegistry } from 'react-native';
 // // import App from './App'; // Replace 'App' with the name of your main application component
 // import { theases as theases } from './app.json';

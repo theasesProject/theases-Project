@@ -9,25 +9,31 @@ function Favorites() {
   const [all, setAll] = useState([]);
   const { DOMAIN_NAME } = require("../env.js");
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state);
+  const user  = useSelector((state) => state.user.data);
   const fetch = async function () {
-    const patched = await axios.get(
-      `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${user.id}`
-    ).then(response => {
-      setAll(response.data)
-      console.log(response.data)
-    })
+    try {
+      const patched = await axios.get(
+        `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${user.id}`
+      ).then(response => {
+        setAll(response.data)
+        console.log(response.data)
+      })
+    } catch (err) {
+      console.error(JSON.stringify(err));
+    }
+   
   };
   useEffect(() => {
     console.log(user.data);
-    fetch();
+    user.id?fetch():null
     console.log(all)
   }, []);
 
   return <View style={styles.container}>
-    {all.map(car => {
+    <Text>My Favourite Vehicules</Text>
+    {/* {all.map(car => {
       <CardCar oneCar={car}/>
-    })}
+    })} */}
   </View>;
 }
 const styles = StyleSheet.create({

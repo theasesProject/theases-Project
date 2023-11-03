@@ -8,7 +8,7 @@ import emptyHeart from "../assets/emptyHeart.png";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-function CardCar({  oneCar }) {
+function CardCar({ oneCar,openPanel }) {
   const [starSelected, setStarSelected] = useState(false);
   const {DOMAIN_NAME} = require("../env.js")
   const [heartSelected, setHeartSelected] = useState(false);
@@ -31,7 +31,7 @@ function CardCar({  oneCar }) {
   };
 
   return (
-    <View style={styles.card}>
+    <View style={styles.card} onPress={openPanel} >
       <View style={styles.Image}>
         <Image style={styles.carImage} source={car} />
         <TouchableOpacity onPress={handleHeartPress}>

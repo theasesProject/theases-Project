@@ -132,10 +132,11 @@ function BrandBar({ onPress, onFilterByBrand }) {
 const styles = StyleSheet.create({
   brand: {
     width: "100%",
-    height: height * 0.22,
+    height: height * 0.21,
     borderRadius: 10,
     alignItems: "center",
     padding: 10,
+    marginBottom:20
   },
   BrandBar: {
     width: "100%",
@@ -153,11 +154,13 @@ const styles = StyleSheet.create({
   },
   topBrand: {
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 21,
+    paddingBottom:10
   },
   ViewAll: {
-    color: "grey",
-    fontSize: 18,
+    color: "#8B91B6",
+    fontSize: 14,
+    paddingBottom:10,
   },
   allBrandImage: {
     // borderRadius: 10,

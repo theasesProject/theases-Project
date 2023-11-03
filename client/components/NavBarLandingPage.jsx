@@ -5,19 +5,44 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
+  AppState,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import localisation from "../assets/localisation1.png";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
-import { selectUser, logStatus } from "../store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, logStatus, fetchUser } from "../store/userSlice";
+import { useEffect, useState } from "react";
 
 function ProfileLandingPage() {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
-
+  const dispatch = useDispatch();
   console.log("active user: ", activeUser);
-
+  const [tokenValue, setTokenValue] = useState(false);
+  const retrieveToken = async () => {
+    try {
+      const tokenResponse = await AsyncStorage.getItem("UserToken");
+      if (tokenResponse) {
+        console.log(tokenResponse);
+        setTokenValue(true);
+        dispatch(fetchUser(tokenResponse));
+      } else {
+        setTokenValue(false);
+      }
+    } catch (e) {
+      console.error("error coming from token", e);
+    }
+  };
+  useEffect(() => {
+    retrieveToken();
+    // AppState.addEventListener("change", retrieveToken);
+    // return () => {
+    //   AppState.removeEventListener("change", retrieveToken);
+    // };
+  }, []);
   return (
     <View style={styles.navBar}>
       <View style={styles.allAdress}>
@@ -47,7 +72,7 @@ function ProfileLandingPage() {
               onPress={() => navigation.navigate("Login")}
               style={styles.authBtn}
             >
-              <Text>Sign In</Text>
+              <Text>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigation.navigate("SignUp")}

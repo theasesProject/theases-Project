@@ -16,7 +16,7 @@ import bkg from "../assets/bkg.png";
 import stg from "../assets/settings.png";
 import lgt from "../assets/logout.png";
 import { useSelector } from "react-redux";
-import { selectUser } from "../store/userSlice";
+import { logUserOut, selectUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import UserProfileMain from "../components/UserProfileMain.jsx";
@@ -26,7 +26,8 @@ function Userprofile({ navigation }) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(logoutUser());
+    // dispatch(logoutUser());
+    dispatch(logUserOut())
     navigation.navigate("Home");
   };
 

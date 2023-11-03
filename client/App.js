@@ -19,6 +19,7 @@ import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
+import Mape from "./pages/Mape.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 // import { AppRegistry } from 'react-native';
@@ -43,7 +44,11 @@ function App() {
             component={Favorites}
             options={{ headerShown: false }}
           />
-
+<Stack.Screen
+            name="Mape"
+            component={Mape}
+            options={{ headerShown: false }}
+          />
           {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}

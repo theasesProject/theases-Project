@@ -9,16 +9,18 @@ import {
   LinearGradient,
   Button,
 } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
+
 import { useState, useEffect } from "react";
-import SelectDropdown from "react-native-select-dropdown";
+
 import CheckBox from "react-native-check-box";
-import * as DocumentPicker from "expo-document-picker";
+
 import { useDispatch, useSelector } from "react-redux";
 import { CreateAgency } from "../store/agencySlice";
-import axios from "axios";
+
 import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
-import user from "../assets/user.jpg";
+
 function ChangeRole() {
   const transporation = ["accept", "refuse"];
   const [isChecked, setCheck] = useState(false);
@@ -133,12 +135,12 @@ function ChangeRole() {
 
       <View style={styles.dropdownContainer}>
         <Text style={styles.dropdownTitle}> Deposit:</Text>
-        <SelectDropdown
-          onSelect={(selectedItem, index) => {
-            handleDropdownSelect(index, selectedItem);
-          }}
+        <RNPickerSelect
+          onValueChange={ 
+            handleDropdownSelect
+          }
           style={styles.dropdown}
-          data={deposit}
+          items={deposit}
         />
       </View>
       <View style={styles.line} />

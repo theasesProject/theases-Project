@@ -8,7 +8,7 @@ const initialState = {
   loading: false,
   error: null,
   OneCar: {},
-  success: null,
+
 };
 export const getOnecarById = createAsyncThunk(
   "car/getOnecarById",
@@ -119,37 +119,29 @@ const carSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
-    builder.addCase(getOnecarById.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(getOnecarById.fulfilled, (state, action) => {
-      state.loading = false;
-      state.OneCar = action.payload; // Set filtered cars in the state
-    });
-    builder.addCase(getOnecarById.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+  
     builder.addCase(createCar.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
+
     builder.addCase(createCar.fulfilled, (state, action) => {
       state.loading = false;
-      state.succes = "succes"; // Set filtered cars in the state
+     // Set filtered cars in the state
     });
+    
     builder.addCase(createCar.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
+    
     builder.addCase(createImgeForCar.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
     builder.addCase(createImgeForCar.fulfilled, (state, action) => {
       state.loading = false;
-      state.succes = "succes"; // Set filtered cars in the state
+      // Set filtered cars in the state
     });
     builder.addCase(createImgeForCar.rejected, (state, action) => {
       state.loading = false;

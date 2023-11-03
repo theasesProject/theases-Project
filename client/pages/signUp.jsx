@@ -1,6 +1,16 @@
-import * as Rn from "react-native";
+// import * as Rn from "react-native";r
 import { useState, useRef } from "react";
-import { StyleSheet } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  Dimensions,
+} from "react-native";
 import React from "react";
 import UserNormal from "../assets/Svg/user-normal.svg";
 import Email from "../assets/Svg/email.svg";
@@ -10,7 +20,7 @@ import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import Calendar from "../assets/Svg/calendar.svg";
 import { LinearGradient } from "expo-linear-gradient";
-const { width, height } = Rn.Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 import GooglePng from "../assets/googleIcon.png";
 import FaceBookPng from "../assets/facebookIcon.png";
 import { SignUpClick } from "../store/userSlice";
@@ -31,10 +41,10 @@ const SignUp = ({ navigation, props }) => {
       dispatch(SignUpClick(inputForm))
         .then((response) => {
           // Check if the dispatch was successful
-          console.log("RESPONSE§§§",response.meta);
-          if (response.meta.requestStatus==="fulfilled") {
+          console.log("RESPONSE§§§", response.meta);
+          if (response.meta.requestStatus === "fulfilled") {
             // Navigate to the desired location
-            navigation.navigate('Home');
+            navigation.navigate("Home");
           }
         })
         .catch((error) => {
@@ -43,7 +53,7 @@ const SignUp = ({ navigation, props }) => {
         });
     }
   };
-  
+
   const [confirm, setConfirm] = useState("");
   const [inputForm, setInputForm] = useState({
     userName: "",
@@ -51,11 +61,13 @@ const SignUp = ({ navigation, props }) => {
     phoneNumber: "",
     password: "",
     dateOfBirth: new Date(),
+    idCard: "",
   });
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [idCardError, setIdCardError] = useState("");
   const [confirmedError, setConfirmedError] = useState("");
 
   const [color, setColor] = useState("#6C77BF");
@@ -78,6 +90,9 @@ const SignUp = ({ navigation, props }) => {
         return;
       } else if (placeholder === "Email") {
         setEmailError("Email cannot be empty.");
+        return;
+      } else if (placeholder === "id card") {
+        setEmailError("card Id  cannot be empty.");
         return;
       } else if (placeholder === "Phone") {
         setPhoneError("Phone Number cannot be empty.");
@@ -150,22 +165,25 @@ const SignUp = ({ navigation, props }) => {
   };
 
   const onChangeDate = (selectedDate) => {
+    if (selectedDate) {
+      // setShow(Platform.OS === "ios");
+      setInputForm({ ...inputForm, dateOfBirth: selectedDate });
+    }
     // const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setInputForm({ ...inputForm, dateOfBirth: selectedDate });
+    // setInputForm({ ...inputForm, dateOfBirth: selectedDate });
   };
 
   return (
-    <Rn.ScrollView style={styles.container}>
-      <Rn.View style={styles.SignUpContainer}>
-        <Rn.Text style={styles.header}>Create New Account</Rn.Text>
-        <Rn.Text style={styles.subheader}>
+    <ScrollView style={styles.container}>
+      <View style={styles.SignUpContainer}>
+        <Text style={styles.header}>Create New Account</Text>
+        <Text style={styles.subheader}>
           Set up your username and password. You can always change it later.
-        </Rn.Text>
-        <Rn.View style={styles.InputContainer}>
-          <Rn.View style={styles.inputHolder}>
+        </Text>
+        <View style={styles.InputContainer}>
+          <View style={styles.inputHolder}>
             <UserNormal style={styles.icon} />
-            <Rn.TextInput
+            <TextInput
               autoCapitalize="none"
               ref={inputRefName}
               value={inputForm.userName}
@@ -183,18 +201,18 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()
+                    inputForm.dateOfBirth !== new Date()&&
+                    !! inputForm.idCard
+
                 );
               }}
             />
-          </Rn.View>
-          {nameError ? (
-            <Rn.Text style={{ color: "red" }}>{nameError}</Rn.Text>
-          ) : null}
+          </View>
+          {nameError ? <Text style={{ color: "red" }}>{nameError}</Text> : null}
 
-          <Rn.View style={styles.inputHolder}>
+          <View style={styles.inputHolder}>
             <Email style={styles.icon} />
-            <Rn.TextInput
+            <TextInput
               ref={inputRefEmail}
               value={inputForm.email}
               onBlur={() => {
@@ -211,17 +229,19 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()
+                    inputForm.dateOfBirth !== new Date()&&
+                    !! inputForm.idCard
+
                 );
               }}
             />
-          </Rn.View>
+          </View>
           {emailError ? (
-            <Rn.Text style={{ color: "red" }}>{emailError}</Rn.Text>
+            <Text style={{ color: "red" }}>{emailError}</Text>
           ) : null}
-          <Rn.View style={styles.inputHolder}>
+          <View style={styles.inputHolder}>
             <Phone style={styles.icon} />
-            <Rn.TextInput
+            <TextInput
               ref={inputRefPhone}
               value={inputForm.phoneNumber}
               onBlur={() => {
@@ -238,17 +258,19 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.email &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()
+                    inputForm.dateOfBirth !== new Date()&&
+                    !! inputForm.idCard
+
                 );
               }}
             />
-          </Rn.View>
+          </View>
           {phoneError ? (
-            <Rn.Text style={{ color: "red" }}>{phoneError}</Rn.Text>
+            <Text style={{ color: "red" }}>{phoneError}</Text>
           ) : null}
-          <Rn.View style={styles.inputHolder}>
+          <View style={styles.inputHolder}>
             <Lock style={styles.icon} />
-            <Rn.TextInput
+            <TextInput
               ref={inputRefPassword}
               onBlur={() => {
                 checkInput(inputForm.password, "Password");
@@ -267,7 +289,9 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!text &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()
+                    inputForm.dateOfBirth !== new Date()&&
+                    !! inputForm.idCard
+
                 );
               }}
             />
@@ -286,14 +310,14 @@ const SignUp = ({ navigation, props }) => {
                 }}
               />
             )}
-          </Rn.View>
+          </View>
           {passwordError ? (
-            <Rn.Text style={{ color: "red" }}>{passwordError}</Rn.Text>
+            <Text style={{ color: "red" }}>{passwordError}</Text>
           ) : null}
 
-          <Rn.View style={styles.inputHolder}>
+          <View style={styles.inputHolder}>
             <Lock style={styles.icon} />
-            <Rn.TextInput
+            <TextInput
               ref={inputRefConfirmed}
               onBlur={() => {
                 checkInput(confirm, "Confirm Your Password");
@@ -311,7 +335,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!text &&
-                    inputForm.dateOfBirth !== new Date()
+                    inputForm.dateOfBirth !== new Date()&&
+                    !! inputForm.idCard
                 );
               }}
             />
@@ -330,22 +355,53 @@ const SignUp = ({ navigation, props }) => {
                 }}
               />
             )}
-          </Rn.View>
+          </View>
           {confirmedError ? (
-            <Rn.Text style={{ color: "red" }}>{confirmedError}</Rn.Text>
+            <Text style={{ color: "red" }}>{confirmedError}</Text>
           ) : null}
-        </Rn.View>
-        <Rn.View style={{display:"flex" , flexDirection:"row",alignContent:"center"}}>
-          <Rn.TouchableOpacity onPress={showDatepicker}>
-            <Calendar  style={styles.icon}/>
+        <View style={styles.inputHolder}>
+          <Lock style={styles.icon} />
+          <TextInput
+            ref={inputRefConfirmed}
+            onBlur={() => {
+              checkInput(inputForm.idCard, "id card");
+            }}
+            autoCapitalize="none"
+            value={inputForm.idCard}
+            style={styles.input}
+            placeholder="id card"
+            secureTextEntry={isSecure2}
+            onChangeText={(text) => {
+              setInputForm({ ...inputForm, idCard: text });
+              setCheckUp(
+                !!inputForm.userName &&
+                  !!inputForm.email &&
+                  !!inputForm.phoneNumber &&
+                  !!inputForm.password &&
+                  !!confirm &&
+                  inputForm.dateOfBirth !== new Date()
+              );
+            }}
+          />
+        </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+          }}
+        >
+          <TouchableOpacity onPress={showDatepicker}>
+            <Calendar style={styles.icon2} />
             <LinearGradient
               colors={["#EFEFF9", "#EFEFF9"]}
               locations={[0, 1]}
               style={styles.buttonContainer2}
             >
-              <Rn.Text>Date of Birth</Rn.Text>
+              <Text>Date of Birth</Text>
             </LinearGradient>
-          </Rn.TouchableOpacity>
+          </TouchableOpacity>
           {show && (
             <DateTimePicker
               testID="dateTimePicker"
@@ -354,12 +410,12 @@ const SignUp = ({ navigation, props }) => {
               is24Hour={true}
               display="default"
               onChangeText={(text) => {
-                onChangeDate(text);
+                setInputForm(text);
               }}
             />
           )}
-        </Rn.View>
-        <Rn.TouchableOpacity
+        </View>
+        <TouchableOpacity
           disabled={!checkUp}
           activeOpacity={0.8}
           onPress={() => {
@@ -371,10 +427,10 @@ const SignUp = ({ navigation, props }) => {
             locations={[0, 1]}
             style={styles.buttonContainer}
           >
-            <Rn.Text style={styles.buttonText}>{"Sign Up"}</Rn.Text>
+            <Text style={styles.buttonText}>{"Sign Up"}</Text>
           </LinearGradient>
-        </Rn.TouchableOpacity>
-        <Rn.Pressable
+        </TouchableOpacity>
+        <Pressable
           activeOpacity={0.8}
           onPressIn={() => {
             setColor("darkblue");
@@ -382,36 +438,36 @@ const SignUp = ({ navigation, props }) => {
           }}
           onPressOut={() => setColor("#6C77BF")}
         >
-          <Rn.Text>
+          <Text>
             Already have an account?
-            <Rn.Text style={{ color: color }}> Log in</Rn.Text>
-          </Rn.Text>
-        </Rn.Pressable>
-        <Rn.View
+            <Text style={{ color: color }}> Log in</Text>
+          </Text>
+        </Pressable>
+        <View
           style={styles.separatorContainer}
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
         >
-          <Rn.View style={styles.separator} />
-          <Rn.Text style={{ color: "grey" }}>Or sign in with</Rn.Text>
-          <Rn.View style={styles.separator} />
-        </Rn.View>
-        <Rn.View style={styles.extraSignContainer}>
-          <Rn.TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
-            <Rn.View style={styles.extraSign}>
-              <Rn.Image style={styles.GoogleCss} source={GooglePng} />
-              <Rn.Text style={styles.googleText}>Google</Rn.Text>
-            </Rn.View>
-          </Rn.TouchableOpacity>
-          <Rn.TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
-            <Rn.View style={styles.extraSign}>
-              <Rn.Image style={styles.FacebookCss} source={FaceBookPng} />
-              <Rn.Text style={styles.googleText}>Facebook</Rn.Text>
-            </Rn.View>
-          </Rn.TouchableOpacity>
-        </Rn.View>
-      </Rn.View>
-    </Rn.ScrollView>
+          <View style={styles.separator} />
+          <Text style={{ color: "grey" }}>Or sign in with</Text>
+          <View style={styles.separator} />
+        </View>
+        <View style={styles.extraSignContainer}>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+            <View style={styles.extraSign}>
+              <Image style={styles.GoogleCss} source={GooglePng} />
+              <Text style={styles.googleText}>Google</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+            <View style={styles.extraSign}>
+              <Image style={styles.FacebookCss} source={FaceBookPng} />
+              <Text style={styles.googleText}>Facebook</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -424,6 +480,17 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   icon: {
+    position: "absolute",
+    top: 25,
+    right: "85%",
+    width: "10%",
+    height: 20,
+    zIndex: 1,
+
+    // height: height * 0.01,
+    // width: width * 0.01,
+  },
+  icon2: {
     position: "absolute",
     top: 25,
     right: "85%",
@@ -536,7 +603,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 10,
     zIndex: -1,
     height: 50,
-    width: "90%",
+    width: width*0.8,
     borderRadius: 5,
     borderWidth: "none",
     borderWidth: 0,
@@ -555,10 +622,11 @@ const styles = StyleSheet.create({
   buttonContainer2: {
     // backgroundColor: "red",
     borderRadius: 5,
+    height: height * 0.06,
     padding: 10,
     alignItems: "center",
     marginTop: 15,
-    width: width * 0.3,
+    width: width * 0.8,
   },
   buttonText: {
     fontSize: 18,

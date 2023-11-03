@@ -8,14 +8,14 @@ import emptyHeart from "../assets/emptyHeart.png";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-function CardCar({  oneCar }) {
+function CardCar({ oneCar,openPanel }) {
   const [starSelected, setStarSelected] = useState(false);
   const {DOMAIN_NAME} = require("../env.js")
   const [heartSelected, setHeartSelected] = useState(false);
   const starImage = starSelected ? star : emptyStar;
   const heartImage = heartSelected ? heartBleu : emptyHeart;
   const dispatch = useDispatch();
-  const {user} = useSelector( state =>state)
+  const user = useSelector( (state) =>state.user.data)
   const handleStarPress = () => {
     setStarSelected(!starSelected);
   };
@@ -23,7 +23,7 @@ function CardCar({  oneCar }) {
     setHeartSelected(!heartSelected)
     console.log(oneCar.id);
     if(!heartSelected) {
-      const added = await axios.post(`http://${DOMAIN_NAME}:5000/api/bookmarks/add`,{UserId:user.data.id,CarId:oneCar.id}).then((response) => console.log("added ")).catch((err)=>{console.log(err)})
+      const added = await axios.post(`http://${DOMAIN_NAME}:5000/api/bookmarks/add`,{UserId:user.id,CarId:oneCar.id}).then((response) => console.log("added ")).catch((err)=>{console.log(err)})
     }
     else if(heartSelected){
       const removed = await axios.delete(`http://${DOMAIN_NAME}:5000/api/bookmarks/delete/${oneCar.id}`).then((response) => console.log("done")).catch(err => console.log(err))
@@ -31,7 +31,7 @@ function CardCar({  oneCar }) {
   };
 
   return (
-    <View style={styles.card}>
+    <View style={styles.card} onPress={openPanel} >
       <View style={styles.Image}>
         <Image style={styles.carImage} source={car} />
         <TouchableOpacity onPress={handleHeartPress}>

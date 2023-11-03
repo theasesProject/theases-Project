@@ -11,47 +11,48 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectUser, logStatus } from "../store/userSlice";
 import { useEffect, useState } from "react";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 
 function ProfileLandingPage() {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
-  const [userAddress, setUserAddress] = useState('Norvey ');
-  
+  const [userAddress, setUserAddress] = useState("Norvey ");
+
   const getUserLocationAndNearestAddress = async () => {
-    let  status = await Location.requestForegroundPermissionsAsync();
+    let status = await Location.requestForegroundPermissionsAsync();
     // if (status === 'granted') {
 
-      let location = await Location.getCurrentPositionAsync({});
-      if (location) {
-        const { coords } = location;
-        const nearestAddressResponse = await Location.reverseGeocodeAsync({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        });
-        if (nearestAddressResponse.length > 0) {
-          const nearestAddress = nearestAddressResponse[0];
-          const place=`${nearestAddress.region}, ${nearestAddress.country}`
-          const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`; 
-          setUserAddress(place);
-        }
+    let location = await Location.getCurrentPositionAsync({});
+    if (location) {
+      const { coords } = location;
+      const nearestAddressResponse = await Location.reverseGeocodeAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+      if (nearestAddressResponse.length > 0) {
+        const nearestAddress = nearestAddressResponse[0];
+        const place = `${nearestAddress.region}, ${nearestAddress.country}`;
+        const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
+        setUserAddress(place);
       }
     }
+  };
   // };
   console.log("active user: ", activeUser);
-  
+
   return (
     <View style={styles.navBar}>
       <View style={styles.allAdress}>
-        <Pressable onPress={()=>getUserLocationAndNearestAddress()}>
+        <Pressable onPress={() => getUserLocationAndNearestAddress()}>
           <Image style={styles.locationImage} source={localisation} />
-         </Pressable>
+        </Pressable>
         <View style={styles.adress}>
           <Text style={styles.yourLocation}>Your Location </Text>
-          
-          <Text style={styles.UserAdress}>{userAddress},{activeUser?.userName} </Text>
-         
+
+          <Text style={styles.UserAdress}>
+            {userAddress},{activeUser?.userName}{" "}
+          </Text>
         </View>
       </View>
       <View>

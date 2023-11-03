@@ -1,16 +1,12 @@
 import {
-  SafeAreaView,
-  ScrollView,
   View,
   Text,
-  Button,
   Image,
   StyleSheet,
   TouchableOpacity,
   Pressable,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import profil from "../assets/profile.png";
 import React, { useEffect, useState } from "react";
 import bkg from "../assets/bkg.png";
 import stg from "../assets/settings.png";
@@ -19,7 +15,7 @@ import { useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
-import UserProfileMain from "../components/UserProfileMain.jsx";
+import change from "../assets/change.png";
 
 function Userprofile({ navigation }) {
   const activeUser = useSelector(selectUser);
@@ -52,13 +48,31 @@ function Userprofile({ navigation }) {
           <Text style={styles.editProfile}>Edit Profile</Text>
         </Pressable>
       </View>
-
-      {/*  */}
-
-      <UserProfileMain />
-
-      {/*  */}
-
+      <View style={styles.bottomSection}>
+        <View style={styles.profileOptions}>
+          <TouchableOpacity
+            style={styles.profileOption}
+            onPress={() => console.log("history")}
+          >
+            <Image style={styles.icon} source={bkg} />
+            <Text>My bookings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.profileOption}
+            onPress={() => console.log("settings")}
+          >
+            <Image source={stg} style={styles.icon} />
+            <Text>Settings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.profileOption}
+            onPress={() => navigation.navigate("changeRole")}
+          >
+            <Image source={change} style={styles.icon} />
+            <Text>Become an Agency</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       <View style={styles.logoutBtnContainer}>
         <TouchableOpacity onPress={handleLogout}>
           <LinearGradient
@@ -153,6 +167,28 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: "white",
+  },
+  //
+  bottomSection: {
+    height: "75%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  profileOptions: {},
+  profileOption: {
+    gap: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e5e6e8",
+  },
+
+  icon: {
+    width: 20,
+    height: 20,
   },
 });
 export default Userprofile;

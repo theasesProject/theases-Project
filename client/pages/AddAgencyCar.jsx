@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Pressable,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from "react-native-check-box";
@@ -14,6 +15,8 @@ import { createCar } from "../store/carFetch";
 import * as ImagePicker from "expo-image-picker";
 import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import { useSelector, useDispatch } from "react-redux";
+import { selectUser } from "../store/userSlice";
+import xBtn from "../assets/xBtn.png";
 function AddAgencyCar() {
   const [model, setModel] = useState("");
   const [brandCar, setBrandCar] = useState("");
@@ -32,10 +35,8 @@ function AddAgencyCar() {
   const [typeError, setTypeError] = useState("");
   const [charError, setCharError] = useState("");
   const [imgError, setImgError] = useState("");
-  const [img, setImg] = useState(
-    "https://th.bing.com/th/id/OIP.pfmvcg0taUpBapQUtsDpWwHaE8?w=258&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"
-  );
-
+  const [img, setImg] = useState([]);
+  const activeUser = useSelector(selectUser);
   const handleCreateCar = () => {
     if (model === "") {
       setModelError("Please enter your car model");
@@ -53,22 +54,30 @@ function AddAgencyCar() {
     } else if (img === "") {
       setImgError("Please enter picture for your car ");
     } else {
+      const form = {
+        model: model,
+        brand: brandCar,
+        price: price,
+        period: periodRent,
+        status: "available",
+        horsePower: horse,
+        typeOfFuel: fuel,
+        description: description,
+        warrantyInsurance: warranty,
+        acceptation: "pending",
+        typevehicle: type,
+        characteristics: char,
+        media: img.map((file) => ({ media: file })),
+        AgencyId: activeUser.id,
+      };
+
       dispatch(
         createCar({
-          model: model,
-          brand: brandCar,
-          price: price,
-          period: periodRent,
-          status: "available",
-          horsePower: horse,
-          typeOfFuel: fuel,
-          description: description,
-          warrantyInsurance: warranty,
-          acceptation: "pending",
-          typevehicle: type,
-          characteristics: char,
+          body: form,
+          media: selectedDocuments.map((file) => ({ media: file })),
         })
       );
+      console.log("succes");
     }
   };
   const brand = [
@@ -107,6 +116,10 @@ function AddAgencyCar() {
     { label: "Commercial", value: "Commercial" },
   ];
   const selectImage = async () => {
+    if (img.length >= 3) {
+      return setError("You can't add more than six images");
+    }
+
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== "granted") {
@@ -116,22 +129,36 @@ function AddAgencyCar() {
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [2, 4],
+      allowsMultipleSelection: true,
+      selectionLimit: 3,
     });
 
     if (!result.canceled) {
-      const selectedAsset = result.assets[0];
-      try {
-        const cloudinaryResponse = await cloudinaryUpload(selectedAsset.uri);
+      const selectedAssets = result.assets;
 
-        console.log("img link: ", cloudinaryResponse);
-        setImg(cloudinaryResponse);
-        console.log(img, "img");
-      } catch (err) {
-        console.error("Cloudinary Upload Error:", err);
-      }
+      const updatedSelectedDocuments = await Promise.all(
+        selectedAssets.map(async (file) => {
+          try {
+            const cloudinaryResponse = await cloudinaryUpload(file.uri);
+            return cloudinaryResponse;
+          } catch (err) {
+            console.error("Cloudinary Upload Error:", err);
+            return null;
+          }
+        })
+      );
+
+      setImg((prev) => [
+        ...prev,
+        ...updatedSelectedDocuments.filter((image) => image !== null),
+      ]);
     }
+  };
+  const handleDelete = (uri) => {
+    const copy = [...img];
+    const position = copy.indexOf(uri);
+    copy.splice(position, 1);
+    setImg([...copy]);
   };
 
   const handleModel = (model) => {
@@ -171,6 +198,7 @@ function AddAgencyCar() {
     console.log(type, "type");
   };
 
+  console.log(img, "img");
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
@@ -247,6 +275,7 @@ function AddAgencyCar() {
             value={fuel}
             items={typeOfFuel}
             onValueChange={(value) => handleFuel(value)}
+            style={{ backgroundColor: "lightgrey" }}
           />
 
           <RNPickerSelect
@@ -284,21 +313,28 @@ function AddAgencyCar() {
             isChecked={!warranty}
           />
           <View style={styles.picture}>
-            <Text style={styles.input2}>ADD PICTURE</Text>
-            <TouchableOpacity
-              style={styles.profilePictureContainer}
+            <Pressable
               onPress={selectImage}
+              style={styles.addImgTextContainer}
+              activeOpacity={0.8}
             >
-              <Image
-                source={{
-                  uri: img,
-                }}
-                style={styles.profilePicture}
-              />
-            </TouchableOpacity>
-            {imgError !== "" && (
-              <Text style={styles.errorText}>{imgError}</Text>
-            )}
+              <Text style={styles.input2}>ADD PICTURE</Text>
+
+              {/* <Text style={styles.input2}>ADD PICTURE</Text> */}
+              {imgError !== "" && (
+                <Text style={styles.errorText}>{imgError}</Text>
+              )}
+            </Pressable>
+          </View>
+          <View style={styles.imgsContainer}>
+            {img.map((uri, index) => (
+              <View key={index} style={styles.imgContainer}>
+                <Pressable onPress={() => handleDelete(uri)}>
+                  <Image source={xBtn} style={styles.xBtn} />
+                </Pressable>
+                <Image source={{ uri }} style={styles.img} />
+              </View>
+            ))}
           </View>
           <TouchableOpacity onPress={handleCreateCar}>
             <Text style={styles.input1}>ADD CAR</Text>
@@ -375,7 +411,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     color: "black",
     borderColor: "lightgrey",
-    width: 240,
+    width: "100%",
     height: 40,
     borderRadius: 8,
     textAlign: "center",
@@ -399,6 +435,37 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 14,
     marginTop: 5,
+  },
+  addImgTextContainer: {
+    // paddingHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  imgsContainer: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    gap: 10,
+    backgroundColor: "white",
+    // padding: 10,
+    height: 100,
+  },
+  imgContainer: {
+    position: "relative",
+    backgroundColor: "#DBDBDB",
+    width: 100,
+    height: 70,
+  },
+  xBtn: {
+    position: "absolute",
+    zIndex: 0,
+    width: 25,
+    height: 25,
+    right: 0,
+  },
+  img: {
+    zIndex: -1,
+    width: "100%",
+    height: "100%",
   },
 });
 

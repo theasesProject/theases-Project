@@ -1,11 +1,22 @@
-module.exports = ( DataTypes, connection) => {
-    const Request = connection.define("request", {
-        transportation: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-          },
-    });
-    return Request;
-  };
-  
+module.exports = (DataTypes, connection) => {
+  const Request = connection.define("request", {
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    companyNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    deposit: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    transportation: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+  });
+  return Request;
+};

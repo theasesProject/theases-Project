@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import localisation from "../assets/localisation1.png";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { selectUser, logStatus,fetchUser } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
@@ -20,7 +20,7 @@ function ProfileLandingPage() {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [userAddress, setUserAddress] = useState("location ");
 
   const getUserLocationAndNearestAddress = async () => {

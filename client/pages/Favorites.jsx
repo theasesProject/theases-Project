@@ -31,9 +31,9 @@ function Favorites() {
 
   return <View style={styles.container}>
     <Text>My Favourite Vehicules</Text>
-    {all.map(car => {
+    {/* {all.map(car => {
       <CardCar oneCar={car}/>
-    })}
+    })} */}
   </View>;
 }
 const styles = StyleSheet.create({

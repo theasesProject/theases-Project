@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     padding: 10,
-    marginBottom:20
+    marginBottom: 20,
   },
   BrandBar: {
     width: "100%",
@@ -155,12 +155,12 @@ const styles = StyleSheet.create({
   topBrand: {
     fontWeight: "bold",
     fontSize: 21,
-    paddingBottom:10
+    paddingBottom: 10,
   },
   ViewAll: {
     color: "#8B91B6",
     fontSize: 14,
-    paddingBottom:10,
+    paddingBottom: 10,
   },
   allBrandImage: {
     // borderRadius: 10,
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     gap: 100,
   },
   brandDetails: {
-    backgroundColor: "white",
+    backgroundColor: "rgb(240, 238, 255)",
 
     display: "flex",
 

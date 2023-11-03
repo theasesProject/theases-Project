@@ -33,7 +33,7 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="AddAgencyCar">
           <Stack.Screen
             name="Home"
             component={Home}
@@ -44,7 +44,7 @@ function App() {
             component={Favorites}
             options={{ headerShown: false }}
           />
-<Stack.Screen
+          <Stack.Screen
             name="Mape"
             component={Mape}
             options={{ headerShown: false }}

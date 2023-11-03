@@ -1,5 +1,5 @@
-import { Text, View, StyleSheet, TextInput } from "react-native";
-import SelectDropdown from "react-native-select-dropdown";
+import { Text, View, StyleSheet, TextInput,TouchableOpacity,Image } from "react-native";
+;
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from "react-native-check-box";
 import { useState } from "react";
@@ -169,7 +169,7 @@ function AddAgencyCar() {
         />
 
         <CheckBox
-          style={styles.input}
+          // style={styles.input}
           onClick={() => {
             setWarrranty(!warranty);
           }}

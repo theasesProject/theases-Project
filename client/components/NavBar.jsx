@@ -27,7 +27,7 @@ import { useNavigation } from "@react-navigation/native";
         </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.quarter} onPress={() => navigation.navigate("editProfile")}>
+        <TouchableOpacity style={styles.quarter} onPress={() => navigation.navigate("Mape")}>
         <View style={styles.hm}>
             <Ms ></Ms>
         <Text>Messeges</Text>

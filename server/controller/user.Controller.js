@@ -7,7 +7,7 @@ require("dotenv").config();
 module.exports = {
   bringUsersData: async (req, res, next) => {
     try {
-      const Users = await db.User.findAll({});
+      const Users = await db.User.findAll();
       res.json(Users);
     } catch (error) {
       next(error);
@@ -95,11 +95,14 @@ module.exports = {
       delete response.password;
       console.log(response.type);
       if (response.type === "agency") {
-        const task = await User.findOne({ where: { email: response.email }, include: ["Agency"] })
+        const task = await User.findOne({
+          where: { email: response.email },
+          include: ["Agency"],
+        });
         if (task) {
-          delete task.password
-        }  
-         res.json(task)
+          delete task.password;
+        }
+        res.json(task);
       } else {
         res.status(200).json(response);
       }
@@ -147,7 +150,7 @@ module.exports = {
         res.status(404).json({ message: "User not found" });
       }
     } catch (err) {
-      res.json( err);
+      res.json(err);
     }
   },
 

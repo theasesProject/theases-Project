@@ -9,8 +9,9 @@ import { SvgXml } from 'react-native-svg';
 const Mape = () => {
   const [location, setLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState({
-    latitude: 0, // You can replace these with your default values
-    longitude: 0,
+    latitude: 36.842278, // You can replace these with your default values
+    longitude: 10.187765,
+    
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });

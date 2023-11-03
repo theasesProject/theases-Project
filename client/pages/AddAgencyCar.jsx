@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
 function AddAgencyCar() {
+  const dispatch=useDispatch()
   const [model, setModel] = useState("");
   const [brandCar, setBrandCar] = useState("");
   const [horse, setHorse] = useState("");
@@ -74,7 +75,7 @@ function AddAgencyCar() {
       dispatch(
         createCar({
           body: form,
-          media: selectedDocuments.map((file) => ({ media: file })),
+          media: img.map((file) => ({ media: file })),
         })
       );
       console.log("succes");

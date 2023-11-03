@@ -19,7 +19,7 @@ import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
 
 function ChangeRole({ navigation }) {
-  const [isChecked, setIsChecked] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [color, setColor] = useState("#6C77BF");
   const [error, setError] = useState("");
@@ -27,6 +27,7 @@ function ChangeRole({ navigation }) {
     //* temp
     verificationStatus: true, //* when the admin board is functional this line MUST be removed, it will be added with its default value (false) so the admin can check the request and does he has to do
     //* temp
+    transportation:false
   });
   const activeUser = useSelector(selectUser);
 
@@ -59,7 +60,7 @@ function ChangeRole({ navigation }) {
   const handleChangeDeposit = (content) => {
     if (!content && content !== 0) {
       let copy = form;
-      delete copy.address;
+      delete copy.deposit;
       return setForm({ ...copy });
     }
     setForm({ ...form, deposit: content });
@@ -147,9 +148,10 @@ function ChangeRole({ navigation }) {
       <CheckBox
         style={styles.check}
         onClick={() => {
-          setIsChecked(!isChecked);
+          setForm({...form,transportation:!form.transportation})
+          // setIsChecked(!isChecked);
         }}
-        isChecked={isChecked}
+        isChecked={form.transportation}
         leftText="Deliver cars to users locations"
         checkBoxColor="#4485C5"
       />

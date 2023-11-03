@@ -23,17 +23,16 @@ function AdvancedSearch() {
   const [isPressed5, setIsPressed5] = useState(false);
   const [isPressed6, setIsPressed6] = useState(false);
   const dispatch = useDispatch();
-  useEffect(() => {
-    const filterCriteria = {
-      price: [sliderValue, priceSearched],
-      typevehicle: typeVehicule,
-      characteristics: chara,
-    };
 
-    dispatch(getAllCars());
-    dispatch(fetchFilteredCars(filterCriteria));
-    prices();
-  }, [dispatch]);
+  dispatch(getAllCars());
+
+  dispatch(fetchFilteredCars(filterCriteria));
+
+  const filterCriteria = {
+    price: [sliderValue, priceSearched],
+    typevehicle: typeVehicule,
+    characteristics: chara,
+  };
 
   console.log(chara, "char");
   console.log(priceSearched, "price");
@@ -75,14 +74,9 @@ function AdvancedSearch() {
     setPriceSearched(value);
   };
 
-  const handleChara = (value) => {
-    setChar(value);
-    setIsPressed(!isPressed);
-  };
-
   const prices = () => {
-    let minPrice = allCars[0].price ;
-    let maxPrice = allCars[0].price ;
+    let minPrice = allCars[0].price;
+    let maxPrice = allCars[0].price;
     for (const car of allCars) {
       const price = car.price;
       if (price < minPrice) {
@@ -93,7 +87,7 @@ function AdvancedSearch() {
       }
     }
   };
-
+  prices();
   return (
     <View style={styles.homePage}>
       <TouchableOpacity
@@ -205,7 +199,7 @@ function AdvancedSearch() {
 
       <TouchableOpacity
         style={styles.showResult}
-        onPress={() => navigation.navigate("filtredCar")}
+        onPress={() => navigation.navigate("FiltredCar")}
       >
         <LinearGradient colors={["#6C77BF", "#4485C5"]} locations={[0, 1]}>
           <Text style={styles.showResults}>Show Results</Text>
@@ -252,7 +246,7 @@ const styles = StyleSheet.create({
     alignItem: "flex-start",
     gap: 22,
 
-    padding: 10,
+    // padding: 10,
   },
   cardType2: {
     gap: 15,
@@ -263,30 +257,32 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     marginVertical: 15,
-    width: 117,
+    width: 100,
     color: "white",
   },
   homePage: {
-    marginTop: "10%",
     flex: 1,
-    backgroundColor: "rgb(219, 217, 224)",
-    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 30,
+    flexDirection: "column",
+    backgroundColor: "white",
+    gap: 12,
   },
   showResult: {
     borderRadius: 10,
     padding: 7,
     alignItems: "center",
-    marginVertical: 50,
+    marginVertical: 40,
     width: 380,
   },
   showResults: {
-    borderRadius: 15,
     textAlign: "center",
-    width: 440,
+    width: 250,
     justifyContent: "center",
     color: "black",
     fontSize: 30,
-    height: 60,
+    height: 50,
+    borderRadius: 14,
   },
   backImage: {
     width: 22,

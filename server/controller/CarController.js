@@ -5,7 +5,10 @@ module.exports = {
   getAllCars: async function (req, res) {
     try {
       const allCars = await db.Car.findAll({
-        include: { model: db.CarMedia, as: "CarMedia" },
+        include: [
+          { model: db.CarMedia, as: "CarMedia" },
+          { model: db.Agency, as: "Agency" },
+        ],
       });
 
       res.status(200).send(allCars);
@@ -30,6 +33,7 @@ module.exports = {
         acceptation: "pending",
         typevehicle: req.body.typevehicle,
         characteristics: req.body.characteristics,
+        AgencyId: req.body.AgencyId,
       });
 
       res.status(200).send(newCar);

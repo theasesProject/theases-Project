@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { DOMAIN_NAME } from "../env.js";
+// import { DOMAIN_NAME } from "../env.js";
 
 const initialState = {
   loading: false,
@@ -10,18 +10,19 @@ const initialState = {
 export const CreateAgency = createAsyncThunk(
   "agency/CreateAgency",
   async (params) => {
+ 
     if (!params) return;
     try {
       const response = await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/request/create/${params.id}`,
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/request/create/${params.id}`,
         params.body
-      );
+      ); 
       const requestId = response.data.id;
       await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/media/add/request/${requestId}`,
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/request/${requestId}`,
         params.media
       );
-      console.log(body, "body");
+    
       return response.data;
     } catch (error) {
       console.log(error);

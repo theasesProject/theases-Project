@@ -17,9 +17,10 @@ import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
+import { useSelector } from 'react-redux';
 const { height, width } = Dimensions.get("screen");
-
 function NavBar({style}) {
+  const loggedIn = useSelector((state)=>state.user.loggedIn)
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -57,7 +58,10 @@ function NavBar({style}) {
       </Pressable>
       <Pressable
         style={styles.quarter}
-        onPress={() => navigation.navigate("Userprofile")}
+        onPress={() => {if(loggedIn){
+          navigation.navigate("Userprofile")}else{
+            navigation.navigate("Login")}
+          }}
       >
         <View style={styles.hm}>
           <Pr fill={isActive('Userprofile')} />

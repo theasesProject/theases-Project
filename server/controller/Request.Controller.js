@@ -16,13 +16,16 @@ module.exports = {
   },
   createRequest: async (req, res) => {
     try {
+      console.log(req.body);
       const response = await Request.create({
         ...req.body,
         UserId: req.params.id,
       });
+     console.log('aalaaaa',response);
       res.status(201).send(response);
-    } catch (err) {
-      res.status(500).json(err);
+    } catch (err) { 
+      throw err;
+      // res.status(500).json(err);
     }
   },
 };

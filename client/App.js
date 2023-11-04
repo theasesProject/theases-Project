@@ -1,5 +1,4 @@
-import { StyleSheet} from "react-native";
-import { LogBox } from 'react-native';
+import { StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CarDetails from "./pages/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
@@ -22,13 +21,6 @@ import ChangeRole from "./pages/ChangeRole.jsx";
 import Mape from "./pages/Mape.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
-LogBox.ignoreLogs(['ViewPropTypes will be removed']);
-LogBox.ignoreLogs(['Warning: ...']);
-// import { AppRegistry } from 'react-native';
-// // import App from './App'; // Replace 'App' with the name of your main application component
-// import { theases as theases } from './app.json';
-
-// AppRegistry.registerComponent(theases, () => App);
 
 const Stack = createStackNavigator();
 function App() {
@@ -57,6 +49,7 @@ function App() {
             component={ChangeRole}
             options={{ headerShown: false }}
           />
+
           <Stack.Screen
             name="Mape"
             component={Mape}

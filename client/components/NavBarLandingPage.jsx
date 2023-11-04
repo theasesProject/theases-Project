@@ -23,7 +23,7 @@ function ProfileLandingPage({style}) {
   const loggedIn = useSelector(logStatus);
   const dispatch = useDispatch();
   const [userAddress, setUserAddress] = useState("</> click here");
-
+console.log("jiji from page");
   const getUserLocationAndNearestAddress = async () => {
     let status = await Location.requestForegroundPermissionsAsync();
     // if (status === 'granted') {
@@ -43,7 +43,6 @@ function ProfileLandingPage({style}) {
       }
     }
   };
-  // };
   console.log("active user: ", activeUser);
   const [tokenValue, setTokenValue] = useState(false);
   const retrieveToken = async () => {
@@ -75,7 +74,6 @@ function ProfileLandingPage({style}) {
         </Pressable>
         <View style={styles.adress}>
           <Text style={styles.yourLocation}>Your Location </Text>
-
           <Text
             style={styles.UserAdress}
             onPress={() => {
@@ -133,25 +131,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   authBtnsContainer: {
-    height: "100%",
+    paddingRight:20,
+    height: height*.1,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
-    padding: 10,
+    // padding: 10,
   },
   authBtn: {
     borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 5,
     backgroundColor: "white",
   },
   locationImage: {
     // marginLeft: 30,
     width: 45,
     height: 40,
-    alignItems: "center",
+    // alignItems: "center",
   },
   allAdress: {
     paddingLeft:10,
@@ -173,13 +172,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   yourLocation: {
-    fontSize: 14,
+    fontSize: 12,
     color: "rgb(130, 124, 140)",
   },
   UserAdress: {
-    fontSize: 16,
+    fontSize: 14,
     color: "black",
     fontWeight: "bold",
+    width: 180,
   },
 });
 

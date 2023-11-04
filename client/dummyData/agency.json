@@ -9,6 +9,7 @@
     "transportation": true
   },
   {
+    "name":"sel",
     "papers": "Business Permit",
     "address": "456 Elm St, Othertown, USA",
     "verificationStatus": false,

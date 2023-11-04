@@ -8,7 +8,13 @@ import { SvgXml } from 'react-native-svg';
 
 const Mape = () => {
   const [location, setLocation] = useState(null);
-  const [mapRegion, setMapRegion] = useState(null);
+  const [mapRegion, setMapRegion] = useState({
+    latitude: 36.842278, // You can replace these with your default values
+    longitude: 10.187765,
+    
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
   const [destination, setDestination] = useState({
     latitude: 36.736451, // Replace with the destination latitude
     longitude: 10.313687, // Replace with the destination longitude
@@ -18,7 +24,7 @@ const Mape = () => {
 
   // Import the car logo image
   const carIconSvg = `
-    <svg xmlns="http://www.w3.org/2000/svg" height='10' width='10' viewBox="0 0 512 512"><!-- Your SVG code here --></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" height='10' width='10' viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M135.2 117.4L109.1 192H402.9l-26.1-74.6C372.3 104.6 360.2 96 346.6 96H165.4c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32H346.6c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2V400v48c0 17.7-14.3 32-32 32H448c-17.7 0-32-14.3-32-32V400H96v48c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V400 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg>
   `;
 
   const getLocation = async () => {
@@ -60,24 +66,26 @@ const Mape = () => {
       }
     }
   };
-
   const handleZoomIn = () => {
-    // Decrease the latitudeDelta and longitudeDelta to zoom in
+    const newLatitudeDelta = mapRegion.latitudeDelta / 2;
+    const newLongitudeDelta = mapRegion.longitudeDelta / 2;
     setMapRegion({
       ...mapRegion,
-      latitudeDelta: mapRegion.latitudeDelta * 0.5,
-      longitudeDelta: mapRegion.longitudeDelta * 0.5,
+      latitudeDelta: newLatitudeDelta,
+      longitudeDelta: newLongitudeDelta,
     });
   };
-
+  
   const handleZoomOut = () => {
-    // Increase the latitudeDelta and longitudeDelta to zoom out
+    const newLatitudeDelta = mapRegion.latitudeDelta * 2;
+    const newLongitudeDelta = mapRegion.longitudeDelta * 2;
     setMapRegion({
       ...mapRegion,
-      latitudeDelta: mapRegion.latitudeDelta * 2,
-      longitudeDelta: mapRegion.longitudeDelta * 2,
+      latitudeDelta: newLatitudeDelta,
+      longitudeDelta: newLongitudeDelta,
     });
   };
+  
 
 
 

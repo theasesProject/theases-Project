@@ -19,14 +19,15 @@ import opel from "../assets/Brands/opel.png";
 import suzuki from "../assets/Brands/suzuki.png";
 import { useState } from "react";
 import axios from "axios";
+
 const { width, height } = Dimensions.get("window");
-import { DOMAIN_NAME } from "../env";
+// import { DOMAIN_NAME } from "../env";
 function BrandBar({ onPress, onFilterByBrand }) {
   const [carByBrand, setCarByBrand] = useState([]);
   const [error, setError] = useState(false);
   const handleFilterByBrand = (brandName) => {
     axios
-      .post(`http://${DOMAIN_NAME}:5000/api/car/byBrand`, { brand: brandName })
+      .post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/byBrand`, { brand: brandName })
       .then((response) => {
         onFilterByBrand(response.data);
       })

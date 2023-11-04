@@ -24,8 +24,6 @@ import Mape from "./pages/Mape.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
-
-
 const Stack = createStackNavigator();
 function App() {
   return (
@@ -38,7 +36,7 @@ function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="favorites"
+            name="Favorites"
             component={Favorites}
             options={{ headerShown: false }}
           />

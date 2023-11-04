@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { DOMAIN_NAME } from "../env.js";
+// import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env.js";
 
 const initialState = {
   allCars: [],
@@ -8,13 +8,15 @@ const initialState = {
   loading: false,
   error: null,
   OneCar: {},
+  bookMarks: [],
+  succes: null,
 };
 export const getOnecarById = createAsyncThunk(
   "car/getOnecarById",
   async (id) => {
     try {
       const response = await axios.get(
-        `http://${DOMAIN_NAME}:5000/api/car/carById/${id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/carById/${id}`
       );
 
       return response.data;
@@ -26,11 +28,11 @@ export const getOnecarById = createAsyncThunk(
 export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
   try {
     const response = await axios.get(
-      `http://${DOMAIN_NAME}:5000/api/car/allCars`
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCars`
     );
     return response.data;
   } catch (error) {
-    console.log(JSON.stringify(error), "aaa"); // Rethrow the error to trigger the rejected action
+    console.log(JSON.stringify(error));
   }
 });
 
@@ -39,7 +41,7 @@ export const fetchFilteredCars = createAsyncThunk(
   async (filterCriteria, { getState, dispatch }) => {
     try {
       const response = await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/car/filtredCar`,
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/filtredCar`,
         filterCriteria
       );
 
@@ -53,12 +55,12 @@ export const createCar = createAsyncThunk("car/createCar", async (params) => {
   if (!params) return;
   try {
     const response = await axios.post(
-      `http://${DOMAIN_NAME}:5000/api/car/newCar`,
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/newCar`,
       params.body
     );
     const requestId = response.data.id;
     await axios.post(
-      `http://${DOMAIN_NAME}:5000/api/media/add/car/${requestId}`,
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media
     );
     console.log(body, "body");
@@ -73,7 +75,7 @@ export const createImgeForCar = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/car/imageCar`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/imageCar`
       );
 
       return response.data;
@@ -82,6 +84,56 @@ export const createImgeForCar = createAsyncThunk(
     }
   }
 );
+
+export const getAllBoolMarks = createAsyncThunk(
+  "car/getAllBoolMarks",
+  async (id) => {console.log('bookmarks',id);
+    try {
+      const response = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/getAll/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const CreateBookMark = createAsyncThunk(
+  "car/CreateBookMark",
+  async (body) => {
+   
+    try {
+ console.log(body,'body before');
+      
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/add`,
+       body
+      );
+    
+ console.log(body,'body');
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const removedBookMark = createAsyncThunk(
+  "car/removedBookMark",
+  async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/delete/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const carSlice = createSlice({
   name: "car",
   initialState,
@@ -150,6 +202,42 @@ const carSlice = createSlice({
       // Set filtered cars in the state
     });
     builder.addCase(createImgeForCar.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(getAllBoolMarks.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getAllBoolMarks.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bookMarks = action.payload;
+    });
+    builder.addCase(getAllBoolMarks.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(CreateBookMark.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(CreateBookMark.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = action.payload;
+    });
+    builder.addCase(CreateBookMark.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(removedBookMark.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(removedBookMark.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = action.payload;
+    });
+    builder.addCase(removedBookMark.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

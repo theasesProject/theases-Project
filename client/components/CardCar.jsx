@@ -10,7 +10,7 @@ import axios from "axios";
 
 function CardCar({ oneCar,openPanel }) {
   const [starSelected, setStarSelected] = useState(false);
-  const {DOMAIN_NAME} = require("../env.js")
+  // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
   const [heartSelected, setHeartSelected] = useState(false);
   const starImage = starSelected ? star : emptyStar;
   const heartImage = heartSelected ? heartBleu : emptyHeart;
@@ -23,10 +23,10 @@ function CardCar({ oneCar,openPanel }) {
     setHeartSelected(!heartSelected)
     console.log(oneCar.id);
     if(!heartSelected) {
-      const added = await axios.post(`http://${DOMAIN_NAME}:5000/api/bookmarks/add`,{UserId:user.id,CarId:oneCar.id}).then((response) => console.log("added ")).catch((err)=>{console.log(err)})
+      const added = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/add`,{UserId:user.id,CarId:oneCar.id}).then((response) => console.log("added ")).catch((err)=>{console.log(err)})
     }
     else if(heartSelected){
-      const removed = await axios.delete(`http://${DOMAIN_NAME}:5000/api/bookmarks/delete/${oneCar.id}`).then((response) => console.log("done")).catch(err => console.log(err))
+      const removed = await axios.delete(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/delete/${oneCar.id}`).then((response) => console.log("done")).catch(err => console.log(err))
     }
   };
 

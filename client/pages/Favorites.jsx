@@ -7,13 +7,13 @@ import CardCar from "../components/CardCar.jsx";
 
 function Favorites() {
   const [all, setAll] = useState([]);
-  const { DOMAIN_NAME } = require("../env.js");
+  // const { DOMAIN_NAME } = require("../env.js");
   const dispatch = useDispatch();
   const user  = useSelector((state) => state.user.data);
   const fetch = async function () {
     try {
       const patched = await axios.get(
-        `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${user.id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/getAll/${user.id}`
       ).then(response => {
         setAll(response.data)
         console.log(response.data)

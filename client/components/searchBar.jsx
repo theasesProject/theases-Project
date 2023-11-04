@@ -26,7 +26,7 @@ function SearchBar({ onSearch }) {
   const searchCarsByModel = async (model) => {
     try {
       const response = await axios.get(
-        `http://${DOMAIN_NAME}:5000/api/car/searchName/${model}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/searchName/${model}`
       );
       onSearch(response.data);
     } catch (error) {

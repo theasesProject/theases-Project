@@ -27,7 +27,7 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Favorites">
+        <Stack.Navigator initialRouteName="AddAgencyCar">
           <Stack.Screen
             name="Home"
             component={Home}

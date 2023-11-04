@@ -24,9 +24,9 @@ function CardCar({ oneCar, openPanel }) {
     setHeartSelected(!heartSelected);
 
     if (!heartSelected) {
-      CreateBookMark(oneCar.id, activeUser.id);
+      dispatch(CreateBookMark(oneCar.id, activeUser.id));
     } else if (heartSelected) {
-      removedBookMark(oneCar.id);
+      dispatch(removedBookMark(oneCar.id));
     }
   };
 

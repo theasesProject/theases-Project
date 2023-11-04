@@ -21,6 +21,7 @@ import FiltredCar from "./pages/FiltredCar.jsx";
 import SignUp from "./pages/signUp.jsx";
 import ChangeRole from "./pages/ChangeRole.jsx";
 import Mape from "./pages/Mape.jsx";
+import Conversation from "./pages/Conversation.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
@@ -40,10 +41,10 @@ function App() {
             component={Favorites}
             options={{ headerShown: false }}
           />
-          <Stack.Screen 
+          <Stack.Screen
             name="Messages"
             component={Messages}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="changeRole"
@@ -54,6 +55,11 @@ function App() {
           <Stack.Screen
             name="Mape"
             component={Mape}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="conversation"
+            component={Conversation}
             options={{ headerShown: false }}
           />
           {/* <Stack.Screen

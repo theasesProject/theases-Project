@@ -1,11 +1,15 @@
 module.exports = ( DataTypes, connection) => {
   const RoomChat = connection.define("room", {
-    userId: {
+    user2:{
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    agencyId:{
-      type : DataTypes.INTEGER,
+    avatarUrl:{
+      type : DataTypes.STRING,
+      allowNull: false,
+    },
+    name:{
+      type : DataTypes.STRING,
       allowNull: false,
     }
   });

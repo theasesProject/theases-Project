@@ -63,11 +63,11 @@ db.Car.belongsTo(db.Service);
 db.User.hasMany(db.Report);
 db.Report.belongsTo(db.User);
 
-db.User.hasMany(db.RoomChat);
-db.RoomChat.belongsTo(db.User);
-
 db.User.hasMany(db.Message);
 db.Message.belongsTo(db.User);
+
+db.User.hasMany(db.RoomChat);
+db.RoomChat.belongsTo(db.User)
 
 db.RoomChat.hasMany(db.Message);
 db.Message.belongsTo(db.RoomChat);

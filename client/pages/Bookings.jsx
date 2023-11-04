@@ -5,46 +5,44 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  Touchable,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBoolMarks, removedBookMark } from "../store/carFetch.js";
+import { getallCarByAgency, deletedAgencyCar } from "../store/carFetch.js";
 import { selectUser } from "../store/userSlice";
-import greyHeart from "../assets/greyHeart.jpg";
+
 import car2 from "../assets/car2.png";
 import star from "../assets/star.jpg";
 import deleteImge from "../assets/delete.jpg";
-import { TouchableOpacity } from "react-native-gesture-handler";
-function Favorites() {
+
+function Bookings() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
-  const bookMarks = useSelector((state) => state.car.bookMarks);
-
+  const allCarsByAgency = useSelector((state) => state.car.agencyCar);
   useEffect(() => {
-    dispatch(getAllBoolMarks(activeUser.id));
-  }, []);
-console.log('heeere',bookMarks)
-  const handleDeled = (id) => {
-    removedBookMark(id);
+    dispatch(getallCarByAgency(activeUser.id));
+  }, [dispatch]);
+
+  const handleDeled = (car) => {
+    deletedAgencyCar(activeUser.id, car);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.favouriteText}>Favourite</Text>
-
-        {bookMarks.length > 0 ? (
-          bookMarks.map((bookmark,i) => (
+        <Text style={styles.favouriteText}>All Cars</Text>
+        {activeUser.type === "agency" ? (
+          allCarsByAgency.map((OneCar, i) => (
             <View key={i} style={styles.carCard}>
               <View style={styles.items}>
                 <View style={styles.deleted2}>
-                  <TouchableOpacity onPress={handleDeled(bookmark.car.id)}>
+                  <TouchableOpacity onPress={handleDeled(OneCar.car.id)}>
                     <Image style={styles.delete} source={deleteImge} />
                   </TouchableOpacity>
                 </View>
-                <Image style={styles.car} source={bookmark.carImage.media} />
+                <Image style={styles.car} source={OneCar.carImage.media} />
                 <View style={styles.detail}>
-                  <Text style={styles.title}>{bookmark.car.model}</Text>
+                  <Text style={styles.title}>{OneCar.car.model}</Text>
                   <View style={styles.stars}>
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
@@ -52,24 +50,36 @@ console.log('heeere',bookMarks)
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
                   </View>
-                  <Text style={styles.agencyName}>{bookmark.agency.name}</Text>
+                  <Text style={styles.agencyName}>{OneCar.car.status}</Text>
                   <Text style={styles.price}>
-                    ${bookmark.car.price}/{bookmark.car.period}
+                    ${OneCar.car.price}/{OneCar.car.period}
                   </Text>
                 </View>
               </View>
             </View>
           ))
         ) : (
-          <View style={styles.message}>
-            <Image source={greyHeart} style={styles.heart} />
-            <Text style={styles.emptyText1}>Empty Favourite list</Text>
-            <Text style={styles.emptyText}>
-              it feel like nothing to Collect in your favourite{" "}
-            </Text>
-            <Text style={styles.emptyText}>
-              list let's add your favourite car{" "}
-            </Text>
+          <View style={styles.carCard}>
+            <View style={styles.items}>
+              <View style={styles.deleted2}>
+                <TouchableOpacity>
+                  <Image style={styles.delete} source={deleteImge} />
+                </TouchableOpacity>
+              </View>
+              <Image style={styles.car} source={car2} />
+              <View style={styles.detail}>
+                <Text style={styles.title}>clio</Text>
+                <View style={styles.stars}>
+                  <Image style={styles.star} source={star} />
+                  <Image style={styles.star} source={star} />
+                  <Image style={styles.star} source={star} />
+                  <Image style={styles.star} source={star} />
+                  <Image style={styles.star} source={star} />
+                </View>
+                <Text style={styles.agencyName}>rent</Text>
+                <Text style={styles.price}>$220 / daily</Text>
+              </View>
+            </View>
           </View>
         )}
       </ScrollView>
@@ -186,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Favorites;
+export default Bookings;

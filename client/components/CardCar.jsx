@@ -10,7 +10,7 @@ import { CreateBookMark, removedBookMark } from "../store/carFetch.js";
 import { selectUser } from "../store/userSlice";
 function CardCar({ oneCar, openPanel }) {
   const [starSelected, setStarSelected] = useState(false);
-
+  // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
   const [heartSelected, setHeartSelected] = useState(false);
   const activeUser = useSelector(selectUser);
   const starImage = starSelected ? star : emptyStar;
@@ -24,7 +24,8 @@ function CardCar({ oneCar, openPanel }) {
     setHeartSelected(!heartSelected);
 
     if (!heartSelected) {
-      dispatch(CreateBookMark(oneCar.id, activeUser.id));
+      console.log(oneCar.id + "selim");
+      dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
     } else if (heartSelected) {
       dispatch(removedBookMark(oneCar.id));
     }

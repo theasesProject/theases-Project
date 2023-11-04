@@ -17,8 +17,9 @@ import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
 //! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
-import ChangeRole from "./pages/ChangeRole.jsx";
+import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";
+import MapComponent from "./pages/MapForAdminLoc.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
@@ -38,6 +39,12 @@ function App() {
             component={Favorites}
             options={{ headerShown: false }}
           />
+            <Stack.Screen
+            name="mapforAgency"
+            component={MapComponent}
+            options={{ headerShown: false }}
+          />
+
 
           <Stack.Screen
             name="changeRole"

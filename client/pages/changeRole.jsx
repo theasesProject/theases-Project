@@ -17,12 +17,13 @@ import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
-
+import { UseSelector } from "react-redux";
 function ChangeRole({ navigation }) {
   // const [isChecked, setIsChecked] = useState(false);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [color, setColor] = useState("#6C77BF");
   const [error, setError] = useState("");
+const agencyLocation=useSelector((state)=>state.location.selectedAgencyLocation)
   const [form, setForm] = useState({
     //* temp
     verificationStatus: true, //* when the admin board is functional this line MUST be removed, it will be added with its default value (false) so the admin can check the request and does he has to do
@@ -148,12 +149,15 @@ function ChangeRole({ navigation }) {
         placeholder="Enter Your Agency Name"
         style={styles.input}
       />
-      <TextInput
+      {!agencyLocation?<TouchableOpacity  onPress={() => navigation.navigate("mapforAgency")}>
+        <Text style={styles.input}>set your Agency Location </Text>
+      </TouchableOpacity>:<Text>your location is:{agencyLocation}</Text>}
+      {/* <TextInput
         value={form.address}
         onChangeText={handleChangeAddress}
         placeholder="Enter Your Address"
         style={styles.input}
-      />
+      /> */}
       <TextInput
         value={form.companyNumber}
         onChangeText={handleChangeCompanyPhone}

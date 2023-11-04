@@ -16,6 +16,7 @@ import { logUserOut, selectUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import change from "../assets/change.png";
+import NavBar from "../components/NavBar";
 
 function Userprofile({ navigation }) {
   const activeUser = useSelector(selectUser);
@@ -85,6 +86,7 @@ function Userprofile({ navigation }) {
           </LinearGradient>
         </TouchableOpacity>
       </View>
+      <NavBar style={styles.navBar}/>
     </View>
   );
 }
@@ -146,12 +148,19 @@ const styles = StyleSheet.create({
   },
   logoutBtnContainer: {
     position: "absolute",
-    bottom: 10,
+    bottom: 70, // adjust this value as needed
     left: 20,
     width: "100%",
     borderTopColor: "#e5e6e8",
     borderTopWidth: 1,
     paddingTop: 20,
+  },
+  navBar: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // ... rest of your styles
   },
   logoutBtn: {
     flexDirection: "row",

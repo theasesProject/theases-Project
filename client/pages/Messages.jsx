@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,10 +12,12 @@ import {useDispatch, useSelector} from "react-redux"
 
 function Messages() {
   const dispatch = useDispatch()
+  const [rooms,setRooms] = useState([])
   const user = useSelector(state => state.user)
+  console.log(user.data);
 
   useEffect(()=>{
-
+    
   },[])
   return (
     <View style={styles.messages}>
@@ -27,7 +29,7 @@ function Messages() {
         <TextInput placeholder="Search" style={styles.input} />
       </View>
       <View>
-        
+        <Image source={user.data.avatar}></Image>
       </View>
       <View></View>
       <View></View>

@@ -3,9 +3,10 @@ const Agency = db.Agency;
 const User = db.User;
 module.exports = {
   CreateAgency: async (req, res, next) => {
-    // this line will be replaced somewhere else, its type should be an agency when the admin accepts his requeest
     await User.update({ type: "agency" }, { where: { id: req.body.UserId } });
+
     const agency = await db.Agency.create(req.body);
+
     res.status(201).send({
       status: "success",
       message: "agency added successfully!!!",

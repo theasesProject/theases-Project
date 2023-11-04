@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { LogBox } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CarDetails from "./components/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
@@ -22,27 +21,20 @@ import ChangeRole from "./pages/ChangeRole.jsx";
 import Mape from "./pages/Mape.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
-LogBox.ignoreLogs(["ViewPropTypes will be removed"]);
-LogBox.ignoreLogs(["Warning: ..."]);
-// import { AppRegistry } from 'react-native';
-// // import App from './App'; // Replace 'App' with the name of your main application component
-// import { theases as theases } from './app.json';
-
-// AppRegistry.registerComponent(theases, () => App);
 
 const Stack = createStackNavigator();
 function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="favorites">
+        <Stack.Navigator initialRouteName="Favorites">
           <Stack.Screen
             name="Home"
             component={Home}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="favorites"
+            name="Favorites"
             component={Favorites}
             options={{ headerShown: false }}
           />

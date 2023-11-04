@@ -75,8 +75,8 @@ function AdvancedSearch() {
   };
 
   const prices = () => {
-    let minPrice = allCars[0].price;
-    let maxPrice = allCars[0].price;
+    let minPrice = 5;
+    let maxPrice = 20;
     for (const car of allCars) {
       const price = car.price;
       if (price < minPrice) {

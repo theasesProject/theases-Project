@@ -22,21 +22,19 @@ import Mape from "./pages/Mape.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
-
-
 const Stack = createStackNavigator();
 function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="AddAgencyCar">
+        <Stack.Navigator initialRouteName="Favorites">
           <Stack.Screen
             name="Home"
             component={Home}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="favorites"
+            name="Favorites"
             component={Favorites}
             options={{ headerShown: false }}
           />

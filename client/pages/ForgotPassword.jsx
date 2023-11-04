@@ -11,7 +11,7 @@ import Logo from "../assets/tempLogo.png";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { DOMAIN_NAME } from "../env";
+// import { DOMAIN_NAME } from "../env";
 
 const ForgotPassword = ({ navigation }) => {
   const [identifier, setIdentifier] = useState("");
@@ -29,7 +29,7 @@ const ForgotPassword = ({ navigation }) => {
         return setError("please provide an email or a phone number");
       }
       const response = await axios.get(
-        `http://${DOMAIN_NAME}:5000/api/users/${endPoint}/${identifier}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/${endPoint}/${identifier}`
       );
       if (response.data === "user exists") {
         navigation.navigate("confirmIdentity");

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { DOMAIN_NAME } from "../env.js";
+// import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env.js";
 
 const initialState = {
   allCars: [],
@@ -16,7 +16,7 @@ export const getOnecarById = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(
-        `http://${DOMAIN_NAME}:5000/api/car/carById/${id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/carById/${id}`
       );
 
       return response.data;
@@ -28,7 +28,7 @@ export const getOnecarById = createAsyncThunk(
 export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
   try {
     const response = await axios.get(
-      `http://${DOMAIN_NAME}:5000/api/car/allCars`
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCars`
     );
     return response.data;
   } catch (error) {
@@ -41,7 +41,7 @@ export const fetchFilteredCars = createAsyncThunk(
   async (filterCriteria, { getState, dispatch }) => {
     try {
       const response = await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/car/filtredCar`,
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/filtredCar`,
         filterCriteria
       );
 
@@ -55,12 +55,12 @@ export const createCar = createAsyncThunk("car/createCar", async (params) => {
   if (!params) return;
   try {
     const response = await axios.post(
-      `http://${DOMAIN_NAME}:5000/api/car/newCar`,
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/newCar`,
       params.body
     );
     const requestId = response.data.id;
     await axios.post(
-      `http://${DOMAIN_NAME}:5000/api/media/add/car/${requestId}`,
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media
     );
     console.log(body, "body");
@@ -75,7 +75,7 @@ export const createImgeForCar = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/car/imageCar`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/imageCar`
       );
 
       return response.data;
@@ -87,10 +87,10 @@ export const createImgeForCar = createAsyncThunk(
 
 export const getAllBoolMarks = createAsyncThunk(
   "car/getAllBoolMarks",
-  async (id) => {
+  async (id) => {console.log('bookmarks',id);
     try {
       const response = await axios.get(
-        `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/getAll/${id}`
       );
 
       return response.data;
@@ -101,16 +101,17 @@ export const getAllBoolMarks = createAsyncThunk(
 );
 export const CreateBookMark = createAsyncThunk(
   "car/CreateBookMark",
-  async (CarId, UserId) => {
+  async (body) => {
+   
     try {
+ console.log(body,'body before');
+      
       const response = await axios.post(
-        (`http://${DOMAIN_NAME}:5000/api/bookmarks/add`,
-        {
-          CarId: CarId,
-          UserId: UserId,
-        })
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/add`,
+       body
       );
-
+    
+ console.log(body,'body');
       return response.data;
     } catch (error) {
       console.log(error);
@@ -123,7 +124,7 @@ export const removedBookMark = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.delete(
-        `http://${DOMAIN_NAME}:5000/api/bookmarks/delete/${id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/delete/${id}`
       );
 
       return response.data;

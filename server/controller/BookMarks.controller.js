@@ -33,7 +33,7 @@ module.exports.getAll = async function (req, res) {
     }
     res.send(allCars);
   } catch (err) {
-    throw Error;
+    throw err;
   }
 };
 module.exports.remove = async function (req, res) {

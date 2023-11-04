@@ -6,43 +6,43 @@ import {
   Image,
   Pressable,
   AppState,
+  Dimensions
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+const {height,width}= Dimensions.get("screen")
 import localisation from "../assets/localisation1.png";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector,useDispatch } from "react-redux";
-import { selectUser, logStatus,fetchUser } from "../store/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser, logStatus, fetchUser } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
 
-function ProfileLandingPage() {
+function ProfileLandingPage({style}) {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
   const dispatch = useDispatch();
-  const [userAddress, setUserAddress] = useState("location ");
-
+  const [userAddress, setUserAddress] = useState("</> click here");
+console.log("jiji from page");
   const getUserLocationAndNearestAddress = async () => {
     let status = await Location.requestForegroundPermissionsAsync();
     // if (status === 'granted') {
 
-      let location = await Location.getCurrentPositionAsync({});
-      if (location) {
-        const { coords } = location;
-        const nearestAddressResponse = await Location.reverseGeocodeAsync({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        });
-        if (nearestAddressResponse.length > 0) {
-          const nearestAddress = nearestAddressResponse[0];
-          const place=`${nearestAddress.region}, ${nearestAddress.country}`
-          const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`; 
-          setUserAddress(fullNearestAddress);
-        }
+    let location = await Location.getCurrentPositionAsync({});
+    if (location) {
+      const { coords } = location;
+      const nearestAddressResponse = await Location.reverseGeocodeAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+      if (nearestAddressResponse.length > 0) {
+        const nearestAddress = nearestAddressResponse[0];
+        const place = ` ${nearestAddress.city}`;
+        const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
+        setUserAddress(place);
       }
     }
-  // };
+  };
   console.log("active user: ", activeUser);
   const [tokenValue, setTokenValue] = useState(false);
   const retrieveToken = async () => {
@@ -67,16 +67,22 @@ function ProfileLandingPage() {
     // };
   }, []);
   return (
-    <View style={styles.navBar}>
+    <View style={[styles.navBar,style]}>
       <View style={styles.allAdress}>
-        <Pressable onPress={() => getUserLocationAndNearestAddress()}>
-          <Image style={styles.locationImage} source={localisation} />
+        <Pressable>
+          <Image style={styles.locationImage} source={localisation}  onPress={() => getUserLocationAndNearestAddress()} />
         </Pressable>
         <View style={styles.adress}>
           <Text style={styles.yourLocation}>Your Location </Text>
-
-          <Text style={styles.UserAdress}>
-            {userAddress},{activeUser?.userName}{" "}
+          <Text
+            style={styles.UserAdress}
+            onPress={() => {
+              if (userAddress === "</> click here") {
+                getUserLocationAndNearestAddress();
+              }
+            }}
+          >
+            {userAddress}
           </Text>
         </View>
       </View>
@@ -116,21 +122,23 @@ function ProfileLandingPage() {
 }
 const styles = StyleSheet.create({
   navBar: {
-    width: "100%",
-    height: 75,
+    width: width,
+    height: 60,
+    // paddingHorizontal:,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
   authBtnsContainer: {
-    height: "100%",
+    paddingRight:20,
+    height: height*.1,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
-    padding: 10,
+    // padding: 10,
   },
   authBtn: {
     borderRadius: 10,
@@ -139,22 +147,24 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   locationImage: {
+    // marginLeft: 30,
     width: 45,
     height: 40,
     // alignItems: "center",
   },
   allAdress: {
+    paddingLeft:10,
     flex: 1,
     flexDirection: "row",
-
     width: 200,
-    justifyContent: "flex-start",
+    // justifyContent: "flex-start",
     gap: 1,
   },
   userAvatar: {
-    padding: 10,
+    padding: 23,
   },
   UserImage: {
+    // marginRight: 20,
     width: 50,
     height: 50,
     borderWidth: 2,

@@ -18,6 +18,7 @@ import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
+// import removeBackground from "../HelperFunctions/removeBackGround";
 function AddAgencyCar() {
   const dispatch = useDispatch();
   const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
@@ -149,6 +150,9 @@ function AddAgencyCar() {
       const updatedSelectedDocuments = await Promise.all(
         selectedAssets.map(async (file) => {
           try {
+            // const removedBgImage = removeBackground(file.uri);
+            // console.log(removedBgImage, "bbb");
+            // return removedBgImage;
             const cloudinaryResponse = await cloudinaryUpload(file.uri);
             return cloudinaryResponse;
           } catch (err) {

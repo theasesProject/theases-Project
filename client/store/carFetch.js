@@ -8,6 +8,8 @@ const initialState = {
   loading: false,
   error: null,
   OneCar: {},
+  bookMarks: [],
+  succes: null,
 };
 export const getOnecarById = createAsyncThunk(
   "car/getOnecarById",
@@ -30,7 +32,7 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     );
     return response.data;
   } catch (error) {
-    console.log(JSON.stringify(error), "aaa"); // Rethrow the error to trigger the rejected action
+    console.log(JSON.stringify(error));
   }
 });
 
@@ -82,6 +84,55 @@ export const createImgeForCar = createAsyncThunk(
     }
   }
 );
+
+export const getAllBoolMarks = createAsyncThunk(
+  "car/getAllBoolMarks",
+  async (id) => {
+    try {
+      const response = await axios.get(
+        `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const CreateBookMark = createAsyncThunk(
+  "car/CreateBookMark",
+  async (CarId, UserId) => {
+    try {
+      const response = await axios.post(
+        (`http://${DOMAIN_NAME}:5000/api/bookmarks/add`,
+        {
+          CarId: CarId,
+          UserId: UserId,
+        })
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const removedBookMark = createAsyncThunk(
+  "car/removedBookMark",
+  async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://${DOMAIN_NAME}:5000/api/bookmarks/delete/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const carSlice = createSlice({
   name: "car",
   initialState,
@@ -150,6 +201,42 @@ const carSlice = createSlice({
       // Set filtered cars in the state
     });
     builder.addCase(createImgeForCar.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(getAllBoolMarks.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getAllBoolMarks.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bookMarks = action.payload;
+    });
+    builder.addCase(getAllBoolMarks.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(CreateBookMark.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(CreateBookMark.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = action.payload;
+    });
+    builder.addCase(CreateBookMark.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(removedBookMark.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(removedBookMark.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = action.payload;
+    });
+    builder.addCase(removedBookMark.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

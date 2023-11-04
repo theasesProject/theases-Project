@@ -32,7 +32,6 @@ function Home({ navigation }) {
   const [filteredCars, setFilteredCars] = useState(allCars);
   console.log("allCars", allCars);
 
-  console.log("car", allCars);
   const updateFilteredCars = (filteredCarData) => {
     setFilteredCars(filteredCarData);
   };
@@ -62,9 +61,8 @@ function Home({ navigation }) {
             <CardCar key={i} oneCar={element} />
           </View>
         ))}
-        
       </ScrollView>
-      <NavBar/>
+      <NavBar />
     </View>
   );
 }

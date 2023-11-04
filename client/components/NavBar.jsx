@@ -34,7 +34,7 @@ import { useNavigation } from "@react-navigation/native";
         </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.quarter} onPress={() => navigation.navigate("favorites")}>
+        <TouchableOpacity style={styles.quarter} onPress={() => navigation.navigate("Favorites")}>
         <View style={styles.hm}>
         <Fa></Fa>
         <Text>Favorites</Text>

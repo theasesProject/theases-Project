@@ -22,8 +22,8 @@ function Favorites() {
 
   useEffect(() => {
     dispatch(getAllBoolMarks(activeUser.id));
-  }, [dispatch]);
-
+  }, []);
+console.log('heeere',bookMarks)
   const handleDeled = (id) => {
     removedBookMark(id);
   };
@@ -34,15 +34,15 @@ function Favorites() {
         <Text style={styles.favouriteText}>Favourite</Text>
 
         {bookMarks.length > 0 ? (
-          bookMarks.map((bookmark) => (
-            <View style={styles.carCard}>
+          bookMarks.map((bookmark,i) => (
+            <View key={i} style={styles.carCard}>
               <View style={styles.items}>
                 <View style={styles.deleted2}>
                   <TouchableOpacity onPress={handleDeled(bookmark.car.id)}>
                     <Image style={styles.delete} source={deleteImge} />
                   </TouchableOpacity>
                 </View>
-                <Image style={styles.car} source={bookMarks.carImage.media} />
+                <Image style={styles.car} source={bookmark.carImage.media} />
                 <View style={styles.detail}>
                   <Text style={styles.title}>{bookmark.car.model}</Text>
                   <View style={styles.stars}>

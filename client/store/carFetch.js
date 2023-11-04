@@ -87,10 +87,10 @@ export const createImgeForCar = createAsyncThunk(
 
 export const getAllBoolMarks = createAsyncThunk(
   "car/getAllBoolMarks",
-  async (id) => {
+  async (id) => {console.log('bookmarks',id);
     try {
       const response = await axios.get(
-        `http://${DOMAIN_NAME}:5000/api/bookmarks/getAll/${id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/getAll/${id}`
       );
 
       return response.data;
@@ -101,16 +101,17 @@ export const getAllBoolMarks = createAsyncThunk(
 );
 export const CreateBookMark = createAsyncThunk(
   "car/CreateBookMark",
-  async (CarId, UserId) => {
+  async (body) => {
+   
     try {
+ console.log(body,'body before');
+      
       const response = await axios.post(
-        (`http://${DOMAIN_NAME}:5000/api/bookmarks/add`,
-        {
-          CarId: CarId,
-          UserId: UserId,
-        })
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/add`,
+       body
       );
-
+    
+ console.log(body,'body');
       return response.data;
     } catch (error) {
       console.log(error);
@@ -123,7 +124,7 @@ export const removedBookMark = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.delete(
-        `http://${DOMAIN_NAME}:5000/api/bookmarks/delete/${id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/delete/${id}`
       );
 
       return response.data;

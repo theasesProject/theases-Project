@@ -4,7 +4,7 @@ import car from "../assets/car2.png";
 import emptyStar from "../assets/eto.png";
 import star from "../assets/star1.png";
 import heartBleu from "../assets/filledPurpleHeart.png";
-import emptyHeart from "../assets/emptyHeart.png";
+import EmptyHeart from "../assets/Svg/carHeart.svg";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
@@ -13,7 +13,7 @@ function CardCar({ oneCar,openPanel }) {
   const {DOMAIN_NAME} = require("../env.js")
   const [heartSelected, setHeartSelected] = useState(false);
   const starImage = starSelected ? star : emptyStar;
-  const heartImage = heartSelected ? heartBleu : emptyHeart;
+  // const heartImage = heartSelected ? heartBleu : EmptyHeart;
   const dispatch = useDispatch();
   const user = useSelector( (state) =>state.user.data)
   const handleStarPress = () => {
@@ -34,9 +34,9 @@ function CardCar({ oneCar,openPanel }) {
     <View style={styles.card} onPress={openPanel} >
       <View style={styles.Image}>
         <Image style={styles.carImage} source={car} />
-        <TouchableOpacity onPress={handleHeartPress}>
-          <Image style={styles.heart} source={heartImage} />
-        </TouchableOpacity>
+        <View onPress={handleHeartPress}>
+          <EmptyHeart/>
+        </View>
       </View>
       <View style={styles.carDetails}>
         <View style={styles.NameAvaib}>
@@ -61,7 +61,7 @@ function CardCar({ oneCar,openPanel }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "rgb(237, 238, 247)",
+    backgroundColor: "white",
     width: "100%",
     height: 250,
     borderRadius: 10,

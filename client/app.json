@@ -11,7 +11,7 @@
     
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/background.png",
+      "image": "./assets/background.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

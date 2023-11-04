@@ -21,7 +21,10 @@ import { useState } from "react";
 import axios from "axios";
 const { width, height } = Dimensions.get("window");
 import { DOMAIN_NAME } from "../env";
-function BrandBar({ onPress, onFilterByBrand }) {
+import { useDispatch } from "react-redux";
+import { filterCars } from "../store/carFetch";
+function BrandBar({ onPress, onFilterByBrand,resetData }) {
+  const dispatch=useDispatch()
   const [carByBrand, setCarByBrand] = useState([]);
   const [error, setError] = useState(false);
   const handleFilterByBrand = (brandName) => {
@@ -40,7 +43,7 @@ function BrandBar({ onPress, onFilterByBrand }) {
       <View style={styles.BrandBar}>
         <View style={styles.barText}>
           <Text style={styles.topBrand}>Top Brands</Text>
-          <Text style={styles.ViewAll}>View All</Text>
+          <Text style={styles.ViewAll} onPress={()=>resetData()}>View All</Text>
         </View>
       </View>
       <ScrollView horizontal={true} style={styles.allBrandImage}>
@@ -178,10 +181,8 @@ const styles = StyleSheet.create({
     gap: 100,
   },
   brandDetails: {
-    backgroundColor: "rgb(240, 238, 255)",
-
+    backgroundColor: "white",
     display: "flex",
-
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",

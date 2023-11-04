@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,7 +11,7 @@ import {
   Pressable,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import Svg, { Path } from 'react-native-svg';
 import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
@@ -19,70 +19,56 @@ import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
 const { height, width } = Dimensions.get("screen");
 
-function NavBar({ style }) {
+function NavBar({style}) {
   const navigation = useNavigation();
-  const [activeIcon, setActiveIcon] = useState(null);
+  const route = useRoute();
 
-  const handlePress = (iconName) => {
-    setActiveIcon(iconName);
-  };
-
+  const isActive = (routeName) => route.name === routeName ? '#6C77BF' : 'grey';
   return (
-    <View  style={[styles.navBar, style]}>
-      <TouchableOpacity
+    <View style={[styles.navBar,style]}>
+      <Pressable
         style={styles.quarter}
-        onPress={() => {
-          navigation.navigate("Home");
-          handlePress('home');
-        }}
+        onPress={() => navigation.navigate("Home")}
       >
         <View style={styles.hm}>
-          <Hm fill={activeIcon === 'home' ? '#6C77BF' : 'grey'} />
-          <Text style={{color: activeIcon === 'home' ? '#6C77BF' : 'grey'}}>Home</Text>
+          <Hm fill={isActive('Home')} />
+          <Text style={{color: isActive('Home')}}>Home</Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
 
-      <TouchableOpacity
+      <Pressable
         style={styles.quarter}
-        onPress={() => {
-          navigation.navigate("Mape");
-          handlePress('mape');
-        }}
+        onPress={() => navigation.navigate("Mape")}
       >
         <View style={styles.hm}>
-          <Ms fill={activeIcon === 'mape' ? '#6C77BF' : 'grey'} />
-          <Text style={{color: activeIcon === 'mape' ? '#6C77BF' : 'grey'}}>Messeges</Text>
+          <Ms fill={isActive('Mape')} />
+          <Text style={{color: isActive('Mape')}}>Messeges</Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
 
-      <TouchableOpacity
+      <Pressable
         style={styles.quarter}
-        onPress={() => {
-          navigation.navigate("favorites");
-          handlePress('favorites');
-        }}
+        onPress={() => navigation.navigate("favorites")}
       >
         <View style={styles.hm}>
-          <Fa fill={activeIcon === 'favorites' ? '#6C77BF' : 'grey'} />
-          <Text style={{color: activeIcon === 'favorites' ? '#6C77BF' : 'grey'}}>Favorites</Text>
+          <Fa fill={isActive('favorites')} />
+          <Text style={{color: isActive('favorites')}}>Favorites</Text>
         </View>
-      </TouchableOpacity>
-      <TouchableOpacity
+      </Pressable>
+      <Pressable
         style={styles.quarter}
-        onPress={() => {
-          navigation.navigate("Userprofile");
-          handlePress('userprofile');
-        }}
+        onPress={() => navigation.navigate("Userprofile")}
       >
         <View style={styles.hm}>
-          <Pr fill={activeIcon === 'userprofile' ? '#6C77BF' : 'grey'} />
-          <Text style={{color: activeIcon === 'userprofile' ? '#6C77BF' : 'grey'}}>Profile</Text>
+          <Pr fill={isActive('Userprofile')} />
+          <Text style={{color: isActive('Userprofile')}}>Profile</Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }
 
+// ... rest of your code
 // ... rest of your code
 
 const styles = StyleSheet.create({

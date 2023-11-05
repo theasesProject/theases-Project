@@ -20,6 +20,7 @@ import SignUp from "./pages/signUp.jsx";
 import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";
 import MapComponent from "./pages/MapForAdminLoc.jsx";
+import Bookings from "./pages/Bookings.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
@@ -28,7 +29,9 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
+
         <Stack.Navigator initialRouteName="home">
+
           <Stack.Screen
             name="Home"
             component={Home}
@@ -51,6 +54,11 @@ function App() {
             options={{ headerShown: false }}
           />
 
+          <Stack.Screen
+            name="Bookings"
+            component={Bookings}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="changeRole"
             component={ChangeRole}

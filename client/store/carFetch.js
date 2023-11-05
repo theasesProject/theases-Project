@@ -8,7 +8,11 @@ const initialState = {
   loading: false,
   error: null,
   OneCar: {},
+
+  agencyCar: [],
+
   fixedData:[],
+
   bookMarks: [],
   succes: null,
 };
@@ -18,6 +22,38 @@ export const getOnecarById = createAsyncThunk(
     try {
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/carById/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getallCarByAgency = createAsyncThunk(
+  "car/getallCarByAgency",
+  async (id) => {
+    try {
+      const response = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCarByAgency`,
+        { AgencyId: id }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const deletedAgencyCar = createAsyncThunk(
+  "car/deletedAgencyCar",
+  async (Agency, car) => {
+    try {
+      const response = await axios.delete(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar`,
+        { AgencyId: Agency, id: car }
       );
 
       return response.data;
@@ -88,7 +124,8 @@ export const createImgeForCar = createAsyncThunk(
 
 export const getAllBoolMarks = createAsyncThunk(
   "car/getAllBoolMarks",
-  async (id) => {console.log('bookmarks',id);
+  async (id) => {
+    console.log("bookmarks", id);
     try {
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/getAll/${id}`
@@ -103,16 +140,15 @@ export const getAllBoolMarks = createAsyncThunk(
 export const CreateBookMark = createAsyncThunk(
   "car/CreateBookMark",
   async (body) => {
-   
     try {
- console.log(body,'body before');
-      
+      console.log(body, "body before");
+
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/add`,
-       body
+        body
       );
-    
- console.log(body,'body');
+
+      console.log(body, "body");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -243,6 +279,30 @@ const carSlice = createSlice({
       state.succes = action.payload;
     });
     builder.addCase(removedBookMark.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(getallCarByAgency.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getallCarByAgency.fulfilled, (state, action) => {
+      state.loading = false;
+      state.agencyCar = action.payload;
+    });
+    builder.addCase(getallCarByAgency.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(deletedAgencyCar.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deletedAgencyCar.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = action.payload;
+    });
+    builder.addCase(deletedAgencyCar.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

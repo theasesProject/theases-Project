@@ -24,8 +24,8 @@ function CardCar({ oneCar, openPanel }) {
     setHeartSelected(!heartSelected);
 
     if (!heartSelected) {
-    console.log(oneCar.id + "selim")
-      dispatch(CreateBookMark({CarId:oneCar.id, UserId:activeUser.id}));
+      console.log(oneCar.id + "selim");
+      dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
     } else if (heartSelected) {
       dispatch(removedBookMark(oneCar.id));
     }

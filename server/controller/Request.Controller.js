@@ -27,7 +27,7 @@ module.exports = {
     }
   },
   // this is the controller that'll fetch all pending requests for the admin, each one will have all its images included
-  getAllUnvalidatedRequests: async (req, res) => {
+  getAllUnverifiedRequests: async (req, res) => {
     try {
       const response = Request.findAll({ where: { verified: false } });
       res.status(200).send(response);

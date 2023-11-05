@@ -1,5 +1,5 @@
 const { db } = require("../models/index");
-const Media = db.CarMedia;
+const Media = db.Media;
 
 module.exports = {
   addCarMedia: async (req, res) => {

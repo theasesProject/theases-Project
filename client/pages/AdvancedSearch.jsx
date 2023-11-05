@@ -1,17 +1,17 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import Slider from "@react-native-community/slider";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { getAllCars, fetchFilteredCars } from "../store/carFetch";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import back from "../assets/back.png";
+import FilterSlider from "../components/FilterSlider.jsx";
 function AdvancedSearch() {
   const navigation = useNavigation();
   const allCars = useSelector((state) => state.car.allCars);
 
-  const [sliderValue, setSliderValue] = useState(0);
-  const [sliderValue2, setSliderValue2] = useState(0);
+  const [sliderMinValue, setSliderMinValue] = useState(0);
+  const [sliderMaxValue, setSliderMaxValue] = useState(0);
   const [priceSearched, setPriceSearched] = useState(0);
   const [typeVehicule, setTypeVehicule] = useState("");
   const [chara, setChar] = useState("");
@@ -24,12 +24,10 @@ function AdvancedSearch() {
   const [isPressed6, setIsPressed6] = useState(false);
   const dispatch = useDispatch();
 
-  dispatch(getAllCars());
-
   dispatch(fetchFilteredCars(filterCriteria));
 
   const filterCriteria = {
-    price: [sliderValue, priceSearched],
+    price: [sliderMinValue, priceSearched],
     typevehicle: typeVehicule,
     characteristics: chara,
   };
@@ -80,14 +78,24 @@ function AdvancedSearch() {
     for (const car of allCars) {
       const price = car.price;
       if (price < minPrice) {
-        setSliderValue(price);
+        setSliderMinValue(price);
       }
       if (price > maxPrice) {
-        setSliderValue2(price);
+        setSliderMaxValue(price);
       }
     }
   };
-  prices();
+  useEffect(() => {
+    prices();
+  }, []);
+
+  const [rangeLow, setRangeLow] = useState(10);
+  const [rangeHigh, setRangeHigh] = useState(50);
+
+  const onValueChanged = (low, high) => {
+    setRangeLow(low);
+    setRangeHigh(high);
+  };
   return (
     <View style={styles.homePage}>
       <TouchableOpacity
@@ -100,22 +108,28 @@ function AdvancedSearch() {
       <View style={styles.allTitles}>
         <Text style={styles.title}>All Cars</Text>
       </View>
-
-      <Slider
-        style={{ width: 400, height: 50 }}
-        minimumValue={sliderValue}
-        maximumValue={sliderValue2}
-        onValueChange={handleSliderChange}
-        minimumTrackTintColor="blue"
-        maximumTrackTintColor="blue"
-        thumbTintColor="blue"
-        trackWidth="100%"
-        thumbWidth="200%"
-        step={10}
-      />
+      <FilterSlider />
+      {/* <RangeSlider
+        // values={values}
+        sliderLength={200}
+        onValuesChange={handleSliderChange}
+        min={sliderMinValue}
+        max={sliderMaxValue}
+        step={1}
+        // style={{ width: 400, height: 50 }}
+        // minimumValue={sliderMinValue}
+        // maximumValue={sliderMaxValue}
+        // onValueChange={handleSliderChange}
+        // minimumTrackTintColor="blue"
+        // maximumTrackTintColor="blue"
+        // thumbTintColor="blue"
+        // trackWidth="100%"
+        // thumbWidth="200%"
+        // step={10}
+      /> */}
       <TouchableOpacity
         style={styles.buttonStart}
-        onPress={() => handleButtonPress(sliderValue)}
+        onPress={() => handleButtonPress(sliderMinValue)}
       >
         <Text>{priceSearched}$</Text>
       </TouchableOpacity>

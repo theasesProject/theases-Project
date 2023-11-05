@@ -5,7 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  Dimensions,
 } from "react-native";
+const { height, width } = Dimensions.get("screen");
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import bkg from "../assets/bkg.png";
@@ -21,8 +23,7 @@ import change from "../assets/change.png";
 
 import NavBar from "../components/NavBar";
 
-
-function Userprofile({navigation}) {
+function Userprofile({ navigation }) {
   // const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ function Userprofile({navigation}) {
     dispatch(logUserOut());
     navigation.navigate("Home");
   };
-
+  console.log("active User Profileeeeeeeeee", activeUser);
   return (
     <View style={styles.userProfilePage}>
       <View style={styles.topSection}>
@@ -76,7 +77,13 @@ function Userprofile({navigation}) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.profileOption}
-            onPress={() => navigation.navigate("changeRole")}
+            onPress={() => {
+              if (activeUser.type !== "client") {
+                navigation.navigate("AddAgencyCar")
+              } else {
+                navigation.navigate("changeRole");
+              }
+            }}
           >
             <Image source={change} style={styles.icon} />
             {activeUser.type === "client" ? (
@@ -99,7 +106,7 @@ function Userprofile({navigation}) {
           </LinearGradient>
         </TouchableOpacity>
       </View>
-      <NavBar style={styles.navBar}/>
+      <NavBar style={styles.navBar} />
     </View>
   );
 }
@@ -121,13 +128,14 @@ const styles = StyleSheet.create({
   userInfo: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 20,
+    paddingVertical: 40,
     paddingHorizontal: 10,
     gap: 10,
   },
   profilePic: {
-    width: 50,
-    height: 50,
+    // paddingTop:height*0.1,
+    width: width * 0.18,
+    height: height * 0.085,
     borderRadius: 50,
     borderWidth: 2,
     borderColor: "#6a78c1",

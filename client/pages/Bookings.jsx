@@ -5,49 +5,44 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  Touchable,
-  Dimensions
+  TouchableOpacity,
 } from "react-native";
-const {height,width}=Dimensions.get("window")
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBoolMarks, removedBookMark } from "../store/carFetch.js";
+import { getallCarByAgency, deletedAgencyCar } from "../store/carFetch.js";
 import { selectUser } from "../store/userSlice";
-import GreyHeart from "../assets/Svg/greyHeart";
+
 import car2 from "../assets/car2.png";
 import star from "../assets/star.jpg";
 import deleteImge from "../assets/delete.jpg";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import NavBar from "../components/NavBar.jsx";
-function Favorites() {
+
+function Bookings() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
-  const bookMarks = useSelector((state) => state.car.bookMarks);
-
+  const allCarsByAgency = useSelector((state) => state.car.agencyCar);
   useEffect(() => {
-    console.log("jijij",activeUser);
-    dispatch(getAllBoolMarks(activeUser.id));
-  }, []);
-console.log('heeere',bookMarks)
-  const handleDeled = (id) => {
-    removedBookMark(id);
+    dispatch(getallCarByAgency(activeUser.id));
+  }, [dispatch]);
+
+  const handleDeled = (car) => {
+    deletedAgencyCar(activeUser.id, car);
   };
 
   return (
-      <ScrollView >
     <View style={styles.container}>
-        {/* <Text style={styles.favouriteText}>Favourite</Text> */}
-        {bookMarks?.length > 0 ? (
-          bookMarks.map((bookmark,i) => (
+      <ScrollView>
+        <Text style={styles.favouriteText}>All Cars</Text>
+        {activeUser.type === "agency" ? (
+          allCarsByAgency.map((OneCar, i) => (
             <View key={i} style={styles.carCard}>
               <View style={styles.items}>
                 <View style={styles.deleted2}>
-                  <TouchableOpacity onPress={handleDeled(bookmark.car.id)}>
+                  <TouchableOpacity onPress={handleDeled(OneCar.car.id)}>
                     <Image style={styles.delete} source={deleteImge} />
                   </TouchableOpacity>
                 </View>
-                <Image style={styles.car} source={{uri:bookmark.car?.CarMedia}} />
+                <Image style={styles.car} source={OneCar.carImage.media} />
                 <View style={styles.detail}>
-                  <Text style={styles.title}>{bookmark.car.model}</Text>
+                  <Text style={styles.title}>{OneCar.car.model}</Text>
                   <View style={styles.stars}>
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
@@ -55,48 +50,49 @@ console.log('heeere',bookMarks)
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
                   </View>
-                  <Text style={styles.agencyName}>{bookmark.agency?.name}</Text>
+                  <Text style={styles.agencyName}>{OneCar.car.status}</Text>
                   <Text style={styles.price}>
-                    ${bookmark.car.price}/{bookmark.car?.period}
+                    ${OneCar.car.price}/{OneCar.car.period}
                   </Text>
                 </View>
               </View>
             </View>
           ))
         ) : (
-          <View style={styles.message}>
-            <GreyHeart/>
-            <View style={styles.messageContainer}>
-            <Text style={styles.emptyText1}>Empty Favourite list</Text>
-            <Text style={styles.emptyText}>
-              it feel like nothing to Collect in your favourite{" "}
-            </Text>
-            <Text style={styles.emptyText}>
-              list let's add your favourite car{" "}
-            </Text>
+          <View style={styles.carCard}>
+            <View style={styles.items}>
+              <View style={styles.deleted2}>
+                <TouchableOpacity>
+                  <Image style={styles.delete} source={deleteImge} />
+                </TouchableOpacity>
+              </View>
+              <Image style={styles.car} source={car2} />
+              <View style={styles.detail}>
+                <Text style={styles.title}>clio</Text>
+                <View style={styles.stars}>
+                  <Image style={styles.star} source={star} />
+                  <Image style={styles.star} source={star} />
+                  <Image style={styles.star} source={star} />
+                  <Image style={styles.star} source={star} />
+                  <Image style={styles.star} source={star} />
+                </View>
+                <Text style={styles.agencyName}>rent</Text>
+                <Text style={styles.price}>$220 / daily</Text>
+              </View>
             </View>
           </View>
         )}
-    <NavBar style={styles.NavBar}/>
-    </View>
       </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  NavBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingBottom:5
-    // ... rest of your styles
-  },
   container: {
     flex: 1,
-    height:height,
-    // marginHorizontal: 7,
-    // marginVertical: 7,
+    marginHorizontal: 7,
+    marginVertical: 7,
+    marginTop: "12%",
     flexDirection: "column",
     gap: 10,
     backgroundColor: "white",
@@ -106,9 +102,6 @@ const styles = StyleSheet.create({
   favoriteCar: {
     marginBottom: 10,
   },
-  messageContainer:{
-    paddingTop:15
-  },
   carImage: {
     width: 100,
     height: 100,
@@ -116,19 +109,19 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: "center",
     fontSize: 16,
-    color: "grey",
+    color: "rgb(219, 217, 224)",
   },
-  // heart: {
-  //   width: 60,
-  //   height: 55,
-  // },
+  heart: {
+    width: 60,
+    height: 55,
+  },
   message: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    // paddingTop: 180,
-    // gap: 20,
+    paddingTop: 180,
+    gap: 20,
   },
 
   emptyText1: {
@@ -136,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
 
-    color: "grey",
+    color: "rgb(219, 217, 224)",
   },
   favouriteText: {
     color: "black",
@@ -203,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Favorites;
+export default Bookings;

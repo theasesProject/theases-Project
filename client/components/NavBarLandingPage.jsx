@@ -65,6 +65,7 @@ console.log("jiji from page");
     // return () => {
     //   AppState.removeEventListener("change", retrieveToken);
     // };
+    getUserLocationAndNearestAddress();
   }, []);
   return (
     <View style={[styles.navBar,style]}>
@@ -101,20 +102,21 @@ console.log("jiji from page");
             />
           </Pressable>
         ) : (
-          <View style={styles.authBtnsContainer}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Login")}
-              style={styles.authBtn}
-            >
-              <Text>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("SignUp")}
-              style={styles.authBtn}
-            >
-              <Text>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
+          null
+          // <View style={styles.authBtnsContainer}>
+          //   <TouchableOpacity
+          //     onPress={() => navigation.navigate("Login")}
+          //     style={styles.authBtn}
+          //   >
+          //     <Text>Login</Text>
+          //   </TouchableOpacity>
+          //   <TouchableOpacity
+          //     onPress={() => navigation.navigate("SignUp")}
+          //     style={styles.authBtn}
+          //   >
+          //     <Text>Sign Up</Text>
+          //   </TouchableOpacity>
+          // </View>
         )}
       </View>
     </View>

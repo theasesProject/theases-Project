@@ -10,6 +10,19 @@ module.exports.add = async function (req, res) {
   }
 };
 
+module.exports.check = async function (req, res) {
+  try {
+    const task = await db.BookMark.findOne({
+      where:{
+        UserId:req.params.UserId,
+        CarId:req.params.carId
+      }
+    })
+    res.json(task)
+  } catch (er) {
+    throw er
+  }
+}
 module.exports.getAll = async function (req, res) {
   try {
     const allCars = [];

@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Pressable,
   Dimensions,
-} from "react-native";
+} from 'react-native'
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Svg, { Path } from 'react-native-svg';
 import Hm from ".././assets/Svg/house-solid.svg";
@@ -21,27 +21,33 @@ import { useSelector } from 'react-redux';
 const { height, width } = Dimensions.get("screen");
 function NavBar({style}) {
   const loggedIn = useSelector((state)=>state.user.loggedIn)
+
   const navigation = useNavigation();
   const route = useRoute();
+
 
   const isActive = (routeName) => route.name === routeName ? '#6C77BF' : 'grey';
   return (
     <View style={[styles.navBar,style]}>
       <Pressable
+
         style={styles.quarter}
         onPress={() => navigation.navigate("Home")}
       >
         <View style={styles.hm}>
+
           <Hm fill={isActive('Home')} />
           <Text style={{color: isActive('Home')}}>Home</Text>
         </View>
       </Pressable>
 
       <Pressable
+
         style={styles.quarter}
         onPress={() => navigation.navigate("Messages")}
       >
         <View style={styles.hm}>
+
           <Ms fill={isActive('Mape')} />
           <Text style={{color: isActive('Mape')}}>Messeges</Text>
         </View>
@@ -65,7 +71,7 @@ function NavBar({style}) {
       >
         <View style={styles.hm}>
           <Pr fill={isActive('Userprofile')} />
-          <Text style={{color: isActive('Userprofile')}}>Profile</Text>
+          <Text style={{color: isActive('Userprofile')}}>{loggedIn?"Profile":"Login"}</Text>
         </View>
       </Pressable>
     </View>
@@ -92,6 +98,7 @@ const styles = StyleSheet.create({
   },
   hm: {
     alignItems: "center", // Center items horizontally
+
   },
 });
 

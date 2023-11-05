@@ -3,7 +3,6 @@ const Request = db.Request;
 const Media = db.CarMedia;
 
 module.exports = {
-  // this is the controller that'll fetch all requests for the use, each one will have all its images included
   getAll: async (req, res) => {
     try {
       const response = await Request.findAll({
@@ -21,11 +20,19 @@ module.exports = {
         ...req.body,
         UserId: req.params.id,
       });
-     console.log('aalaaaa',response);
+      console.log("aalaaaa", response);
       res.status(201).send(response);
-    } catch (err) { 
-      throw err;
-      // res.status(500).json(err);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  // this is the controller that'll fetch all pending requests for the admin, each one will have all its images included
+  getAllUnvalidatedRequests: async (req, res) => {
+    try {
+      const response = Request.findAll({ where: { verified: false } });
+      res.status(200).send(response);
+    } catch (err) {
+      res.status(500).json(err);
     }
   },
 };

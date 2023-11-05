@@ -65,7 +65,7 @@ function NavBar({style}) {
       >
         <View style={styles.hm}>
           <Pr fill={isActive('Userprofile')} />
-          <Text style={{color: isActive('Userprofile')}}>Profile</Text>
+          <Text style={{color: isActive('Userprofile')}}>{loggedIn?"Profile":"Login"}</Text>
         </View>
       </Pressable>
     </View>

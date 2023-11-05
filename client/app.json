@@ -11,8 +11,8 @@
     
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/background.jpg",
-      "resizeMode": "contain",
+      "image": "./assets/car-logo.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "permissions": {

@@ -6,21 +6,25 @@ import {
   ScrollView,
   Image,
   Touchable,
+  Dimensions
 } from "react-native";
+const {height,width}=Dimensions.get("window")
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBoolMarks, removedBookMark } from "../store/carFetch.js";
 import { selectUser } from "../store/userSlice";
-import greyHeart from "../assets/greyHeart.jpg";
+import GreyHeart from "../assets/Svg/greyHeart";
 import car2 from "../assets/car2.png";
 import star from "../assets/star.jpg";
 import deleteImge from "../assets/delete.jpg";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import NavBar from "../components/NavBar.jsx";
 function Favorites() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const bookMarks = useSelector((state) => state.car.bookMarks);
 
   useEffect(() => {
+    console.log("jijij",activeUser);
     dispatch(getAllBoolMarks(activeUser.id));
   }, []);
 console.log('heeere',bookMarks)
@@ -29,11 +33,10 @@ console.log('heeere',bookMarks)
   };
 
   return (
+      <ScrollView >
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.favouriteText}>Favourite</Text>
-
-        {bookMarks.length > 0 ? (
+        {/* <Text style={styles.favouriteText}>Favourite</Text> */}
+        {bookMarks?.length > 0 ? (
           bookMarks.map((bookmark,i) => (
             <View key={i} style={styles.carCard}>
               <View style={styles.items}>
@@ -42,7 +45,7 @@ console.log('heeere',bookMarks)
                     <Image style={styles.delete} source={deleteImge} />
                   </TouchableOpacity>
                 </View>
-                <Image style={styles.car} source={bookmark.carImage.media} />
+                <Image style={styles.car} source={{uri:bookmark.car?.CarMedia}} />
                 <View style={styles.detail}>
                   <Text style={styles.title}>{bookmark.car.model}</Text>
                   <View style={styles.stars}>
@@ -52,9 +55,9 @@ console.log('heeere',bookMarks)
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
                   </View>
-                  <Text style={styles.agencyName}>{bookmark.agency.name}</Text>
+                  <Text style={styles.agencyName}>{bookmark.agency?.name}</Text>
                   <Text style={styles.price}>
-                    ${bookmark.car.price}/{bookmark.car.period}
+                    ${bookmark.car.price}/{bookmark.car?.period}
                   </Text>
                 </View>
               </View>
@@ -62,7 +65,8 @@ console.log('heeere',bookMarks)
           ))
         ) : (
           <View style={styles.message}>
-            <Image source={greyHeart} style={styles.heart} />
+            <GreyHeart/>
+            <View style={styles.messageContainer}>
             <Text style={styles.emptyText1}>Empty Favourite list</Text>
             <Text style={styles.emptyText}>
               it feel like nothing to Collect in your favourite{" "}
@@ -70,19 +74,29 @@ console.log('heeere',bookMarks)
             <Text style={styles.emptyText}>
               list let's add your favourite car{" "}
             </Text>
+            </View>
           </View>
         )}
-      </ScrollView>
+    <NavBar style={styles.NavBar}/>
     </View>
+      </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  NavBar: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingBottom:5
+    // ... rest of your styles
+  },
   container: {
     flex: 1,
-    marginHorizontal: 7,
-    marginVertical: 7,
-    marginTop: "12%",
+    height:height,
+    // marginHorizontal: 7,
+    // marginVertical: 7,
     flexDirection: "column",
     gap: 10,
     backgroundColor: "white",
@@ -92,6 +106,9 @@ const styles = StyleSheet.create({
   favoriteCar: {
     marginBottom: 10,
   },
+  messageContainer:{
+    paddingTop:15
+  },
   carImage: {
     width: 100,
     height: 100,
@@ -99,19 +116,19 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: "center",
     fontSize: 16,
-    color: "rgb(219, 217, 224)",
+    color: "grey",
   },
-  heart: {
-    width: 60,
-    height: 55,
-  },
+  // heart: {
+  //   width: 60,
+  //   height: 55,
+  // },
   message: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    paddingTop: 180,
-    gap: 20,
+    // paddingTop: 180,
+    // gap: 20,
   },
 
   emptyText1: {
@@ -119,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
 
-    color: "rgb(219, 217, 224)",
+    color: "grey",
   },
   favouriteText: {
     color: "black",

@@ -16,15 +16,20 @@ import { logUserOut, selectUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import change from "../assets/change.png";
+
+// import { useNavigation } from "@react-navigation/native";
+
 import NavBar from "../components/NavBar";
 
-function Userprofile({ navigation }) {
+
+function Userprofile() {
+  const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     // dispatch(logoutUser());
-    dispatch(logUserOut())
+    dispatch(logUserOut());
     navigation.navigate("Home");
   };
 
@@ -53,10 +58,14 @@ function Userprofile({ navigation }) {
         <View style={styles.profileOptions}>
           <TouchableOpacity
             style={styles.profileOption}
-            onPress={() => console.log("history")}
+            onPress={() => navigation.navigate("Bookings")}
           >
             <Image style={styles.icon} source={bkg} />
-            <Text>My bookings</Text>
+            {activeUser.type === "client" ? (
+              <Text>My bookings</Text>
+            ) : (
+              <Text>My Cars</Text>
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.profileOption}
@@ -70,7 +79,11 @@ function Userprofile({ navigation }) {
             onPress={() => navigation.navigate("changeRole")}
           >
             <Image source={change} style={styles.icon} />
-            <Text>Become an Agency</Text>
+            {activeUser.type === "client" ? (
+              <Text>Become an Agency</Text>
+            ) : (
+              <Text>Add Cars For Rent</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>

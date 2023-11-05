@@ -13,6 +13,7 @@ import {
 } from 'react-native'
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Svg, { Path } from 'react-native-svg';
+import SignUp from ".././assets/Svg/signUpNav.svg";
 import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
@@ -55,11 +56,12 @@ function NavBar({style}) {
 
       <Pressable
         style={styles.quarter}
-        onPress={() => navigation.navigate("favorites")}
+        onPress={() => {loggedIn?navigation.navigate("favorites"):navigation.navigate("SignUp")}}
       >
         <View style={styles.hm}>
-          <Fa fill={isActive('favorites')} />
-          <Text style={{color: isActive('favorites')}}>Favorites</Text>
+          {!loggedIn?<SignUp fill={isActive('favorites')}/>:
+          <Fa fill={isActive('favorites')} />}
+          <Text style={{color: isActive('favorites')}}>{loggedIn?"Favorites":"SignUp"}</Text>
         </View>
       </Pressable>
       <Pressable

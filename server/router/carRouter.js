@@ -20,5 +20,5 @@ carRouter.get("/searchName/:model", searchCarByModel);
 carRouter.post("/filtredCar", filtredCar);
 carRouter.get("/carById/:id", searchCarById);
 carRouter.delete("/deletedCar", deletedAgencyCar);
-carRouter.get("/allCarByAgency", getAllCarsByAgencyId);
+carRouter.get("/allCarByAgency/:AgencyId", getAllCarsByAgencyId);
 module.exports = carRouter;

@@ -240,6 +240,7 @@ function AddAgencyCar() {
 
         <TextInput
           value={price}
+          keyboardType="number-pad"
           onChangeText={handlePrice}
           placeholder="rental price by period"
           style={styles.input}
@@ -262,6 +263,7 @@ function AddAgencyCar() {
 
         <TextInput
           value={horse}
+          keyboardType="number-pad"
           onChangeText={handleHorse}
           placeholder="Enter horse power for your car "
           style={styles.input}
@@ -325,7 +327,7 @@ function AddAgencyCar() {
               color: "rgb(130, 124, 140)",
               fontSize: 16,
             }}
-            isChecked={!warranty}
+            isChecked={warranty}
           />
           <View style={styles.picture}>
             <Pressable

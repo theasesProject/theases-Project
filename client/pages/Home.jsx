@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -94,7 +94,6 @@ function Home({ navigation }) {
             </View>
           ))
         ) : (
-          
           <>
             <View style={{ alignItems: "center", paddingTop: 20 }}>
               <View

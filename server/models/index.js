@@ -32,6 +32,7 @@ db.Service = require("./service.Model")(DataTypes, connection);
 db.Report = require("./reports.Model")(DataTypes, connection);
 db.BookMark = require("./bookMarks.Model")(DataTypes, connection);
 db.Request = require("./request.Model")(DataTypes, connection);
+db.RentelRequest = require("./rentelRequest.Model")(DataTypes, connection);
 
 db.User.hasOne(db.Agency);
 db.Agency.belongsTo(db.User);

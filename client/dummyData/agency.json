@@ -5,10 +5,10 @@
     "verificationStatus": true,
     "companyNumber": "ABC123",
     "deposit": 10,
-
     "transportation": true
   },
   {
+    "name": "sel",
     "papers": "Business Permit",
     "address": "456 Elm St, Othertown, USA",
     "verificationStatus": false,

@@ -5,10 +5,14 @@
     "version": "1.0.0",
     "jsEngine": "jsc",
     "orientation": "portrait",
+    "androidNavigationBar": {
+      "visible": "sticky-immersive"
+    },
+    
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/car-logo.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "permissions": {
@@ -17,6 +21,9 @@
         "whenInUse": "LOCATION"
       }
     },
+   
+
+
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
@@ -26,7 +33,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

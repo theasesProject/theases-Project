@@ -6,6 +6,8 @@ const {
   searchCarByModel,
   filtredCar,
   searchCarById,
+  deletedAgencyCar,
+  getAllCarsByAgencyId,
 } = require("../controller/CarController");
 const express = require("express");
 const carRouter = express.Router();
@@ -17,5 +19,6 @@ carRouter.post("/imageCar", createImage);
 carRouter.get("/searchName/:model", searchCarByModel);
 carRouter.post("/filtredCar", filtredCar);
 carRouter.get("/carById/:id", searchCarById);
-
+carRouter.delete("/deletedCar", deletedAgencyCar);
+carRouter.get("/allCarByAgency/:AgencyId", getAllCarsByAgencyId);
 module.exports = carRouter;

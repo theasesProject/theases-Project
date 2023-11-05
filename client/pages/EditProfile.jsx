@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { selectUser, setUser } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { DOMAIN_NAME } from "../env";
+// import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env";
 import { useDispatch } from "react-redux";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
@@ -114,7 +114,7 @@ const EditProfile = ({ navigation }) => {
     setError(null);
     try {
       const passCheck = await axios.post(
-        `http://${DOMAIN_NAME}:5000/api/users/passwordCheck/${activeUser.id}`,
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/passwordCheck/${activeUser.id}`,
         { password: currentPassword }
       );
       if (passCheck.data === "no match") {
@@ -122,13 +122,14 @@ const EditProfile = ({ navigation }) => {
       }
       setError(null);
       const response = await axios.put(
-        `http://${DOMAIN_NAME}:5000/api/users/update/${activeUser.id}`,
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/update/${activeUser.id}`,
         form
       );
       dispatch(setUser(response.data));
       setForm({});
       setCurrentPassword("");
       setConfirmPassword("");
+      navigation.navigate("Userprofile")
     } catch (err) {
       console.error(err);
     }

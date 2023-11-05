@@ -8,8 +8,10 @@ import {
   Pressable,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
+import * as Location from 'expo-location';
+
 import CheckBox from "react-native-check-box";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateAgency } from "../store/agencySlice";
@@ -17,17 +19,20 @@ import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
-
+import { UseSelector } from "react-redux";
 function ChangeRole({ navigation }) {
   // const [isChecked, setIsChecked] = useState(false);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [color, setColor] = useState("#6C77BF");
   const [error, setError] = useState("");
+  const [loc,setLoc]=useState("")
+const agencyLocation=useSelector((state)=>state.location.selectedAgencyLocation)
   const [form, setForm] = useState({
     //* temp
     verificationStatus: true, //* when the admin board is functional this line MUST be removed, it will be added with its default value (false) so the admin can check the request and does he has to do
     //* temp
-    transportation:false
+    adress:agencyLocation,
+    transportation: false,
   });
   const activeUser = useSelector(selectUser);
 
@@ -46,14 +51,23 @@ function ChangeRole({ navigation }) {
     "100%",
   ];
 
-  const handleChangeAddress = (content) => {
+  const handleChangeName = (content) => {
     if (!content) {
       let copy = form;
-      delete copy.address;
+      delete copy.name;
       return setForm({ ...copy });
     }
-    setForm({ ...form, address: content });
+    setForm({ ...form, name: content });
   };
+
+  // const handleChangeAddress = (content) => {
+  //   if (!content) {
+  //     let copy = form;
+  //     delete copy.address;
+  //     return setForm({ ...copy });
+  //   }
+  //   setForm({ ...form, address: content });
+  // };
   const handleChangeCompanyPhone = (content) => {
     setForm({ ...form, companyNumber: content });
   };
@@ -76,7 +90,25 @@ function ChangeRole({ navigation }) {
     );
     navigation.navigate("Home");
   };
-
+  const getUserLocationAndNearestAddress = async () => {
+try {
+      const nearestAddressResponse = await Location.reverseGeocodeAsync({
+        latitude: JSON.parse(agencyLocation).latitude,
+        longitude: JSON.parse(agencyLocation).longitude
+      });
+      if (nearestAddressResponse.length > 0) {
+        const nearestAddress = nearestAddressResponse[0];
+        const place = ` ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
+        const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
+        setLoc(place);
+      }
+  
+} catch (error) {
+  console.log(error);
+}
+    
+    
+  };
   const selectImage = async () => {
     if (selectedDocuments.length >= 6) {
       return setError("You can't add more than six images");
@@ -130,15 +162,26 @@ function ChangeRole({ navigation }) {
     copy.splice(position, 1);
     setSelectedDocuments([...copy]);
   };
-
+useEffect(()=>{
+  getUserLocationAndNearestAddress()
+},[agencyLocation])
   return (
     <View style={styles.changeRolePage}>
       <TextInput
+        value={form.name}
+        onChangeText={handleChangeName}
+        placeholder="Enter Your Agency Name"
+        style={styles.input}
+      />
+      {!agencyLocation?<TouchableOpacity  onPress={() => navigation.navigate("mapforAgency")}>
+        <Text style={styles.input}>Set your Agency Location </Text>
+      </TouchableOpacity>:<Text>Your Agency location is:{loc}</Text>}
+      {/* <TextInput
         value={form.address}
         onChangeText={handleChangeAddress}
         placeholder="Enter Your Address"
         style={styles.input}
-      />
+      /> */}
       <TextInput
         value={form.companyNumber}
         onChangeText={handleChangeCompanyPhone}
@@ -148,7 +191,7 @@ function ChangeRole({ navigation }) {
       <CheckBox
         style={styles.check}
         onClick={() => {
-          setForm({...form,transportation:!form.transportation})
+          setForm({ ...form, transportation: !form.transportation });
           // setIsChecked(!isChecked);
         }}
         isChecked={form.transportation}

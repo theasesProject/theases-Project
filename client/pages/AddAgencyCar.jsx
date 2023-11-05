@@ -7,18 +7,24 @@ import {
   Image,
   ScrollView,
   Pressable,
+  Modal,
+  Button
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from "react-native-check-box";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createCar } from "../store/carFetch";
 import * as ImagePicker from "expo-image-picker";
 import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
+import RemoveBackground from "./RemoveBackground";
+// import removeBackground from "../HelperFunctions/removeBackGround";
 function AddAgencyCar() {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
+  const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
+
   const [model, setModel] = useState("");
   const [brandCar, setBrandCar] = useState("");
   const [horse, setHorse] = useState("");
@@ -36,6 +42,7 @@ function AddAgencyCar() {
   const [typeError, setTypeError] = useState("");
   const [charError, setCharError] = useState("");
   const [imgError, setImgError] = useState("");
+  const [succes, setSucces] = useState("");
   const [img, setImg] = useState([]);
   const activeUser = useSelector(selectUser);
   const handleCreateCar = () => {
@@ -78,9 +85,14 @@ function AddAgencyCar() {
           media: img.map((file) => ({ media: file })),
         })
       );
-      console.log("succes");
+      setSuccessModalVisible(true);
+
+      setTimeout(() => {
+        setSuccessModalVisible(false);
+      }, 5000);
     }
   };
+
   const brand = [
     { label: "Toyota", value: "Toyota" },
     { label: "Ford", value: "Ford" },
@@ -140,6 +152,9 @@ function AddAgencyCar() {
       const updatedSelectedDocuments = await Promise.all(
         selectedAssets.map(async (file) => {
           try {
+            // const removedBgImage = removeBackground(file.uri);
+            // console.log(removedBgImage, "bbb");
+            // return removedBgImage;
             const cloudinaryResponse = await cloudinaryUpload(file.uri);
             return cloudinaryResponse;
           } catch (err) {
@@ -155,6 +170,7 @@ function AddAgencyCar() {
       ]);
     }
   };
+
   const handleDelete = (uri) => {
     const copy = [...img];
     const position = copy.indexOf(uri);
@@ -198,7 +214,10 @@ function AddAgencyCar() {
     setType(type);
     console.log(type, "type");
   };
-
+  
+  
+  
+  
   console.log(img, "img");
   return (
     <View style={styles.editProfilePage}>
@@ -226,6 +245,7 @@ function AddAgencyCar() {
 
         <TextInput
           value={price}
+          keyboardType="number-pad"
           onChangeText={handlePrice}
           placeholder="rental price by period"
           style={styles.input}
@@ -248,6 +268,7 @@ function AddAgencyCar() {
 
         <TextInput
           value={horse}
+          keyboardType="number-pad"
           onChangeText={handleHorse}
           placeholder="Enter horse power for your car "
           style={styles.input}
@@ -311,8 +332,10 @@ function AddAgencyCar() {
               color: "rgb(130, 124, 140)",
               fontSize: 16,
             }}
-            isChecked={!warranty}
+            isChecked={warranty}
           />
+      <RemoveBackground/>
+ 
           <View style={styles.picture}>
             <Pressable
               onPress={selectImage}
@@ -321,7 +344,6 @@ function AddAgencyCar() {
             >
               <Text style={styles.input2}>ADD PICTURE</Text>
 
-              {/* <Text style={styles.input2}>ADD PICTURE</Text> */}
               {imgError !== "" && (
                 <Text style={styles.errorText}>{imgError}</Text>
               )}
@@ -342,6 +364,17 @@ function AddAgencyCar() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isSuccessModalVisible}
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>
+            Congratulations! You have successfully created your car.
+          </Text>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -355,6 +388,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     gap: 12,
   },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+  },
   introdcution: {
     textAlign: "center",
     fontSize: 18,
@@ -367,29 +410,26 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "100%",
-    // Set background color to light gray
+
     borderRadius: 10,
     height: 40,
     paddingHorizontal: 10,
     fontSize: 16,
-    borderColor: "lightgrey", // Set border color to blue
-    borderWidth: 2, // Add border width
-    marginTop: 5, // Add some margin at the top for separation
+    borderColor: "lightgrey",
+    borderWidth: 2,
+    marginTop: 5,
   },
   picture: {
-    // marginLeft: "15%",
     flexDirection: "row",
-    // justifyContent: "center",
+
     alignItems: "center",
-    // gap: 150,
-    // backgroundColor: "rgb(219, 217, 224)",
+
     borderColor: "yellow",
     borderRadius: 5,
     marginBottom: "5%",
   },
   profilePictureContainer: {
     width: "100%",
-    // alignItems: "center",
   },
   profilePicture: {
     width: 80,
@@ -424,7 +464,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     height: 40,
-    // paddingHorizontal: 10,
+
     borderColor: "lightgrey",
     marginBottom: "5%",
     justifyContent: "center",
@@ -438,7 +478,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   addImgTextContainer: {
-    // paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -447,7 +486,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     backgroundColor: "white",
-    // padding: 10,
+
     height: 100,
   },
   imgContainer: {
@@ -467,6 +506,18 @@ const styles = StyleSheet.create({
     zIndex: -1,
     width: "100%",
     height: "100%",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalText: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    color: "green",
   },
 });
 

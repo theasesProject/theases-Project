@@ -1,11 +1,15 @@
 const { db } = require("../models/index");
 const { Sequelize, Op } = require("sequelize");
+const { all } = require("../router/carRouter");
 
 module.exports = {
   getAllCars: async function (req, res) {
     try {
       const allCars = await db.Car.findAll({
-        include: { model: db.CarMedia, as: "CarMedia" },
+        include: [
+          { model: db.CarMedia, as: "CarMedia" },
+          { model: db.Agency, as: "Agency" },
+        ],
       });
 
       res.status(200).send(allCars);
@@ -107,6 +111,47 @@ module.exports = {
       });
       console.log(carById);
       res.status(200).send(carById);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  deletedAgencyCar: async function (req, res) {
+    try {
+      const deletedCar = await db.Car.destroy({
+        where: {
+          id: req.body.id,
+          AgencyId: req.body.AgencyId,
+        },
+      });
+      console.log("ee", deletedCar);
+      res.json(deletedCar);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAllCarsByAgencyId: async function (req, res) {
+    try {
+      console.log("requesttttttttttttt bodyyyyyyyyyyyyyyyyy",req.body);
+      const allCars = [];
+      const allCarsByAgency = await db.Car.findAll({
+        where: { AgencyId: req.params.AgencyId },
+      });
+      for (const OneCar of allCarsByAgency) {
+        const car = await db.Car.findOne({ where: { id: OneCar.id } });
+
+        const carImage = await db.CarMedia.findOne({
+          where: { CarId: car.id },
+        });
+        const carInfo = {
+          car: car,
+          carImage: carImage,
+        };
+
+        allCars.push(carInfo);
+      }
+      res.status(200).send(allCars);
     } catch (error) {
       throw error;
     }

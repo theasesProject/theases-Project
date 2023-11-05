@@ -16,7 +16,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "3 Series",
@@ -31,7 +31,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "Model S",
@@ -46,7 +46,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "3 Series",
@@ -61,7 +61,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "Model X",
@@ -76,7 +76,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "5 Series",
@@ -91,7 +91,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "Model Y",
@@ -106,7 +106,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "7 Series",
@@ -121,7 +121,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "7 Series",
@@ -136,7 +136,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "7 Series",
@@ -151,7 +151,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "Model S",
@@ -166,7 +166,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "3 Series",
@@ -181,7 +181,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "Model S",
@@ -196,7 +196,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "3 Series",
@@ -211,7 +211,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "Model X",
@@ -226,7 +226,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "5 Series",
@@ -241,7 +241,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "Model Y",
@@ -256,7 +256,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "7 Series",
@@ -271,7 +271,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "7 Series",
@@ -286,7 +286,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
   {
     model: "7 Series",
@@ -301,19 +301,17 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    AgencyId: 6,
   },
 ];
 
 async function seedCars() {
-  await db.Car.bulkCreate(cars);
+  for (let car of cars) {
+    await db.Car.create(car);
+  }
 }
 
-seedCars()
-  .then(() => {
-    console.log("Seed complete!");
-    process.exit(0);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+seedCars().then(() => {
+  console.log("Seed complete!");
+  process.exit(0);
+});

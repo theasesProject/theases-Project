@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { DOMAIN_NAME } from "../env";
+// import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define an initial state for the user slice
@@ -16,7 +16,7 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   try {
     // Replace this with your actual API call to fetch the user
     const response = await axios.post(
-      `http://${DOMAIN_NAME}:5000/api/users/token`,
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/token`,
       {
         token: token,
       }
@@ -36,9 +36,9 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
 export const SignUpClick = createAsyncThunk("user/SignUps", async (inputForm, thunkAPI) => {
   try {
     console.log(inputForm);
-    const task = await axios.post(`http://${DOMAIN_NAME}:5000/api/users/SignUpUser`, inputForm)
+    const task = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`, inputForm)
     const response = await axios.post(
-      `http://${DOMAIN_NAME}:5000/api/users/emailLogin`,
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/emailLogin`,
       {
         email: inputForm.email,
         password: inputForm.password,

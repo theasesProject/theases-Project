@@ -5,7 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  Dimensions,
 } from "react-native";
+const { height, width } = Dimensions.get("screen");
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import bkg from "../assets/bkg.png";
@@ -17,16 +19,21 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import change from "../assets/change.png";
 
+// import { useNavigation } from "@react-navigation/native";
+
+import NavBar from "../components/NavBar";
+
 function Userprofile({ navigation }) {
+  // const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     // dispatch(logoutUser());
-    dispatch(logUserOut())
+    dispatch(logUserOut());
     navigation.navigate("Home");
   };
-
+  console.log("active User Profileeeeeeeeee", activeUser);
   return (
     <View style={styles.userProfilePage}>
       <View style={styles.topSection}>
@@ -52,10 +59,14 @@ function Userprofile({ navigation }) {
         <View style={styles.profileOptions}>
           <TouchableOpacity
             style={styles.profileOption}
-            onPress={() => console.log("history")}
+            onPress={() => navigation.navigate("Bookings")}
           >
             <Image style={styles.icon} source={bkg} />
-            <Text>My bookings</Text>
+            {activeUser.type === "client" ? (
+              <Text>My bookings</Text>
+            ) : (
+              <Text>My Cars</Text>
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.profileOption}
@@ -66,10 +77,20 @@ function Userprofile({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.profileOption}
-            onPress={() => navigation.navigate("changeRole")}
+            onPress={() => {
+              if (activeUser.type !== "client") {
+                navigation.navigate("AddAgencyCar")
+              } else {
+                navigation.navigate("changeRole");
+              }
+            }}
           >
             <Image source={change} style={styles.icon} />
-            <Text>Become an Agency</Text>
+            {activeUser.type === "client" ? (
+              <Text>Become an Agency</Text>
+            ) : (
+              <Text>Add Cars For Rent</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -85,6 +106,7 @@ function Userprofile({ navigation }) {
           </LinearGradient>
         </TouchableOpacity>
       </View>
+      <NavBar style={styles.navBar} />
     </View>
   );
 }
@@ -106,13 +128,14 @@ const styles = StyleSheet.create({
   userInfo: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 20,
+    paddingVertical: 40,
     paddingHorizontal: 10,
     gap: 10,
   },
   profilePic: {
-    width: 50,
-    height: 50,
+    // paddingTop:height*0.1,
+    width: width * 0.18,
+    height: height * 0.085,
     borderRadius: 50,
     borderWidth: 2,
     borderColor: "#6a78c1",
@@ -146,12 +169,19 @@ const styles = StyleSheet.create({
   },
   logoutBtnContainer: {
     position: "absolute",
-    bottom: 10,
+    bottom: 70, // adjust this value as needed
     left: 20,
     width: "100%",
     borderTopColor: "#e5e6e8",
     borderTopWidth: 1,
     paddingTop: 20,
+  },
+  navBar: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // ... rest of your styles
   },
   logoutBtn: {
     flexDirection: "row",

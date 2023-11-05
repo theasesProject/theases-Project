@@ -10,27 +10,54 @@ module.exports.add = async function (req, res) {
   }
 };
 
+module.exports.check = async function (req, res) {
+  try {
+    const task = await db.BookMark.findOne({
+      where:{
+        UserId:req.params.UserId,
+        CarId:req.params.carId
+      }
+    })
+    res.json(task)
+  } catch (er) {
+    throw er
+  }
+}
 module.exports.getAll = async function (req, res) {
   try {
+    const allCars = [];
     const all = await db.BookMark.findAll({
-      where: {
-        UserId: req.params.id,
-      },
+      where: { UserId: req.params.UserId },
     });
-    res.json(all);
+    for (const bookmark of all) {
+      const car = await db.Car.findOne({ where: { id: bookmark.CarId } });
+      const agency = await db.Agency.findOne({ where: { id: car.AgencyId } });
+      const carImage = await db.CarMedia.findOne({
+        where: { CarId: bookmark.CarId },
+      });
+
+      const carInfo = {
+        car: car,
+        agency: agency,
+        carImage: carImage,
+      };
+
+      allCars.push(carInfo);
+    }
+    res.send(allCars);
   } catch (err) {
     throw err;
   }
 };
 module.exports.remove = async function (req, res) {
-  try{
+  try {
     const del = await db.BookMark.destroy({
-      where:{
-        CarId:req.params.CarId
-      }
-    })
-    res.json(del)
+      where: {
+        CarId: req.params.CarId,
+      },
+    });
+    res.json(del);
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};

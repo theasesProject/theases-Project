@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import CarDetails from "./components/carDetails.jsx";
+import CarDetails from "./pages/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
@@ -15,13 +15,15 @@ import Favorites from "./pages/Favorites.jsx";
 import AddAgencyCar from "./pages/AddAgencyCar.jsx";
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
-//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
-import ChangeRole from "./pages/ChangeRole.jsx";
+import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
+import MapComponent from "./pages/MapForAdminLoc.jsx";
+import Bookings from "./pages/Bookings.jsx";
+import Booking from "./pages/Booking.jsx";
 const Stack = createStackNavigator();
 function App() {
   return (
@@ -34,11 +36,32 @@ function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="Booking"
+            component={Booking}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
             name="favorites"
             component={Favorites}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="mapforAgency"
+            component={MapComponent}
             options={{ headerShown: false }}
           />
 
+          <Stack.Screen
+            name="details"
+            component={CarDetails}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Bookings"
+            component={Bookings}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="changeRole"
             component={ChangeRole}

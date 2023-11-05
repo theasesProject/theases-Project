@@ -19,14 +19,18 @@ import opel from "../assets/Brands/opel.png";
 import suzuki from "../assets/Brands/suzuki.png";
 import { useState } from "react";
 import axios from "axios";
+
 const { width, height } = Dimensions.get("window");
-import { DOMAIN_NAME } from "../env";
-function BrandBar({ onPress, onFilterByBrand }) {
+// import { DOMAIN_NAME } from "../env";
+import { useDispatch } from "react-redux";
+import { filterCars } from "../store/carFetch";
+function BrandBar({ onPress, onFilterByBrand,resetData }) {
+  const dispatch=useDispatch()
   const [carByBrand, setCarByBrand] = useState([]);
   const [error, setError] = useState(false);
   const handleFilterByBrand = (brandName) => {
     axios
-      .post(`http://${DOMAIN_NAME}:5000/api/car/byBrand`, { brand: brandName })
+      .post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/byBrand`, { brand: brandName })
       .then((response) => {
         onFilterByBrand(response.data);
       })
@@ -40,7 +44,7 @@ function BrandBar({ onPress, onFilterByBrand }) {
       <View style={styles.BrandBar}>
         <View style={styles.barText}>
           <Text style={styles.topBrand}>Top Brands</Text>
-          <Text style={styles.ViewAll}>View All</Text>
+          <Text style={styles.ViewAll} onPress={()=>resetData()}>View All</Text>
         </View>
       </View>
       <ScrollView horizontal={true} style={styles.allBrandImage}>
@@ -178,10 +182,8 @@ const styles = StyleSheet.create({
     gap: 100,
   },
   brandDetails: {
-    backgroundColor: "rgb(240, 238, 255)",
-
+    backgroundColor: "white",
     display: "flex",
-
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",

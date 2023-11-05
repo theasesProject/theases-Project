@@ -1,9 +1,10 @@
-const express = require('express')
-const { add, getAll, remove } = require('../controller/BookMarks.controller')
-const router = express.Router()
+const express = require("express");
+const { add, getAll, remove , check} = require("../controller/BookMarks.controller");
+const router = express.Router();
 
-router.post("/add",add)
-router.get("/getAll/:id",getAll)
-router.delete("/delete/:CarId",remove)
+router.post("/add", add);
+router.get("/getAll/:UserId", getAll);
+router.get("/check/:UserId/:carId", check);
+router.delete("/delete/:CarId", remove);
 
-module.exports = router
+module.exports = router;

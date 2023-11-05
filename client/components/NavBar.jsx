@@ -9,7 +9,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
-
+  Dimensions,
+} from 'react-native'
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Svg, { Path } from 'react-native-svg';
 import Hm from ".././assets/Svg/house-solid.svg";

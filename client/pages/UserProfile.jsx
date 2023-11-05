@@ -22,8 +22,8 @@ import change from "../assets/change.png";
 import NavBar from "../components/NavBar";
 
 
-function Userprofile() {
-  const navigation = useNavigation();
+function Userprofile({navigation}) {
+  // const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const dispatch = useDispatch();
 

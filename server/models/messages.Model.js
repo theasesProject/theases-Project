@@ -8,10 +8,6 @@ module.exports = ( DataTypes, connection) => {
       type : DataTypes.INTEGER,
       allowNull: false,
     },
-    roomId: {
-      type : DataTypes.INTEGER,
-      allowNull: false,
-    }
   });
   return Messages;
 };

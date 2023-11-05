@@ -11,8 +11,10 @@ import Search from "../assets/Svg/search-svgrepo-com.svg";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { setRoom } from "../store/chatSlice";
 
 function Messages() {
+  const dispatch = useDispatch()
   const navigation = useNavigation()
   const [user2ID, setUser2ID] = useState("");
   const [rooms, setRooms] = useState([]);
@@ -74,7 +76,7 @@ function Messages() {
           
           return (
             <TouchableOpacity style={styles.roomContainer} key={i} onPress={()=>{
-              
+              dispatch(setRoom(room))
               navigation.navigate("conversation")
             }}>
               <Image source={{uri:room.avatarUrl}} style={styles.image} />

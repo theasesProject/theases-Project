@@ -8,7 +8,11 @@ const initialState = {
   loading: false,
   error: null,
   OneCar: {},
+
   agencyCar: [],
+
+  fixedData:[],
+
   bookMarks: [],
   succes: null,
 };
@@ -170,8 +174,11 @@ export const removedBookMark = createAsyncThunk(
 const carSlice = createSlice({
   name: "car",
   initialState,
-  reducers: {},
-
+  reducers: {
+    filterCars:(state,action)=>{
+      state.allCars=action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
       state.loading = true;
@@ -180,6 +187,7 @@ const carSlice = createSlice({
     builder.addCase(getAllCars.fulfilled, (state, action) => {
       state.loading = false;
       state.allCars = action.payload;
+      state.fixedData=action.payload;
     });
     builder.addCase(getAllCars.rejected, (state, action) => {
       state.loading = false;
@@ -300,5 +308,5 @@ const carSlice = createSlice({
     });
   },
 });
-
+export const {  filterCars } = carSlice.actions;
 export default carSlice.reducer;

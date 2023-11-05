@@ -5,9 +5,13 @@
     "version": "1.0.0",
     "jsEngine": "jsc",
     "orientation": "portrait",
+    "androidNavigationBar": {
+      "visible": "sticky-immersive"
+    },
+    
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/background.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

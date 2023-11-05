@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState ,useRef} from "react";
 import {
   View,
   Text,
@@ -8,8 +7,10 @@ import {
   Button,
   TouchableOpacity,
   Dimensions,
-  ActivityIndicator,
+  RefreshControl,
 } from "react-native";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import LinearGradient from "expo-linear-gradient";
 import axios from "axios";
 import CardCar from "../components/CardCar.jsx";
 import BrandBar from "../components/brandBar.jsx";
@@ -20,25 +21,30 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
 const { height, width } = Dimensions.get("screen");
+
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
+
 function Home({ navigation }) {
   const dispatch = useDispatch();
-
   const allCars = useSelector((state) => state.car.allCars);
   const fixedData = useSelector((state) => state.car.fixedData);
   const loading = useSelector((state) => state.car.loading);
-  // const viewAllCars = allCars;
+  const [refreshing, setRefreshing] = useState(false);
+  const scrollViewRef = useRef();
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(getAllCars()).then(() => setRefreshing(false));
+  }, [dispatch]);
 
-  // console.log("allCars", allCars);
-
-  // console.log("car", allCars);
   const updateFilteredCars = (filteredCarData) => {
     dispatch(filterCars(filteredCarData));
-    // dispatch({ type: 'filterCars', payload: filteredCarData });
   };
+
   const resetData = () => {
     dispatch(filterCars(fixedData));
-    // dispatch({ type: 'filterCars', payload: filteredCarData });
   };
+
   const retrieveToken = async () => {
     try {
       const value = await AsyncStorage.getItem("UserToken");
@@ -49,24 +55,34 @@ function Home({ navigation }) {
       console.error("error coming from home", e);
     }
   };
+
   useEffect(() => {
-    // retrieveToken();
     dispatch(getAllCars());
-    // .then(
-    //   setFilteredCars(allCars)
-    //   )
   }, [dispatch]);
 
-  // useEffect(() => {
+  useEffect(() => {
+    if (!loading && scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({
+        x: 0,
+        y: scrollPosition,
+        animated: true,
+      });
+    }
+  }, [loading]);
 
-  // }, []);
   return (
     <View style={styles.homePage}>
-      <ScrollView>
+      <ScrollView
+        ref={scrollViewRef}
+        onScroll={(event) => {
+          setScrollPosition(event.nativeEvent.contentOffset.y);
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <ProfileLandingPage style={styles.header} />
-        {/* <View style={styles.searchContainer}> */}
         <SearchBar onSearch={updateFilteredCars} />
-        {/* </View> */}
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
         {!loading ? (
           allCars?.map((element, i) => (
@@ -75,12 +91,70 @@ function Home({ navigation }) {
             </View>
           ))
         ) : (
-          <ActivityIndicator size="large" color="#0000ff" />
+          
+          <>
+            <View style={{ alignItems: "center", paddingTop: 20 }}>
+              <View
+                style={{
+                  width: width * 0.9,
+                  borderRadius: 10,
+                  overflow: "hidden",
+                  backgroundColor: "white",
+                  padding: 10,
+                }}
+              >
+                <ShimmerPlaceholder
+                  style={{
+                    width: "100%",
+                    height: width * 0.374,
+                    borderRadius: 10,
+                  }}
+                  shimmerColors={["#f3f3f3", "#e6e6e6", "#f3f3f3"]}
+                />
+                <ShimmerPlaceholder
+                  style={{
+                    width: "100%",
+                    height: width * 0.15,
+                    marginTop: 10,
+                    borderRadius: 10,
+                  }}
+                  shimmerColors={["#f3f3f3", "#e6e6e6", "#f3f3f3"]}
+                />
+              </View>
+            </View>
+            <View style={{ alignItems: "center", paddingTop: 20 }}>
+              <View
+                style={{
+                  width: width * 0.9,
+                  borderRadius: 10,
+                  overflow: "hidden",
+                  backgroundColor: "white",
+                  padding: 10,
+                }}
+              >
+                <ShimmerPlaceholder
+                  style={{
+                    width: "100%",
+                    height: width * 0.374,
+                    borderRadius: 10,
+                  }}
+                  shimmerColors={["#f3f3f3", "#e6e6e6", "#f3f3f3"]}
+                />
+                <ShimmerPlaceholder
+                  style={{
+                    width: "100%",
+                    height: width * 0.15,
+                    marginTop: 10,
+                    borderRadius: 10,
+                  }}
+                  shimmerColors={["#f3f3f3", "#e6e6e6", "#f3f3f3"]}
+                />
+              </View>
+            </View>
+          </>
         )}
       </ScrollView>
-      {/* <View style={styles.NavBar}> */}
       <NavBar />
-      {/* </View> */}
     </View>
   );
 }
@@ -101,12 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
   },
-  searchContainer: {
-    // paddingTop: 15,
-    // width: "100%",
-    // justifyContent: "center",
-    // alignItems: "center",
-  },
+  searchContainer: {},
   allcars: {
     padding: 20,
     paddingBottom: 20,

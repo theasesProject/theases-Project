@@ -40,7 +40,7 @@ function App() {
           <Stack.Screen
             name="favorites"
             component={Favorites}
-            options={{ headerShown: false }}
+            options={{ headerShown: true }}
           />
             <Stack.Screen
             name="mapforAgency"

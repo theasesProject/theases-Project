@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from "react-native";
 import { useState } from "react";
 import car from "../assets/car2.png";
 import emptyStar from "../assets/eto.png";
@@ -35,9 +35,10 @@ function CardCar({ oneCar, openPanel }) {
     <View style={styles.card} onPress={openPanel}>
       <View style={styles.Image}>
         <Image style={styles.carImage} source={car} />
-        <View onPress={handleHeartPress}>
+        <Pressable onPress={handleHeartPress}>
+        <View >
           <EmptyHeart/>
-        </View>
+        </View></Pressable>
       </View>
       <View style={styles.carDetails}>
         <View style={styles.NameAvaib}>
@@ -63,7 +64,7 @@ function CardCar({ oneCar, openPanel }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    width: "100%",
+    width: "98%",
     height: 250,
     borderRadius: 10,
     alignItems: "center",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
@@ -43,7 +43,23 @@ const Mape = () => {
       longitudeDelta: 0.0421,
     });
   };
+  const openTurnByTurnNavigation = () => {
+    if (destination && location) {
+      const url = `https://www.google.com/maps/dir/?api=1&origin=${location.coords.latitude},${location.coords.longitude}&destination=${destination.latitude},${destination.longitude}&travelmode=driving`;
 
+      Linking.openURL(url)
+        .then((supported) => {
+          if (!supported) {
+            console.error("Can't handle this URL: " + url);
+          }
+        })
+        .catch((err) => {
+          console.error('An error occurred while opening the URL: ' + err);
+        });
+    } else {
+      console.error('Location or destination is not available.');
+    }
+  };
   const startItinerary = () => {
     setIsItineraryStarted(true);
   };
@@ -136,6 +152,7 @@ const Mape = () => {
         <Button title="Get Time" onPress={getTime} />
       )}
       {estimatedDuration && <Text>Estimated Duration: {estimatedDuration}</Text>}
+      <Button title="Navigate Turn-by-Turn" onPress={openTurnByTurnNavigation} /> 
     </View>
   );
 };

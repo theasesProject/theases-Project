@@ -8,8 +8,10 @@ import {
   Pressable,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
+import * as Location from 'expo-location';
+
 import CheckBox from "react-native-check-box";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateAgency } from "../store/agencySlice";
@@ -23,11 +25,13 @@ function ChangeRole({ navigation }) {
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [color, setColor] = useState("#6C77BF");
   const [error, setError] = useState("");
+  const [loc,setLoc]=useState("")
 const agencyLocation=useSelector((state)=>state.location.selectedAgencyLocation)
   const [form, setForm] = useState({
     //* temp
     verificationStatus: true, //* when the admin board is functional this line MUST be removed, it will be added with its default value (false) so the admin can check the request and does he has to do
     //* temp
+    adress:agencyLocation,
     transportation: false,
   });
   const activeUser = useSelector(selectUser);
@@ -56,14 +60,14 @@ const agencyLocation=useSelector((state)=>state.location.selectedAgencyLocation)
     setForm({ ...form, name: content });
   };
 
-  const handleChangeAddress = (content) => {
-    if (!content) {
-      let copy = form;
-      delete copy.address;
-      return setForm({ ...copy });
-    }
-    setForm({ ...form, address: content });
-  };
+  // const handleChangeAddress = (content) => {
+  //   if (!content) {
+  //     let copy = form;
+  //     delete copy.address;
+  //     return setForm({ ...copy });
+  //   }
+  //   setForm({ ...form, address: content });
+  // };
   const handleChangeCompanyPhone = (content) => {
     setForm({ ...form, companyNumber: content });
   };
@@ -86,7 +90,25 @@ const agencyLocation=useSelector((state)=>state.location.selectedAgencyLocation)
     );
     navigation.navigate("Home");
   };
-
+  const getUserLocationAndNearestAddress = async () => {
+try {
+      const nearestAddressResponse = await Location.reverseGeocodeAsync({
+        latitude: JSON.parse(agencyLocation).latitude,
+        longitude: JSON.parse(agencyLocation).longitude
+      });
+      if (nearestAddressResponse.length > 0) {
+        const nearestAddress = nearestAddressResponse[0];
+        const place = ` ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
+        const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
+        setLoc(place);
+      }
+  
+} catch (error) {
+  console.log(error);
+}
+    
+    
+  };
   const selectImage = async () => {
     if (selectedDocuments.length >= 6) {
       return setError("You can't add more than six images");
@@ -140,18 +162,20 @@ const agencyLocation=useSelector((state)=>state.location.selectedAgencyLocation)
     copy.splice(position, 1);
     setSelectedDocuments([...copy]);
   };
-
+useEffect(()=>{
+  getUserLocationAndNearestAddress()
+},[agencyLocation])
   return (
     <View style={styles.changeRolePage}>
       <TextInput
-        value={form.address}
+        value={form.name}
         onChangeText={handleChangeName}
         placeholder="Enter Your Agency Name"
         style={styles.input}
       />
       {!agencyLocation?<TouchableOpacity  onPress={() => navigation.navigate("mapforAgency")}>
-        <Text style={styles.input}>set your Agency Location </Text>
-      </TouchableOpacity>:<Text>your location is:{agencyLocation}</Text>}
+        <Text style={styles.input}>Set your Agency Location </Text>
+      </TouchableOpacity>:<Text>Your Agency location is:{loc}</Text>}
       {/* <TextInput
         value={form.address}
         onChangeText={handleChangeAddress}

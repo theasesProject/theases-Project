@@ -16,6 +16,7 @@ import TopCorner from "../assets/Svg/BookMarkDone.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateBookMark, removedBookMark } from "../store/carFetch.js";
 import axios from "axios";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
 function CardCar({ oneCar }) {
   const [starSelected, setStarSelected] = useState(false);
@@ -27,7 +28,7 @@ function CardCar({ oneCar }) {
   const starImage = starSelected ? star : emptyStar;
   // const heartImage = heartSelected ? heartBleu : EmptyHeart;
   const dispatch = useDispatch();
-
+  const navigation = useNavigation();
   const handleStarPress = () => {
     setStarSelected(!starSelected);
   };
@@ -100,7 +101,7 @@ function CardCar({ oneCar }) {
               ${oneCar.price}/{oneCar.period}
             </Text>
             <View style={styles.bookingCar}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={navigation.navigate("Booking")}>
                 <Text style={styles.bookingCar1}>Booking</Text>
               </TouchableOpacity>
             </View>

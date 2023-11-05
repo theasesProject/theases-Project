@@ -19,10 +19,10 @@ function Bookings() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allCarsByAgency = useSelector((state) => state.car.agencyCar);
+  const loading = useSelector((state)=>state.car.loading)
   useEffect(() => {
-    dispatch(getallCarByAgency(activeUser.id));
+    dispatch(getallCarByAgency(activeUser.Agency.id));
   }, [dispatch]);
-
   const handleDeled = (car) => {
     deletedAgencyCar(activeUser.id, car);
   };
@@ -31,8 +31,8 @@ function Bookings() {
     <View style={styles.container}>
       <ScrollView>
         <Text style={styles.favouriteText}>All Cars</Text>
-        {activeUser.type === "agency" ? (
-          allCarsByAgency.map((OneCar, i) => (
+        {loading?(activeUser.type === "agency" ? (
+          allCarsByAgency?.map((OneCar, i) => (
             <View key={i} style={styles.carCard}>
               <View style={styles.items}>
                 <View style={styles.deleted2}>
@@ -83,8 +83,10 @@ function Bookings() {
                 <Text style={styles.price}>$220 / daily</Text>
               </View>
             </View>
-          </View>
-        )}
+          </View>)
+        )
+          :null
+      }
       </ScrollView>
     </View>
   );

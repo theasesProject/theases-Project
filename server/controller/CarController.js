@@ -133,9 +133,10 @@ module.exports = {
 
   getAllCarsByAgencyId: async function (req, res) {
     try {
+      console.log("requesttttttttttttt bodyyyyyyyyyyyyyyyyy",req.body);
       const allCars = [];
       const allCarsByAgency = await db.Car.findAll({
-        where: { AgencyId: req.body.AgencyId },
+        where: { AgencyId: req.params.AgencyId },
       });
       for (const OneCar of allCarsByAgency) {
         const car = await db.Car.findOne({ where: { id: OneCar.id } });

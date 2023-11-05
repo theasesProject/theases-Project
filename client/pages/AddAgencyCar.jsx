@@ -8,6 +8,7 @@ import {
   ScrollView,
   Pressable,
   Modal,
+  Button
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from "react-native-check-box";
@@ -18,6 +19,7 @@ import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
+import RemoveBackground from "./RemoveBackground";
 // import removeBackground from "../HelperFunctions/removeBackGround";
 function AddAgencyCar() {
   const dispatch = useDispatch();
@@ -212,7 +214,10 @@ function AddAgencyCar() {
     setType(type);
     console.log(type, "type");
   };
-
+  
+  
+  
+  
   console.log(img, "img");
   return (
     <View style={styles.editProfilePage}>
@@ -329,6 +334,8 @@ function AddAgencyCar() {
             }}
             isChecked={warranty}
           />
+      <RemoveBackground/>
+ 
           <View style={styles.picture}>
             <Pressable
               onPress={selectImage}
@@ -380,6 +387,16 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "white",
     gap: 12,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
   },
   introdcution: {
     textAlign: "center",

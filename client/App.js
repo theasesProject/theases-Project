@@ -30,7 +30,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
 
-        <Stack.Navigator initialRouteName="home">
+        <Stack.Navigator initialRouteName="AddAgencyCar">
 
           <Stack.Screen
             name="Home"

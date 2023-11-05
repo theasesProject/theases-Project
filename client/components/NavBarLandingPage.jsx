@@ -65,6 +65,7 @@ console.log("jiji from page");
     // return () => {
     //   AppState.removeEventListener("change", retrieveToken);
     // };
+    getUserLocationAndNearestAddress();
   }, []);
   return (
     <View style={[styles.navBar,style]}>

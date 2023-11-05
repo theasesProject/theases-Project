@@ -40,7 +40,10 @@ function Bookings() {
                     <Image style={styles.delete} source={deleteImge} />
                   </TouchableOpacity>
                 </View>
-                <Image style={styles.car} source={OneCar.carImage.media} />
+                <Image
+                  style={styles.car}
+                  source={{ uri: OneCar.carImage.media }}
+                />
                 <View style={styles.detail}>
                   <Text style={styles.title}>{OneCar.car.model}</Text>
                   <View style={styles.stars}>

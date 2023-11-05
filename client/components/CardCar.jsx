@@ -1,11 +1,18 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity ,Pressable} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import { useEffect, useState } from "react";
 import car from "../assets/car2.png";
 import emptyStar from "../assets/eto.png";
 import star from "../assets/star1.png";
 import heartBleu from "../assets/filledPurpleHeart.png";
 import BookMark from "../assets/Svg/bookMark.svg";
-import TopCorner from "../assets/Svg/BookMarkDone.svg"
+import TopCorner from "../assets/Svg/BookMarkDone.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateBookMark, removedBookMark } from "../store/carFetch.js";
 import axios from "axios";
@@ -15,7 +22,7 @@ function CardCar({ oneCar }) {
   // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
   const [isHeartClicked, setHeartClicked] = useState(false);
   // const [heartSelected, setHeartSelected] = useState(false);
-  const [done,setDone]= useState(null)
+  const [done, setDone] = useState(null);
   const activeUser = useSelector(selectUser);
   const starImage = starSelected ? star : emptyStar;
   // const heartImage = heartSelected ? heartBleu : EmptyHeart;
@@ -27,55 +34,80 @@ function CardCar({ oneCar }) {
   const handleHeartPress = async () => {
     // setHeartSelected(!heartSelected);
     // if (!heartSelected) {
-      setHeartClicked(!isHeartClicked);
+    setHeartClicked(!isHeartClicked);
     // console.log(oneCar.id + "selim")
-      dispatch(CreateBookMark({CarId:oneCar.id, UserId:activeUser.id}));
+    dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
     // } else if (heartSelected) {
-      // dispatch(removedBookMark(oneCar.id));
+    // dispatch(removedBookMark(oneCar.id));
     // }
   };
-  const checkBookMarked=async()=>{
-try {
-  const task =await axios.get(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/check/${activeUser.id}/${oneCar.id}`)
-  if (task.data) {
-    console.log("taskkkkkkkkkkkkkk",task.data);
-    setDone(true)
-  }else{
-    setDone(false)
-  }
-} catch (er) {
-  console.error(er);
-}
-  }
-useEffect(()=>{
-  setDone(false)
-  checkBookMarked()
-},[])
+  const checkBookMarked = async () => {
+    try {
+      const task = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/check/${activeUser.id}/${oneCar.id}`
+      );
+      if (task.data) {
+        setDone(true);
+      } else {
+        setDone(false);
+      }
+    } catch (er) {
+      console.error(er);
+    }
+  };
+  useEffect(() => {
+    setDone(false);
+    checkBookMarked();
+  }, []);
+
+  console.log(oneCar.CarMedia.length !== 0, "zeineb");
   return (
     <View style={styles.card}>
-    <View style={styles.Image}>
-      <Image style={styles.carImage} source={car} />
-      {Object.values(activeUser).length ? (!done ? <BookMark onPress={handleHeartPress}/> : <TopCorner/>) : null}
-    </View>
-    <View style={styles.carDetails}>
-      <View style={styles.NameAvaib}>
-        <Text style={styles.carName}>{oneCar.model}</Text>
-        <Text style={styles.avaible}>{oneCar.status}</Text>
+      <View style={styles.Image}>
+        {oneCar.CarMedia.length !== 0 ? (
+          <Image
+            style={styles.carImage}
+            source={{
+              uri: oneCar.CarMedia[0].media,
+            }}
+          />
+        ) : (
+          <Image style={styles.carImage} source={car} />
+        )}
+
+        {Object.values(activeUser).length ? (
+          !done ? (
+            <BookMark onPress={handleHeartPress} />
+          ) : (
+            <TopCorner />
+          )
+        ) : null}
       </View>
-      <View style={styles.PriceStar}>
-        <View style={styles.reviews}>
-          <TouchableOpacity onPress={handleStarPress}>
-            <Image style={styles.heart} source={starImage}></Image>
-          </TouchableOpacity>
-          <Text style={styles.avaible}>(150 review)</Text>
+      <View style={styles.carDetails}>
+        <View style={styles.NameAvaib}>
+          <Text style={styles.carName}>{oneCar.model}</Text>
+          <Text style={styles.avaible}>{oneCar.status}</Text>
         </View>
-        <Text style={styles.carPrice}>
-          ${oneCar.price}/{oneCar.period}
-        </Text>
+        <View style={styles.PriceStar}>
+          <View style={styles.reviews}>
+            <TouchableOpacity onPress={handleStarPress}>
+              <Image style={styles.heart} source={starImage}></Image>
+            </TouchableOpacity>
+            <Text style={styles.avaible}>(150 review)</Text>
+          </View>
+          <View style={styles.booking}>
+            <Text style={styles.carPrice}>
+              ${oneCar.price}/{oneCar.period}
+            </Text>
+            <View style={styles.bookingCar}>
+              <TouchableOpacity>
+                <Text style={styles.bookingCar1}>Booking</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </View>
     </View>
-  </View>
-  
   );
 }
 
@@ -139,6 +171,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "rgb(172, 133, 234)",
+  },
+  bookingCar: {
+    borderWidth: 2,
+    width: 120,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "lightgrey",
+    borderRadius: 5,
+    backgroundColor: "lightblue",
+  },
+  bookingCar1: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

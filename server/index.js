@@ -23,6 +23,7 @@ const agencyRouter = require("./router/Agency");
 const requestRouter = require("./router/request.Route");
 const mediaRouter = require("./router/Media.Route");
 const chatRouter = require("./router/chat.router")
+const bookingRouter = require("./router/booking.Router");
 //!routers
 app.use("/api/car", carRouter);
 app.use("/api/users", userRouter);
@@ -33,6 +34,7 @@ app.use("/api/agency", agencyRouter);
 app.use("/api/request", requestRouter);
 app.use("/api/media", mediaRouter);
 app.use("/api/chat",chatRouter )
+app.use("/api/booking", bookingRouter);
 
 app.listen(5000, function () {
   console.log("Server is running on port 5000", port);

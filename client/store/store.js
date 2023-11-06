@@ -6,12 +6,14 @@ import location from "./locationSlice";
 import chatRoomReducer from "./chatSlice";
 
 
+import bookingReducer from "./bookingSlice";
 const store = configureStore({
   reducer: {
     user: userReducer,
     car: carReducer,
     agency: agencyReducer,
-    location:location,
+    location: location,
+    booking: bookingReducer,
     chatRoom:chatRoomReducer
   },
 });

@@ -6,9 +6,9 @@ import {
   ScrollView,
   Image,
   Touchable,
-  Dimensions
+  Dimensions,
 } from "react-native";
-const {height,width}=Dimensions.get("window")
+const { height, width } = Dimensions.get("window");
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBoolMarks, removedBookMark } from "../store/carFetch.js";
 import { selectUser } from "../store/userSlice";
@@ -24,20 +24,19 @@ function Favorites() {
   const bookMarks = useSelector((state) => state.car.bookMarks);
 
   useEffect(() => {
-    console.log("jijij",activeUser);
     dispatch(getAllBoolMarks(activeUser.id));
   }, []);
-console.log('heeere',bookMarks)
+
   const handleDeled = (id) => {
     removedBookMark(id);
   };
-
+  console.log(bookMarks[bookMarks.length - 1].carImage.media, "zeineb");
   return (
-      <ScrollView >
-    <View style={styles.container}>
+    <ScrollView>
+      <View style={styles.container}>
         {/* <Text style={styles.favouriteText}>Favourite</Text> */}
         {bookMarks?.length > 0 ? (
-          bookMarks.map((bookmark,i) => (
+          bookMarks.map((bookmark, i) => (
             <View key={i} style={styles.carCard}>
               <View style={styles.items}>
                 <View style={styles.deleted2}>
@@ -45,7 +44,12 @@ console.log('heeere',bookMarks)
                     <Image style={styles.delete} source={deleteImge} />
                   </TouchableOpacity>
                 </View>
-                <Image style={styles.car} source={{uri:bookmark.car?.CarMedia}} />
+                <Image
+                  style={styles.car}
+                  source={{
+                    uri: bookmark.carImage.media,
+                  }}
+                />
                 <View style={styles.detail}>
                   <Text style={styles.title}>{bookmark.car.model}</Text>
                   <View style={styles.stars}>
@@ -65,21 +69,21 @@ console.log('heeere',bookMarks)
           ))
         ) : (
           <View style={styles.message}>
-            <GreyHeart/>
+            <GreyHeart />
             <View style={styles.messageContainer}>
-            <Text style={styles.emptyText1}>Empty Favourite list</Text>
-            <Text style={styles.emptyText}>
-              it feel like nothing to Collect in your favourite{" "}
-            </Text>
-            <Text style={styles.emptyText}>
-              list let's add your favourite car{" "}
-            </Text>
+              <Text style={styles.emptyText1}>Empty Favourite list</Text>
+              <Text style={styles.emptyText}>
+                it feel like nothing to Collect in your favourite{" "}
+              </Text>
+              <Text style={styles.emptyText}>
+                list let's add your favourite car{" "}
+              </Text>
             </View>
           </View>
         )}
-    <NavBar style={styles.NavBar}/>
-    </View>
-      </ScrollView>
+        <NavBar style={styles.NavBar} />
+      </View>
+    </ScrollView>
   );
 }
 
@@ -89,12 +93,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingBottom:5
+    paddingBottom: 5,
     // ... rest of your styles
   },
   container: {
     flex: 1,
-    height:height,
+    height: height,
     // marginHorizontal: 7,
     // marginVertical: 7,
     flexDirection: "column",
@@ -106,8 +110,8 @@ const styles = StyleSheet.create({
   favoriteCar: {
     marginBottom: 10,
   },
-  messageContainer:{
-    paddingTop:15
+  messageContainer: {
+    paddingTop: 15,
   },
   carImage: {
     width: 100,

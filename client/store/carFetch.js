@@ -36,8 +36,8 @@ export const getallCarByAgency = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCarByAgency`,
-        { AgencyId: id }
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCarByAgency/${id}`
+        // ,{ AgencyId: id }
       );
 
       return response.data;

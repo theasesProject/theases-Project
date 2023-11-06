@@ -33,6 +33,7 @@ function Userprofile({ navigation }) {
     dispatch(logUserOut());
     navigation.navigate("Home");
   };
+
   console.log("active User Profileeeeeeeeee", activeUser);
   return (
     <View style={styles.userProfilePage}>
@@ -79,7 +80,7 @@ function Userprofile({ navigation }) {
             style={styles.profileOption}
             onPress={() => {
               if (activeUser.type !== "client") {
-                navigation.navigate("AddAgencyCar")
+                navigation.navigate("AddAgencyCar");
               } else {
                 navigation.navigate("changeRole");
               }

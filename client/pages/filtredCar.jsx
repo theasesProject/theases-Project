@@ -23,7 +23,7 @@ function FiltredCar() {
           navigation.navigate("Home");
         }}
       >
-        <Image style={styles.backImage} source={back} />
+        <Image style={styles.backImage} source={back}></Image>
       </TouchableOpacity>
       <ScrollView>
         {filteredCars

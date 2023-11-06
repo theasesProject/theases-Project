@@ -18,9 +18,6 @@ import FiltredCar from "./pages/FiltredCar.jsx";
 import SignUp from "./pages/signUp.jsx";
 import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";
-// import Remobg from "./pages/removeBackground.jsx";
-("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
-
 import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import Booking from "./pages/Booking.jsx";

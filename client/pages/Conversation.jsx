@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -73,20 +74,22 @@ function Conversation() {
     <View style={{ width: "100%", height: "83%" }}>
       <View style={styles.chatHeader}>
         <Image source={{ uri: room.avatarUrl }} style={styles.imageChat} />
-        <Text style={{ marginLeft: 50, fontWeight: 500, fontSize: 25 }}>
-          {room.name}
+        <Text style={{ marginLeft: 50, fontWeight: 500, fontSize: 20 }}>
+          Chat with {room.name}!!
         </Text>
       </View>
-      <View style={styles.feed}>
+      <ScrollView style={styles.feed}>
         {allMes.map((message, i) => {
           return (
-            <View key={i} style={{ backgroundColor: message.senderId=== user.id ? "blue" : "grey", padding: 10 , position:"relative", float: message.senderId=== user.id ? "right" : "left" }}>
+            <View key={i} style={{width:"100%",display:"flex",flexDirection:"column"}}>
+              <View  style={{ backgroundColor: message.senderId=== user.id ? "blue" : "grey", padding: 10 , position:"relative", float: message.senderId=== user.id ? "right" : "left",width:"20%" }}>
               <Text style={{color:"white" , alignSelf:"center"}}>{message.message}</Text>
               <Text style={{color:"white" , alignSelf:"center"}}>{format(message.createdAt)}</Text>
             </View>
+            </View>
           );
         })}
-      </View>
+      </ScrollView>
       <View style={styles.inputs}>
         <TextInput
           placeholder="Type your Message Here"
@@ -123,12 +126,12 @@ const styles = StyleSheet.create({
   chatHeader: {
     position: "relative",
     top: 0,
-    backgroundColor: "yellow",
+    backgroundColor: "#ffff",
     display: "flex",
-    height: 100,
+    height: 80,
     alignItems: "center",
     flexDirection: "row",
-    padding: 30,
+    padding: 20,
   },
   imageChat: {
     marginLeft: 10,

@@ -23,11 +23,16 @@ function Messages() {
   const fetch = async () => {
     const all = await axios
       .get(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getAll/${user.data.id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getAllRoomsUserId/${user.data.id}`
       )
-      .then((response) => {
-        setRooms(response.data);
+      .then( async (response) => {
+        setRooms(response.data)
+        await axios.get(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getAllRoomsUser2/${user.data.id}`).then((res) => {
+          rooms.push(...res.data)
+        setRooms(rooms)
+        })
       }).catch((error) => console.log(error));
+    
   };
 
 
@@ -51,6 +56,7 @@ function Messages() {
 
   useEffect(() => {
     fetch();
+    console.log(rooms);
   }, []);
   return (
     <View style={styles.messages}>

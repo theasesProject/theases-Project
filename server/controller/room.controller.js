@@ -33,3 +33,15 @@ module.exports.getAll = async (req, res)=>{
         throw err
     }
 }
+module.exports.getAllUser2 = async (req, res)=>{
+    try{
+        const all = await db.RoomChat.findAll({
+            where:{
+                user2:req.params.id
+            }
+        })
+        res.json(all)
+    } catch(err){
+        throw err
+    }
+}

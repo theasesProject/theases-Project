@@ -20,9 +20,9 @@ import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
-import { Animated } from 'react-native';
+import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
-import CarDetails from  "./carDetails.jsx"
+import CarDetails from "./carDetails.jsx";
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
 function Home({ navigation }) {
@@ -155,7 +155,7 @@ function Home({ navigation }) {
             </View>
           </>
         )}
-        <CarDetails/>
+        <CarDetails />
       </ScrollView>
       <NavBar />
     </View>
@@ -391,5 +391,5 @@ export default Home;
 //       paddingBottom: 20,
 //     },
 //   });
-  
+
 //   export default Home;

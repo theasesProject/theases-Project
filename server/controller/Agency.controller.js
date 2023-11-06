@@ -11,8 +11,11 @@ module.exports = {
         where: { id: reqId },
         attributes: { exclude: ["id", "createdAt", "updatedAt"] },
       });
+      const name = request.agencyName;
+      delete request.agencyName;
       const agency = await Agency.create({
         ...request.dataValues,
+        name: name,
         verificationStatus: true,
         requestId: reqId,
       });

@@ -30,7 +30,7 @@ function Favorites() {
   const handleDeled = (id) => {
     removedBookMark(id);
   };
-  console.log(bookMarks[bookMarks.length - 1].carImage.media, "zeineb");
+  console.log(bookMarks, "zeineb");
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -51,7 +51,7 @@ function Favorites() {
                   }}
                 />
                 <View style={styles.detail}>
-                  <Text style={styles.title}>{bookmark.car.model}</Text>
+                  <Text style={styles.title}>{bookmark.car?.model}</Text>
                   <View style={styles.stars}>
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
@@ -61,7 +61,7 @@ function Favorites() {
                   </View>
                   <Text style={styles.agencyName}>{bookmark.agency?.name}</Text>
                   <Text style={styles.price}>
-                    ${bookmark.car.price}/{bookmark.car?.period}
+                    ${bookmark.car?.price}/{bookmark.car?.period}
                   </Text>
                 </View>
               </View>

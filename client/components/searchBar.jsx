@@ -12,9 +12,9 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import filter from "../assets/filter.png";
 import { useState } from "react";
-import { DOMAIN_NAME } from "../env";
+// import { DOMAIN_NAME } from "../env";
 import axios from "axios";
-import Filter from "../assets/Svg/filter"
+import Filter from "../assets/Svg/filter.svg";
 import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("screen");
 function SearchBar({ onSearch }) {
@@ -48,16 +48,13 @@ function SearchBar({ onSearch }) {
         placeholderTextColor={"black"}
       ></TextInput>
 
-      <Pressable
-        onPress={() => navigation.navigate("AdvancedSearch")}
-        >
+      <Pressable onPress={() => navigation.navigate("AdvancedSearch")}>
         <LinearGradient
-        style={styles.filterImage}
+          style={styles.filterImage}
           colors={["#6C77BF", "#4485C5"]}
           locations={[0, 1]}
         >
-
-        <Filter/>
+          <Filter />
         </LinearGradient>
       </Pressable>
     </View>
@@ -66,7 +63,7 @@ function SearchBar({ onSearch }) {
 const styles = StyleSheet.create({
   input: {
     backgroundColor: "white",
-    height: height*0.07,
+    height: height * 0.07,
     borderRadius: 10,
     width: "90%",
     paddingHorizontal: 10,
@@ -81,13 +78,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   filterImage: {
-    width: width*.11,
-    height: height*.055,
+    width: width * 0.11,
+    height: height * 0.055,
     // backgroundColor: "rgb(106,119,197)",
     borderRadius: 10,
     position: "absolute",
     right: 5,
-    top:-24,
+    top: -24,
     justifyContent: "center",
     alignItems: "center",
   },

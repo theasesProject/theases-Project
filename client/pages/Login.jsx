@@ -19,11 +19,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
-import { DOMAIN_NAME } from "../env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// require("dotenv").config();
-// ${process.env.DOMAIN_NAME}
 
 function Login({ navigation }) {
   const [color, setColor] = useState("#6C77BF");
@@ -116,21 +112,23 @@ function Login({ navigation }) {
       } else {
         return setError("please provide an email or a phone number");
       }
-      const response = await axios
-        .post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/${endPoint}`, {
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/${endPoint}`,
+        {
           [checkedIdentifier]: form.identifier,
           password: form.password,
-        })
+        }
+      );
       //  console.log(await response.data)
       setError(null);
       storeData("token", response.data);
 
       console.log("token: ", retrieveData("token"));
-      dispatch(fetchUser(response.data)).then(async response => {
-         await AsyncStorage.setItem("UserToken", response?.meta.arg)
+      dispatch(fetchUser(response.data)).then(async (response) => {
+        await AsyncStorage.setItem("UserToken", response?.meta.arg);
         // console.log("fuckingggggggggggggggg",response.meta.arg);
-    })
-    
+      });
+
       navigation.navigate("Home");
     } catch (err) {
       if (err.response.status == "404") {

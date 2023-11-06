@@ -22,7 +22,8 @@ module.exports = {
       });
       res.status(201).send(response);
     } catch (err) {
-      res.status(500).json(err);
+      // res.status(500).json(err);
+      throw err;
     }
   },
   // this is the controller that'll fetch all pending requests for the admin, each one will have all its images included

@@ -39,6 +39,16 @@ const Dashboard = () => {
       window.open(paper.media);
     }
   };
+
+  function openLocationInGoogleMaps(location) {
+    if (location && location.latitude && location.longitude) {
+      const url = `https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}`;
+      window.open(url, "_blank");
+    } else {
+      console.error("Invalid location data.");
+    }
+  }
+
   return (
     <div>
       <div>
@@ -53,8 +63,8 @@ const Dashboard = () => {
           <table className="table">
             <tr>
               <th>UserName</th>
-              <th>Role</th>
               <th>Email</th>
+              <th>Role</th>
               <th>BlockedUser</th>
             </tr>
 
@@ -152,7 +162,22 @@ const Dashboard = () => {
               return (
                 <tr>
                   <td>{request.id}</td>
-                  <td>{request.address}</td>
+                  <td>
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        padding: "0.5rem 2.5rem",
+                        borderRadius: "0.3125rem",
+                        background: "red",
+                        color: "#fff",
+                      }}
+                      onClick={() =>
+                        openLocationInGoogleMaps(JSON.parse(request.address))
+                      }
+                    >
+                      Open in maps
+                    </button>
+                  </td>
                   <td>{request.companyNumber}</td>
                   <td>
                     <button
@@ -233,7 +258,6 @@ const Dashboard = () => {
                                 <span aria-hidden="true">&times;</span>
                               </button>
                             </div>
-
                             <div className="modal-footer">
                               <button
                                 type="button"
@@ -243,10 +267,10 @@ const Dashboard = () => {
                                 Close
                               </button>
                               <button
-                                onClick={() => handleApproveRequest(request.id)}
                                 type="button"
                                 className="btn btn-primary"
                                 data-dismiss="modal"
+                                onClick={() => handleApproveRequest(request.id)}
                               >
                                 Yes
                               </button>
@@ -292,10 +316,10 @@ const Dashboard = () => {
                                 Close
                               </button>
                               <button
-                                onClick={() => handleDeclineRequest(request.id)}
                                 type="button"
                                 className="btn btn-primary"
                                 data-dismiss="modal"
+                                onClick={() => handleDeclineRequest(request.id)}
                               >
                                 Yes
                               </button>

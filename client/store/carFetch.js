@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env.js";
 
 const initialState = {
   allCars: [],
@@ -11,7 +10,7 @@ const initialState = {
 
   agencyCar: [],
 
-  fixedData:[],
+  fixedData: [],
 
   bookMarks: [],
   succes: null,
@@ -72,16 +71,23 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     console.log(JSON.stringify(error));
   }
 });
-
+export const fetchAllCarsWithBrand = createAsyncThunk(
+  "car/fetchAllCarsWithBrand",
+  async () => {
+    try {
+    } catch {}
+  }
+);
 export const fetchFilteredCars = createAsyncThunk(
   "car/fetchFilteredCars",
-  async (filterCriteria, { getState, dispatch }) => {
+  async (filterCriteria) => {
     try {
+      console.log(filterCriteria, "first");
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/filtredCar`,
         filterCriteria
       );
-
+      console.log(response.data, "final");
       return response.data;
     } catch (error) {
       console.error(error);
@@ -175,9 +181,9 @@ const carSlice = createSlice({
   name: "car",
   initialState,
   reducers: {
-    filterCars:(state,action)=>{
-      state.allCars=action.payload
-    }
+    filterCars: (state, action) => {
+      state.allCars = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
@@ -187,7 +193,7 @@ const carSlice = createSlice({
     builder.addCase(getAllCars.fulfilled, (state, action) => {
       state.loading = false;
       state.allCars = action.payload;
-      state.fixedData=action.payload;
+      state.fixedData = action.payload;
     });
     builder.addCase(getAllCars.rejected, (state, action) => {
       state.loading = false;
@@ -200,7 +206,7 @@ const carSlice = createSlice({
     });
     builder.addCase(fetchFilteredCars.fulfilled, (state, action) => {
       state.loading = false;
-      state.filteredCars = action.payload; // Set filtered cars in the state
+      state.carFiltred = action.payload; // Set filtered cars in the state
     });
     builder.addCase(fetchFilteredCars.rejected, (state, action) => {
       state.loading = false;
@@ -308,5 +314,5 @@ const carSlice = createSlice({
     });
   },
 });
-export const {  filterCars } = carSlice.actions;
+export const { filterCars } = carSlice.actions;
 export default carSlice.reducer;

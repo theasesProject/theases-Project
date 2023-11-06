@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Button } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import { useDispatch } from 'react-redux';
-import { locAgn } from '../store/locationSlice';
+import React, { useState } from "react";
+import { View, StyleSheet, Button } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import { useDispatch } from "react-redux";
+import { locAgn } from "../store/locationSlice";
 
 const MapComponent = ({ navigation }) => {
   const [mapRegion, setMapRegion] = useState({
@@ -18,7 +18,10 @@ const MapComponent = ({ navigation }) => {
   const handleMapPress = (e) => {
     const selectedLatitude = e.nativeEvent.coordinate.latitude;
     const selectedLongitude = e.nativeEvent.coordinate.longitude;
-    setSelectedLocation({ latitude: selectedLatitude, longitude: selectedLongitude });
+    setSelectedLocation({
+      latitude: selectedLatitude,
+      longitude: selectedLongitude,
+    });
   };
 
   const handleLoc = () => {

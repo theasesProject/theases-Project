@@ -22,6 +22,10 @@ module.exports = (DataTypes, connection) => {
       allowNull: false,
       defaultValue: false,
     },
+    agencyName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   });
   return Request;
 };

@@ -61,15 +61,15 @@ function CardCar({ oneCar }) {
     checkBookMarked();
   }, []);
 
-  console.log(oneCar.CarMedia.length !== 0, "zeineb");
+  console.log("onecar: ", oneCar);
   return (
     <View style={styles.card}>
       <View style={styles.Image}>
-        {oneCar.CarMedia.length !== 0 ? (
+        {oneCar.Media?.length !== 0 ? (
           <Image
             style={styles.carImage}
             source={{
-              uri: oneCar.CarMedia[0].media,
+              uri: oneCar?.Media[0]?.media,
             }}
           />
         ) : (
@@ -101,7 +101,7 @@ function CardCar({ oneCar }) {
               ${oneCar.price}/{oneCar.period}
             </Text>
             <View style={styles.bookingCar}>
-              <TouchableOpacity onPress={navigation.navigate("Booking")}>
+              <TouchableOpacity onPress={() => navigation.navigate("Booking")}>
                 <Text style={styles.bookingCar1}>Booking</Text>
               </TouchableOpacity>
             </View>

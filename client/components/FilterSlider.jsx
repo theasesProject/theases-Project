@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import RangeSlider from "rn-range-slider";
+// import RangeSlider from "rn-range-slider";
 
 const FilterSlider = () => {
   const [rangeLow, setRangeLow] = useState(10); //this should take the cheapest car price as initial value
@@ -13,7 +13,7 @@ const FilterSlider = () => {
 
   return (
     <View style={styles.slider}>
-      <RangeSlider
+      {/* <RangeSlider
         style={{ width: 300, height: 80 }}
         gravity="center"
         min={0}
@@ -24,7 +24,7 @@ const FilterSlider = () => {
         onValueChanged={onValueChanged}
       />
       <Text>Lower Value: {rangeLow}</Text>
-      <Text>Upper Value: {rangeHigh}</Text>
+      <Text>Upper Value: {rangeHigh}</Text> */}
     </View>
   );
 };

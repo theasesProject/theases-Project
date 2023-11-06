@@ -17,11 +17,6 @@ module.exports = (DataTypes, connection) => {
       allowNull: false,
       defaultValue: false,
     },
-    verified: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
   });
   return Request;
 };

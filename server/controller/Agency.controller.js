@@ -1,29 +1,20 @@
 const { db } = require("../models/index");
 const Agency = db.Agency;
-const Request = db.Request;
 const User = db.User;
 module.exports = {
-  CreateAgency: async (req, res) => {
+  CreateAgency: async (req, res, next) => {
+    await User.update({ type: "agency" }, { where: { id: req.body.UserId } });
+
+    const agency = await db.Agency.create(req.body);
+
+    res.status(201).send({
+      status: "success",
+      message: "agency added successfully!!!",
+      data: agency,
+    });
     try {
-      const { reqId } = req.params;
-      await Request.update({ verified: true }, { where: { id: reqId } });
-      const request = await Request.findOne({
-        where: { id: reqId },
-        attributes: { exclude: ["id", "createdAt", "updatedAt"] },
-      });
-      const agency = await Agency.create({
-        ...request.dataValues,
-        verificationStatus: true,
-        requestId: reqId,
-      });
-      await User.update({ type: "agency" }, { where: { id: agency.UserId } });
-      res.status(201).send({
-        status: "success",
-        message: "agency added successfully!!!",
-        data: agency,
-      });
     } catch (err) {
-      res.status(500).json(err);
+      next(err);
     }
   },
   UpdateAgency: async (req, res, next) => {

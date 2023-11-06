@@ -25,7 +25,7 @@ import GooglePng from "../assets/googleIcon.png";
 import FaceBookPng from "../assets/facebookIcon.png";
 import { SignUpClick } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
-import DateTimePicker from "@react-native-community/datetimepicker";
+// import DateTimePicker from "@react-native-community/datetimepicker";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
@@ -201,9 +201,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
-
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -229,9 +228,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
-
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -258,9 +256,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.email &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
-
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -289,9 +286,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!text &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
-
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -335,8 +331,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!text &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -359,31 +355,31 @@ const SignUp = ({ navigation, props }) => {
           {confirmedError ? (
             <Text style={{ color: "red" }}>{confirmedError}</Text>
           ) : null}
-        <View style={styles.inputHolder}>
-          <Lock style={styles.icon} />
-          <TextInput
-            ref={inputRefConfirmed}
-            onBlur={() => {
-              checkInput(inputForm.idCard, "id card");
-            }}
-            autoCapitalize="none"
-            value={inputForm.idCard}
-            style={styles.input}
-            placeholder="id card"
-            secureTextEntry={isSecure2}
-            onChangeText={(text) => {
-              setInputForm({ ...inputForm, idCard: text });
-              setCheckUp(
-                !!inputForm.userName &&
-                  !!inputForm.email &&
-                  !!inputForm.phoneNumber &&
-                  !!inputForm.password &&
-                  !!confirm &&
-                  inputForm.dateOfBirth !== new Date()
-              );
-            }}
-          />
-        </View>
+          <View style={styles.inputHolder}>
+            <Lock style={styles.icon} />
+            <TextInput
+              ref={inputRefConfirmed}
+              onBlur={() => {
+                checkInput(inputForm.idCard, "id card");
+              }}
+              autoCapitalize="none"
+              value={inputForm.idCard}
+              style={styles.input}
+              placeholder="id card"
+              secureTextEntry={isSecure2}
+              onChangeText={(text) => {
+                setInputForm({ ...inputForm, idCard: text });
+                setCheckUp(
+                  !!inputForm.userName &&
+                    !!inputForm.email &&
+                    !!inputForm.phoneNumber &&
+                    !!inputForm.password &&
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
+                );
+              }}
+            />
+          </View>
         </View>
         <View
           style={{
@@ -402,7 +398,7 @@ const SignUp = ({ navigation, props }) => {
               <Text>Date of Birth</Text>
             </LinearGradient>
           </TouchableOpacity>
-          {show && (
+          {/* {show && (
             <DateTimePicker
               testID="dateTimePicker"
               value={inputForm.dateOfBirth}
@@ -413,7 +409,7 @@ const SignUp = ({ navigation, props }) => {
                 setInputForm(text);
               }}
             />
-          )}
+          )} */}
         </View>
         <TouchableOpacity
           disabled={!checkUp}
@@ -603,7 +599,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 10,
     zIndex: -1,
     height: 50,
-    width: width*0.8,
+    width: width * 0.8,
     borderRadius: 5,
     borderWidth: "none",
     borderWidth: 0,

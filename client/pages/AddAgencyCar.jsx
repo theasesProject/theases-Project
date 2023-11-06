@@ -8,7 +8,7 @@ import {
   ScrollView,
   Pressable,
   Modal,
-  Button
+  Button,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from "react-native-check-box";
@@ -214,10 +214,7 @@ function AddAgencyCar() {
     setType(type);
     console.log(type, "type");
   };
-  
-  
-  
-  
+
   console.log(img, "img");
   return (
     <View style={styles.editProfilePage}>
@@ -334,8 +331,8 @@ function AddAgencyCar() {
             }}
             isChecked={warranty}
           />
-      <RemoveBackground/>
- 
+          <RemoveBackground />
+
           <View style={styles.picture}>
             <Pressable
               onPress={selectImage}
@@ -390,8 +387,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   image: {
     width: 200,

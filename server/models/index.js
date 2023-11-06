@@ -18,7 +18,7 @@ connection
 const db = {};
 db.connection = connection;
 db.Sequelize = Sequelize;
-
+db.UnavailableDate = require("./avaibilityDate.Model")(DataTypes, connection);
 db.Admin = require("./admin.Model")(DataTypes, connection);
 db.User = require("./user.Model")(DataTypes, connection);
 db.Car = require("./car.Model")(DataTypes, connection);
@@ -58,8 +58,8 @@ db.Review.belongsTo(db.User);
 db.Agency.hasMany(db.Review);
 db.Review.belongsTo(db.Agency);
 
-db.Service.hasOne(db.Car);
-db.Car.belongsTo(db.Service);
+// db.Car.hasMany(db.Service);
+// db.Service.belongsTo(db.Car);
 
 db.User.hasMany(db.Report);
 db.Report.belongsTo(db.User);

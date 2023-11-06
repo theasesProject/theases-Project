@@ -8,11 +8,8 @@ const initialState = {
   loading: false,
   error: null,
   OneCar: {},
-
   agencyCar: [],
-
-  fixedData:[],
-
+  fixedData: [],
   bookMarks: [],
   succes: null,
 };
@@ -67,6 +64,7 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     const response = await axios.get(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCars`
     );
+    console.log(response.data, "response");
     return response.data;
   } catch (error) {
     console.log(JSON.stringify(error));
@@ -175,9 +173,12 @@ const carSlice = createSlice({
   name: "car",
   initialState,
   reducers: {
-    filterCars:(state,action)=>{
-      state.allCars=action.payload
-    }
+    filterCars: (state, action) => {
+      state.allCars = action.payload;
+    },
+    setCarDetails: (state, action) => {
+      state.OneCar = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
@@ -187,7 +188,7 @@ const carSlice = createSlice({
     builder.addCase(getAllCars.fulfilled, (state, action) => {
       state.loading = false;
       state.allCars = action.payload;
-      state.fixedData=action.payload;
+      state.fixedData = action.payload;
     });
     builder.addCase(getAllCars.rejected, (state, action) => {
       state.loading = false;
@@ -308,5 +309,5 @@ const carSlice = createSlice({
     });
   },
 });
-export const {  filterCars } = carSlice.actions;
+export const { filterCars, setCarDetails } = carSlice.actions;
 export default carSlice.reducer;

@@ -1,18 +1,17 @@
-import {createSlice,createAsyncThunk} from '@reduxjs/toolkit'
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-  selectedAgencyLocation:null
-}
+  selectedAgencyLocation: null,
+};
 
-const locSlice=createSlice({
-    name: 'location ',
-    initialState,
-    reducers:{
-        locAgn:(state,action)=>{
-            state.selectedAgencyLocation = action.payload
-        }
-    }
-})
-export const {locAgn}=locSlice.actions
+const locSlice = createSlice({
+  name: "location ",
+  initialState,
+  reducers: {
+    locAgn: (state, action) => {
+      state.selectedAgencyLocation = action.payload;
+    },
+  },
+});
+export const { locAgn } = locSlice.actions;
 export default locSlice.reducer;

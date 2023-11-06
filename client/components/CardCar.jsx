@@ -14,10 +14,15 @@ import heartBleu from "../assets/filledPurpleHeart.png";
 import BookMark from "../assets/Svg/bookMark.svg";
 import TopCorner from "../assets/Svg/BookMarkDone.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateBookMark, removedBookMark } from "../store/carFetch.js";
+import {
+  CreateBookMark,
+  removedBookMark,
+  setCarDetails,
+} from "../store/carFetch.js";
 import axios from "axios";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
+import { Booking } from "../pages/Booking.jsx";
 function CardCar({ oneCar }) {
   const [starSelected, setStarSelected] = useState(false);
   // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
@@ -36,7 +41,7 @@ function CardCar({ oneCar }) {
     // setHeartSelected(!heartSelected);
     // if (!heartSelected) {
     setHeartClicked(!isHeartClicked);
-    // console.log(oneCar.id + "selim")
+
     dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
     // } else if (heartSelected) {
     // dispatch(removedBookMark(oneCar.id));
@@ -101,7 +106,12 @@ function CardCar({ oneCar }) {
               ${oneCar.price}/{oneCar.period}
             </Text>
             <View style={styles.bookingCar}>
-              <TouchableOpacity onPress={navigation.navigate("Booking")}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setCarDetails(oneCar));
+                  navigation.navigate("Booking");
+                }}
+              >
                 <Text style={styles.bookingCar1}>Booking</Text>
               </TouchableOpacity>
             </View>

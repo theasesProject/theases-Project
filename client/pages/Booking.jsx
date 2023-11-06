@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,31 +7,61 @@ import {
   TextInput,
   Button,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Calendar from "expo-calendar";
 import { useSelector, useDispatch } from "react-redux";
 import { CreateBooking } from "../store/bookingSlice";
 import { StatusBar } from "expo-status-bar";
 import CalendarPicker from "react-native-calendar-picker";
+import { GetUnavailableDatesForCar } from "../store/bookingSlice";
 // import { Calendar } from "react-native-calendars";
 import moment from "moment";
+import { selectUser, setUser } from "../store/userSlice";
 function Booking() {
+  const unavailableDate = useSelector((state) => state.booking.unavailableDate);
+  const oneCar = useSelector((state) => state.car.OneCar);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
   const dispatch = useDispatch();
-  const activeUser = useSelector((state) => state.user);
-  console.log(selectedStartDate, "selectedStartDate");
-  console.log(selectedEndDate, "selectedEndDate");
-  console.log(markedDates, "markedDates");
+  const activeUser = useSelector(selectUser);
+
+  useEffect(() => {
+    dispatch(GetUnavailableDatesForCar(oneCar.id));
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Create an object with dates from unavailableDate array marked as red
+    const markedDatesObject = {};
+    unavailableDate.forEach((date) => {
+      markedDatesObject[date] = {
+        selectedDayColor: "red",
+      };
+    });
+
+    // Update the markedDates state
+    setMarkedDates(markedDatesObject);
+  }, [unavailableDate]);
+  console.log(unavailableDate, "unavailableDate");
   const createBooking = () => {
     if (selectedStartDate && selectedEndDate) {
+      console.log(
+        selectedStartDate.format("YYYY-MM-DD").toString(),
+        "selectedStartDate"
+      );
+      console.log(
+        selectedEndDate.format("YYYY-MM-DD").toString(),
+        "selectedEndDate"
+      );
       dispatch(
         CreateBooking({
           startDate: selectedStartDate.format("YYYY-MM-DD").toString(),
           endDate: selectedEndDate.format("YYYY-MM-DD").toString(),
           UserId: activeUser.id,
+          CarId: oneCar.id,
         })
       );
+      console.log("succes");
     } else {
       alert("Please select both a start date and an end date.");
     }
@@ -110,22 +140,33 @@ function Booking() {
         allowRangeSelection={true}
         onDateChange={(date) => handleDateSelect(date)}
         markedDates={markedDates}
-        todayBackgroundColor="blue"
-        selectedDayColor="yellow"
-        selectedDayTextColor="grey"
+        todayBackgroundColor="red"
+        selectedDayColor="#daddf0"
+        selectedDayTextColor="white"
         scaleFactor={375}
         textStyle={{
           // fontFamily: "Cochin",
           color: "black",
+
           fontSize: 18,
         }}
         previousTitle="<"
         nextTitle=">"
         customStyles={customStyles}
       />
-
-      <Text>Pick Time</Text>
-      <TouchableOpacity onPress={createBooking}>
+      <View>
+        <Text style={styles.Pick}>Pick Time</Text>
+      </View>
+      {/* <TouchableOpacity onPress={() => handleChara3("Manual")}>
+        <LinearGradient
+          colors={["#6C77BF", "#FFFF"]}
+          locations={[0, 1]}
+          style={styles.buttonContainer}
+        >
+          <Text>Manual</Text>
+        </LinearGradient>
+      </TouchableOpacity> */}
+      <TouchableOpacity style={styles.bookNow} onPress={() => createBooking()}>
         <Text>Book Now</Text>
       </TouchableOpacity>
     </View>
@@ -135,6 +176,18 @@ function Booking() {
 const styles = StyleSheet.create({
   calender: {
     backgroundColor: "red",
+  },
+  Pick: {
+    width: "100%",
+    height: 50,
+    fontSize: 16,
+    padding: 10,
+    fontWeight: "bold",
+  },
+  bookNow: {
+    backgroundColor: "yellow",
+    height: 50,
+    width: 100,
   },
 });
 

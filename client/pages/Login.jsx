@@ -116,21 +116,22 @@ function Login({ navigation }) {
       } else {
         return setError("please provide an email or a phone number");
       }
-      const response = await axios
-        .post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/${endPoint}`, {
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/${endPoint}`,
+        {
           [checkedIdentifier]: form.identifier,
           password: form.password,
-        })
+        }
+      );
       //  console.log(await response.data)
       setError(null);
       storeData("token", response.data);
 
       console.log("token: ", retrieveData("token"));
-      dispatch(fetchUser(response.data)).then(async response => {
-         await AsyncStorage.setItem("UserToken", response?.meta.arg)
-        // console.log("fuckingggggggggggggggg",response.meta.arg);
-    })
-    
+      dispatch(fetchUser(response.data)).then(async (response) => {
+        await AsyncStorage.setItem("UserToken", response?.meta.arg);
+      });
+
       navigation.navigate("Home");
     } catch (err) {
       if (err.response.status == "404") {

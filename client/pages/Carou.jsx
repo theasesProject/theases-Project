@@ -1,5 +1,13 @@
 import * as React from "react";
-import { Dimensions, Text, View, StyleSheet, TouchableOpacity, Image, Animated } from "react-native";
+import {
+  Dimensions,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Animated,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-reanimated-carousel";
 import frim from "../assets/Fst-removebg-preview.png";
@@ -16,22 +24,25 @@ function Carou() {
     {
       id: "1",
       text: "Download App",
-      secondText: "Welcome to [Your App Name] We're thrilled you've chosen us. Stay tuned for updates and enjoy your journey with us",
+      secondText:
+        "Welcome to [Your App Name] We're thrilled you've chosen us. Stay tuned for updates and enjoy your journey with us",
       image: frim,
     },
     {
       id: "2",
       text: "Select a Car",
-      secondText: "At [Your Business Name], you can rent a car and start your journey effortlessly",
+      secondText:
+        "At [Your Business Name], you can rent a car and start your journey effortlessly",
       image: scim,
     },
     {
       id: "3",
       text: "Enjoy your Ride",
-      secondText: "At [Your Business Name], you can rent a car and start your journey effortlessly",
+      secondText:
+        "At [Your Business Name], you can rent a car and start your journey effortlessly",
       image: thim,
-    }
-  ]
+    },
+  ];
   const carouselRef = React.useRef(null);
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
 

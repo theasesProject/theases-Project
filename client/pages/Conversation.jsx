@@ -81,11 +81,9 @@ function Conversation() {
       <ScrollView style={styles.feed}>
         {allMes.map((message, i) => {
           return (
-            <View key={i} style={{width:"100%",display:"flex",flexDirection:"column"}}>
-              <View  style={{ backgroundColor: message.senderId=== user.id ? "blue" : "grey", padding: 10 , position:"relative", float: message.senderId=== user.id ? "right" : "left",width:"20%" }}>
+            <View key={i} style={{ backgroundColor: message.senderId=== user.id ? "blue" : "grey", padding: 10 , position:"relative", float: message.senderId=== user.id ? "right" : "left" }}>
               <Text style={{color:"white" , alignSelf:"center"}}>{message.message}</Text>
               <Text style={{color:"white" , alignSelf:"center"}}>{format(message.createdAt)}</Text>
-            </View>
             </View>
           );
         })}

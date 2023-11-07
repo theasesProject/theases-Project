@@ -12,7 +12,7 @@ import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 // import { google_api } from '../env';
 import { SvgXml } from "react-native-svg";
-const google_api = process.env.EXPO_GOOGLE_API;
+const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
 const Mape = () => {
   const [location, setLocation] = useState(null);

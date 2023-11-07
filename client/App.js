@@ -24,6 +24,7 @@ import Mape from "./pages/Mape.jsx";
 import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import Booking from "./pages/Booking.jsx";
+import MyCars from "./pages/MyCars.jsx";
 const Stack = createStackNavigator();
 function App() {
   return (
@@ -38,6 +39,11 @@ function App() {
           <Stack.Screen
             name="Booking"
             component={Booking}
+            options={{ headerShown: true }}
+          />
+            <Stack.Screen
+            name="MyCars"
+            component={MyCars}
             options={{ headerShown: true }}
           />
           <Stack.Screen

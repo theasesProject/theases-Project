@@ -72,7 +72,6 @@ function Home({ navigation }) {
       });
     }
   }, [loading]);
-
   return (
     <View style={styles.homePage}>
       <ScrollView
@@ -84,9 +83,13 @@ function Home({ navigation }) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+
+       
         <ProfileLandingPage style={styles.header} />
         <SearchBar onSearch={updateFilteredCars} />
+       
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
+        {console.log('allcars',allCars)}
         {!loading ? (
           allCars?.map((element, i) => (
             <View style={styles.allcars} key={i}>

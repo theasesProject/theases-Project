@@ -5,17 +5,20 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import {
   allServiceForAgency,
   UpdateServiceByAgency,
 } from "../store/bookingSlice";
+const { width, height } = Dimensions.get("screen");
 import { selectUser, setUser } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import carImage from "../assets/Brands/BMW.png";
 import userImage from "../assets/user.jpg";
 import { useEffect } from "react";
 import moment from "moment";
+import io from "socket.io-client";
 function AgencyService() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
@@ -23,17 +26,27 @@ function AgencyService() {
 
   useEffect(() => {
     dispatch(allServiceForAgency(activeUser.id));
+
+    // Connect to the server using Socket.io
+    const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`); // Replace with your server's URL
+
+    // Emit notifications when accepting or rejecting a service request
+    const acceptService = (idservice) => {
+      const obj = { id: idservice, acceptation: "accepted" };
+      dispatch(UpdateServiceByAgency(obj));
+
+      // Send a notification to ProfileLandingPage
+      socket.emit("notification", `Service request accepted: ${idservice}`);
+    };
+
+    const rejectService = (idservice) => {
+      const obj = { id: idservice, acceptation: "rejected" };
+      dispatch(UpdateServiceByAgency(obj));
+
+      // Send a notification to ProfileLandingPage
+      socket.emit("notification", `Service request rejected: ${idservice}`);
+    };
   }, [dispatch]);
-
-  const acceptService = (idservice) => {
-    const obj = { id: idservice, acceptation: "accepted" };
-    dispatch(UpdateServiceByAgency(obj));
-  };
-
-  const rejectService = (idservice) => {
-    const obj = { id: idservice, acceptation: "rejected" };
-    dispatch(UpdateServiceByAgency(obj));
-  };
 
   return (
     <View style={styles.pageContainer}>
@@ -103,8 +116,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: width * 0,
+      height: height * 0.1,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

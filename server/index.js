@@ -1,5 +1,6 @@
 const express = require("express");
 
+const socketIo = require("socket.io");
 require("./models");
 const cors = require("cors");
 const app = express();
@@ -7,6 +8,8 @@ const port = 5000;
 const http = require("http");
 const dotenv = require("dotenv");
 const bodyparser = require("body-parser");
+const server = http.createServer(app);
+const io = socketIo(server);
 const logger = require("morgan");
 var jwt = require("jsonwebtoken");
 app.set("TOKEN_SECRET", `${process.env.JWT_SECRET_KEY}`);
@@ -42,4 +45,15 @@ app.use(function (err, req, res, next) {
 
   if (err.status === 404) res.status(404).json({ message: "Not found" });
   else res.status(500).json({ message: "Something looks wrong :( !!!" });
+});
+
+io.on("connection", (socket) => {
+  console.log("A user connected");
+  socket.on("notification", (message) => {
+    io.emit("notification", message);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
 });

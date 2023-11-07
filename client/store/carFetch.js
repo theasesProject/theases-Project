@@ -71,13 +71,7 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     console.log(JSON.stringify(error));
   }
 });
-export const fetchAllCarsWithBrand = createAsyncThunk(
-  "car/fetchAllCarsWithBrand",
-  async () => {
-    try {
-    } catch {}
-  }
-);
+
 export const fetchFilteredCars = createAsyncThunk(
   "car/fetchFilteredCars",
   async (filterCriteria) => {

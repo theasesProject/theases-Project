@@ -59,7 +59,7 @@ module.exports = {
       const carByBrand = await db.Car.findAll({
         where: { brand: req.body.brand },
         include: { model: db.Media, as: "Media" },
-        é,
+        
       });
 
       res.status(200).send(carByBrand);

@@ -5,6 +5,7 @@ import { format } from "timeago.js";
 
 function OneMessage({message , user}) {
     const [showDate,setShowDate] = useState(false)
+    console.log("donegit");
 
   return (
     <View>

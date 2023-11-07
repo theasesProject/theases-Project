@@ -24,7 +24,7 @@ db.User = require("./user.Model")(DataTypes, connection);
 db.Car = require("./car.Model")(DataTypes, connection);
 db.Message = require("./messages.Model")(DataTypes, connection);
 db.Agency = require("./agency.Model")(DataTypes, connection);
-db.CarMedia = require("./mediaCar.Model")(DataTypes, connection);
+db.Media = require("./media.Model")(DataTypes, connection);
 db.Review = require("./reviews.Model")(DataTypes, connection);
 db.RoomChat = require("./roomChat.Model")(DataTypes, connection);
 db.History = require("./history.Model")(DataTypes, connection);
@@ -40,14 +40,17 @@ db.Agency.belongsTo(db.User);
 db.User.hasOne(db.Request);
 db.Request.belongsTo(db.User);
 
-db.Request.hasMany(db.CarMedia);
-db.CarMedia.belongsTo(db.Request);
+db.Request.hasMany(db.Media);
+db.Media.belongsTo(db.Request);
+
+db.Request.hasOne(db.Agency);
+db.Agency.belongsTo(db.Request);
 
 db.Agency.hasMany(db.Car);
 db.Car.belongsTo(db.Agency);
 
-db.Car.hasMany(db.CarMedia);
-db.CarMedia.belongsTo(db.Car);
+db.Car.hasMany(db.Media);
+db.Media.belongsTo(db.Car);
 
 db.User.hasMany(db.Car);
 db.Car.belongsTo(db.User);
@@ -64,11 +67,11 @@ db.Car.belongsTo(db.Service);
 db.User.hasMany(db.Report);
 db.Report.belongsTo(db.User);
 
-// db.User.hasMany(db.Message);
-// db.Message.belongsTo(db.User);
-
 db.User.hasMany(db.RoomChat);
-db.RoomChat.belongsTo(db.User)
+db.RoomChat.belongsTo(db.User);
+
+db.User.hasMany(db.Message);
+db.Message.belongsTo(db.User);
 
 db.RoomChat.hasMany(db.Message);
 db.Message.belongsTo(db.RoomChat);
@@ -84,4 +87,5 @@ db.BookMark.belongsTo(db.User);
 
 db.BookMark.hasMany(db.Car);
 db.Car.belongsTo(db.BookMark);
+
 module.exports.db = db;

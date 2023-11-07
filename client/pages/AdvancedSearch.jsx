@@ -10,9 +10,9 @@ function AdvancedSearch() {
   const navigation = useNavigation();
   const allCars = useSelector((state) => state.car.allCars);
 
-  const [sliderValue, setSliderValue] = useState(0);
-  const [sliderValue2, setSliderValue2] = useState(0);
-  const [priceSearched, setPriceSearched] = useState(0);
+  const [sliderValue, setSliderValue] = useState(40000);
+  const [sliderValue2, setSliderValue2] = useState(200000);
+  const [priceSearched, setPriceSearched] = useState(40000);
   const [typeVehicule, setTypeVehicule] = useState("");
   const [chara, setChar] = useState("");
   const [isPressed, setIsPressed] = useState(false);
@@ -26,12 +26,15 @@ function AdvancedSearch() {
 
   // dispatch(getAllCars());
 
-  dispatch(fetchFilteredCars(filterCriteria));
+  // dispatch(fetchFilteredCars(filterCriteria));
 
-  const filterCriteria = {
-    price: [sliderValue, priceSearched],
-    typevehicle: typeVehicule,
-    characteristics: chara,
+  const create = () => {
+    const filterCriteria = {
+      price: [sliderValue, priceSearched],
+      typevehicle: typeVehicule,
+      characteristics: chara,
+    };
+    dispatch(fetchFilteredCars(filterCriteria));
   };
 
   console.log(chara, "char");

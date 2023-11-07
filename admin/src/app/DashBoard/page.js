@@ -3,15 +3,23 @@ import React, { useEffect, useState } from "react";
 import "../../styles/dashboard/page.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReviews, selectReviews } from "@/Redux/adminSlice";
-import { getAllUsers, updateStateBlock } from "@/Redux/dachboardAdmin";
+import {
+  getAllUsers,
+  updateStateBlock,
+  getAllRequests,
+  approveRequest,
+  declineRequest,
+} from "@/Redux/dachboardAdmin";
 import TableAdmin from "@/components/tableAdmin";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const ReviewData = useSelector(selectReviews);
   const allUsers = useSelector((state) => state.user.allUsers);
+  const allRequests = useSelector((state) => state.user.requests);
   useEffect(() => {
     dispatch(fetchReviews());
     dispatch(getAllUsers());
+    dispatch(getAllRequests());
   }, [dispatch]);
   const handleBlock = (id) => {
     dispatch(updateStateBlock(id));
@@ -52,7 +60,7 @@ const Dashboard = () => {
         </div>
 
         <div>
-          <table id="customers">
+          <table className="table">
             <tr>
               <th>UserName</th>
               <th>Email</th>

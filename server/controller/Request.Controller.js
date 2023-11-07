@@ -1,9 +1,8 @@
 const { db } = require("../models/index");
 const Request = db.Request;
-const Media = db.CarMedia;
+const Media = db.Media;
 
 module.exports = {
-  // this is the controller that'll fetch all requests for the use, each one will have all its images included
   getAll: async (req, res) => {
     try {
       const response = await Request.findAll({
@@ -21,7 +20,6 @@ module.exports = {
         ...req.body,
         UserId: req.params.id,
       });
-     console.log('aalaaaa',response);
       res.status(201).send(response);
     } catch (err) {
       // res.status(500).json(err);

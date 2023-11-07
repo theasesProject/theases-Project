@@ -105,7 +105,7 @@ function Conversation() {
           }}
           onChangeText={handleInput}
         ></TextInput>
-        <TouchableOpacity
+        <Pressable  
           style={{
             borderColor: "black",
             borderWidth: 1,
@@ -120,7 +120,7 @@ function Conversation() {
           }}
         >
           <Text>Send</Text>
-        </TouchableOpacity>
+        </Pressable >
       </View>
     </ScrollView>
   );

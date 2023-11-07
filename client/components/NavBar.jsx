@@ -49,7 +49,7 @@ function NavBar({style}) {
       >
         <View style={styles.hm}>
 
-          <Ms fill={isActive('Mape')} />
+          <Ms fill={isActive('Messages')} />
           <Text style={{color: isActive('Mape')}}>Messeges</Text>
         </View>
       </Pressable>

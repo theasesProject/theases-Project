@@ -7,7 +7,7 @@ module.exports = {
     try {
       const allCars = await db.Car.findAll({
         include: [
-          { model: db.CarMedia, as: "CarMedia" },
+          // { model: db.Media, as: "Media" },
           { model: db.Agency, as: "Agency" },
         ],
       });

@@ -2,17 +2,19 @@ const {
   CreateBooking,
   GetUnavailableDatesForCar,
   GetAvailableDatesForCar,
+  UpdateService,
+  GetAllServicesForAgency,
 } = require("../controller/booking.controller");
 const express = require("express");
 const bookingRouter = express.Router();
 
-// Route to create a booking
 bookingRouter.post("/createbooking", CreateBooking);
 
-// Route to get all unavailable dates for a specific car
 bookingRouter.get("/unavailabledates/:oneCar", GetUnavailableDatesForCar);
 
-// Route to get all available dates for a specific car
 bookingRouter.get("/availabledates/:oneCar", GetAvailableDatesForCar);
 
+bookingRouter.put("/updatebooking", UpdateService);
+
+bookingRouter.get("/allServiceForAgency/:agencyId", GetAllServicesForAgency);
 module.exports = bookingRouter;

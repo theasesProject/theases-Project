@@ -6,18 +6,18 @@ const initialState = {
   error: null,
   succes: null,
   unavailableDate: [],
+  allServiceByAgency: [],
 };
 export const CreateBooking = createAsyncThunk(
   "booking/CreateBooking",
   async (params) => {
     try {
-      console.log(params, "bbbbb");
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/createbooking`,
 
         params
       );
-      console.log(response.data, "response");
+
       return response.data;
     } catch (error) {
       console.log(error);
@@ -31,14 +31,42 @@ export const GetUnavailableDatesForCar = createAsyncThunk(
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/unavailabledates/${id}`
       );
-      console.log(response.data, "response");
+
       return response.data;
     } catch (error) {
       console.log(error);
     }
   }
 );
+export const UpdateServiceByAgency = createAsyncThunk(
+  "booking/UpdateServiceByAgency",
+  async (params) => {
+    try {
+      const response = await axios.put(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/updatebooking`,
+        params
+      );
+      console.log(response.data, "params");
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const allServiceForAgency = createAsyncThunk(
+  "booking/allServiceForAgency",
+  async (id) => {
+    try {
+      const response = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/allServiceForAgency/${id}`
+      );
 
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 const bookingSlice = createSlice({
   name: "booking",
   initialState,
@@ -66,6 +94,30 @@ const bookingSlice = createSlice({
       state.unavailableDate = action.payload;
     });
     builder.addCase(GetUnavailableDatesForCar.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(allServiceForAgency.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(allServiceForAgency.fulfilled, (state, action) => {
+      state.loading = false;
+      state.allServiceByAgency = action.payload;
+    });
+    builder.addCase(allServiceForAgency.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(UpdateServiceByAgency.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(UpdateServiceByAgency.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = action.payload;
+    });
+    builder.addCase(UpdateServiceByAgency.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

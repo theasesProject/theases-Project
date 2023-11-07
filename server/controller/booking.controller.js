@@ -43,7 +43,7 @@ module.exports = {
         .json({ message: "Selected date range is not available." });
     }
 
-    await db.Service.create({
+    const services = await db.Service.create({
       CarId: CarId,
       UserId: UserId,
       startDate,
@@ -58,7 +58,7 @@ module.exports = {
       });
     }
 
-    return res.json({ message: "Car rental successful." });
+    return res.json(services);
   },
   GetAvailableDatesForCar: async function (req, res) {
     try {
@@ -131,6 +131,84 @@ module.exports = {
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  UpdateService: async function (req, res) {
+    try {
+      const { id, acceptation } = req.body;
+
+      const service = await db.Service.findByPk(id);
+
+      if (!service) {
+        return res.status(404).json({ message: "Service not found." });
+      }
+
+      if (service.acceptation !== "pending") {
+        return res
+          .status(400)
+          .json({ message: "Service is already accepted or rejected." });
+      }
+
+      if (acceptation === "rejected") {
+        const startDate = service.startDate;
+        const endDate = service.endDate;
+
+        const datesInRange = getDatesInRange(startDate, endDate);
+
+        await db.UnavailableDate.destroy({
+          where: {
+            CarId: service.CarId,
+            unavailableDate: datesInRange,
+          },
+        });
+      }
+
+      await service.update({ acceptation });
+
+      return res.json({ message: "Service updated successfully." });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  GetAllServicesForAgency: async function (req, res) {
+    try {
+      const serviceObj = [];
+      const { agencyId } = req.params;
+
+      const services = await db.Service.findAll({
+        where: {
+          UserId: agencyId,
+        },
+      });
+      for (const service of services) {
+        console.log(service.CarId, "service");
+        const car = await db.Car.findOne({
+          where: { id: service.CarId },
+        });
+        const carImage = await db.CarMedia.findOne({
+          where: { CarId: service.CarId },
+        });
+        const user = await db.User.findOne({ where: { id: service.UserId } });
+        const serviceInfo = {
+          car: car,
+          carImage: carImage,
+          user: user,
+          service: service,
+        };
+        serviceObj.push(serviceInfo);
+      }
+
+      if (!services || services.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "No services found for the agency." });
+      }
+
+      return res.json(serviceObj);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
     }
   },
 };

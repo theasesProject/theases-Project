@@ -46,7 +46,7 @@ function Home({ navigation }) {
   const resetData = () => {
     dispatch(filterCars(fixedData));
   };
-  console.log(allCars, "allCars");
+
   const retrieveToken = async () => {
     try {
       const value = await AsyncStorage.getItem("UserToken");
@@ -77,9 +77,9 @@ function Home({ navigation }) {
     <View style={styles.homePage}>
       <ScrollView
         ref={scrollViewRef}
-        onScroll={(event) => {
-          setScrollPosition(event.nativeEvent.contentOffset.y);
-        }}
+        // onScroll={(event) => {
+        //   setScrollPosition(event.nativeEvent.contentOffset.y);
+        // }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

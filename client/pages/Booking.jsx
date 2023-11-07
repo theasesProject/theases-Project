@@ -14,10 +14,12 @@ import { CreateBooking } from "../store/bookingSlice";
 import { StatusBar } from "expo-status-bar";
 import CalendarPicker from "react-native-calendar-picker";
 import { GetUnavailableDatesForCar } from "../store/bookingSlice";
+import { useNavigation } from "@react-navigation/native";
 // import { Calendar } from "react-native-calendars";
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
 function Booking() {
+  const navigation = useNavigation();
   const unavailableDate = useSelector((state) => state.booking.unavailableDate);
   const oneCar = useSelector((state) => state.car.OneCar);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -25,34 +27,14 @@ function Booking() {
   const [markedDates, setMarkedDates] = useState({});
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
+  const succes = useSelector((state) => state.booking.succes);
 
   useEffect(() => {
     dispatch(GetUnavailableDatesForCar(oneCar.id));
   }, [dispatch]);
 
-  useEffect(() => {
-    // Create an object with dates from unavailableDate array marked as red
-    const markedDatesObject = {};
-    unavailableDate.forEach((date) => {
-      markedDatesObject[date] = {
-        selectedDayColor: "red",
-      };
-    });
-
-    // Update the markedDates state
-    setMarkedDates(markedDatesObject);
-  }, [unavailableDate]);
-  console.log(unavailableDate, "unavailableDate");
   const createBooking = () => {
     if (selectedStartDate && selectedEndDate) {
-      console.log(
-        selectedStartDate.format("YYYY-MM-DD").toString(),
-        "selectedStartDate"
-      );
-      console.log(
-        selectedEndDate.format("YYYY-MM-DD").toString(),
-        "selectedEndDate"
-      );
       dispatch(
         CreateBooking({
           startDate: selectedStartDate.format("YYYY-MM-DD").toString(),
@@ -61,7 +43,6 @@ function Booking() {
           CarId: oneCar.id,
         })
       );
-      console.log("succes");
     } else {
       alert("Please select both a start date and an end date.");
     }
@@ -89,7 +70,7 @@ function Booking() {
       setSelectedEndDate(date);
       setMarkedDates({
         ...markedDates,
-        [date]: { color: "red" },
+        [date]: { color: "green" },
       });
 
       const datesInRange = getDatesInRange(selectedStartDate, date);
@@ -110,28 +91,14 @@ function Booking() {
     }
   };
 
-  const customStyles = {
-    calendar: {
-      // Style for the calendar container
-      backgroundColor: "red",
-      width: 400,
-      heigth: 400,
-    },
-    day: {
-      // Style for individual day cells
-      fontSize: 18,
-      textAlign: "center",
-    },
-    weekend: {
-      // Style for weekend days
-      color: "red",
-      backgroundColor: "blue",
-    },
-    selected: {
-      // Style for selected dates
-      backgroundColor: "blue",
-      borderRadius: 16,
-    },
+  const markDatesRed = () => {
+    const markedRedDates = {};
+
+    unavailableDate.forEach((date) => {
+      markedRedDates[date] = { selectedDayColor: "red" };
+    });
+
+    return markedRedDates;
   };
 
   return (
@@ -139,8 +106,12 @@ function Booking() {
       <CalendarPicker
         allowRangeSelection={true}
         onDateChange={(date) => handleDateSelect(date)}
-        markedDates={markedDates}
-        todayBackgroundColor="red"
+        // markedDates={markedDates}
+        markedDates={{
+          ...markedDates,
+          ...markDatesRed(), // Add red dates to the markedDates
+        }}
+        todayBackgroundColor="blue"
         selectedDayColor="#daddf0"
         selectedDayTextColor="white"
         scaleFactor={375}
@@ -152,20 +123,17 @@ function Booking() {
         }}
         previousTitle="<"
         nextTitle=">"
-        customStyles={customStyles}
+        // customStyles={customStyles}
       />
       <View>
-        <Text style={styles.Pick}>Pick Time</Text>
-      </View>
-      {/* <TouchableOpacity onPress={() => handleChara3("Manual")}>
-        <LinearGradient
-          colors={["#6C77BF", "#FFFF"]}
-          locations={[0, 1]}
-          style={styles.buttonContainer}
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("AgencyService");
+          }}
         >
-          <Text>Manual</Text>
-        </LinearGradient>
-      </TouchableOpacity> */}
+          <Text style={styles.Pick}>Pick Time</Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity style={styles.bookNow} onPress={() => createBooking()}>
         <Text>Book Now</Text>
       </TouchableOpacity>

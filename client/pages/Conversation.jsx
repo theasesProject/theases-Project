@@ -90,7 +90,7 @@ function Conversation() {
       <ScrollView ref={scrollViewRef} style={styles.feed}>
         {allMes.map((message, i) => {
           return (
-            <OneMessage message={message} i={i} user={user}/>
+            <OneMessage message={message} key={i} user={user}/>
           );
         })}
       </ScrollView>

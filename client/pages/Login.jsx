@@ -19,7 +19,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
-import { DOMAIN_NAME } from "../env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // require("dotenv").config();

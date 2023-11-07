@@ -3,7 +3,7 @@ import { View, Text, Button, StyleSheet, TouchableOpacity, Linking } from 'react
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
-import { google_api } from '../env';
+// import { google_api } from '../env';
 import { SvgXml } from 'react-native-svg';
 
 const Mape = () => {

@@ -28,8 +28,9 @@ function Messages() {
       .then( async (response) => {
         setRooms(response.data)
         await axios.get(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getAllRoomsUser2/${user.data.id}`).then((res) => {
-          rooms.push(...res.data)
-        setRooms(rooms)
+        if(res.data.length !== 0 ){
+          setRooms(rooms.concat(res.data))
+        }
         })
       }).catch((error) => console.log(error));
     

@@ -24,7 +24,7 @@ function AdvancedSearch() {
   const [isPressed6, setIsPressed6] = useState(false);
   const dispatch = useDispatch();
 
-  dispatch(getAllCars());
+  // dispatch(getAllCars());
 
   dispatch(fetchFilteredCars(filterCriteria));
 

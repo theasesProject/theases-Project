@@ -7,11 +7,8 @@ const initialState = {
   loading: false,
   error: null,
   OneCar: {},
-
   agencyCar: [],
-
   fixedData: [],
-
   bookMarks: [],
   succes: null,
 };

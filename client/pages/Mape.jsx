@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import * as Location from 'expo-location';
-import MapViewDirections from 'react-native-maps-directions';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import * as Location from "expo-location";
+import MapViewDirections from "react-native-maps-directions";
 // import { google_api } from '../env';
-import { SvgXml } from 'react-native-svg';
+import { SvgXml } from "react-native-svg";
+const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
 const Mape = () => {
   const [location, setLocation] = useState(null);

@@ -24,6 +24,7 @@ import Conversation from "./pages/Conversation.jsx";
 import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import Booking from "./pages/Booking.jsx";
+import MyCars from "./pages/MyCars.jsx";
 const Stack = createStackNavigator();
 function App() {
   return (
@@ -38,6 +39,11 @@ function App() {
           <Stack.Screen
             name="Booking"
             component={Booking}
+            options={{ headerShown: true }}
+          />
+            <Stack.Screen
+            name="MyCars"
+            component={MyCars}
             options={{ headerShown: true }}
           />
           <Stack.Screen
@@ -118,11 +124,7 @@ function App() {
             component={ForgotPassword}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
-            name="Remobg"
-            component={Remobg}
-            options={{ headerShown: false }}
-          /> */}
+
           <Stack.Screen
             name="confirmIdentity"
             component={ConfirmIdentity}
@@ -144,11 +146,7 @@ function App() {
             component={FiltredCar}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="CarDetails"
-            component={CarDetails}
-            options={{ headerShown: false }}
-          />
+
           <Stack.Screen
             name="AddAgencyCar"
             component={AddAgencyCar}

@@ -208,7 +208,7 @@ const carMediaData = [
 async function seedCarMedia() {
   for (let carMedia of carMediaData) {
     for (let media of carMedia.media) {
-      await db.CarMedia.create({
+      await db.Media.create({
         media: media,
         carId: carMedia.id,
       });

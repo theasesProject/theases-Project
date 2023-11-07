@@ -44,7 +44,7 @@ module.exports = {
   },
   createImage: async function (req, res) {
     try {
-      const image = await db.CarMedia.create({
+      const image = await db.Media.create({
         media: req.body.media,
         CarId: req.body.CarId,
       });
@@ -58,6 +58,8 @@ module.exports = {
     try {
       const carByBrand = await db.Car.findAll({
         where: { brand: req.body.brand },
+        include: { model: db.Media, as: "Media" },
+        
       });
 
       res.status(200).send(carByBrand);
@@ -97,6 +99,7 @@ module.exports = {
     try {
       const filtredOne = await db.Car.findAll({
         where,
+        include: { model: db.Media, as: "Media" },
       });
 
       res.json(filtredOne);
@@ -133,7 +136,7 @@ module.exports = {
 
   getAllCarsByAgencyId: async function (req, res) {
     try {
-      console.log("requesttttttttttttt bodyyyyyyyyyyyyyyyyy",req.body);
+      console.log("requesttttttttttttt bodyyyyyyyyyyyyyyyyy", req.body);
       const allCars = [];
       const allCarsByAgency = await db.Car.findAll({
         where: { AgencyId: req.params.AgencyId },
@@ -141,7 +144,7 @@ module.exports = {
       for (const OneCar of allCarsByAgency) {
         const car = await db.Car.findOne({ where: { id: OneCar.id } });
 
-        const carImage = await db.CarMedia.findOne({
+        const carImage = await db.Media.findOne({
           where: { CarId: car.id },
         });
         const carInfo = {

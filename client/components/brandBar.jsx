@@ -20,17 +20,22 @@ import suzuki from "../assets/Brands/suzuki.png";
 import { useState } from "react";
 import axios from "axios";
 
-const { width, height } = Dimensions.get("window");
-// import { DOMAIN_NAME } from "../env";
-import { useDispatch } from "react-redux";
+const { width, height } = Dimensions.get("screen");
+import { useDispatch, useSelector } from "react-redux";
 import { filterCars } from "../store/carFetch";
-function BrandBar({ onPress, onFilterByBrand,resetData }) {
-  const dispatch=useDispatch()
+function BrandBar({ onPress, onFilterByBrand, resetData }) {
+  const dispatch = useDispatch();
   const [carByBrand, setCarByBrand] = useState([]);
+  const allCars = useSelector((state) => state.car.allCars);
+
   const [error, setError] = useState(false);
   const handleFilterByBrand = (brandName) => {
+    !allCars.length?(null):
     axios
-      .post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/byBrand`, { brand: brandName })
+      .post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/byBrand`,
+        { brand: brandName }
+      )
       .then((response) => {
         onFilterByBrand(response.data);
       })
@@ -44,7 +49,9 @@ function BrandBar({ onPress, onFilterByBrand,resetData }) {
       <View style={styles.BrandBar}>
         <View style={styles.barText}>
           <Text style={styles.topBrand}>Top Brands</Text>
-          <Text style={styles.ViewAll} onPress={()=>resetData()}>View All</Text>
+          <Text style={styles.ViewAll} onPress={() => resetData()}>
+            View All
+          </Text>
         </View>
       </View>
       <ScrollView horizontal={true} style={styles.allBrandImage}>

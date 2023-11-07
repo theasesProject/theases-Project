@@ -13,16 +13,16 @@ module.exports.add = async function (req, res) {
 module.exports.check = async function (req, res) {
   try {
     const task = await db.BookMark.findOne({
-      where:{
-        UserId:req.params.UserId,
-        CarId:req.params.carId
-      }
-    })
-    res.json(task)
+      where: {
+        UserId: req.params.UserId,
+        CarId: req.params.carId,
+      },
+    });
+    res.json(task);
   } catch (er) {
-    throw er
+    throw er;
   }
-}
+};
 module.exports.getAll = async function (req, res) {
   try {
     const allCars = [];
@@ -32,7 +32,7 @@ module.exports.getAll = async function (req, res) {
     for (const bookmark of all) {
       const car = await db.Car.findOne({ where: { id: bookmark.CarId } });
       const agency = await db.Agency.findOne({ where: { id: car.AgencyId } });
-      const carImage = await db.CarMedia.findOne({
+      const carImage = await db.Media.findOne({
         where: { CarId: bookmark.CarId },
       });
 

@@ -75,8 +75,8 @@ function AdvancedSearch() {
   };
 
   const prices = () => {
-    let minPrice = 5;
-    let maxPrice = 20;
+    let minPrice = 40000;
+    let maxPrice = 200000;
     for (const car of allCars) {
       const price = car.price;
       if (price < minPrice) {
@@ -199,7 +199,10 @@ function AdvancedSearch() {
 
       <TouchableOpacity
         style={styles.showResult}
-        onPress={() => navigation.navigate("FiltredCar")}
+        onPress={() => {
+          create();
+          navigation.navigate("FiltredCar");
+        }}
       >
         <LinearGradient colors={["#6C77BF", "#4485C5"]} locations={[0, 1]}>
           <Text style={styles.showResults}>Show Results</Text>

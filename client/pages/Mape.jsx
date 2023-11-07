@@ -11,7 +11,7 @@ const Mape = () => {
   const [mapRegion, setMapRegion] = useState({
     latitude: 36.842278, // You can replace these with your default values
     longitude: 10.187765,
-    
+
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -29,8 +29,8 @@ const Mape = () => {
 
   const getLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      console.error('Permission to access location was denied');
+    if (status !== "granted") {
+      console.error("Permission to access location was denied");
       return;
     }
 
@@ -54,10 +54,10 @@ const Mape = () => {
           }
         })
         .catch((err) => {
-          console.error('An error occurred while opening the URL: ' + err);
+          console.error("An error occurred while opening the URL: " + err);
         });
     } else {
-      console.error('Location or destination is not available.');
+      console.error("Location or destination is not available.");
     }
   };
   const startItinerary = () => {
@@ -71,14 +71,14 @@ const Mape = () => {
           `https://maps.googleapis.com/maps/api/directions/json?origin=${location.coords.latitude},${location.coords.longitude}&destination=${destination.latitude},${destination.longitude}&key=${google_api}`
         );
         const data = await response.json();
-        if (data.status === 'OK') {
+        if (data.status === "OK") {
           const duration = data.routes[0].legs[0].duration.text;
           setEstimatedDuration(duration);
         } else {
-          console.error('Error calculating route: ', data.status);
+          console.error("Error calculating route: ", data.status);
         }
       } catch (error) {
-        console.error('Error fetching route data: ', error);
+        console.error("Error fetching route data: ", error);
       }
     }
   };
@@ -91,7 +91,7 @@ const Mape = () => {
       longitudeDelta: newLongitudeDelta,
     });
   };
-  
+
   const handleZoomOut = () => {
     const newLatitudeDelta = mapRegion.latitudeDelta * 2;
     const newLongitudeDelta = mapRegion.longitudeDelta * 2;
@@ -101,9 +101,6 @@ const Mape = () => {
       longitudeDelta: newLongitudeDelta,
     });
   };
-  
-
-
 
   return (
     <View style={styles.container}>
@@ -148,11 +145,14 @@ const Mape = () => {
       {!isItineraryStarted && (
         <Button title="Start Itinerary" onPress={startItinerary} />
       )}
-      {isItineraryStarted && (
-        <Button title="Get Time" onPress={getTime} />
+      {isItineraryStarted && <Button title="Get Time" onPress={getTime} />}
+      {estimatedDuration && (
+        <Text>Estimated Duration: {estimatedDuration}</Text>
       )}
-      {estimatedDuration && <Text>Estimated Duration: {estimatedDuration}</Text>}
-      <Button title="Navigate Turn-by-Turn" onPress={openTurnByTurnNavigation} /> 
+      <Button
+        title="Navigate Turn-by-Turn"
+        onPress={openTurnByTurnNavigation}
+      />
     </View>
   );
 };
@@ -165,13 +165,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     right: 20,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   zoomButton: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 15,
     margin: 5,
     borderRadius: 5,

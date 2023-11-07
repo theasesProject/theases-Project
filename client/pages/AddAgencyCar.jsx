@@ -8,7 +8,7 @@ import {
   ScrollView,
   Pressable,
   Modal,
-  Button
+  Button,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from "react-native-check-box";
@@ -21,7 +21,7 @@ import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
 import RemoveBackground from "./RemoveBackground";
 // import removeBackground from "../HelperFunctions/removeBackGround";
-function AddAgencyCar() {
+function AddAgencyCar({ navigation }) {
   const dispatch = useDispatch();
   const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
 
@@ -89,17 +89,24 @@ function AddAgencyCar() {
 
       setTimeout(() => {
         setSuccessModalVisible(false);
+    navigation.navigate("Home");
+
       }, 5000);
     }
   };
 
   const brand = [
-    { label: "Toyota", value: "Toyota" },
-    { label: "Ford", value: "Ford" },
-    { label: "Honda", value: "Honda" },
-    { label: "Hyndai", value: "Hyndai" },
-    { label: "Porch", value: "Porch" },
-    { label: "Other", value: "Other" },
+    { label: "toyota", value: "toyota" },
+    { label: "bmw", value: "bmw" },
+    { label: "peugeot", value: "peugeot" },
+
+    { label: "ford", value: "ford" },
+    { label: "honda", value: "honda" },
+    { label: "hyndai", value: "hyndai" },
+    { label: "porch", value: "porch" },
+    { label: "renault", value: "renault" },
+    { label: "volkswagen", value: "volkswagen" },
+    { label: "other", value: "other" },
   ];
   const typeOfFuel = [
     { label: "Gasoline", value: "Gasoline" },
@@ -215,17 +222,54 @@ function AddAgencyCar() {
     console.log(type, "type");
   };
   
+const pickerSelectStyles = {
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "black",
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: "lightgrey",
+    borderRadius: 10,
+    color: "black",
+    paddingRight: 30,
+  justifyContent: "center",
   
-  
-  
-  console.log(img, "img");
+  // to ensure the text is never behind the icon
+  },
+	
+};
+
+
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
         <Text style={styles.introdcution1}>
           Welcome ,Now you can add Your car collection
         </Text>
-
+        <RNPickerSelect
+            placeholder={{
+              label: "Select Brand for your car ",
+              value: null,
+            }}
+            items={brand}
+            value={brandCar}
+            onValueChange={(value) => handleBrand(value)}
+            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false}
+          />
+          {brandError !== "" && (
+            <Text style={styles.errorText}>{brandError}</Text>
+          )}
         <TextInput
           value={model}
           onChangeText={handleModel}
@@ -261,6 +305,9 @@ function AddAgencyCar() {
           }}
           items={period}
           onValueChange={handlePeriode}
+          style={pickerSelectStyles}
+
+          useNativeAndroidPickerStyle={false}
         />
         {periodError !== "" && (
           <Text style={styles.errorText}>{periodError}</Text>
@@ -275,19 +322,7 @@ function AddAgencyCar() {
         />
 
         <View style={styles.selectedItem}>
-          <RNPickerSelect
-            placeholder={{
-              label: "Select Brand for your car ",
-              value: null,
-            }}
-            items={brand}
-            value={brandCar}
-            onValueChange={(value) => handleBrand(value)}
-            style={pickerSelectStyles}
-          />
-          {brandError !== "" && (
-            <Text style={styles.errorText}>{brandError}</Text>
-          )}
+         
 
           <RNPickerSelect
             placeholder={{
@@ -297,7 +332,9 @@ function AddAgencyCar() {
             value={fuel}
             items={typeOfFuel}
             onValueChange={(value) => handleFuel(value)}
-            style={{ backgroundColor: "lightgrey" }}
+            style={pickerSelectStyles}
+
+            useNativeAndroidPickerStyle={false}
           />
 
           <RNPickerSelect
@@ -307,6 +344,9 @@ function AddAgencyCar() {
             }}
             items={characteristics}
             onValueChange={(value) => handleChar(value)}
+            style={pickerSelectStyles}
+
+            useNativeAndroidPickerStyle={false}
           />
           {charError !== "" && (
             <Text style={styles.errorText}>{charError}</Text>
@@ -318,6 +358,9 @@ function AddAgencyCar() {
             }}
             items={types}
             onValueChange={(value) => handleType(value)}
+            style={pickerSelectStyles}
+
+            useNativeAndroidPickerStyle={false}
           />
           {typeError !== "" && (
             <Text style={styles.errorText}>{typeError}</Text>
@@ -334,8 +377,8 @@ function AddAgencyCar() {
             }}
             isChecked={warranty}
           />
-      <RemoveBackground/>
- 
+          <RemoveBackground />
+
           <View style={styles.picture}>
             <Pressable
               onPress={selectImage}
@@ -390,8 +433,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   image: {
     width: 200,
@@ -521,26 +564,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 4,
-    color: "black",
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: "purple",
-    borderRadius: 8,
-    color: "black",
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-});
 export default AddAgencyCar;

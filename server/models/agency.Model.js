@@ -1,9 +1,5 @@
 module.exports = (DataTypes, connection) => {
   const Agency = connection.define("Agency", {
-    papers: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     address: {
       type: DataTypes.STRING,
       allowNull: false,

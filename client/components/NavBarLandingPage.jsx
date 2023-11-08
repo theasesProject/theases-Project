@@ -61,11 +61,11 @@ console.log("jiji from page");
   };
   useEffect(() => {
     retrieveToken();
+    // getUserLocationAndNearestAddress();
     // AppState.addEventListener("change", retrieveToken);
     // return () => {
     //   AppState.removeEventListener("change", retrieveToken);
     // };
-    getUserLocationAndNearestAddress();
   }, []);
   return (
     <View style={[styles.navBar,style]}>

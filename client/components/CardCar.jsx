@@ -5,21 +5,22 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
-  Dimensions
+  Dimensions,
+  Button,
 } from "react-native";
-const  {height,width}=Dimensions.get("screen")
+const { height, width } = Dimensions.get("screen");
 import { useEffect, useState } from "react";
 import car from "../assets/car2.png";
 import emptyStar from "../assets/eto.png";
 import star from "../assets/star1.png";
-import RatingStar from "../assets/Svg/RatingStar.svg"
+import RatingStar from "../assets/Svg/RatingStar.svg";
 import BookMark from "../assets/Svg/bookMark.svg";
 import TopCorner from "../assets/Svg/BookMarkDone.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateBookMark, removedBookMark } from "../store/carFetch.js";
+import { CreateBookMark, removedBookMark, saveDetails } from "../store/carFetch.js";
 import axios from "axios";
 import { selectUser } from "../store/userSlice";
-function CardCar({ oneCar, setNothing }) {
+function CardCar({ oneCar, setNothing, handlePress }) {
   const [starSelected, setStarSelected] = useState(false);
   // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
   const [isHeartClicked, setHeartClicked] = useState(false);
@@ -30,7 +31,7 @@ function CardCar({ oneCar, setNothing }) {
   const starImage = starSelected ? star : emptyStar;
   // const heartImage = heartSelected ? heartBleu : EmptyHeart;
   const dispatch = useDispatch();
-  console.log("Car dataaaaaaaaaaaa", oneCar);
+  // console.log("Car dataaaaaaaaaaaa", oneCar);
   const handleStarPress = () => {
     setStarSelected(!starSelected);
   };
@@ -50,7 +51,7 @@ function CardCar({ oneCar, setNothing }) {
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/check/${activeUser.id}/${oneCar.id}`
       );
       if (task.data) {
-        console.log("taskkkkkkkkkkkkkk", task.data);
+        // console.log("taskkkkkkkkkkkkkk", task.data);
         setNothing("");
         setDone(true);
       } else {
@@ -61,12 +62,16 @@ function CardCar({ oneCar, setNothing }) {
       console.error(er);
     }
   };
+  const handleRent = async () => {
+    handlePress();
+    dispatch(saveDetails(oneCar));
+  };
   useEffect(() => {
-    // setDone(false)
     checkBookMarked();
   }, [loading]);
   return (
     <View style={styles.card}>
+      <Button title="Details & Booking" onPress={handleRent} />
       <View style={styles.Image}>
         <Image style={styles.carImage} source={car} />
         {Object.values(activeUser).length ? (
@@ -84,11 +89,11 @@ function CardCar({ oneCar, setNothing }) {
         </View>
         <View style={styles.PriceStar}>
           {/* <View style={styles.reviews}> */}
-            {/* <TouchableOpacity > */}
-              {/* <RatingStar onPress={handleStarPress}/> */}
-              {/* <Image style={styles.heart} source={starImage}></Image> */}
-            {/* </TouchableOpacity> */}
-            {/* <Text style={styles.avaible}>(150 review)</Text> */}
+          {/* <TouchableOpacity > */}
+          {/* <RatingStar onPress={handleStarPress}/> */}
+          {/* <Image style={styles.heart} source={starImage}></Image> */}
+          {/* </TouchableOpacity> */}
+          {/* <Text style={styles.avaible}>(150 review)</Text> */}
           {/* </View> */}
           <Text style={styles.carPrice}>
             ${oneCar.price}/{oneCar.period}
@@ -153,14 +158,14 @@ const styles = StyleSheet.create({
   },
   avaible: {
     fontSize: 15,
-    fontWeight:"bold",
+    fontWeight: "bold",
     color: "green",
   },
   carPrice: {
     fontSize: 17,
-    paddingLeft:width*.5,
+    paddingLeft: width * 0.5,
     fontWeight: "bold",
-    color: "#6C77BF"
+    color: "#6C77BF",
   },
 });
 

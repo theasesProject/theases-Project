@@ -23,10 +23,10 @@ function AdvancedSearch() {
   const [isPressed5, setIsPressed5] = useState(false);
   const [isPressed6, setIsPressed6] = useState(false);
   const dispatch = useDispatch();
-
-  dispatch(getAllCars());
-
-  dispatch(fetchFilteredCars(filterCriteria));
+  useEffect(() => {
+    dispatch(getAllCars());
+    dispatch(fetchFilteredCars(filterCriteria));
+  }, []);
 
   const filterCriteria = {
     price: [sliderValue, priceSearched],

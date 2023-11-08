@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import SwipeUpDown from "react-native-swipe-up-down";
 import LinearGradient from "expo-linear-gradient";
 import axios from "axios";
 import CardCar from "../components/CardCar.jsx";
@@ -20,13 +21,15 @@ import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
-import { Animated } from 'react-native';
+import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
-import CarDetails from  "./carDetails.jsx"
+import CarDetails from "./carDetails.jsx";
+import ItemMini from "../components/ItemMini.jsx";
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
 function Home({ navigation }) {
   const dispatch = useDispatch();
+  const [isVisibleSwipe, setIsVisibleSwipe] = useState(false);
   const allCars = useSelector((state) => state.car.allCars);
   const fixedData = useSelector((state) => state.car.fixedData);
   const loading = useSelector((state) => state.car.loading);
@@ -34,6 +37,15 @@ function Home({ navigation }) {
   const scrollViewRef = useRef();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [nothing, setNothing] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  console.log("CAR TABLE!!!!!!!!!!!!!!!!", allCars);
+  const swipeUpDownRef = useRef();
+  const handlePress = () => {
+    if (swipeUpDownRef.current) {
+      swipeUpDownRef.current.showFull();
+      // setIsVisibleSwipe(true)
+    }
+  };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
@@ -77,9 +89,9 @@ function Home({ navigation }) {
     <View style={styles.homePage}>
       <ScrollView
         ref={scrollViewRef}
-        onScroll={(event) => {
-          setScrollPosition(event.nativeEvent.contentOffset.y);
-        }}
+        // onScroll={(event) => {
+        //   setScrollPosition(event.nativeEvent.contentOffset.y);
+        // }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -90,11 +102,15 @@ function Home({ navigation }) {
         {!loading ? (
           allCars?.map((element, i) => (
             <View style={styles.allcars} key={i}>
-              <CardCar setNothing={setNothing} key={i} oneCar={element} />
+              <CardCar
+                setNothing={setNothing}
+                key={i}
+                oneCar={element}
+                handlePress={handlePress}
+              />
             </View>
           ))
         ) : (
-          
           <>
             <View style={{ alignItems: "center", paddingTop: 20 }}>
               <View
@@ -156,8 +172,41 @@ function Home({ navigation }) {
             </View>
           </>
         )}
-        <CarDetails/>
+        {/* <CarDetails /> */}
       </ScrollView>
+
+      {/* <View style={{ height: 500 , 
+            backgroundColor: "green",
+            display: isVisible ? "flex" : "none",
+          }}> */}
+{/* <View style={{ height: '1%' }}> */}
+
+      <SwipeUpDown
+        itemFull={<CarDetails />}
+        ref={swipeUpDownRef}
+        extraMarginTop={"60%"}
+        scrollEnabled={false}
+        style={{
+          height: "100%",
+          backgroundColor: "lightgrey",
+          //  backgroundColor: 'transparent'
+        }}
+      />
+{/* </View> */}
+      {/* // display: isVisible ? "flex" : "none",
+        // itemMini={(show) => <CarDetails show={show} style={{ height: 60 }} />}
+        // onShowMini={() => setIsVisibleSwipe(false)}
+        // onShowFull={() => {
+        //   console.log("full");
+        //   setIsVisible(true); // Show the SwipeUpDown component when itemFull is shown
+        // }}
+        // onMoveDown={() =>setIsVisibleSwipe(false)}
+        // swipeHeight={height*.6} // Default 60
+        // onMoveUp={() => console.log("up")}
+        // disablePressToShow={false} // Press item mini to show full
+        // Hide the SwipeUpDown component when isVisible is false */}
+      {/* </View> */}
+
       <NavBar />
     </View>
   );
@@ -392,5 +441,5 @@ export default Home;
 //       paddingBottom: 20,
 //     },
 //   });
-  
+
 //   export default Home;

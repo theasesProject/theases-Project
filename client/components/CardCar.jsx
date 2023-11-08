@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  Dimensions,
 } from "react-native";
 import { useEffect, useState } from "react";
 import car from "../assets/car2.png";
@@ -23,13 +24,14 @@ import axios from "axios";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
 import { Booking } from "../pages/Booking.jsx";
+const { height, width } = Dimensions.get("screen");
 function CardCar({ oneCar }) {
   const [starSelected, setStarSelected] = useState(false);
   // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
   const [isHeartClicked, setHeartClicked] = useState(false);
   // const [heartSelected, setHeartSelected] = useState(false);
   const [done, setDone] = useState(null);
-  const activeUser = useSelector(selectUser);
+  const activeUser = useSelector(selectUser) || {};
   const starImage = starSelected ? star : emptyStar;
   // const heartImage = heartSelected ? heartBleu : EmptyHeart;
   const dispatch = useDispatch();
@@ -66,15 +68,14 @@ function CardCar({ oneCar }) {
     checkBookMarked();
   }, []);
 
-  console.log(oneCar.CarMedia.length !== 0, "zeineb");
   return (
     <View style={styles.card}>
       <View style={styles.Image}>
-        {oneCar.CarMedia.length !== 0 ? (
+        {oneCar.Media?.length !== 0 ? (
           <Image
             style={styles.carImage}
             source={{
-              uri: oneCar.CarMedia[0].media,
+              uri: oneCar?.Media[0]?.media,
             }}
           />
         ) : (
@@ -125,8 +126,7 @@ function CardCar({ oneCar }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    width: "98%",
-    height: 250,
+    height: height * 0.3,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",

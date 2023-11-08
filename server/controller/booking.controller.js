@@ -186,10 +186,13 @@ module.exports = {
         const car = await db.Car.findOne({
           where: { id: service.CarId },
         });
-        const carImage = await db.CarMedia.findOne({
+        console.log(car, "car");
+        const carImage = await db.Media.findOne({
           where: { CarId: service.CarId },
         });
-        const user = await db.User.findOne({ where: { id: service.UserId } });
+        const user = await db.User.findOne({
+          where: { id: service.UserId * 1 },
+        });
         const serviceInfo = {
           car: car,
           carImage: carImage,

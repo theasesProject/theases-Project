@@ -15,7 +15,7 @@ import { selectUser } from "../store/userSlice";
 import GreyHeart from "../assets/Svg/greyHeart";
 import car2 from "../assets/car2.png";
 import star from "../assets/star.jpg";
-import deleteImge from "../assets/delete.jpg";
+import deleteImge from "../assets/xBtn.png";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import NavBar from "../components/NavBar.jsx";
 function Favorites() {
@@ -27,31 +27,30 @@ function Favorites() {
     dispatch(getAllBoolMarks(activeUser.id));
   }, []);
 
-  const handleDeled = (id) => {
+  const handleDelete = (id) => {
     removedBookMark(id);
   };
-  console.log(bookMarks[bookMarks.length - 1].carImage.media, "zeineb");
+  console.log(bookMarks, "zeineb");
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {/* <Text style={styles.favouriteText}>Favourite</Text> */}
+    <View style={styles.favoritesPage}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {bookMarks?.length > 0 ? (
           bookMarks.map((bookmark, i) => (
             <View key={i} style={styles.carCard}>
               <View style={styles.items}>
                 <View style={styles.deleted2}>
-                  <TouchableOpacity onPress={handleDeled(bookmark.car.id)}>
+                  <TouchableOpacity onPress={handleDelete(bookmark.car.id)}>
                     <Image style={styles.delete} source={deleteImge} />
                   </TouchableOpacity>
                 </View>
                 <Image
                   style={styles.car}
                   source={{
-                    uri: bookmark.carImage.media,
+                    uri: bookmark.carImage?.media,
                   }}
                 />
                 <View style={styles.detail}>
-                  <Text style={styles.title}>{bookmark.car.model}</Text>
+                  <Text style={styles.title}>{bookmark.car?.model}</Text>
                   <View style={styles.stars}>
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
@@ -61,7 +60,7 @@ function Favorites() {
                   </View>
                   <Text style={styles.agencyName}>{bookmark.agency?.name}</Text>
                   <Text style={styles.price}>
-                    ${bookmark.car.price}/{bookmark.car?.period}
+                    ${bookmark.car?.price}/{bookmark.car?.period}
                   </Text>
                 </View>
               </View>
@@ -73,7 +72,7 @@ function Favorites() {
             <View style={styles.messageContainer}>
               <Text style={styles.emptyText1}>Empty Favourite list</Text>
               <Text style={styles.emptyText}>
-                it feel like nothing to Collect in your favourite{" "}
+                it feel like nothing to Collect in your favourite
               </Text>
               <Text style={styles.emptyText}>
                 list let's add your favourite car{" "}
@@ -81,34 +80,31 @@ function Favorites() {
             </View>
           </View>
         )}
-        <NavBar style={styles.NavBar} />
-      </View>
-    </ScrollView>
+      </ScrollView>
+      <NavBar style={styles.NavBar} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  favoritesPage: {
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "white",
+    alignItems: "center",
+    borderTopColor: "lightgrey",
+    borderWidth: 1,
+  },
   NavBar: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    paddingBottom: 5,
-    // ... rest of your styles
   },
   container: {
-    flex: 1,
-    height: height,
-    // marginHorizontal: 7,
-    // marginVertical: 7,
-    flexDirection: "column",
-    gap: 10,
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  favoriteCar: {
-    marginBottom: 10,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    maxHeight: height * 0.89,
   },
   messageContainer: {
     paddingTop: 15,
@@ -122,17 +118,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "grey",
   },
-  // heart: {
-  //   width: 60,
-  //   height: 55,
-  // },
   message: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    // paddingTop: 180,
-    // gap: 20,
   },
 
   emptyText1: {
@@ -148,17 +138,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   carCard: {
-    marginTop: "7%",
-    borderColor: "grey",
-    borderWidth: 2,
+    borderColor: "lightgrey",
+    borderWidth: 1,
     width: "100%",
-    height: 120,
+    height: height * 0.17,
+    marginBottom: height * 0.03,
     borderRadius: 10,
+    backgroundColor: "white",
   },
   car: {
     width: 180,
     height: 120,
-
     borderRadius: 7,
   },
   star: {
@@ -176,7 +166,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start",
-
     width: 140,
     gap: 7,
     padding: 8,
@@ -190,20 +179,17 @@ const styles = StyleSheet.create({
     color: "lightgrey",
     fontSize: 14,
   },
-  price: {
-    color: "blue",
-  },
   delete: {
     justifyContent: "flex-end",
-    width: 20,
-    height: 20,
+    width: width * 0.05,
+    height: height * 0.03,
   },
-
   deleted2: {
     width: 320,
     height: 10,
     position: "absolute",
     alignItems: "flex-end",
+    padding: 4,
   },
 });
 

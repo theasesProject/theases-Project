@@ -20,7 +20,7 @@ import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import Calendar from "../assets/Svg/calendar.svg";
 import { LinearGradient } from "expo-linear-gradient";
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("screen");
 import GooglePng from "../assets/googleIcon.png";
 import FaceBookPng from "../assets/facebookIcon.png";
 import { SignUpClick } from "../store/userSlice";

@@ -10,9 +10,9 @@ function AdvancedSearch() {
   const navigation = useNavigation();
   const allCars = useSelector((state) => state.car.allCars);
 
-  const [sliderValue, setSliderValue] = useState(0);
-  const [sliderValue2, setSliderValue2] = useState(0);
-  const [priceSearched, setPriceSearched] = useState(0);
+  const [sliderValue, setSliderValue] = useState(40000);
+  const [sliderValue2, setSliderValue2] = useState(200000);
+  const [priceSearched, setPriceSearched] = useState(40000);
   const [typeVehicule, setTypeVehicule] = useState("");
   const [chara, setChar] = useState("");
   const [isPressed, setIsPressed] = useState(false);
@@ -24,14 +24,17 @@ function AdvancedSearch() {
   const [isPressed6, setIsPressed6] = useState(false);
   const dispatch = useDispatch();
 
-  dispatch(getAllCars());
+  // dispatch(getAllCars());
 
-  dispatch(fetchFilteredCars(filterCriteria));
+  // dispatch(fetchFilteredCars(filterCriteria));
 
-  const filterCriteria = {
-    price: [sliderValue, priceSearched],
-    typevehicle: typeVehicule,
-    characteristics: chara,
+  const create = () => {
+    const filterCriteria = {
+      price: [sliderValue, priceSearched],
+      typevehicle: typeVehicule,
+      characteristics: chara,
+    };
+    dispatch(fetchFilteredCars(filterCriteria));
   };
 
   console.log(chara, "char");
@@ -75,8 +78,8 @@ function AdvancedSearch() {
   };
 
   const prices = () => {
-    let minPrice = 5;
-    let maxPrice = 20;
+    let minPrice = 40000;
+    let maxPrice = 200000;
     for (const car of allCars) {
       const price = car.price;
       if (price < minPrice) {
@@ -199,7 +202,10 @@ function AdvancedSearch() {
 
       <TouchableOpacity
         style={styles.showResult}
-        onPress={() => navigation.navigate("FiltredCar")}
+        onPress={() => {
+          create();
+          navigation.navigate("FiltredCar");
+        }}
       >
         <LinearGradient colors={["#6C77BF", "#4485C5"]} locations={[0, 1]}>
           <Text style={styles.showResults}>Show Results</Text>

@@ -19,9 +19,8 @@ import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
-import { UseSelector } from "react-redux";
 function ChangeRole({ navigation }) {
-  // const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [color, setColor] = useState("#6C77BF");
   const [error, setError] = useState("");
@@ -30,10 +29,6 @@ function ChangeRole({ navigation }) {
     (state) => state.location.selectedAgencyLocation
   );
   const [form, setForm] = useState({
-    //* temp
-    verificationStatus: true, //* when the admin board is functional this line MUST be removed, it will be added with its default value (false) so the admin can check the request and does he has to do
-    //* temp
-    adress: agencyLocation,
     transportation: false,
   });
   const activeUser = useSelector(selectUser);
@@ -56,20 +51,11 @@ function ChangeRole({ navigation }) {
   const handleChangeName = (content) => {
     if (!content) {
       let copy = form;
-      delete copy.name;
+      delete copy.agencyName;
       return setForm({ ...copy });
     }
-    setForm({ ...form, name: content });
+    setForm({ ...form, agencyName: content });
   };
-
-  // const handleChangeAddress = (content) => {
-  //   if (!content) {
-  //     let copy = form;
-  //     delete copy.address;
-  //     return setForm({ ...copy });
-  //   }
-  //   setForm({ ...form, address: content });
-  // };
   const handleChangeCompanyPhone = (content) => {
     setForm({ ...form, companyNumber: content });
   };
@@ -86,7 +72,7 @@ function ChangeRole({ navigation }) {
     dispatch(
       CreateAgency({
         id: activeUser.id,
-        body: form,
+        body: { ...form, address: agencyLocation },
         media: selectedDocuments.map((file) => ({ media: file })),
       })
     );
@@ -172,6 +158,12 @@ function ChangeRole({ navigation }) {
         placeholder="Enter Your Agency Name"
         style={styles.input}
       />
+      <TextInput
+        value={form.companyNumber}
+        onChangeText={handleChangeCompanyPhone}
+        placeholder="Enter Your Agency Number"
+        style={styles.input}
+      />
       {!agencyLocation ? (
         <TouchableOpacity onPress={() => navigation.navigate("mapforAgency")}>
           <Text style={styles.input}>Set your Agency Location </Text>
@@ -179,18 +171,6 @@ function ChangeRole({ navigation }) {
       ) : (
         <Text>Your Agency location is:{loc}</Text>
       )}
-      {/* <TextInput
-        value={form.address}
-        onChangeText={handleChangeAddress}
-        placeholder="Enter Your Address"
-        style={styles.input}
-      /> */}
-      <TextInput
-        value={form.companyNumber}
-        onChangeText={handleChangeCompanyPhone}
-        placeholder="Enter Your Agency Number"
-        style={styles.input}
-      />
       <CheckBox
         style={styles.check}
         onClick={() => {

@@ -19,11 +19,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
-import { DOMAIN_NAME } from "../env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// require("dotenv").config();
-// ${process.env.DOMAIN_NAME}
 
 function Login({ navigation }) {
   const [color, setColor] = useState("#6C77BF");

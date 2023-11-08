@@ -5,7 +5,7 @@ const initialState = {
 };
 
 const locSlice = createSlice({
-  name: "location ",
+  name: "location",
   initialState,
   reducers: {
     locAgn: (state, action) => {

@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env.js";
 
 const initialState = {
   allCars: [],
@@ -73,13 +72,14 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
 
 export const fetchFilteredCars = createAsyncThunk(
   "car/fetchFilteredCars",
-  async (filterCriteria, { getState, dispatch }) => {
+  async (filterCriteria) => {
     try {
+      console.log(filterCriteria, "first");
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/filtredCar`,
         filterCriteria
       );
-
+      console.log(response.data, "final");
       return response.data;
     } catch (error) {
       console.error(error);
@@ -201,7 +201,7 @@ const carSlice = createSlice({
     });
     builder.addCase(fetchFilteredCars.fulfilled, (state, action) => {
       state.loading = false;
-      state.filteredCars = action.payload; // Set filtered cars in the state
+      state.carFiltred = action.payload; // Set filtered cars in the state
     });
     builder.addCase(fetchFilteredCars.rejected, (state, action) => {
       state.loading = false;

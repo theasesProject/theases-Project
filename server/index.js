@@ -26,6 +26,7 @@ const agencyRouter = require("./router/Agency");
 const requestRouter = require("./router/request.Route");
 const mediaRouter = require("./router/Media.Route");
 const bookingRouter = require("./router/booking.Router");
+const chatRouter = require("./router/chat.router");
 //!routers
 app.use("/api/car", carRouter);
 app.use("/api/users", userRouter);
@@ -55,7 +56,7 @@ io.on("connection", (socket) => {
     const { UserId, message } = data;
 
     // Emit the notification to the specific user
-    io.to(UserId).emit("notification", message);
+    io.emit("notification", message);
     console.log(message, UserId, "messageBack");
   });
 

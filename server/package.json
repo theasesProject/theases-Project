@@ -10,7 +10,8 @@
     "users": "node  seeds/users.js",
     "cars": "node  seeds/cars.js",
     "carMedia": "node  seeds/carMedia.js",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "chat": "nodemon chat.server.js"
   },
   "keywords": [],
   "author": "",

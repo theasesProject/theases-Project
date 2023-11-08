@@ -42,11 +42,11 @@ function NavBar({ style }) {
 
       <Pressable
         style={styles.quarter}
-        onPress={() => navigation.navigate("Mape")}
+        onPress={() => navigation.navigate("Messages")}
       >
         <View style={styles.hm}>
-          <Ms fill={isActive("Mape")} />
-          <Text style={{ color: isActive("Mape") }}>Messeges</Text>
+          <Ms fill={isActive("Messages")} />
+          <Text style={{ color: isActive("Messages") }}>Messeges</Text>
         </View>
       </Pressable>
 

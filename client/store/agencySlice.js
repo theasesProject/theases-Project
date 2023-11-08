@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// import { DOMAIN_NAME } from "../env.js";
 
 const initialState = {
   loading: false,
@@ -21,7 +20,6 @@ export const CreateAgency = createAsyncThunk(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/request/${requestId}`,
         params.media
       );
-
       return response.data;
     } catch (error) {
       console.log(error);

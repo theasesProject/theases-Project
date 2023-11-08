@@ -12,9 +12,9 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import filter from "../assets/filter.png";
 import { useState } from "react";
-import { DOMAIN_NAME } from "../env";
+// import { DOMAIN_NAME } from "../env";
 import axios from "axios";
-import Filter from "../assets/Svg/filter";
+import Filter from "../assets/Svg/filter.svg";
 import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("screen");
 function SearchBar({ onSearch }) {

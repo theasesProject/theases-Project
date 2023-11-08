@@ -25,6 +25,8 @@ import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import Booking from "./pages/Booking.jsx";
 import MyCars from "./pages/MyCars.jsx";
+import AgencyProfile from "./pages/AgencyProfile.jsx";
+import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 const Stack = createStackNavigator();
 function App() {
   return (
@@ -94,10 +96,7 @@ function App() {
             options={{ headerShown: false }}
           /> */}
 
-          {/* <Stack.Screen
-            name="Carousel"
-            component={Carousel}
-          /> */}
+  
           <Stack.Screen
             name="Carou"
             component={Carou}
@@ -150,6 +149,18 @@ function App() {
           <Stack.Screen
             name="AddAgencyCar"
             component={AddAgencyCar}
+            options={{ headerShown: false }}
+          />
+          
+          <Stack.Screen
+            name="AgencyProfile"
+            component={AgencyProfile}
+            options={{ headerShown: false }}
+          />
+               <Stack.Screen
+            name="MapAgencyProfile"
+
+            component={MapAgencyProfile }
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

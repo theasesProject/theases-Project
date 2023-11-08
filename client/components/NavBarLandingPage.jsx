@@ -88,7 +88,7 @@ console.log("jiji from page");
         </View>
       </View>
       <View>
-        {loggedIn ? (
+        {loggedIn && activeUser.type==="client" ? (
           <Pressable
             onPress={() => navigation.navigate("Userprofile")}
             style={styles.userAvatar}
@@ -103,20 +103,22 @@ console.log("jiji from page");
           </Pressable>
         ) : (
           null
-          // <View style={styles.authBtnsContainer}>
-          //   <TouchableOpacity
-          //     onPress={() => navigation.navigate("Login")}
-          //     style={styles.authBtn}
-          //   >
-          //     <Text>Login</Text>
-          //   </TouchableOpacity>
-          //   <TouchableOpacity
-          //     onPress={() => navigation.navigate("SignUp")}
-          //     style={styles.authBtn}
-          //   >
-          //     <Text>Sign Up</Text>
-          //   </TouchableOpacity>
-          // </View>
+        )}
+         {loggedIn && activeUser.type==="agency" ? (
+          <Pressable
+            onPress={() => navigation.navigate("AgencyProfile")}
+            style={styles.userAvatar}
+          >
+            <Image
+              source={{
+                uri: activeUser?.avatar,
+              }}
+              alt="userPic"
+              style={styles.UserImage}
+            />
+          </Pressable>
+        ) : (
+          null
         )}
       </View>
     </View>

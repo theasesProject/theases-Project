@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
 import RemoveBackground from "./RemoveBackground";
+import NavBarAgency from "../components/NavBarAgency";
 // import removeBackground from "../HelperFunctions/removeBackGround";
 function AddAgencyCar({ navigation }) {
   const dispatch = useDispatch();
@@ -407,6 +408,7 @@ const pickerSelectStyles = {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      
       <Modal
         animationType="slide"
         transparent={true}
@@ -418,6 +420,7 @@ const pickerSelectStyles = {
           </Text>
         </View>
       </Modal>
+ 
     </View>
   );
 }
@@ -562,6 +565,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     color: "green",
   },
+
 });
 
 export default AddAgencyCar;

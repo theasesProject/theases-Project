@@ -90,7 +90,7 @@ function ProfileLandingPage({ style }) {
         </View>
       </View>
       <View>
-        {loggedIn && activeUser.type === "client" ? (
+        {loggedIn && activeUser?.type === "client" ? (
           <Pressable
             onPress={() => navigation.navigate("Userprofile")}
             style={styles.userAvatar}
@@ -104,7 +104,7 @@ function ProfileLandingPage({ style }) {
             />
           </Pressable>
         ) : null}
-        {loggedIn && activeUser.type === "agency" ? (
+        {loggedIn && activeUser?.type === "agency" ? (
           <Pressable
             onPress={() => navigation.navigate("AgencyProfile")}
             style={styles.userAvatar}

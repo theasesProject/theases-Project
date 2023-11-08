@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  Dimensions,
 } from "react-native";
 import { useEffect, useState } from "react";
 import car from "../assets/car2.png";
@@ -18,6 +19,7 @@ import { CreateBookMark, removedBookMark } from "../store/carFetch.js";
 import axios from "axios";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
+const { height, width } = Dimensions.get("screen");
 function CardCar({ oneCar }) {
   const [starSelected, setStarSelected] = useState(false);
   // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
@@ -115,8 +117,7 @@ function CardCar({ oneCar }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    width: "98%",
-    height: 250,
+    height: height * 0.3,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",

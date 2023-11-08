@@ -62,7 +62,7 @@ function Userprofile({ navigation }) {
             onPress={() => navigation.navigate("Bookings")}
           >
             <Image style={styles.icon} source={bkg} />
-            {activeUser.type === "client" ? (
+            {activeUser?.type === "client" ? (
               <Text>My bookings</Text>
             ) : (
               <Text>My Cars</Text>
@@ -79,7 +79,7 @@ function Userprofile({ navigation }) {
             style={styles.profileOption}
             onPress={() => {
               if (activeUser.type !== "client") {
-                navigation.navigate("AddAgencyCar")
+                navigation.navigate("AddAgencyCar");
               } else {
                 navigation.navigate("changeRole");
               }

@@ -71,7 +71,6 @@ function Home({ navigation }) {
       });
     }
   }, [loading]);
-
   return (
     <View style={styles.homePage}>
       <ScrollView

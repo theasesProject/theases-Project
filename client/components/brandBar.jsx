@@ -21,13 +21,16 @@ import { useState } from "react";
 import axios from "axios";
 
 const { width, height } = Dimensions.get("screen");
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { filterCars } from "../store/carFetch";
 function BrandBar({ onPress, onFilterByBrand, resetData }) {
   const dispatch = useDispatch();
   const [carByBrand, setCarByBrand] = useState([]);
+  const allCars = useSelector((state) => state.car.allCars);
+
   const [error, setError] = useState(false);
   const handleFilterByBrand = (brandName) => {
+    !allCars.length?(null):
     axios
       .post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/byBrand`,

@@ -3,6 +3,9 @@ import userReducer from "./userSlice";
 import carReducer from "./carFetch";
 import agencyReducer from "./agencySlice";
 import location from "./locationSlice";
+import chatRoomReducer from "./chatSlice";
+
+
 import bookingReducer from "./bookingSlice";
 const store = configureStore({
   reducer: {
@@ -10,7 +13,8 @@ const store = configureStore({
     car: carReducer,
     agency: agencyReducer,
     location: location,
-    booking: bookingReducer, // Add other slices as needed
+    booking: bookingReducer,
+    chatRoom:chatRoomReducer
   },
 });
 

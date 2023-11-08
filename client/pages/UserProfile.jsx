@@ -18,7 +18,7 @@ import { logUserOut, selectUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import change from "../assets/change.png";
-
+import CarIcon from "../assets/Svg/car-side-solid";
 // import { useNavigation } from "@react-navigation/native";
 
 import NavBar from "../components/NavBar";
@@ -33,6 +33,7 @@ function Userprofile({ navigation }) {
     dispatch(logUserOut());
     navigation.navigate("Home");
   };
+
   console.log("active User Profileeeeeeeeee", activeUser);
   return (
     <View style={styles.userProfilePage}>
@@ -57,17 +58,25 @@ function Userprofile({ navigation }) {
       </View>
       <View style={styles.bottomSection}>
         <View style={styles.profileOptions}>
-          <TouchableOpacity
-            style={styles.profileOption}
-            onPress={() => navigation.navigate("Bookings")}
-          >
-            <Image style={styles.icon} source={bkg} />
-            {activeUser?.type === "client" ? (
+          {activeUser.type === "client" ? (
+            <TouchableOpacity
+              style={styles.profileOption}
+              onPress={() => navigation.navigate("Bookings")}
+            >
+              <Image style={styles.icon} source={bkg} />
               <Text>My bookings</Text>
-            ) : (
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.profileOption}
+              onPress={() => navigation.navigate("MyCars")}
+            >
+              <CarIcon style={styles.icon}></CarIcon>
+
               <Text>My Cars</Text>
-            )}
-          </TouchableOpacity>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity
             style={styles.profileOption}
             onPress={() => console.log("settings")}

@@ -18,9 +18,12 @@ import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
+import Plus from ".././assets/Svg/plus-solid.svg"
+import Car from ".././assets/Svg/car-side-solid.svg"
+
 import { useSelector } from "react-redux";
 const { height, width } = Dimensions.get("screen");
-function NavBar({ style }) {
+function NavBarAgency({ style }) {
   const loggedIn = useSelector((state) => state.user.loggedIn);
 
   const navigation = useNavigation();
@@ -49,23 +52,29 @@ function NavBar({ style }) {
           <Text style={{ color: isActive("Messages") }}>Messeges</Text>
         </View>
       </Pressable>
-
+      <Pressable
+        style={styles.quarter}
+        onPress={() => navigation.navigate("AddAgencyCar")}
+      >
+        <View style={styles.hm}>
+          <Plus fill={isActive("AddAgencyCar")} />
+          <Text style={{ color: isActive("AddAgencyCar") }}>Add a Car</Text>
+        </View>
+      </Pressable>
       <Pressable
         style={styles.quarter}
         onPress={() => {
           loggedIn
-            ? navigation.navigate("favorites")
+            ? navigation.navigate("MyCars")
             : navigation.navigate("SignUp");
         }}
       >
         <View style={styles.hm}>
-          {!loggedIn ? (
-            <SignUp fill={isActive("favorites")} />
-          ) : (
-            <Fa fill={isActive("favorites")} />
-          )}
+        
+            <Car fill={isActive("favorites")} />
+        
           <Text style={{ color: isActive("favorites") }}>
-            {loggedIn ? "Favorites" : "SignUp"}
+           My Cars
           </Text>
         </View>
       </Pressable>
@@ -82,7 +91,7 @@ function NavBar({ style }) {
         <View style={styles.hm}>
           <Pr fill={isActive("Userprofile")} />
           <Text style={{ color: isActive("Userprofile") }}>
-            {loggedIn ? "Profile" : "Login"}
+        Requests
           </Text>
         </View>
       </Pressable>
@@ -102,6 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around", // Distribute items evenly along the row
     alignItems: "center", // Center items vertically
+
   },
   quarter: {
     flex: 1,
@@ -113,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NavBar;
+export default NavBarAgency;

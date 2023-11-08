@@ -58,24 +58,25 @@ function Userprofile({ navigation }) {
       </View>
       <View style={styles.bottomSection}>
         <View style={styles.profileOptions}>
-         
-           
-            {activeUser.type === "client" ? ( 
+          {activeUser.type === "client" ? (
             <TouchableOpacity
-            style={styles.profileOption}
-            onPress={() => navigation.navigate("Bookings")}
-          >
-             <Image style={styles.icon} source={bkg} />
-              <Text>My bookings</Text>  
-               </TouchableOpacity>
-            ) : (
-              <TouchableOpacity   style={styles.profileOption}     onPress={() => navigation.navigate("MyCars")}>
-             <CarIcon style={styles.icon}></CarIcon>
+              style={styles.profileOption}
+              onPress={() => navigation.navigate("Bookings")}
+            >
+              <Image style={styles.icon} source={bkg} />
+              <Text>My bookings</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.profileOption}
+              onPress={() => navigation.navigate("MyCars")}
+            >
+              <CarIcon style={styles.icon}></CarIcon>
 
               <Text>My Cars</Text>
-              </TouchableOpacity>
-            )}
-       
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity
             style={styles.profileOption}
             onPress={() => console.log("settings")}

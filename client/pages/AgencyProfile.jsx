@@ -14,6 +14,7 @@ import dots from "../assets/icons8-three-dots-48.png";
 import NavBarAgency from "../components/NavBarAgency";
 import Stats from "../components/Stats";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import MapAgencyProfile from "./MapAgencyProfile";
 const { width, height } = Dimensions.get("screen");
 
 function AgencyProfile({ navigation }) {
@@ -61,6 +62,7 @@ function AgencyProfile({ navigation }) {
         </TouchableOpacity>
 
       </View>
+      {/* <MapAgencyProfile/> */}
 <View style={styles.foot}>
       <NavBarAgency />
       </View>

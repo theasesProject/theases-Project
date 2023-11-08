@@ -86,9 +86,11 @@ function Home({ navigation }) {
         </View>
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
         {!loading ? (
-          allCars?.map((element, i) => (
-            <CardCar setNothing={setNothing} key={i} oneCar={element} />
-          ))
+          <View style={styles.allcars}>
+            {allCars?.map((element, i) => (
+              <CardCar setNothing={setNothing} key={i} oneCar={element} />
+            ))}
+          </View>
         ) : (
           <>
             <View style={{ alignItems: "center", paddingTop: 20 }}>
@@ -176,8 +178,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {},
   allcars: {
-    // padding: 20,
-    // paddingBottom: 20,
+    paddingHorizontal: 20,
   },
 });
 

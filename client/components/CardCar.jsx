@@ -77,14 +77,6 @@ function CardCar({ oneCar }) {
         ) : (
           <Image style={styles.carImage} source={car} />
         )}
-
-        {Object.values(activeUser).length ? (
-          !done ? (
-            <BookMark onPress={handleHeartPress} />
-          ) : (
-            <TopCorner />
-          )
-        ) : null}
       </View>
       <View style={styles.carDetails}>
         <View style={styles.NameAvaib}>
@@ -92,12 +84,6 @@ function CardCar({ oneCar }) {
           <Text style={styles.avaible}>{oneCar.status}</Text>
         </View>
         <View style={styles.PriceStar}>
-          <View style={styles.reviews}>
-            <TouchableOpacity onPress={handleStarPress}>
-              <Image style={styles.heart} source={starImage}></Image>
-            </TouchableOpacity>
-            <Text style={styles.avaible}>(150 review)</Text>
-          </View>
           <View style={styles.booking}>
             <Text style={styles.carPrice}>
               ${oneCar.price}/{oneCar.period}
@@ -107,6 +93,12 @@ function CardCar({ oneCar }) {
                 <Text style={styles.bookingCar1}>Booking</Text>
               </TouchableOpacity>
             </View>
+          </View>
+          <View style={styles.reviews}>
+            <TouchableOpacity onPress={handleStarPress}>
+              <Image style={styles.heart} source={starImage} />
+            </TouchableOpacity>
+            <Text style={styles.avaible}>(150 review)</Text>
           </View>
         </View>
       </View>
@@ -121,6 +113,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
+    // paddingVertical: 110,
   },
   barText: {
     width: 360,
@@ -131,7 +125,7 @@ const styles = StyleSheet.create({
   },
 
   carImage: {
-    width: 300,
+    width: width * 0.8,
     height: 150,
   },
   heart: {

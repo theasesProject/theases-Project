@@ -30,9 +30,10 @@ function Userprofile({ navigation }) {
 
   const handleLogout = () => {
     // dispatch(logoutUser());
-    dispatch(logUserOut());
+
     navigation.navigate("Home");
   };
+  dispatch(logUserOut());
   console.log("active User Profileeeeeeeeee", activeUser);
   return (
     <View style={styles.userProfilePage}>

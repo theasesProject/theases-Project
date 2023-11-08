@@ -19,35 +19,38 @@ import userImage from "../assets/user.jpg";
 import { useEffect } from "react";
 import moment from "moment";
 import io from "socket.io-client";
+
 function AgencyService() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allService = useSelector((state) => state.booking.allServiceByAgency);
-
+  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   useEffect(() => {
     dispatch(allServiceForAgency(activeUser.id));
 
-    // Connect to the server using Socket.io
-    const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`); // Replace with your server's URL
-
-    // Emit notifications when accepting or rejecting a service request
-    const acceptService = (idservice) => {
-      const obj = { id: idservice, acceptation: "accepted" };
-      dispatch(UpdateServiceByAgency(obj));
-
-      // Send a notification to ProfileLandingPage
-      socket.emit("notification", `Service request accepted: ${idservice}`);
-    };
-
-    const rejectService = (idservice) => {
-      const obj = { id: idservice, acceptation: "rejected" };
-      dispatch(UpdateServiceByAgency(obj));
-
-      // Send a notification to ProfileLandingPage
-      socket.emit("notification", `Service request rejected: ${idservice}`);
-    };
+    socket;
   }, [dispatch]);
 
+  const acceptService = (idservice, message) => {
+    const obj = { id: idservice, acceptation: "accepted" };
+    dispatch(UpdateServiceByAgency(obj));
+
+    // Send a notification to ProfileLandingPage
+    socket.emit("notification", {
+      UserId: activeUser.id,
+      message: `Service request accepted: ${message}`,
+    });
+  };
+
+  const rejectService = (idservice, message) => {
+    const obj = { id: idservice, acceptation: "rejected" };
+    dispatch(UpdateServiceByAgency(obj));
+
+    socket.emit("notification", {
+      UserId: activeUser.id,
+      message: `Service request rejected: ${message}`,
+    });
+  };
   return (
     <View style={styles.pageContainer}>
       <ScrollView style={styles.scrollContainer}>
@@ -76,7 +79,7 @@ function AgencyService() {
               <View style={styles.actionContainer}>
                 <TouchableOpacity
                   onPress={() => {
-                    rejectService(service.service.id);
+                    rejectService(service.service.id, service.car.model);
                   }}
                   style={styles.rejectButton}
                 >
@@ -84,7 +87,7 @@ function AgencyService() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    acceptService(service.service.id);
+                    acceptService(service.service.id, service.car.model);
                   }}
                   style={styles.acceptButton}
                 >

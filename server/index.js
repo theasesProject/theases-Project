@@ -37,9 +37,9 @@ app.use("/api/request", requestRouter);
 app.use("/api/media", mediaRouter);
 app.use("/api/booking", bookingRouter);
 
-app.listen(5000, function () {
-  console.log("Server is running on port 5000", port);
-});
+// app.listen(5000, function () {
+//   console.log("Server is running on port 5000", port);
+// });
 app.use(function (err, req, res, next) {
   console.log(err);
 
@@ -49,11 +49,20 @@ app.use(function (err, req, res, next) {
 
 io.on("connection", (socket) => {
   console.log("A user connected");
-  socket.on("notification", (message) => {
-    io.emit("notification", message);
+
+  // Assume you have a user ID associated with each booking
+  socket.on("notification", (data) => {
+    const { UserId, message } = data;
+
+    // Emit the notification to the specific user
+    io.to(UserId).emit("notification", message);
+    console.log(message, UserId, "messageBack");
   });
 
   socket.on("disconnect", () => {
-    console.log("A user disconnected");
+    console.log("User disconnected");
   });
+});
+server.listen(5000, function () {
+  console.log("Server is running on port 5000", port);
 });

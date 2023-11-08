@@ -7,6 +7,7 @@ import {
   Pressable,
   AppState,
   Dimensions,
+  Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { height, width } = Dimensions.get("screen");
@@ -16,14 +17,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser, logStatus, fetchUser } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
-import io from "socket.io-client";
+
 function ProfileLandingPage({ style }) {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
   const dispatch = useDispatch();
   const [userAddress, setUserAddress] = useState("</> click here");
-  const [notifications, setNotifications] = useState([]);
+
   const getUserLocationAndNearestAddress = async () => {
     let status = await Location.requestForegroundPermissionsAsync();
     // if (status === 'granted') {
@@ -61,23 +62,8 @@ function ProfileLandingPage({ style }) {
   };
   useEffect(() => {
     retrieveToken();
-    // AppState.addEventListener("change", retrieveToken);
-    // return () => {
-    //   AppState.removeEventListener("change", retrieveToken);
-    // };
+
     getUserLocationAndNearestAddress();
-    const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`); // Replace with your server's URL
-
-    // Listen for notifications
-    socket.on("notification", (message) => {
-      // Update the notifications state with the received message
-      setNotifications((prevNotifications) => [...prevNotifications, message]);
-    });
-
-    // Clean up the socket connection when the component unmounts
-    return () => {
-      socket.disconnect();
-    };
   }, []);
   return (
     <View style={[styles.navBar, style]}>
@@ -134,14 +120,6 @@ function ProfileLandingPage({ style }) {
           //   </TouchableOpacity>
           // </View>
         }
-      </View>
-      <View style={styles.notificationsContainer}>
-        <Text style={styles.notificationTitle}>Notifications</Text>
-        {notifications.map((notification, index) => (
-          <Text key={index} style={styles.notificationText}>
-            {notification}
-          </Text>
-        ))}
       </View>
     </View>
   );
@@ -206,29 +184,6 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     width: 180,
-  },
-  notificationsContainer: {
-    flex: 1,
-    margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0.1,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  notificationTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  notificationText: {
-    fontSize: 14,
-    marginTop: 5,
   },
 });
 

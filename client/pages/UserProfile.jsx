@@ -29,11 +29,10 @@ function Userprofile({ navigation }) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    // dispatch(logoutUser());
-    dispatch(logUserOut());
+    dispatch(logoutUser());
+
     navigation.navigate("Home");
   };
-
   console.log("active User Profileeeeeeeeee", activeUser);
   return (
     <View style={styles.userProfilePage}>
@@ -58,7 +57,7 @@ function Userprofile({ navigation }) {
       </View>
       <View style={styles.bottomSection}>
         <View style={styles.profileOptions}>
-          {activeUser.type === "client" ? (
+          {activeUser?.type === "client" ? (
             <TouchableOpacity
               style={styles.profileOption}
               onPress={() => navigation.navigate("Bookings")}
@@ -87,7 +86,7 @@ function Userprofile({ navigation }) {
           <TouchableOpacity
             style={styles.profileOption}
             onPress={() => {
-              if (activeUser.type !== "client") {
+              if (activeUser?.type !== "client") {
                 navigation.navigate("AddAgencyCar");
               } else {
                 navigation.navigate("changeRole");
@@ -95,7 +94,7 @@ function Userprofile({ navigation }) {
             }}
           >
             <Image source={change} style={styles.icon} />
-            {activeUser.type === "client" ? (
+            {activeUser?.type === "client" ? (
               <Text>Become an Agency</Text>
             ) : (
               <Text>Add Cars For Rent</Text>

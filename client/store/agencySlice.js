@@ -9,7 +9,6 @@ const initialState = {
 export const CreateAgency = createAsyncThunk(
   "agency/CreateAgency",
   async (params) => {
-    console.log("request: ", params);
     if (!params) return;
     try {
       const response = await axios.post(

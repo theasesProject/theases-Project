@@ -187,39 +187,30 @@ function AddAgencyCar({ navigation }) {
 
   const handleModel = (model) => {
     setModel(model);
-    console.log(model, "model");
   };
   const handlePeriode = (period) => {
     setPeriodRent(period);
-    console.log(period, "period");
   };
   const handleBrand = (brand) => {
     setBrandCar(brand);
-    console.log(brand, "brand");
   };
   const handlePrice = (price) => {
     setPrice(price);
-    console.log(price, "price");
   };
   const handleHorse = (horse) => {
     setHorse(horse);
-    console.log(horse, "horse");
   };
   const handleFuel = (fuel) => {
     setFuel(fuel);
-    console.log(fuel, "fuel");
   };
   const handleDescription = (des) => {
     setDesciption(des);
-    console.log(des, "des");
   };
   const handleChar = (char) => {
     setChar(char);
-    console.log(char, "char");
   };
   const handleType = (type) => {
     setType(type);
-    console.log(type, "type");
   };
 
   const pickerSelectStyles = {

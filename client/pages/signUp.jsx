@@ -25,7 +25,7 @@ import GooglePng from "../assets/googleIcon.png";
 import FaceBookPng from "../assets/facebookIcon.png";
 import { SignUpClick } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
-import DateTimePicker from "@react-native-community/datetimepicker";
+// import DateTimePicker from "@react-native-community/datetimepicker";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
@@ -398,7 +398,7 @@ const SignUp = ({ navigation, props }) => {
               <Text>Date of Birth</Text>
             </LinearGradient>
           </TouchableOpacity>
-          {show && (
+          {/* {show && (
             <DateTimePicker
               testID="dateTimePicker"
               value={inputForm.dateOfBirth}
@@ -409,7 +409,7 @@ const SignUp = ({ navigation, props }) => {
                 setInputForm(text);
               }}
             />
-          )}
+          )} */}
         </View>
         <TouchableOpacity
           disabled={!checkUp}

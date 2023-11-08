@@ -54,7 +54,11 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
           </Text>
         </View>
       </View>
-      <ScrollView horizontal={true} style={styles.allBrandImage}>
+      <ScrollView
+        horizontal={true}
+        style={styles.allBrandImage}
+        showsHorizontalScrollIndicator={false}
+      >
         <TouchableOpacity
           style={styles.brandDetails}
           onPress={() => handleFilterByBrand("volkswagen")}
@@ -162,6 +166,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 360,
     alignItems: "center",
+    paddingHorizontal: width * 0.04999999,
   },
   topBrand: {
     fontWeight: "bold",

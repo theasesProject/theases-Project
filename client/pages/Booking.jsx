@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,22 +7,32 @@ import {
   TextInput,
   Button,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Calendar from "expo-calendar";
 import { useSelector, useDispatch } from "react-redux";
 import { CreateBooking } from "../store/bookingSlice";
 import { StatusBar } from "expo-status-bar";
 import CalendarPicker from "react-native-calendar-picker";
+import { GetUnavailableDatesForCar } from "../store/bookingSlice";
+import { useNavigation } from "@react-navigation/native";
 // import { Calendar } from "react-native-calendars";
 import moment from "moment";
+import { selectUser, setUser } from "../store/userSlice";
 function Booking() {
+  const navigation = useNavigation();
+  const unavailableDate = useSelector((state) => state.booking.unavailableDate);
+  const oneCar = useSelector((state) => state.car.OneCar);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
   const dispatch = useDispatch();
-  const activeUser = useSelector((state) => state.user);
-  console.log(selectedStartDate, "selectedStartDate");
-  console.log(selectedEndDate, "selectedEndDate");
-  console.log(markedDates, "markedDates");
+  const activeUser = useSelector(selectUser);
+  const succes = useSelector((state) => state.booking.succes);
+
+  useEffect(() => {
+    dispatch(GetUnavailableDatesForCar(oneCar.id));
+  }, [dispatch]);
+
   const createBooking = () => {
     if (selectedStartDate && selectedEndDate) {
       dispatch(
@@ -30,6 +40,7 @@ function Booking() {
           startDate: selectedStartDate.format("YYYY-MM-DD").toString(),
           endDate: selectedEndDate.format("YYYY-MM-DD").toString(),
           UserId: activeUser.id,
+          CarId: oneCar.id,
         })
       );
     } else {
@@ -59,7 +70,7 @@ function Booking() {
       setSelectedEndDate(date);
       setMarkedDates({
         ...markedDates,
-        [date]: { color: "red" },
+        [date]: { color: "green" },
       });
 
       const datesInRange = getDatesInRange(selectedStartDate, date);
@@ -80,28 +91,14 @@ function Booking() {
     }
   };
 
-  const customStyles = {
-    calendar: {
-      // Style for the calendar container
-      backgroundColor: "red",
-      width: 400,
-      heigth: 400,
-    },
-    day: {
-      // Style for individual day cells
-      fontSize: 18,
-      textAlign: "center",
-    },
-    weekend: {
-      // Style for weekend days
-      color: "red",
-      backgroundColor: "blue",
-    },
-    selected: {
-      // Style for selected dates
-      backgroundColor: "blue",
-      borderRadius: 16,
-    },
+  const markDatesRed = () => {
+    const markedRedDates = {};
+
+    unavailableDate.forEach((date) => {
+      markedRedDates[date] = { selectedDayColor: "red" };
+    });
+
+    return markedRedDates;
   };
 
   return (
@@ -109,23 +106,27 @@ function Booking() {
       <CalendarPicker
         allowRangeSelection={true}
         onDateChange={(date) => handleDateSelect(date)}
-        markedDates={markedDates}
+        // markedDates={markedDates}
+        markedDates={{
+          ...markedDates,
+          ...markDatesRed(), // Add red dates to the markedDates
+        }}
         todayBackgroundColor="blue"
-        selectedDayColor="yellow"
-        selectedDayTextColor="grey"
+        selectedDayColor="#daddf0"
+        selectedDayTextColor="white"
         scaleFactor={375}
         textStyle={{
           // fontFamily: "Cochin",
           color: "black",
+
           fontSize: 18,
         }}
         previousTitle="<"
         nextTitle=">"
-        customStyles={customStyles}
+        // customStyles={customStyles}
       />
-
-      <Text>Pick Time</Text>
-      <TouchableOpacity onPress={createBooking}>
+      <View></View>
+      <TouchableOpacity style={styles.bookNow} onPress={() => createBooking()}>
         <Text>Book Now</Text>
       </TouchableOpacity>
     </View>
@@ -135,6 +136,18 @@ function Booking() {
 const styles = StyleSheet.create({
   calender: {
     backgroundColor: "red",
+  },
+  Pick: {
+    width: "100%",
+    height: 50,
+    fontSize: 16,
+    padding: 10,
+    fontWeight: "bold",
+  },
+  bookNow: {
+    backgroundColor: "yellow",
+    height: 50,
+    width: 100,
   },
 });
 

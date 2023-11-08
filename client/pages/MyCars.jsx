@@ -35,8 +35,8 @@ function MyCars() {
   const ccc = [];
   const renderRightActions = (progress, dragX, carId) => {
     const trans = dragX.interpolate({
-      inputRange: [0, 50, 100],
-      outputRange: [0, 10, 50],
+      inputRange: [0, 25, 50],
+      outputRange: [0, 10, 30],
       extrapolate: "clamp",
     });
 

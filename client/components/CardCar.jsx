@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  Dimensions,
 } from "react-native";
 import { useEffect, useState } from "react";
 import car from "../assets/car2.png";
@@ -14,17 +15,23 @@ import heartBleu from "../assets/filledPurpleHeart.png";
 import BookMark from "../assets/Svg/bookMark.svg";
 import TopCorner from "../assets/Svg/BookMarkDone.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateBookMark, removedBookMark } from "../store/carFetch.js";
+import {
+  CreateBookMark,
+  removedBookMark,
+  setCarDetails,
+} from "../store/carFetch.js";
 import axios from "axios";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
+import { Booking } from "../pages/Booking.jsx";
+const { height, width } = Dimensions.get("screen");
 function CardCar({ oneCar }) {
   const [starSelected, setStarSelected] = useState(false);
   // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
   const [isHeartClicked, setHeartClicked] = useState(false);
   // const [heartSelected, setHeartSelected] = useState(false);
   const [done, setDone] = useState(null);
-  const activeUser = useSelector(selectUser);
+  const activeUser = useSelector(selectUser) || {};
   const starImage = starSelected ? star : emptyStar;
   // const heartImage = heartSelected ? heartBleu : EmptyHeart;
   const dispatch = useDispatch();
@@ -36,7 +43,7 @@ function CardCar({ oneCar }) {
     // setHeartSelected(!heartSelected);
     // if (!heartSelected) {
     setHeartClicked(!isHeartClicked);
-    // console.log(oneCar.id + "selim")
+
     dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
     // } else if (heartSelected) {
     // dispatch(removedBookMark(oneCar.id));
@@ -61,7 +68,6 @@ function CardCar({ oneCar }) {
     checkBookMarked();
   }, []);
 
-  console.log("onecar: ", oneCar);
   return (
     <View style={styles.card}>
       <View style={styles.Image}>
@@ -101,7 +107,12 @@ function CardCar({ oneCar }) {
               ${oneCar.price}/{oneCar.period}
             </Text>
             <View style={styles.bookingCar}>
-              <TouchableOpacity onPress={() => navigation.navigate("Booking")}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setCarDetails(oneCar));
+                  navigation.navigate("Booking");
+                }}
+              >
                 <Text style={styles.bookingCar1}>Booking</Text>
               </TouchableOpacity>
             </View>
@@ -115,8 +126,7 @@ function CardCar({ oneCar }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    width: "98%",
-    height: 250,
+    height: height * 0.3,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",

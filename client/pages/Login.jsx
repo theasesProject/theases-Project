@@ -126,7 +126,6 @@ function Login({ navigation }) {
       console.log("token: ", retrieveData("token"));
       dispatch(fetchUser(response.data)).then(async (response) => {
         await AsyncStorage.setItem("UserToken", response?.meta.arg);
-        // console.log("fuckingggggggggggggggg",response.meta.arg);
       });
 
       navigation.navigate("Home");

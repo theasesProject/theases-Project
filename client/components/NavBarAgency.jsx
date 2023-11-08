@@ -18,8 +18,8 @@ import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
-import Plus from ".././assets/Svg/plus-solid.svg"
-import Car from ".././assets/Svg/car-side-solid.svg"
+import Plus from ".././assets/Svg/plus-solid.svg";
+import Car from ".././assets/Svg/car-side-solid.svg";
 
 import { useSelector } from "react-redux";
 const { height, width } = Dimensions.get("screen");
@@ -70,29 +70,20 @@ function NavBarAgency({ style }) {
         }}
       >
         <View style={styles.hm}>
-        
-            <Car fill={isActive("favorites")} />
-        
-          <Text style={{ color: isActive("favorites") }}>
-           My Cars
-          </Text>
+          <Car fill={isActive("favorites")} />
+
+          <Text style={{ color: isActive("favorites") }}>My Cars</Text>
         </View>
       </Pressable>
       <Pressable
         style={styles.quarter}
         onPress={() => {
-          if (loggedIn) {
-            navigation.navigate("Userprofile");
-          } else {
-            navigation.navigate("Login");
-          }
+          navigation.navigate("AgencyService");
         }}
       >
         <View style={styles.hm}>
           <Pr fill={isActive("Userprofile")} />
-          <Text style={{ color: isActive("Userprofile") }}>
-        Requests
-          </Text>
+          <Text style={{ color: isActive("Userprofile") }}>Requests</Text>
         </View>
       </Pressable>
     </View>
@@ -111,7 +102,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around", // Distribute items evenly along the row
     alignItems: "center", // Center items vertically
-
   },
   quarter: {
     flex: 1,

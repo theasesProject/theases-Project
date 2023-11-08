@@ -125,15 +125,7 @@ function Booking() {
         nextTitle=">"
         // customStyles={customStyles}
       />
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("AgencyService");
-          }}
-        >
-          <Text style={styles.Pick}>Pick Time</Text>
-        </TouchableOpacity>
-      </View>
+      <View></View>
       <TouchableOpacity style={styles.bookNow} onPress={() => createBooking()}>
         <Text>Book Now</Text>
       </TouchableOpacity>

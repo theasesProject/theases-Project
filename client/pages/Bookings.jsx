@@ -19,7 +19,7 @@ function Bookings() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allCarsByAgency = useSelector((state) => state.car.agencyCar);
-  const loading = useSelector((state)=>state.car.loading)
+  const loading = useSelector((state) => state.car.loading);
   useEffect(() => {
     dispatch(getallCarByAgency(activeUser.Agency.id));
   }, [dispatch]);
@@ -31,21 +31,48 @@ function Bookings() {
     <View style={styles.container}>
       <ScrollView>
         <Text style={styles.favouriteText}>All Cars</Text>
-        {loading?(activeUser.type === "agency" ? (
-          allCarsByAgency?.map((OneCar, i) => (
-            <View key={i} style={styles.carCard}>
+        {loading ? (
+          activeUser.type === "agency" ? (
+            allCarsByAgency?.map((OneCar, i) => (
+              <View key={i} style={styles.carCard}>
+                <View style={styles.items}>
+                  <View style={styles.deleted2}>
+                    <TouchableOpacity onPress={handleDeled(OneCar.car.id)}>
+                      <Image style={styles.delete} source={deleteImge} />
+                    </TouchableOpacity>
+                  </View>
+                  <Image
+                    style={styles.car}
+                    source={{ uri: OneCar.carImage.media }}
+                  />
+                  <View style={styles.detail}>
+                    <Text style={styles.title}>{OneCar.car.model}</Text>
+                    <View style={styles.stars}>
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                    </View>
+                    <Text style={styles.agencyName}>{OneCar.car.status}</Text>
+                    <Text style={styles.price}>
+                      ${OneCar.car.price}/{OneCar.car.period}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            ))
+          ) : (
+            <View style={styles.carCard}>
               <View style={styles.items}>
                 <View style={styles.deleted2}>
-                  <TouchableOpacity onPress={handleDeled(OneCar.car.id)}>
+                  <TouchableOpacity>
                     <Image style={styles.delete} source={deleteImge} />
                   </TouchableOpacity>
                 </View>
-                <Image
-                  style={styles.car}
-                  source={{ uri: OneCar.carImage.media }}
-                />
+                <Image style={styles.car} source={car2} />
                 <View style={styles.detail}>
-                  <Text style={styles.title}>{OneCar.car.model}</Text>
+                  <Text style={styles.title}>clio</Text>
                   <View style={styles.stars}>
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
@@ -53,40 +80,13 @@ function Bookings() {
                     <Image style={styles.star} source={star} />
                     <Image style={styles.star} source={star} />
                   </View>
-                  <Text style={styles.agencyName}>{OneCar.car.status}</Text>
-                  <Text style={styles.price}>
-                    ${OneCar.car.price}/{OneCar.car.period}
-                  </Text>
+                  <Text style={styles.agencyName}>rent</Text>
+                  <Text style={styles.price}>$220 / daily</Text>
                 </View>
               </View>
             </View>
-          ))
-        ) : (
-          <View style={styles.carCard}>
-            <View style={styles.items}>
-              <View style={styles.deleted2}>
-                <TouchableOpacity>
-                  <Image style={styles.delete} source={deleteImge} />
-                </TouchableOpacity>
-              </View>
-              <Image style={styles.car} source={car2} />
-              <View style={styles.detail}>
-                <Text style={styles.title}>clio</Text>
-                <View style={styles.stars}>
-                  <Image style={styles.star} source={star} />
-                  <Image style={styles.star} source={star} />
-                  <Image style={styles.star} source={star} />
-                  <Image style={styles.star} source={star} />
-                  <Image style={styles.star} source={star} />
-                </View>
-                <Text style={styles.agencyName}>rent</Text>
-                <Text style={styles.price}>$220 / daily</Text>
-              </View>
-            </View>
-          </View>)
-        )
-          :null
-      }
+          )
+        ) : null}
       </ScrollView>
     </View>
   );

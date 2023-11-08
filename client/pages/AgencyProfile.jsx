@@ -7,6 +7,7 @@ import {
   Image,
   ImageBackground,
   Touchable,
+  ScrollView,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
@@ -21,48 +22,53 @@ function AgencyProfile({ navigation }) {
   console.log("here", activeUser.Agency.companyNumber);
   return (
     <View style={styles.agency}>
-      <View style={styles.vbgImg}>
-        <ImageBackground
-          source={{
-            uri: activeUser.Agency.backgroundImage,
-          }}
-          style={styles.bgim}
-        />
-      </View>
-      <View style={styles.vav}>
-        <View style={styles.bvav}>
+      <ScrollView>
+        <View style={styles.vbgImg}>
           <ImageBackground
             source={{
-              uri: activeUser.avatar,
+              uri: activeUser.Agency.backgroundImage,
             }}
-            style={styles.avatar}
+            style={styles.bgim}
           />
         </View>
-      </View>
-
-      <View style={styles.acna}>
-        <View style={styles.leftSection}>
-          <Text style={styles.leac}>{activeUser.Agency.name}</Text>
-          <Text style={styles.number}>{activeUser.Agency.companyNumber}</Text>
+        <View style={styles.vav}>
+          <View style={styles.bvav}>
+            <ImageBackground
+              source={{
+                uri: activeUser.avatar,
+              }}
+              style={styles.avatar}
+            />
+          </View>
         </View>
-        <View style={styles.rightSection}>
-          <Image source={dots} />
+
+        <View style={styles.acna}>
+          <View style={styles.leftSection}>
+            <Text style={styles.leac}>{activeUser.Agency.name}</Text>
+            <Text style={styles.number}>{activeUser.Agency.companyNumber}</Text>
+          </View>
+          <View style={styles.rightSection}>
+            <Image source={dots} />
+          </View>
         </View>
-      </View>
 
-      <View style={styles.stats}>
-        <Stats />
-      </View>
+        <View style={styles.stats}>
+          <Stats />
+        </View>
 
-      <View >
-        <TouchableOpacity style={styles.map} onPress={()=> navigation.navigate("MapAgencyProfile")}>
+        <View>
+          <TouchableOpacity
+            style={styles.map}
+            onPress={() => navigation.navigate("MapAgencyProfile")}
+          >
             <View style={styles.btn}>
-          <Text style={styles.temap}>Map</Text></View>
-        </TouchableOpacity>
-
-      </View>
-<View style={styles.foot}>
-      <NavBarAgency />
+              <Text style={styles.temap}>Map</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <View style={styles.foot}>
+        <NavBarAgency />
       </View>
     </View>
   );
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
   acna: {
     // flex: 1,
     flexDirection: "row",
-    padding:10
+    padding: 10,
     // height:height*0.01,
     // backgroundColor:"lightgrey",
   },
@@ -117,7 +123,6 @@ const styles = StyleSheet.create({
   leac: {
     fontSize: 33,
     fontStyle: "italic",
-    
   },
   rightSection: {
     height: height * 0.12,
@@ -129,35 +134,31 @@ const styles = StyleSheet.create({
   },
   stats: {
     height: height * 0.35,
-    padding:20 // Adjust the value as needed to move the "Stats" section up
+    padding: 20, // Adjust the value as needed to move the "Stats" section up
     // flex: 1,
     // backgroundColor: "green",
   },
   map: {
-height:height*0.15,
-width:width*0.5,
+    height: height * 0.15,
+    width: width * 0.5,
     alignItems: "center",
     justifyContent: "center",
-    
   },
-  btn:{
+  btn: {
     justifyContent: "center",
-    height: height*0.05,
-    width: width*0.2,
+    height: height * 0.05,
+    width: width * 0.2,
     backgroundColor: "white",
-    alignItems:'center',
-    borderWidth:1,
-    borderRadius:5,
-    
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 5,
   },
-  temap: {fontSize:25,
-color:"lightblue",},
-  foot:{
-
+  temap: { fontSize: 25, color: "lightblue" },
+  foot: {
     flex: 1,
-    justifyContent: 'flex-end', // Align the component to the bottom
-    alignItems: 'center',
-    backgroundColor: 'lightgray',
-  }
+    justifyContent: "flex-end", // Align the component to the bottom
+    alignItems: "center",
+    backgroundColor: "lightgray",
+  },
 });
 export default AgencyProfile;

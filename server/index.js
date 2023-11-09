@@ -56,7 +56,7 @@ io.on("connection", (socket) => {
   // Assume you have a user ID associated with each booking
   socket.on("notification", (data) => {
     const { UserId, message } = data;
-
+    socket.join(UserId);
     // Emit the notification to the specific user
     io.emit("notification", message);
     console.log(message, UserId, "messageBack");

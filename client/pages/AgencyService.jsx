@@ -6,51 +6,149 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Platform,
 } from "react-native";
 import {
   allServiceForAgency,
   UpdateServiceByAgency,
 } from "../store/bookingSlice";
+// import { Notifications } from "expo-notifications";
 const { width, height } = Dimensions.get("screen");
 import { selectUser, setUser } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import carImage from "../assets/Brands/BMW.png";
 import userImage from "../assets/user.jpg";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import io from "socket.io-client";
+import { registerIndieID, unregisterIndieDevice } from "native-notify";
+import axios from "axios";
+// import * as Device from "expo-device";
+
+// import Constants from "expo-constants";
+
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: false,
+//     shouldSetBadge: false,
+//   }),
+// });
+
+// // Can use this function below or use Expo's Push Notification Tool from: https://expo.dev/notifications
+// async function sendPushNotification(expoPushToken) {
+//   const message = {
+//     to: expoPushToken,
+//     sound: "default",
+//     title: "Original Title",
+//     body: "And here is the body!",
+//     data: { someData: "goes here" },
+//   };
+
+//   await fetch("https://exp.host/--/api/v2/push/send", {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json",
+//       "Accept-encoding": "gzip, deflate",
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(message),
+//   });
+// }
+
+// async function registerForPushNotificationsAsync() {
+//   let token;
+
+//   if (Platform.OS === "android") {
+//     Notifications.setNotificationChannelAsync("default", {
+//       name: "default",
+//       importance: Notifications.AndroidImportance.MAX,
+//       vibrationPattern: [0, 250, 250, 250],
+//       lightColor: "#FF231F7C",
+//     });
+//   }
+
+//   if (Device.isDevice) {
+//     const { status: existingStatus } =
+//       await Notifications.getPermissionsAsync();
+//     let finalStatus = existingStatus;
+//     if (existingStatus !== "granted") {
+//       const { status } = await Notifications.requestPermissionsAsync();
+//       finalStatus = status;
+//     }
+//     if (finalStatus !== "granted") {
+//       alert("Failed to get push token for push notification!");
+//       return;
+//     }
+//     token = await Notifications.getExpoPushTokenAsync({
+//       projectId: Constants.expoConfig.extra.eas.projectId,
+//     });
+//     console.log(token);
+//   } else {
+//     alert("Must use physical device for Push Notifications");
+//   }
+
+//   return token.data;
+// }
 
 function AgencyService() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allService = useSelector((state) => state.booking.allServiceByAgency);
-  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+
   useEffect(() => {
     dispatch(allServiceForAgency(activeUser.id));
-
-    socket;
+    // registerForPushNotificationsAsync();
   }, [dispatch]);
 
-  const acceptService = (idservice, message) => {
+  // const [expoPushToken, setExpoPushToken] = useState("");
+  // const [notification, setNotification] = useState(false);
+  // const notificationListener = useRef();
+  // const responseListener = useRef();
+
+  // useEffect(() => {
+  //   registerForPushNotificationsAsync().then((token) =>
+  //     setExpoPushToken(token)
+  //   );
+
+  //   notificationListener.current =
+  //     Notifications.addNotificationReceivedListener((notification) => {
+  //       setNotification(notification);
+  //     });
+
+  //   responseListener.current =
+  //     Notifications.addNotificationResponseReceivedListener((response) => {
+  //       console.log(response);
+  //     });
+
+  //   return () => {
+  //     Notifications.removeNotificationSubscription(
+  //       notificationListener.current
+  //     );
+  //     Notifications.removeNotificationSubscription(responseListener.current);
+  //   };
+  // }, []);
+
+  const acceptService = (idservice, message, id) => {
     const obj = { id: idservice, acceptation: "accepted" };
     dispatch(UpdateServiceByAgency(obj));
-
-    // Send a notification to ProfileLandingPage
-    socket.emit("notification", {
-      UserId: activeUser.id,
-      message: `Service request accepted: ${message}`,
-    });
+    notification(id);
   };
 
+  const notification = (id) => {
+    axios.post(`https://app.nativenotify.com/api/indie/notification`, {
+      subID: `${id}`,
+      appId: 14608,
+      appToken: "0IjK45dvxv48dlwYcWDWTR",
+      title: "Booking",
+      message: "you are succes to booking",
+    });
+    console.log(id, "notifcation");
+  };
   const rejectService = (idservice, message) => {
     const obj = { id: idservice, acceptation: "rejected" };
     dispatch(UpdateServiceByAgency(obj));
-
-    socket.emit("notification", {
-      UserId: activeUser.id,
-      message: `Service request rejected: ${message}`,
-    });
   };
+
   return (
     <View style={styles.pageContainer}>
       <ScrollView style={styles.scrollContainer}>
@@ -87,7 +185,11 @@ function AgencyService() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    acceptService(service.service.id, service.car.model);
+                    acceptService(
+                      service.service.UserId,
+                      service.service.id,
+                      service.car.model
+                    );
                   }}
                   style={styles.acceptButton}
                 >

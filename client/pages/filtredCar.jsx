@@ -15,8 +15,9 @@ import { useEffect } from "react";
 import star from "../assets/star.jpg";
 function FiltredCar() {
   const navigation = useNavigation();
-  const filteredCars = useSelector((state) => state.car.carFiltred);
-  console.log(filteredCars, "selected");
+  // const filteredCars = useSelector((state) => state.car.carFiltred);
+  const avaibleCar = useSelector((state) => state.booking.avaibleCar);
+  console.log(avaibleCar, "avaible");
   // useEffect(()=>)
   return (
     <View style={styles.homePage}>
@@ -28,40 +29,78 @@ function FiltredCar() {
         <Image style={styles.backImage} source={back}></Image>
       </TouchableOpacity>
       <ScrollView>
-        {filteredCars
-          ? filteredCars.map((element, i) => (
-              <View key={i} style={styles.all}>
-                <View style={styles.carCard}>
-                  <View style={styles.items}>
-                    <View style={styles.deleted2}>
-                      {/* <Image style={styles.delete} source={deleteImge} /> */}
-                    </View>
-                    <Image
-                      style={styles.car}
-                      source={{
-                        uri: element.Media[0]?.media,
-                      }}
-                    />
-                    <View style={styles.detail}>
-                      <Text style={styles.title}>{element.model}</Text>
-                      <View style={styles.stars}>
-                        <Image style={styles.star} source={star} />
-                        <Image style={styles.star} source={star} />
-                        <Image style={styles.star} source={star} />
-                        <Image style={styles.star} source={star} />
-                        <Image style={styles.star} source={star} />
-                      </View>
+        {/* {filteredCars */}
+        {/* ? filteredCars.map((element, i) => ( */}
+        {/* <View key={i} style={styles.all}> */}
+        {/* <View style={styles.carCard}> */}
+        {/* <View style={styles.items}> */}
+        {/* <View style={styles.deleted2}> */}
+        {/* <Image style={styles.delete} source={deleteImge} /> */}
+        {/* </View> */}
+        {/* <Image */}
+        {/* style={styles.car} */}
+        {/* source={{ */}
+        {/* uri: element.Media[0]?.media, */}
+        {/* }} */}
+        {/* /> */}
+        {/* <View style={styles.detail}> */}
+        {/* <Text style={styles.title}>{element.model}</Text> */}
+        {/* <View style={styles.stars}> */}
+        {/* <Image style={styles.star} source={star} /> */}
+        {/* <Image style={styles.star} source={star} /> */}
+        {/* <Image style={styles.star} source={star} /> */}
+        {/* <Image style={styles.star} source={star} /> */}
+        {/* <Image style={styles.star} source={star} /> */}
+        {/* </View> */}
 
-                      <Text style={styles.price}>
-                        ${element.price}/{element.period}
-                      </Text>
+        {/* <Text style={styles.price}> */}
+        {/* ${element.price}/{element.period} */}
+        {/* </Text> */}
+        {/* </View> */}
+        {/* </View> */}
+        {/* </View> */}
+
+        {/* <CardCar key={i} oneCar={element} /> */}
+        {/* </View> */}
+        {/* )) */}
+        {/* : null} */}
+        <View>
+          {avaibleCar
+            ? avaibleCar.map((element, i) => (
+                <View key={i} style={styles.all}>
+                  <View style={styles.carCard}>
+                    <View style={styles.items}>
+                      <View style={styles.deleted2}>
+                        {/* <Image style={styles.delete} source={deleteImge} /> */}
+                      </View>
+                      <Image
+                        style={styles.car}
+                        source={{
+                          uri: element.Media[0]?.media,
+                        }}
+                      />
+                      <View style={styles.detail}>
+                        <Text style={styles.title}>{element.model}</Text>
+                        <View style={styles.stars}>
+                          <Image style={styles.star} source={star} />
+                          <Image style={styles.star} source={star} />
+                          <Image style={styles.star} source={star} />
+                          <Image style={styles.star} source={star} />
+                          <Image style={styles.star} source={star} />
+                        </View>
+
+                        <Text style={styles.price}>
+                          ${element.price}/{element.period}
+                        </Text>
+                      </View>
                     </View>
                   </View>
+
+                  {/* <CardCar key={i} oneCar={element} /> */}
                 </View>
-                {/* <CardCar key={i} oneCar={element} /> */}
-              </View>
-            ))
-          : null}
+              ))
+            : null}
+        </View>
       </ScrollView>
     </View>
   );

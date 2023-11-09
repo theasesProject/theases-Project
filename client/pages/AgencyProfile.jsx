@@ -21,8 +21,8 @@ function AgencyProfile({ navigation }) {
   const activeUser = useSelector(selectUser);
   console.log("here", activeUser.Agency.companyNumber);
   return (
-    <View style={styles.agency}>
-      <ScrollView>
+    <View>
+      <ScrollView style={styles.agency}>
         <View style={styles.vbgImg}>
           <ImageBackground
             source={{
@@ -67,8 +67,8 @@ function AgencyProfile({ navigation }) {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <View style={styles.foot}>
-        <NavBarAgency />
+      <View>
+        <NavBarAgency style={styles.foot} />
       </View>
     </View>
   );
@@ -76,7 +76,7 @@ function AgencyProfile({ navigation }) {
 const styles = StyleSheet.create({
   agency: {
     width: width,
-    height: height,
+    height: height * 0.89,
   },
   vbgImg: {
     height: height * 0.25,
@@ -155,7 +155,6 @@ const styles = StyleSheet.create({
   },
   temap: { fontSize: 25, color: "lightblue" },
   foot: {
-    flex: 1,
     justifyContent: "flex-end", // Align the component to the bottom
     alignItems: "center",
     backgroundColor: "lightgray",

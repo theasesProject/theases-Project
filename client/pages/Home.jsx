@@ -25,11 +25,11 @@ import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
 
-import io from "socket.io-client";
 import { selectUser, setUser } from "../store/userSlice";
-
+import registerNNPushToken from "native-notify";
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
+  registerNNPushToken(14608, "0IjK45dvxv48dlwYcWDWTR");
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allCars = useSelector((state) => state.car.allCars);
@@ -39,11 +39,7 @@ function Home({ navigation }) {
   const scrollViewRef = useRef();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [nothing, setNothing] = useState("");
-  const [notifications, setNotifications] = useState([]);
-  const [notificationModalVisible, setNotificationModalVisible] =
-    useState(false);
 
-  const [notificationText, setNotificationText] = useState("");
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
@@ -67,29 +63,7 @@ function Home({ navigation }) {
       console.error("error coming from home", e);
     }
   };
-  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to Socket.IO server");
-    });
-
-    socket.on("notification", (message) => {
-      console.log("messageFront");
-      setNotificationText(message);
-      setNotificationModalVisible(true);
-      setTimeout(() => {
-        setNotificationModalVisible(false);
-      }, 10000);
-    });
-
-    socket.on("connect_error", (error) => {
-      console.error("Socket.IO connection error:", error);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  console.log("all", allCars);
 
   // useEffect(() => {
   //   if (!loading && scrollViewRef.current) {
@@ -183,24 +157,6 @@ function Home({ navigation }) {
         <CarDetails />
       </ScrollView>
       <NavBar />
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={notificationModalVisible}
-        onRequestClose={() => {
-          setNotificationModalVisible(false);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>{notificationText}</Text>
-          <TouchableOpacity
-            onPress={() => setNotificationModalVisible(false)}
-            style={styles.modalCloseButton}
-          >
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
     </View>
   );
 }

@@ -17,10 +17,10 @@ import Close from "../assets/Svg/eyeClose.svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { fetchUser } from "../store/userSlice";
-import { useDispatch } from "react-redux";
+import { fetchUser, selectUser } from "../store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { registerIndieID, unregisterIndieDevice } from "native-notify";
 function Login({ navigation }) {
   const [color, setColor] = useState("#6C77BF");
   const [color2, setColor2] = useState("#6C77BF");
@@ -33,7 +33,7 @@ function Login({ navigation }) {
   const [formChecked, setFormChecked] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-
+  const activeUser = useSelector(selectUser);
   const storeData = async (key, value) => {
     try {
       await AsyncStorage.setItem(key, value);
@@ -126,6 +126,7 @@ function Login({ navigation }) {
       console.log("token: ", retrieveData("token"));
       dispatch(fetchUser(response.data)).then(async (response) => {
         await AsyncStorage.setItem("UserToken", response?.meta.arg);
+        registerIndieID(`${activeUser.id}`, 14608, "0IjK45dvxv48dlwYcWDWTR");
       });
 
       navigation.navigate("Home");

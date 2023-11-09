@@ -67,12 +67,14 @@ function MyCars() {
               }
             >
               <View style={styles.carCard}>
-                <Image
-                  style={styles.car}
-                  source={{
-                    uri: agencycar.carImage.media,
-                  }}
-                />
+                {agencycar.carImage ? (
+                  <Image
+                    style={styles.car}
+                    source={{
+                      uri: agencycar.carImage?.media,
+                    }}
+                  />
+                ) : null}
                 {/* Rest of your car item code */}
               </View>
             </Swipeable>

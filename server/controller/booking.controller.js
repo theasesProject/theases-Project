@@ -1,5 +1,5 @@
 const { db } = require("../models/index");
-
+const { Op } = require("sequelize");
 function getDatesInRange(startDate, endDate) {
   const dates = [];
   let currentDate = new Date(startDate);
@@ -30,10 +30,11 @@ module.exports = {
     }
 
     const datesInRange = getDatesInRange(startDate, endDate);
-    const unavailableDates = await db.UnavailableDate.findAll({
+    const unavailableDates = await db.Availability.findAll({
       where: {
         CarId,
-        unavailableDate: datesInRange,
+        date: datesInRange,
+        isAvailable: false,
       },
     });
 
@@ -52,56 +53,36 @@ module.exports = {
 
     // Insert records for unavailable dates
     for (const date of datesInRange) {
-      await db.UnavailableDate.create({
+      await db.Availability.create({
         CarId,
-        unavailableDate: date,
+        date,
+        isAvailable: false,
       });
     }
 
     return res.json(services);
   },
+
   GetAvailableDatesForCar: async function (req, res) {
     try {
-      const { oneCar } = req.params; // Get the car identifier from the URL parameters
+      const { oneCar } = req.params;
+      const startDate = req.body.startDate;
+      const endDate = req.body.endDate;
 
-      const carBookings = await db.Service.findAll({
+      const unavailableDates = await db.Availability.findAll({
         where: {
           CarId: oneCar,
+          date: getDatesInRange(startDate, endDate),
+          isAvailable: false,
         },
+        attributes: ["date"],
       });
 
-      const unavailableDates = await db.UnavailableDate.findAll({
-        where: {
-          CarId: oneCar,
-        },
-        attributes: ["unavailableDate"], // Select only the unavailableDate column
-      });
+      const unavailableDateList = unavailableDates.map((date) => date.date);
 
-      // Extract the dates from the results
-      const bookingDates = carBookings.map((booking) => ({
-        startDate: booking.startDate,
-        endDate: booking.endDate,
-      }));
-      const unavailableDateList = unavailableDates.map(
-        (date) => date.unavailableDate
+      const availableDates = getDatesInRange(startDate, endDate).filter(
+        (date) => !unavailableDateList.includes(date)
       );
-
-      // Process the bookings and unavailable dates to determine available dates
-      const availableDates = [];
-
-      for (const date of getDatesInRange(startDate, endDate)) {
-        if (
-          !unavailableDateList.includes(date) &&
-          bookingDates.every((booking) => {
-            return (
-              new Date(date) < new Date(booking.startDate) ||
-              new Date(date) > new Date(booking.endDate)
-            );
-          })
-        ) {
-          availableDates.push(date);
-        }
-      }
 
       res.json(availableDates);
     } catch (error) {
@@ -109,30 +90,28 @@ module.exports = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+
   GetUnavailableDatesForCar: async function (req, res) {
     try {
-      const { oneCar } = req.params; // Get the car identifier from the URL parameters
+      const { oneCar } = req.params;
 
-      // Query the database to find all unavailable dates for the specified car
-      const unavailableDates = await db.UnavailableDate.findAll({
+      const unavailableDates = await db.Availability.findAll({
         where: {
           CarId: oneCar,
+          isAvailable: false,
         },
-        attributes: ["unavailableDate"], // Select only the unavailableDate column
+        attributes: ["date"],
       });
 
-      // Extract the dates from the result
-      const unavailableDateList = unavailableDates.map(
-        (date) => date.unavailableDate
-      );
+      const unavailableDateList = unavailableDates.map((date) => date.date);
 
-      // Return the list of unavailable dates as a JSON response
       res.json(unavailableDateList);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal server error" });
     }
   },
+
   UpdateService: async function (req, res) {
     try {
       const { id, acceptation } = req.body;
@@ -155,10 +134,10 @@ module.exports = {
 
         const datesInRange = getDatesInRange(startDate, endDate);
 
-        await db.UnavailableDate.destroy({
+        await db.Availability.destroy({
           where: {
             CarId: service.CarId,
-            unavailableDate: datesInRange,
+            date: datesInRange,
           },
         });
       }
@@ -171,6 +150,7 @@ module.exports = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+
   GetAllServicesForAgency: async function (req, res) {
     try {
       const serviceObj = [];
@@ -181,6 +161,7 @@ module.exports = {
           UserId: agencyId,
         },
       });
+
       for (const service of services) {
         console.log(service.CarId, "service");
         const car = await db.Car.findOne({
@@ -212,6 +193,62 @@ module.exports = {
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  GetAvailableCars: async function (req, res) {
+    try {
+      const { startDate, endDate, price, characteristics, type, deposit } =
+        req.body;
+
+      const carBookings = await db.Service.findAll();
+      const unavailableDates = await db.Availability.findAll({
+        where: {
+          date: getDatesInRange(startDate, endDate),
+          isAvailable: false,
+        },
+        attributes: ["CarId"],
+      });
+
+      const unavailableCarIds = unavailableDates.map(
+        (availability) => availability.CarId
+      );
+
+      const whereClause = {
+        id: { [Op.notIn]: unavailableCarIds },
+      };
+
+      if (price) {
+        whereClause.price = {
+          [Op.between]: price,
+        };
+      }
+
+      if (characteristics) {
+        whereClause.characteristics = characteristics;
+      }
+
+      if (type) {
+        whereClause.typevehicle = type;
+      }
+
+      if (deposit) {
+        whereClause["Agency.deposit"] = {
+          [Op.gte]: deposit,
+        };
+      }
+
+      const availableCars = await db.Car.findAll({
+        where: whereClause,
+        include: [
+          { model: db.Media, as: "Media" },
+          { model: db.Agency, as: "Agency" },
+        ],
+      });
+
+      res.json(availableCars);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
     }
   },
 };

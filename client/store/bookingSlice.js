@@ -7,6 +7,7 @@ const initialState = {
   succes: null,
   unavailableDate: [],
   allServiceByAgency: [],
+  avaibleCar: [],
 };
 export const CreateBooking = createAsyncThunk(
   "booking/CreateBooking",
@@ -67,6 +68,23 @@ export const allServiceForAgency = createAsyncThunk(
     }
   }
 );
+export const getAllCarByDate = createAsyncThunk(
+  "booking/getAllCarByDate",
+  async (body) => {
+    try {
+      console.log(body, "body");
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/avaibleCar`,
+        body
+      );
+      console.log(response.data, "response");
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const bookingSlice = createSlice({
   name: "booking",
   initialState,
@@ -118,6 +136,18 @@ const bookingSlice = createSlice({
       state.succes = action.payload;
     });
     builder.addCase(UpdateServiceByAgency.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(getAllCarByDate.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getAllCarByDate.fulfilled, (state, action) => {
+      state.loading = false;
+      state.avaibleCar = action.payload;
+    });
+    builder.addCase(getAllCarByDate.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

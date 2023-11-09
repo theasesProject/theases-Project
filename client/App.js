@@ -28,14 +28,11 @@ import MyCars from "./pages/MyCars.jsx";
 import AgencyProfile from "./pages/AgencyProfile.jsx";
 import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 import { StripeProvider } from "@stripe/stripe-react-native";
-import Payment from "./components/PaymentBtn.jsx";
 const Stack = createStackNavigator();
 function App() {
   return (
     <Provider store={store}>
-      <StripeProvider
-        publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
-      >
+      <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen

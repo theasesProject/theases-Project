@@ -12,7 +12,6 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import filter from "../assets/filter.png";
 import { useState } from "react";
-// import { DOMAIN_NAME } from "../env";
 import axios from "axios";
 import Filter from "../assets/Svg/filter.svg";
 import { useNavigation } from "@react-navigation/native";
@@ -45,7 +44,6 @@ function SearchBar({ onSearch }) {
         style={styles.input}
         value={searchedCar}
         placeholder="Search cars or locations…"
-        placeholderTextColor={"black"}
       ></TextInput>
 
       <Pressable onPress={() => navigation.navigate("AdvancedSearch")}>

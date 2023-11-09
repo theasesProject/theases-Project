@@ -70,9 +70,9 @@ function NavBarAgency({ style }) {
         }}
       >
         <View style={styles.hm}>
-          <Car fill={isActive("favorites")} />
+          <Car fill={isActive("MyCars")} />
 
-          <Text style={{ color: isActive("favorites") }}>My Cars</Text>
+          <Text style={{ color: isActive("MyCars") }}>My Cars</Text>
         </View>
       </Pressable>
       <Pressable
@@ -82,8 +82,8 @@ function NavBarAgency({ style }) {
         }}
       >
         <View style={styles.hm}>
-          <Pr fill={isActive("Userprofile")} />
-          <Text style={{ color: isActive("Userprofile") }}>Requests</Text>
+          <Pr fill={isActive("AgencyService")} />
+          <Text style={{ color: isActive("AgencyService") }}>Requests</Text>
         </View>
       </Pressable>
     </View>

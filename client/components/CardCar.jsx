@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
+    
   },
   barText: {
     width: 360,

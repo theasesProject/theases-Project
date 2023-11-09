@@ -13,6 +13,7 @@ const Payment = () => {
     try {
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/payment/intentsStripe`,
+        // this amount will be sent by props when we use this btn component
         { amount: 12345 }
       );
       await initPaymentSheet({

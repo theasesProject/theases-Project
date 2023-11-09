@@ -45,12 +45,12 @@ export const getallCarByAgency = createAsyncThunk(
 
 export const deletedAgencyCar = createAsyncThunk(
   "car/deletedAgencyCar",
-  async (Agency, car) => {
+  async (body) => {
+    const {id,AgencyId} = body;
     try {
+      console.log(body, "body");
       const response = await axios.delete(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar`,
-        { AgencyId: Agency, id: car }
-      );
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar/${id}/${AgencyId}`);
 
       return response.data;
     } catch (error) {

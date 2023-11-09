@@ -27,6 +27,7 @@ import CarDetails from "./carDetails.jsx";
 
 import io from "socket.io-client";
 import { selectUser, setUser } from "../store/userSlice";
+import NavBarAgency from "../components/NavBarAgency.jsx";
 
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
@@ -90,7 +91,7 @@ function Home({ navigation }) {
       socket.disconnect();
     };
   }, []);
-
+console.log('selim',activeUser);
   // useEffect(() => {
   //   if (!loading && scrollViewRef.current) {
   //     scrollViewRef.current.scrollTo({
@@ -184,7 +185,7 @@ function Home({ navigation }) {
         )}
         <CarDetails />
       </ScrollView>
-      <NavBar />
+     {activeUser?.type==='agency'? <NavBarAgency/>:<NavBar />}
       <Modal
         animationType="slide"
         transparent={true}

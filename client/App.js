@@ -21,6 +21,7 @@ import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";
 import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
+import Report from "./pages/Report.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
@@ -30,11 +31,16 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
 
-        <Stack.Navigator initialRouteName="home">
+        <Stack.Navigator initialRouteName="Home">
 
           <Stack.Screen
             name="Home"
             component={Home}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Report"
+            component={Report}
             options={{ headerShown: false }}
           />
           <Stack.Screen

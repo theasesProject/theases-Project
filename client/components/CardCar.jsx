@@ -71,9 +71,9 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   }, [loading]);
   return (
     <View style={styles.card}>
-      <Button title="Details & Booking" onPress={handleRent} />
-      <View style={styles.Image}>
-        <Image style={styles.carImage} source={car} />
+      {/* <Button title="Details & Booking" onPress={handleRent} /> */}
+      <Pressable style={styles.Image} onPress={handleRent}>
+        <Image style={styles.carImage} source={car}  />
         {Object.values(activeUser).length ? (
           !done ? (
             <BookMark onPress={handleHeartPress} />
@@ -81,7 +81,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
             <TopCorner />
           )
         ) : null}
-      </View>
+      </Pressable>
       <View style={styles.carDetails}>
         <View style={styles.NameAvaib}>
           <Text style={styles.carName}>{oneCar.model}</Text>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: "98%",
     height: 250,
-    borderRadius: 10,
+    borderTopEndRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },

@@ -83,6 +83,7 @@ const SignUp = ({ navigation, props }) => {
     setPhoneError("");
     setPasswordError("");
     setConfirmedError("");
+    setIdCardError("")
 
     if (value === "") {
       if (placeholder === "Username") {
@@ -92,7 +93,7 @@ const SignUp = ({ navigation, props }) => {
         setEmailError("Email cannot be empty.");
         return;
       } else if (placeholder === "id card") {
-        setEmailError("card Id  cannot be empty.");
+        setIdCardError("card Id  cannot be empty.");
         return;
       } else if (placeholder === "Phone") {
         setPhoneError("Phone Number cannot be empty.");
@@ -140,8 +141,8 @@ const SignUp = ({ navigation, props }) => {
           setPasswordError("Password should be at least 8 characters long.");
           return;
         }
-        const passwordRegex =
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).*$/;
+
         if (!passwordRegex.test(value)) {
           setPasswordError(
             "Password should include a mix of uppercase letters, lowercase letters, numbers, and special characters."
@@ -157,6 +158,14 @@ const SignUp = ({ navigation, props }) => {
         } else {
           setConfirmedError("");
         }
+      }else if(placeholder==="id card"){
+        if (inputForm.idCard.length <8 || inputForm.idCard>8 ) {
+          setConfirmedError("Your id should be 8 numbers");
+          return;
+        }
+        else{
+          setIdCardError("")
+        }
       }
     }
   };
@@ -164,14 +173,11 @@ const SignUp = ({ navigation, props }) => {
     setShow(true);
   };
 
-  const onChangeDate = (selectedDate) => {
-    if (selectedDate) {
-      // setShow(Platform.OS === "ios");
-      setInputForm({ ...inputForm, dateOfBirth: selectedDate });
-    }
-    // const currentDate = selectedDate || date;
-    // setInputForm({ ...inputForm, dateOfBirth: selectedDate });
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setInputForm({ ...inputForm, dateOfBirth: currentDate });
   };
+
 
   return (
     <ScrollView style={styles.container}>
@@ -201,9 +207,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
-
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -229,9 +234,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
-
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -258,9 +262,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.email &&
                     !!inputForm.password &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
-
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -289,9 +292,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!text &&
                     !!confirm &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
-
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -335,8 +337,8 @@ const SignUp = ({ navigation, props }) => {
                     !!inputForm.phoneNumber &&
                     !!inputForm.password &&
                     !!text &&
-                    inputForm.dateOfBirth !== new Date()&&
-                    !! inputForm.idCard
+                    inputForm.dateOfBirth !== new Date() &&
+                    !!inputForm.idCard
                 );
               }}
             />
@@ -359,40 +361,35 @@ const SignUp = ({ navigation, props }) => {
           {confirmedError ? (
             <Text style={{ color: "red" }}>{confirmedError}</Text>
           ) : null}
-        <View style={styles.inputHolder}>
-          <Lock style={styles.icon} />
-          <TextInput
-            ref={inputRefConfirmed}
-            onBlur={() => {
-              checkInput(inputForm.idCard, "id card");
-            }}
-            autoCapitalize="none"
-            value={inputForm.idCard}
-            style={styles.input}
-            placeholder="id card"
-            secureTextEntry={isSecure2}
-            onChangeText={(text) => {
-              setInputForm({ ...inputForm, idCard: text });
-              setCheckUp(
-                !!inputForm.userName &&
-                  !!inputForm.email &&
-                  !!inputForm.phoneNumber &&
-                  !!inputForm.password &&
-                  !!confirm &&
-                  inputForm.dateOfBirth !== new Date()
-              );
-            }}
-          />
-        </View>
-        </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignContent: "center",
-          }}
-        >
-          <TouchableOpacity onPress={showDatepicker}>
+          <View style={styles.inputHolder}>
+            <Lock style={styles.icon} />
+            <TextInput
+              ref={inputRefConfirmed}
+              onBlur={() => {
+                checkInput(inputForm.idCard, "id card");
+              }}
+              autoCapitalize="none"
+              value={inputForm.idCard}
+              style={styles.input}
+              placeholder="id card"
+              secureTextEntry={isSecure2}
+              onChangeText={(text) => {
+                setInputForm({ ...inputForm, idCard: text });
+                setCheckUp(
+                  !!inputForm.userName &&
+                    !!inputForm.email &&
+                    !!inputForm.phoneNumber &&
+                    !!inputForm.password &&
+                    !!confirm &&
+                    inputForm.dateOfBirth !== new Date()
+                );
+              }}
+            />
+          </View>
+            {idCardError ? (
+            <Text style={{ color: "red" }}>{emailError}</Text>
+          ) : null}
+          <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
             <Calendar style={styles.icon2} />
             <LinearGradient
               colors={["#EFEFF9", "#EFEFF9"]}
@@ -404,18 +401,23 @@ const SignUp = ({ navigation, props }) => {
           </TouchableOpacity>
           {show && (
             <DateTimePicker
-              testID="dateTimePicker"
-              value={inputForm.dateOfBirth}
-              mode="date"
-              is24Hour={true}
-              display="default"
-              onChangeText={(text) => {
-                setInputForm(text);
-              }}
-            />
+            value={inputForm.dateOfBirth}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              if (event.type === 'dismissed') {
+                setShow(false);
+              } else if (event.type === 'set'){
+                const currentDate = selectedDate || inputForm.dateOfBirth;
+                setInputForm({...inputForm, dateOfBirth: currentDate})
+                setShow(false)
+              }
+            }}
+          />
           )}
         </View>
         <TouchableOpacity
+        style={{paddingRight:10}}
           disabled={!checkUp}
           activeOpacity={0.8}
           onPress={() => {
@@ -603,7 +605,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 10,
     zIndex: -1,
     height: 50,
-    width: width*0.8,
+    width: width * 0.8,
     borderRadius: 5,
     borderWidth: "none",
     borderWidth: 0,

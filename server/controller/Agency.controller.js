@@ -2,6 +2,18 @@ const { db } = require("../models/index");
 const Agency = db.Agency;
 const User = db.User;
 module.exports = {
+  fetchAll: async (req, res, next) => {
+    try {
+      const data = await Agency.findAll()
+      res.status(200).send({
+        data:data,
+        message:"Data Found",
+        status:"success"
+      })
+    } catch (er) {
+      next(er)
+    }
+  },
   CreateAgency: async (req, res, next) => {
     await User.update({ type: "agency" }, { where: { id: req.body.UserId } });
 

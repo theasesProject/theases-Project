@@ -6,17 +6,14 @@ import {
   Dimensions,
   Image,
   ImageBackground,
-  Touchable,
   ScrollView,
   Pressable,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
-
+import bg from "../assets/tempLogo.png"
 import NavBarAgency from "../components/NavBarAgency";
 import Stats from "../components/Stats";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import MapAgencyProfile from "./MapAgencyProfile";
 import Left from "../assets/Svg/left-long-solid.svg";
 import Dots from "../assets/Svg/three-dots-svgrepo-com.svg";
 import SliderMenu from "../components/SideBar";
@@ -37,7 +34,9 @@ function AgencyProfile({ navigation }) {
     <View>
       <View style={styles.trial}>
         <View style={styles.trle}>
+          <Pressable onPress={()=>navigation.navigate('Home')}>
           <Left />
+          </Pressable>
         </View>
 
         <View style={styles.trri}>
@@ -61,9 +60,7 @@ function AgencyProfile({ navigation }) {
           <ScrollView>
             <View style={styles.vbgImg}>
               <ImageBackground
-                source={{
-                  uri: activeUser.Agency.backgroundImage,
-                }}
+                source={bg    }
                 style={styles.bgim}
               />
             </View>
@@ -136,10 +133,10 @@ const styles = StyleSheet.create({
     height: height * 0.25,
     width: width,
     borderBottomColor: "#6a78c1",
-    borderWidth: 3,
+    borderBottomWidth: 3,
   },
   bgim: {
-    height: "100%",
+    height: "88%",
     width: "100%",
     // objectFit:'cover'
   },

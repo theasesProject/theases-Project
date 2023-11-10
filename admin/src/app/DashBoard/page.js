@@ -10,9 +10,25 @@ import {
   approveRequest,
   declineRequest,
 } from "@/Redux/dachboardAdmin";
+import Modal from 'react-modal';
+Modal.setAppElement('body');
+import UserRow from "../../components/UserRow.jsx"
+import ReqRow from "../../components/ReqRow.jsx"
 import TableAdmin from "@/components/tableAdmin";
 const Dashboard = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+  const handleConfirm = () => {
+    // Handle confirmation here
+    closeModal();
+  };
   const dispatch = useDispatch();
+  const [refresh, setRefresh] = useState(false)
   const ReviewData = useSelector(selectReviews);
   const allUsers = useSelector((state) => state.user.allUsers);
   const allRequests = useSelector((state) => state.user.requests);
@@ -20,28 +36,34 @@ const Dashboard = () => {
     dispatch(fetchReviews());
     dispatch(getAllUsers());
     dispatch(getAllRequests());
-  }, [dispatch]);
+  }, [dispatch, refresh]);
   const handleBlock = (id) => {
-    dispatch(updateStateBlock(id));
-    console.log(user, "update");
+    const user = allUsers.find((user) => user.id === id);
+    if (user) {
+      // console.log(user, "update");
+      dispatch(updateStateBlock(id))
+        .then(
+          setRefresh(!refresh))
+      // dispatch(getAllUsers());
+
+    } else {
+      console.log('User not found');
+    }
   };
-  // const [input, setInput] = useState({})
-  var input={}
+  var input = {}
   const handleApproveRequest = (id, address, Media, companyNumber, deposit, transportation, agencyName) => {
-    // setInput(id, address, Media, companyNumber, deposit, transportation, agencyName)
-    dispatch(approveRequest(input={id, address, Media, companyNumber, deposit, transportation, agencyName}));
-  };
+    dispatch(approveRequest(input = { id, address, Media, companyNumber, deposit, transportation, agencyName }, id)).then(setRefresh(!refresh))
 
+  };
   const handleDeclineRequest = (id) => {
-    dispatch(declineRequest(id));
-  };
+    dispatch(declineRequest(id)).then(setRefresh(!refresh)).then(setRefresh(!refresh))
 
+  };
   const handlePapers = (papers) => {
     for (let paper of papers) {
       window.open(paper.media);
     }
   };
-
   function openLocationInGoogleMaps(location) {
     if (location && location.latitude && location.longitude) {
       const url = `https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}`;
@@ -50,295 +72,66 @@ const Dashboard = () => {
       console.error("Invalid location data.");
     }
   }
-
   return (
     <div>
       <div>
+        
         <h1>Dashboard</h1>
         <p>Welcome to your special dashboard!</p>
         <div>
           <h2>Your Data</h2>
           <p>Here's where we'll show some interesting data...</p>
         </div>
-
-        <div>
+        <div >
           <table className="table">
-            <tr>
-              <th>UserName</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>BlockedUser</th>
-            </tr>
-
-            {allUsers?.map((user) => {
-              return (
-                <tr>
-                  <td>{user.userName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.type}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                      data-bs-toggle="modal"
-                      data-bs-target="#exampleModal"
-                      name="d-flex btn-service-book-appointement w-80"
-                      style={{
-                        padding: "0.5rem 2.5rem",
-                        borderRadius: "0.3125rem",
-                        background: "red",
-                        color: "#fff",
-                      }}
-                    >
-                      {user.stateBlocked === false ? "block" : "Unblock"}
-                    </button>
-                    <div>
-                      <div
-                        className="modal fade"
-                        id="exampleModal"
-                        tabindex="-1"
-                        role="dialog"
-                        aria-labelledby="exampleModalLabel"
-                        aria-hidden="true"
-                      >
-                        <div className="modal-dialog" role="document">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h5
-                                className="modal-title"
-                                id="exampleModalLabel"
-                              >
-                                Are you sure to blocked this user?
-                              </h5>
-                              <button
-                                type="button"
-                                className="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                              >
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-secondary"
-                                data-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                              <button
-                                onClick={() => {
-                                  handleBlock(user.id);
-                                }}
-                                type="button"
-                                className="btn btn-primary"
-                                data-dismiss="modal"
-                              >
-                                Yes
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            <thead>
+              <tr>
+                <th>UserName</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>BlockedUser</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allUsers?.map((user) => {
+                return (
+                  <UserRow openModal={openModal} user={user} handleBlock={handleBlock} />
+                )
+              })}
+            </tbody>
           </table>
-
+          <br></br>
+          <br></br>
+          <br></br>
           <table className="table">
-            <tr>
-              <th>request id</th>
-              <th>address</th>
-              <th>Company Phone Number</th>
-              <th>papers</th>
-              <th>approve/decline</th>
-            </tr>
-
-            {allRequests?.map((request) => {
-              return (
-                <tr>
-                  <td>{request.id}</td>
-                  <td>
-                    <button
-                      className="btn btn-primary"
-                      style={{
-                        padding: "0.5rem 2.5rem",
-                        borderRadius: "0.3125rem",
-                        background: "red",
-                        color: "#fff",
-                      }}
-                      onClick={() =>
-                        openLocationInGoogleMaps(JSON.parse(request.address))
-                      }
-                    >
-                      Open in maps
-                    </button>
-                  </td>
-                  <td>{request.companyNumber}</td>
-                  <td>
-                    <button
-                      className="btn btn-primary"
-                      style={{
-                        padding: "0.5rem 2.5rem",
-                        borderRadius: "0.3125rem",
-                        background: "red",
-                        color: "#fff",
-                      }}
-                      onClick={() => handlePapers(request.Media)}
-                    >
-                      Check papers
-                    </button>
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", gap: "1rem" }}>
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        data-toggle="modal"
-                        data-target="#approveModal"
-                        data-bs-toggle="modal"
-                        data-bs-target="#approveModal"
-                        name="d-flex btn-service-book-appointement w-80"
-                        style={{
-                          padding: "0.5rem 2.5rem",
-                          borderRadius: "0.3125rem",
-                          background: "blue",
-                          color: "#fff",
-                        }}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        data-toggle="modal"
-                        data-target="#declineModal"
-                        data-bs-toggle="modal"
-                        data-bs-target="#declineModal"
-                        name="d-flex btn-service-book-appointement w-80"
-                        style={{
-                          padding: "0.5rem 2.5rem",
-                          borderRadius: "0.3125rem",
-                          background: "red",
-                          color: "#fff",
-                        }}
-                      >
-                        Decline
-                      </button>
-                    </div>
-                    <div>
-                      <div
-                        className="modal fade"
-                        id="approveModal"
-                        tabindex="-1"
-                        role="dialog"
-                        aria-labelledby="exampleModalLabel"
-                        aria-hidden="true"
-                      >
-                        <div className="modal-dialog" role="document">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h5
-                                className="modal-title"
-                                id="exampleModalLabel"
-                              >
-                                Are you sure you want to switch this user's
-                                account to an agency account?
-                              </h5>
-                              <button
-                                type="button"
-                                className="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                              >
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-secondary"
-                                data-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                data-dismiss="modal"
-                                onClick={() => handleApproveRequest(request.id, request.address, request.Media, request.companyNumber, request.deposit, request.transportation, request.agencyName)}
-                              >
-                                Yes
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div
-                        className="modal fade"
-                        id="declineModal"
-                        tabindex="-1"
-                        role="dialog"
-                        aria-labelledby="exampleModalLabel"
-                        aria-hidden="true"
-                      >
-                        <div className="modal-dialog" role="document">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h5
-                                className="modal-title"
-                                id="exampleModalLabel"
-                              >
-                                Are you sure you want to decline this request?
-                              </h5>
-                              <button
-                                type="button"
-                                className="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                              >
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-secondary"
-                                data-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                data-dismiss="modal"
-                                onClick={() => handleDeclineRequest(request.id)}
-                              >
-                                Yes
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            <thead>
+              <tr>
+                <th>request id</th>
+                <th>address</th>
+                <th>Company Phone Number</th>
+                <th>papers</th>
+                <th>approve/decline</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allRequests?.map((request) => {
+                return (
+                  <ReqRow openLocationInGoogleMaps={openLocationInGoogleMaps} handleDeclineRequest={handleDeclineRequest} handlePapers={handlePapers} handleApproveRequest={handleApproveRequest} request={request} />
+                );
+              })}
+            </tbody>
           </table>
         </div>
       </div>
+      <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
+        <h2>Confirm Action</h2>
+        <p>Are you sure you want to perform this action?</p>
+        <button onClick={handleConfirm}>Yes</button>
+        <button onClick={closeModal}>No</button>
+      </Modal>
     </div>
   );
+
 };
 
 export default Dashboard;

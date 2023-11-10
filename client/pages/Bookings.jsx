@@ -21,7 +21,7 @@ function Bookings() {
   const allCarsByAgency = useSelector((state) => state.car.agencyCar);
   const loading = useSelector((state) => state.car.loading);
   useEffect(() => {
-    dispatch(getallCarByAgency(activeUser.Agency.id));
+    activeUser.Agency?dispatch(getallCarByAgency(activeUser.Agency.id)):null
   }, [dispatch]);
   const handleDeled = (car) => {
     deletedAgencyCar(activeUser.id, car);

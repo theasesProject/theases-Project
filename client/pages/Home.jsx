@@ -272,8 +272,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {},
   allcars: {
-    // padding: 20,
-    // paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   notificationsContainer: {
     flex: 1,

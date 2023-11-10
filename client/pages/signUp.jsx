@@ -429,7 +429,7 @@ const SignUp = ({ navigation, props }) => {
             locations={[0, 1]}
             style={styles.buttonContainer}
           >
-            <Text style={styles.buttonText}>{"Sign Up"}</Text>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </LinearGradient>
         </TouchableOpacity>
         <Pressable
@@ -449,25 +449,7 @@ const SignUp = ({ navigation, props }) => {
           style={styles.separatorContainer}
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
-        >
-          <View style={styles.separator} />
-          <Text style={{ color: "grey" }}>Or sign in with</Text>
-          <View style={styles.separator} />
-        </View>
-        <View style={styles.extraSignContainer}>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
-            <View style={styles.extraSign}>
-              <Image style={styles.GoogleCss} source={GooglePng} />
-              <Text style={styles.googleText}>Google</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
-            <View style={styles.extraSign}>
-              <Image style={styles.FacebookCss} source={FaceBookPng} />
-              <Text style={styles.googleText}>Facebook</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        ></View>
       </View>
     </ScrollView>
   );

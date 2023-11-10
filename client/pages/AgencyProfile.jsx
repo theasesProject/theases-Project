@@ -57,7 +57,7 @@ function AgencyProfile({ navigation }) {
           onClose={handleSliderToggle}
           navigation={navigation}
         />
-        {isVisible && activeUser.Agency ? (
+        {isVisible && activeUser?.Agency ? (
           <ScrollView>
             <View style={styles.vbgImg}>
               <ImageBackground

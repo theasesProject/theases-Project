@@ -136,7 +136,7 @@ function AddAgencyCar({ navigation }) {
     { label: "Commercial", value: "Commercial" },
   ];
   const selectImage = async () => {
-    if (img.length >= 3) {
+    if (img.length >= 6) {
       return setError("You can't add more than six images");
     }
 

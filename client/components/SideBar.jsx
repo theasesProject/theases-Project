@@ -1,122 +1,126 @@
-import React, {useRef} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity,PanResponder } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, { useRef, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  PanResponder,
+} from "react-native";
+import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 
-
-
-const Sidebar = ({ isOpen, onClose ,navigation}) => {
-
-  if (!isOpen) {
-    return null;
-  }
-
+const Sidebar = ({ isOpen, onClose, navigation }) => {
   const dispatch = useDispatch();
-const panResponder = useRef(
-  PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onMoveShouldSetPanResponder: () => true,
-    onPanResponderGrant: () => {},
-    onPanResponderMove: (evt, gestureState) => {
-    
-      if (gestureState.dx < -50) {
-        onClose();
-      }else if(gestureState.dx > 50) {
-        onClose()}
-    },
-    onPanResponderRelease: () => {},
-  })
-).current;
 
-if (!isOpen) {
-  return null;
-}
-const handleLogout = () => {
-  dispatch(logoutUser());
-  navigation.navigate("Home");
+  const animatedValue = useRef(new Animated.Value(-300)).current;
 
-}
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: isOpen ? 0 : -210,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [isOpen, animatedValue]);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        // Set a threshold to start recognizing horizontal gestures
+
+        return Math.abs(gestureState.dx) > 10;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        console.log("heeeerreeeee", gestureState.dx);
+        if (gestureState.dx > 50) {
+          onClose();
+          console.log("done");
+        }
+       
+      },
+      onPanResponderRelease: () => {
+        // Additional logic on release if needed
+      },
+    })
+  ).current;
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigation.navigate("Home");
+  };
 
   return (
-    <View style={[styles.sidebar, styles.swipeContainer]} {...panResponder.panHandlers}>
-        
+    <Animated.View
+      style={[styles.sidebar, { right: animatedValue }]}
+      {...panResponder.panHandlers}
+    >
       <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-      <Text style={styles.text} >Home</Text>
-      <View style={styles.line} />
+        <Text style={styles.text}>Home</Text>
+        <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("MyCars")}>
-      <Text style={styles.text}>My Cars</Text>
-      <View style={styles.line} />
+        <Text style={styles.text}>My Cars</Text>
+        <View style={styles.line} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("AddAgencyCar")}>      
-      <Text style={styles.text} >Add Car</Text>
-      <View style={styles.line} />
+      <TouchableOpacity onPress={() => navigation.navigate("AddAgencyCar")}>
+        <Text style={styles.text}>Add Car</Text>
+        <View style={styles.line} />
       </TouchableOpacity>
-<TouchableOpacity onPress={() => navigation.navigate("AgencyService")}>
-      <Text style={styles.text}>Requests</Text>
-      <View style={styles.line} />
+      <TouchableOpacity onPress={() => navigation.navigate("AgencyService")}>
+        <Text style={styles.text}>Requests</Text>
+        <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("editProfile")}>
-     <Text  style={styles.text}>Edit profile</Text>
-     <View style={styles.line} />
-     </TouchableOpacity>
-     <TouchableOpacity onPress={() => navigation.navigate("MyCars")}>
-      <Text style={styles.text}>Reviews</Text>
-      <View style={styles.line} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("MyCars")}> 
-      <Text style={styles.text}>Reports</Text>
-      <View style={styles.line} />
+        <Text style={styles.text}>Edit profile</Text>
+        <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("MyCars")}>
-      <Text style={styles.text}>Settings</Text>
-      <View style={styles.line} />
+        <Text style={styles.text}>Reviews</Text>
+        <View style={styles.line} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate("MyCars")}>
+        <Text style={styles.text}>Reports</Text>
+        <View style={styles.line} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate("MyCars")}>
+        <Text style={styles.text}>Settings</Text>
+        <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={handleLogout}>
-      <Text style={styles.text}>Logout</Text>
-      <View style={styles.line} />
+        <Text style={styles.text}>Logout</Text>
+        <View style={styles.line} />
       </TouchableOpacity>
-    
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   sidebar: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
-    right: 0,
-    height: '100%',
-    width: "80%", // Adjust the width as needed
-    backgroundColor: 'white',
-    shadowColor: '#000',
+    height: "92.5%",
+    width: "60%",
+    backgroundColor: "white",
+    shadowColor: "#000",
     shadowOffset: { width: 5, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 2,
     paddingTop: 30,
     paddingHorizontal: 20,
-    zIndex:1,
-    gap :20,
-    alignContent:"center",
+    zIndex: 1,
+    gap: 20,
+    alignContent: "center",
   },
-text:{
-  fontSize:20
-}, 
-swipeContainer: {
-  // Additional styles for the container that handles swipe gestures
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  height: '100%',
-  zIndex: 1,
-},
-line: {
-  borderBottomWidth: 1,
-  borderBottomColor: '#ccc',
-  marginVertical: 10,
-},
+  text: {
+    fontSize: 20,
+  },
+  line: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    marginVertical: 10,
+  },
 });
 
 export default Sidebar;

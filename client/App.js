@@ -38,7 +38,7 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="AgencyProfile">
             <Stack.Screen
               name="Home"
               component={Home}

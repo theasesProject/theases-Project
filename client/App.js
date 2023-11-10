@@ -37,28 +37,8 @@ function App() {
   return (
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AgencyService"
-            component={AgencyService}
-            options={{ headerShown: true }}
-          />
-          <Stack.Screen
-            name="Report"
-            component={Report}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Booking"
-            component={Booking}
-            options={{ headerShown: true }}
-          />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home">
             <Stack.Screen
               name="Home"
               component={Home}
@@ -68,6 +48,11 @@ function App() {
               name="AgencyService"
               component={AgencyService}
               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Report"
+              component={Report}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Booking"

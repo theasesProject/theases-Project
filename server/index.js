@@ -25,6 +25,7 @@ const bookMarksRouter = require("./router/BookMark.router");
 const agencyRouter = require("./router/Agency");
 const requestRouter = require("./router/request.Route");
 const mediaRouter = require("./router/Media.Route");
+const reportRouter = require("./router/reports");
 const bookingRouter = require("./router/booking.Router");
 const paymentRouter = require("./router/payment.Route");
 const chatRouter = require("./router/chat.router");
@@ -37,6 +38,7 @@ app.use("/api/bookmarks", bookMarksRouter);
 app.use("/api/agency", agencyRouter);
 app.use("/api/request", requestRouter);
 app.use("/api/media", mediaRouter);
+app.use("/api/report", reportRouter);
 app.use("/api/booking", bookingRouter);
 app.use("/api/payment", paymentRouter);
 

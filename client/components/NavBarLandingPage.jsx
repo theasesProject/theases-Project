@@ -44,7 +44,7 @@ function ProfileLandingPage({ style }) {
       }
     }
   };
-  console.log("active user: ", activeUser);
+  // console.log("active user: ", activeUser);
   const [tokenValue, setTokenValue] = useState(false);
   const retrieveToken = async () => {
     try {

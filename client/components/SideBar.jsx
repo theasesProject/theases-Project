@@ -32,8 +32,8 @@ if (!isOpen) {
   return null;
 }
 const handleLogout = () => {
-  navigation.navigate("Login");
   dispatch(logoutUser());
+  navigation.navigate("Home");
 
 }
 

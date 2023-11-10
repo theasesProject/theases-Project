@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -18,7 +18,7 @@ import Stats from "../components/Stats";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MapAgencyProfile from "./MapAgencyProfile";
 import Left from "../assets/Svg/left-long-solid.svg";
-import Dots from "../assets/Svg/three-dots-svgrepo-com.svg"
+import Dots from "../assets/Svg/three-dots-svgrepo-com.svg";
 import SliderMenu from "../components/SideBar";
 const { width, height } = Dimensions.get("screen");
 
@@ -26,114 +26,122 @@ function AgencyProfile({ navigation }) {
   const activeUser = useSelector(selectUser);
   const [isSliderOpen, setSliderOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  console.log("here", activeUser)
+  console.log("here", activeUser);
   const handleSliderToggle = () => {
     setSliderOpen(!isSliderOpen);
   };
   // const toggleVisibility = () => {
   //   setIsVisible(!isVisible);
   // };
-  return (<View>
-    
+  return (
+    <View>
       <View style={styles.trial}>
-         
-          <View style={styles.trle}>
-      <Left />
+        <View style={styles.trle}>
+          <Left />
         </View>
 
         <View style={styles.trri}>
-        <Pressable style={styles.trri} onPress={()=>{handleSliderToggle()}}>
-            <Dots />
-        </Pressable>
-      </View>
-
-   
-    </View>
-    <View style={styles.agency}> 
-    <SliderMenu isOpen={isSliderOpen} onClose={handleSliderToggle} navigation={navigation} />
-      {isVisible?<ScrollView>
-   
-        <View style={styles.vbgImg}>
-          <ImageBackground
-            source={{
-              uri: activeUser.Agency.backgroundImage,
+          <Pressable
+            style={styles.trri}
+            onPress={() => {
+              handleSliderToggle();
             }}
-            style={styles.bgim}
-          />
+          >
+            <Dots />
+          </Pressable>
         </View>
-        <View style={styles.vav}>
-          <View style={styles.bvav}>
-            <Image
-              source={{
-                uri: activeUser.avatar,
-              }}
-              style={styles.avatar}
-            />
-          </View>
-        </View>
-
-        <View style={styles.acna}>
-          <View style={styles.leftSection}>
-            <Text style={styles.leac}>{activeUser.Agency.name}</Text>
-            <Text style={styles.number}>{activeUser.Agency.companyNumber}</Text>
-          </View>
-          <View style={styles.rightSection}>    
-
-<Text >{activeUser.Agency.transportation?"With Delivery":"Without Delivery"}</Text>
-<Text >{ activeUser.Agency.createdAt.slice(0,10)}</Text>
-            {/* <Image source={dots} /> */}
-          </View>
-        </View>
-
-        <View style={styles.stats}>
-          <Stats />
-        </View>
-      </ScrollView>:null}
-      <View style={styles.foot}>
-        <NavBarAgency />
       </View>
-    </View>
+      <View style={styles.agency}>
+        <SliderMenu
+          isOpen={isSliderOpen}
+          onClose={handleSliderToggle}
+          navigation={navigation}
+        />
+        {isVisible && activeUser.Agency ? (
+          <ScrollView>
+            <View style={styles.vbgImg}>
+              <ImageBackground
+                source={{
+                  uri: activeUser.Agency.backgroundImage,
+                }}
+                style={styles.bgim}
+              />
+            </View>
+            <View style={styles.vav}>
+              <View style={styles.bvav}>
+                <Image
+                  source={{
+                    uri: activeUser.avatar,
+                  }}
+                  style={styles.avatar}
+                />
+              </View>
+            </View>
+
+            <View style={styles.acna}>
+              <View style={styles.leftSection}>
+                <Text style={styles.leac}>{activeUser.Agency.name}</Text>
+                <Text style={styles.number}>
+                  {activeUser.Agency.companyNumber}
+                </Text>
+              </View>
+              <View style={styles.rightSection}>
+                <Text>
+                  {activeUser.Agency.transportation
+                    ? "With Delivery"
+                    : "Without Delivery"}
+                </Text>
+                <Text>{activeUser.Agency.createdAt.slice(0, 10)}</Text>
+                {/* <Image source={dots} /> */}
+              </View>
+            </View>
+
+            <View style={styles.stats}>
+              <Stats />
+            </View>
+          </ScrollView>
+        ) : null}
+        <View style={styles.foot}>
+          <NavBarAgency />
+        </View>
+      </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  trial:{
-height:"4%",
-// backgroundColor:'green',
-flexDirection: "row",
-
-
+  trial: {
+    height: "6%",
+    width: width,
+    // backgroundColor:'green',
+    flexDirection: "row",
+    paddingHorizontal: width * 0.07,
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  trle:{
-    flex:1,
-paddingRight:200,  
+  trle: {
+    // flex: 1,
+    // paddingRight: 200,
     // backgroundColor:'red'
   },
-  trri:{
-    // alignContent: 'center',
-    // justifyContent: 'center',
-    flex:1,
- 
-// backgroundColor:"green",
+  trri: {
+    width: width * 0.1
   },
 
   agency: {
- zIndex:0,
+    zIndex: 0,
     width: width,
-    height: "96%",
+    height: "94%",
   },
   vbgImg: {
     height: height * 0.25,
     width: width,
     borderBottomColor: "#6a78c1",
-    borderWidth:3,
-   
+    borderWidth: 3,
   },
   bgim: {
     height: "100%",
-    width: "100%", 
+    width: "100%",
     // objectFit:'cover'
-
   },
   vav: {
     marginTop: -height * 0.07,
@@ -146,7 +154,7 @@ paddingRight:200,
     // borderWidth: 1.25,
     // padding: 23,
     // height:height*0.12,
-    marginTop: -height*0.02,
+    marginTop: -height * 0.02,
   },
   avatar: {
     height: height * 0.12,
@@ -182,7 +190,7 @@ paddingRight:200,
     // alignItems: "center",
     justifyContent: "center",
     marginTop: -height * 0.06,
-marginLeft:100,
+    marginLeft: 100,
     flex: 1, // Takes up 50% of the container's width
     // backgroundColor: 'lightgreen', // Optional background color for the right section
   },

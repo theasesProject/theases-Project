@@ -32,9 +32,9 @@ if (!isOpen) {
   return null;
 }
 const handleLogout = () => {
-  navigation.navigate("Login");
-  dispatch(logoutUser());
 
+  dispatch(logoutUser());
+  navigation.navigate("Login");
 }
 
   return (

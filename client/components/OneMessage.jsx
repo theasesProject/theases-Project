@@ -3,6 +3,7 @@ import { View,Pressable , Text } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { format } from "timeago.js";
 
+
 function OneMessage({message , user}) {
     const [showDate,setShowDate] = useState(false)
 

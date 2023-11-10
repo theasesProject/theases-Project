@@ -19,27 +19,28 @@ import TopCorner from "../assets/Svg/BookMarkDone.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateBookMark, removedBookMark, saveDetails } from "../store/carFetch.js";
 import axios from "axios";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
+import { Booking } from "../pages/Booking.jsx";
 function CardCar({ oneCar, setNothing, handlePress }) {
   const [starSelected, setStarSelected] = useState(false);
   // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
   const [isHeartClicked, setHeartClicked] = useState(false);
   // const [heartSelected, setHeartSelected] = useState(false);
-  const loading = useSelector((state) => state.car.loading);
   const [done, setDone] = useState(null);
-  const activeUser = useSelector(selectUser);
+  const activeUser = useSelector(selectUser) || {};
   const starImage = starSelected ? star : emptyStar;
   // const heartImage = heartSelected ? heartBleu : EmptyHeart;
   const dispatch = useDispatch();
-  // console.log("Car dataaaaaaaaaaaa", oneCar);
+  const navigation = useNavigation();
   const handleStarPress = () => {
     setStarSelected(!starSelected);
   };
   const handleHeartPress = async () => {
     // setHeartSelected(!heartSelected);
     // if (!heartSelected) {
-    // console.log(oneCar.id + "selim")
     setHeartClicked(!isHeartClicked);
+
     dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
     // } else if (heartSelected) {
     // dispatch(removedBookMark(oneCar.id));
@@ -55,7 +56,6 @@ function CardCar({ oneCar, setNothing, handlePress }) {
         setNothing("");
         setDone(true);
       } else {
-        setNothing("");
         setDone(false);
       }
     } catch (er) {
@@ -67,13 +67,24 @@ function CardCar({ oneCar, setNothing, handlePress }) {
     dispatch(saveDetails(oneCar));
   };
   useEffect(() => {
+    setDone(false);
     checkBookMarked();
-  }, [loading]);
+  }, []);
+
   return (
     <View style={styles.card}>
-      {/* <Button title="Details & Booking" onPress={handleRent} /> */}
-      <Pressable style={styles.Image} onPress={handleRent}>
-        <Image style={styles.carImage} source={car}  />
+      <Pressable style={styles.Image}  onPress={handleRent}>
+        {oneCar.Media?.length !== 0 ? (
+          <Image
+            style={styles.carImage}
+            source={{
+              uri: oneCar?.Media[0]?.media,
+            }}
+          />
+        ) : (
+          <Image style={styles.carImage} source={car} />
+        )}
+
         {Object.values(activeUser).length ? (
           !done ? (
             <BookMark onPress={handleHeartPress} />
@@ -88,16 +99,21 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           <Text style={styles.avaible}>{oneCar.status}</Text>
         </View>
         <View style={styles.PriceStar}>
-          {/* <View style={styles.reviews}> */}
-          {/* <TouchableOpacity > */}
-          {/* <RatingStar onPress={handleStarPress}/> */}
-          {/* <Image style={styles.heart} source={starImage}></Image> */}
-          {/* </TouchableOpacity> */}
-          {/* <Text style={styles.avaible}>(150 review)</Text> */}
-          {/* </View> */}
-          <Text style={styles.carPrice}>
-            ${oneCar.price}/{oneCar.period}
-          </Text>
+          <View style={styles.booking}>
+            <Text style={styles.carPrice}>
+              ${oneCar.price}/{oneCar.period}
+            </Text>
+            <View style={styles.bookingCar}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setCarDetails(oneCar));
+                  navigation.navigate("Booking");
+                }}
+              >
+                <Text style={styles.bookingCar1}>Booking</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </View>
     </View>
@@ -107,11 +123,11 @@ function CardCar({ oneCar, setNothing, handlePress }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    width: "98%",
-    height: 250,
-    borderTopEndRadius: 10,
+    height: height * 0.3,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
+    
   },
   barText: {
     width: 360,
@@ -166,6 +182,27 @@ const styles = StyleSheet.create({
     paddingLeft: width * 0.5,
     fontWeight: "bold",
     color: "#6C77BF",
+    fontSize: 14,
+    color: "rgb(130, 124, 140)",
+  },
+  carPrice: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "rgb(172, 133, 234)",
+  },
+  bookingCar: {
+    borderWidth: 2,
+    width: 120,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "lightgrey",
+    borderRadius: 5,
+    backgroundColor: "lightblue",
+  },
+  bookingCar1: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

@@ -1,9 +1,5 @@
 module.exports = (DataTypes, connection) => {
   const Agency = connection.define("Agency", {
-    papers: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     address: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -30,6 +26,10 @@ module.exports = (DataTypes, connection) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    backgroundImage: {
+      type: DataTypes.STRING,
+    defaultValue: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzjW45_1AHC87TBlvxPTIhbbnx6N0oA2iUkA&usqp=CAU",
+    }
   });
   return Agency;
 };

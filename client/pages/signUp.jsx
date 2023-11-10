@@ -20,7 +20,7 @@ import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import Calendar from "../assets/Svg/calendar.svg";
 import { LinearGradient } from "expo-linear-gradient";
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("screen");
 import GooglePng from "../assets/googleIcon.png";
 import FaceBookPng from "../assets/facebookIcon.png";
 import { SignUpClick } from "../store/userSlice";
@@ -159,7 +159,7 @@ const SignUp = ({ navigation, props }) => {
           setConfirmedError("");
         }
       }else if(placeholder==="id card"){
-        if (inputForm.idCard.length <8 || inputForm.idCard>8 ) {
+        if (inputForm.idCard.length!==7 ) {
           setConfirmedError("Your id should be 8 numbers");
           return;
         }
@@ -399,7 +399,7 @@ const SignUp = ({ navigation, props }) => {
               <Text>Date of Birth</Text>
             </LinearGradient>
           </TouchableOpacity>
-          {show && (
+           {show && (
             <DateTimePicker
             value={inputForm.dateOfBirth}
             mode="date"

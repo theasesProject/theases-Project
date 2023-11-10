@@ -13,30 +13,40 @@ import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import AddAgencyCar from "./pages/AddAgencyCar.jsx";
+import Messages from "./pages/Messages.jsx";
+
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
-//! DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT
 import SignUp from "./pages/signUp.jsx";
 import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";
+import Conversation from "./pages/Conversation.jsx";
 import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import Report from "./pages/Report.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 
+import Booking from "./pages/Booking.jsx";
+import AgencyService from "./pages/AgencyService.jsx";
+import MyCars from "./pages/MyCars.jsx";
+import AgencyProfile from "./pages/AgencyProfile.jsx";
+import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 const Stack = createStackNavigator();
 function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-
         <Stack.Navigator initialRouteName="Home">
-
           <Stack.Screen
             name="Home"
             component={Home}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AgencyService"
+            component={AgencyService}
+            options={{ headerShown: true }}
           />
           <Stack.Screen
             name="Report"
@@ -44,11 +54,21 @@ function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="Booking"
+            component={Booking}
+            options={{ headerShown: true }}
+          />
+            <Stack.Screen
+            name="MyCars"
+            component={MyCars}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
             name="favorites"
             component={Favorites}
             options={{ headerShown: true }}
           />
-            <Stack.Screen
+          <Stack.Screen
             name="mapforAgency"
             component={MapComponent}
             options={{ headerShown: false }}
@@ -59,7 +79,11 @@ function App() {
             component={CarDetails}
             options={{ headerShown: false }}
           />
-
+          <Stack.Screen
+            name="Messages"
+            component={Messages}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Bookings"
             component={Bookings}
@@ -76,16 +100,18 @@ function App() {
             component={Mape}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="conversation"
+            component={Conversation}
+            options={{ headerShown: false }}
+          />
           {/* <Stack.Screen
             name="LoadingScreen"
             component={LoadingScreen}
             options={{ headerShown: false }}
           /> */}
 
-          {/* <Stack.Screen
-            name="Carousel"
-            component={Carousel}
-          /> */}
+  
           <Stack.Screen
             name="Carou"
             component={Carou}
@@ -112,11 +138,7 @@ function App() {
             component={ForgotPassword}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
-            name="Remobg"
-            component={Remobg}
-            options={{ headerShown: false }}
-          /> */}
+
           <Stack.Screen
             name="confirmIdentity"
             component={ConfirmIdentity}
@@ -138,14 +160,22 @@ function App() {
             component={FiltredCar}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="CarDetails"
-            component={CarDetails}
-            options={{ headerShown: false }}
-          />
+
           <Stack.Screen
             name="AddAgencyCar"
             component={AddAgencyCar}
+            options={{ headerShown: false }}
+          />
+          
+          <Stack.Screen
+            name="AgencyProfile"
+            component={AgencyProfile}
+            options={{ headerShown: false }}
+          />
+               <Stack.Screen
+            name="MapAgencyProfile"
+
+            component={MapAgencyProfile }
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
@@ -153,12 +183,5 @@ function App() {
     </Provider>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+
 export default App;

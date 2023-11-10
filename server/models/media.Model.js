@@ -1,10 +1,10 @@
 module.exports = (DataTypes,connection)=>{
-    const CarMedia= connection.define('CarMedia',{
+    const Media= connection.define('Media',{
     media:{
         type:DataTypes.STRING,
         allowNull:false
     }
     
     });
-    return CarMedia
+    return Media
     }

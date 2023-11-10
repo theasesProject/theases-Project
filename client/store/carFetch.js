@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env.js";
 
 const initialState = {
   allCars: [],
@@ -47,12 +46,12 @@ export const getallCarByAgency = createAsyncThunk(
 
 export const deletedAgencyCar = createAsyncThunk(
   "car/deletedAgencyCar",
-  async (Agency, car) => {
+  async (body) => {
+    const {id,AgencyId} = body;
     try {
+      console.log(body, "body");
       const response = await axios.delete(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar`,
-        { AgencyId: Agency, id: car }
-      );
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar/${id}/${AgencyId}`);
 
       return response.data;
     } catch (error) {
@@ -65,6 +64,7 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     const response = await axios.get(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCars`
     );
+    console.log(response.data, "response");
     return response.data;
   } catch (error) {
     console.log(JSON.stringify(error));
@@ -73,13 +73,14 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
 
 export const fetchFilteredCars = createAsyncThunk(
   "car/fetchFilteredCars",
-  async (filterCriteria, { getState, dispatch }) => {
+  async (filterCriteria) => {
     try {
+      console.log(filterCriteria, "first");
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/filtredCar`,
         filterCriteria
       );
-
+      console.log(response.data, "final");
       return response.data;
     } catch (error) {
       console.error(error);
@@ -201,7 +202,7 @@ const carSlice = createSlice({
     });
     builder.addCase(fetchFilteredCars.fulfilled, (state, action) => {
       state.loading = false;
-      state.filteredCars = action.payload; // Set filtered cars in the state
+      state.carFiltred = action.payload; // Set filtered cars in the state
     });
     builder.addCase(fetchFilteredCars.rejected, (state, action) => {
       state.loading = false;

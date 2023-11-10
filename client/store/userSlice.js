@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 // import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define an initial state for the user slice
 const initialState = {
@@ -9,6 +9,7 @@ const initialState = {
   loggedIn: false,
   status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
   error: null,
+  reporter:{}
 };
 
 // Define an async thunk to fetch a user from the database
@@ -20,44 +21,54 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
       {
         token: token,
       }
-    )
-
+    );
 
     return response.data;
-
   } catch (err) {
     console.error(err);
   }
 });
 
-
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-
-export const SignUpClick = createAsyncThunk("user/SignUps", async (inputForm, thunkAPI) => {
+export const MakeReport = createAsyncThunk("user/createReport", async (inputForm) => {
   try {
-    console.log(inputForm);
-    const task = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`, inputForm)
-    const response = await axios.post(
-      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/emailLogin`,
-      {
-        email: inputForm.email,
-        password: inputForm.password,
-      }
-    );
-    thunkAPI.dispatch(fetchUser(response.data));
-
-    // Store the token in AsyncStorage
-    try {
-      await AsyncStorage.setItem('UserToken', response.data);
-    } catch (e) {
-      console.error(JSON.stringify(e));
-    }
-
+    const task = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/report/create`, inputForm)
     return task.data
-  } catch (er) {
-    console.error("error coming from sign function", JSON.stringify(er));
+  } catch (error) {
+    console.error(JSON.stringify(error));
   }
 })
+export const SignUpClick = createAsyncThunk(
+  "user/SignUps",
+  async (inputForm, thunkAPI) => {
+    try {
+      console.log(inputForm);
+      const task = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`,
+        inputForm
+      );
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/emailLogin`,
+        {
+          email: inputForm.email,
+          password: inputForm.password,
+        }
+      );
+      thunkAPI.dispatch(fetchUser(response.data));
+
+      // Store the token in AsyncStorage
+      try {
+        await AsyncStorage.setItem("UserToken", response.data);
+      } catch (e) {
+        console.error(JSON.stringify(e));
+      }
+
+      return task.data;
+    } catch (er) {
+      console.error("error coming from sign function", JSON.stringify(er));
+    }
+  }
+);
 export const logUserOut = createAsyncThunk("user/logout", async () => {
   try {
     await AsyncStorage.removeItem("UserToken");
@@ -67,6 +78,15 @@ export const logUserOut = createAsyncThunk("user/logout", async () => {
   }
 }
 )
+export const handleToken = createAsyncThunk("user/handleToken", async () => {
+  try {
+    const token = await AsyncStorage.getItem("UserToken");
+    const UserData = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/token`,token)
+    return UserData.data
+  } catch (er) {
+    console.error(er);
+  }
+})
 
 
 const userSlice = createSlice({
@@ -97,9 +117,12 @@ const userSlice = createSlice({
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
-      builder.addCase(logUserOut.fulfilled,(state)=>{
-        state.loggedIn=false
+      })
+      .addCase(logUserOut.fulfilled, (state) => {
+        state.loggedIn = false
+      })
+      .addCase(handleToken.fulfilled,(state,action)=>{
+        state.reporter=action.payload
       })
   },
 });

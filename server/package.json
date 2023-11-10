@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.1",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -28,6 +29,7 @@
     "node": "^21.1.0",
     "nodemon": "^3.0.1",
     "sequelize": "^6.33.0",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "stripe": "^14.3.0"
   }
 }

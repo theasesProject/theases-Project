@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
 import RemoveBackground from "./RemoveBackground";
+import NavBarAgency from "../components/NavBarAgency";
 // import removeBackground from "../HelperFunctions/removeBackGround";
 function AddAgencyCar({ navigation }) {
   const dispatch = useDispatch();
@@ -89,8 +90,7 @@ function AddAgencyCar({ navigation }) {
 
       setTimeout(() => {
         setSuccessModalVisible(false);
-    navigation.navigate("Home");
-
+        navigation.navigate("Home");
       }, 5000);
     }
   };
@@ -187,68 +187,57 @@ function AddAgencyCar({ navigation }) {
 
   const handleModel = (model) => {
     setModel(model);
-    console.log(model, "model");
   };
   const handlePeriode = (period) => {
     setPeriodRent(period);
-    console.log(period, "period");
   };
   const handleBrand = (brand) => {
     setBrandCar(brand);
-    console.log(brand, "brand");
   };
   const handlePrice = (price) => {
     setPrice(price);
-    console.log(price, "price");
   };
   const handleHorse = (horse) => {
     setHorse(horse);
-    console.log(horse, "horse");
   };
   const handleFuel = (fuel) => {
     setFuel(fuel);
-    console.log(fuel, "fuel");
   };
   const handleDescription = (des) => {
     setDesciption(des);
-    console.log(des, "des");
   };
   const handleChar = (char) => {
     setChar(char);
-    console.log(char, "char");
   };
   const handleType = (type) => {
     setType(type);
-    console.log(type, "type");
   };
-  
-const pickerSelectStyles = {
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 4,
-    color: "black",
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: "lightgrey",
-    borderRadius: 10,
-    color: "black",
-    paddingRight: 30,
-  justifyContent: "center",
-  
-  // to ensure the text is never behind the icon
-  },
-	
-};
 
+  const pickerSelectStyles = {
+    inputIOS: {
+      fontSize: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 10,
+      borderWidth: 1,
+      borderColor: "gray",
+      borderRadius: 4,
+      color: "black",
+      paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+      fontSize: 16,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      borderWidth: 1,
+      borderColor: "lightgrey",
+      borderRadius: 10,
+      color: "black",
+      paddingRight: 30,
+      justifyContent: "center",
+
+      // to ensure the text is never behind the icon
+    },
+  };
 
   return (
     <View style={styles.editProfilePage}>
@@ -257,19 +246,19 @@ const pickerSelectStyles = {
           Welcome ,Now you can add Your car collection
         </Text>
         <RNPickerSelect
-            placeholder={{
-              label: "Select Brand for your car ",
-              value: null,
-            }}
-            items={brand}
-            value={brandCar}
-            onValueChange={(value) => handleBrand(value)}
-            style={pickerSelectStyles}
-            useNativeAndroidPickerStyle={false}
-          />
-          {brandError !== "" && (
-            <Text style={styles.errorText}>{brandError}</Text>
-          )}
+          placeholder={{
+            label: "Select Brand for your car ",
+            value: null,
+          }}
+          items={brand}
+          value={brandCar}
+          onValueChange={(value) => handleBrand(value)}
+          style={pickerSelectStyles}
+          useNativeAndroidPickerStyle={false}
+        />
+        {brandError !== "" && (
+          <Text style={styles.errorText}>{brandError}</Text>
+        )}
         <TextInput
           value={model}
           onChangeText={handleModel}
@@ -283,7 +272,7 @@ const pickerSelectStyles = {
         <TextInput
           value={description}
           onChangeText={handleDescription}
-          placeholder="Enter Same description for your Car"
+          placeholder="Enter Some description for your Car"
           style={styles.input}
         />
 
@@ -306,7 +295,6 @@ const pickerSelectStyles = {
           items={period}
           onValueChange={handlePeriode}
           style={pickerSelectStyles}
-
           useNativeAndroidPickerStyle={false}
         />
         {periodError !== "" && (
@@ -322,8 +310,6 @@ const pickerSelectStyles = {
         />
 
         <View style={styles.selectedItem}>
-         
-
           <RNPickerSelect
             placeholder={{
               label: "Select type of Fuel ",
@@ -333,7 +319,6 @@ const pickerSelectStyles = {
             items={typeOfFuel}
             onValueChange={(value) => handleFuel(value)}
             style={pickerSelectStyles}
-
             useNativeAndroidPickerStyle={false}
           />
 
@@ -345,7 +330,6 @@ const pickerSelectStyles = {
             items={characteristics}
             onValueChange={(value) => handleChar(value)}
             style={pickerSelectStyles}
-
             useNativeAndroidPickerStyle={false}
           />
           {charError !== "" && (
@@ -359,7 +343,6 @@ const pickerSelectStyles = {
             items={types}
             onValueChange={(value) => handleType(value)}
             style={pickerSelectStyles}
-
             useNativeAndroidPickerStyle={false}
           />
           {typeError !== "" && (
@@ -407,6 +390,7 @@ const pickerSelectStyles = {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
       <Modal
         animationType="slide"
         transparent={true}

@@ -15,7 +15,7 @@ function UserProfilecard() {
       <View>
         <Image source={car} style={styles.car} />
       </View>
-      <View >
+      <View>
         <Text style={styles.cartext}>CarName</Text>
         <View style={styles.rating}>
           <Image source={etoile} style={styles.etoil} />
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   numetoile: {
-
     fontSize: 14,
   },
   cartext: {
@@ -50,13 +49,12 @@ const styles = StyleSheet.create({
     // width: 140,
     // height: 148,
   },
-  rating:{
+  rating: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    gap:5
-  
+    gap: 5,
   },
   edit: {
     width: 30,

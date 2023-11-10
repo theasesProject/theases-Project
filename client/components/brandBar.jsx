@@ -54,7 +54,11 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
           </Text>
         </View>
       </View>
-      <ScrollView horizontal={true} style={styles.allBrandImage}>
+      <ScrollView
+        horizontal={true}
+        style={styles.allBrandImage}
+        showsHorizontalScrollIndicator={false}
+      >
         <TouchableOpacity
           style={styles.brandDetails}
           onPress={() => handleFilterByBrand("volkswagen")}
@@ -142,16 +146,16 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
 }
 const styles = StyleSheet.create({
   brand: {
-    width: "100%",
+    width: width,
     height: height * 0.21,
     borderRadius: 10,
     alignItems: "center",
-    padding: 10,
-    marginBottom: 20,
+    padding: height*.01,
+    paddingBottom: height*.01,
   },
   BrandBar: {
-    width: "100%",
-    height: 40,
+    width: width,
+    height: height*.05,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -159,34 +163,35 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    height: 40,
-    width: 360,
+    height: height*.05,
+    width: width*.88,
     alignItems: "center",
+    paddingHorizontal: width * 0.04999999,
   },
   topBrand: {
     fontWeight: "bold",
     fontSize: 21,
-    paddingBottom: 10,
+    paddingBottom: height*.01,
   },
   ViewAll: {
     color: "#8B91B6",
     fontSize: 14,
-    paddingBottom: 10,
+    paddingBottom: height*.01,
   },
   allBrandImage: {
     // borderRadius: 10,
   },
   brandLogo: {
-    width: "60%",
-    height: "43%",
-    paddingTop: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
+    width: width*.16,
+    height: height*.06,
+    paddingTop: height*.05,
+    paddingLeft: width*.01,
+    paddingRight: width*.01,
   },
   allBrandImage: {
     display: "flex",
     flexDirection: "row",
-    gap: 100,
+    // gap: 100,
   },
   brandDetails: {
     backgroundColor: "white",
@@ -196,11 +201,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     borderRadius: 10,
     width: width * 0.28,
-    height: "100%",
+    height: height*.13,
     marginLeft: width * 0.03,
   },
   brandName: {
-    paddingTop: 10,
+    paddingTop: height*.01,
     fontWeight: "500",
     textAlign: "center",
     alignItems: "center",

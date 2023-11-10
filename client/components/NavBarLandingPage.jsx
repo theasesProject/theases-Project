@@ -6,10 +6,11 @@ import {
   Image,
   Pressable,
   AppState,
-  Dimensions
+  Dimensions,
+  Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const {height,width}= Dimensions.get("screen")
+const { height, width } = Dimensions.get("screen");
 import localisation from "../assets/localisation1.png";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,13 +18,13 @@ import { selectUser, logStatus, fetchUser } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
 
-function ProfileLandingPage({style}) {
+function ProfileLandingPage({ style }) {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
   const dispatch = useDispatch();
   const [userAddress, setUserAddress] = useState("</> click here");
-console.log("jiji from page");
+
   const getUserLocationAndNearestAddress = async () => {
     let status = await Location.requestForegroundPermissionsAsync();
     // if (status === 'granted') {
@@ -43,7 +44,7 @@ console.log("jiji from page");
       }
     }
   };
-  console.log("active user: ", activeUser);
+  // console.log("active user: ", activeUser);
   const [tokenValue, setTokenValue] = useState(false);
   const retrieveToken = async () => {
     try {
@@ -61,17 +62,18 @@ console.log("jiji from page");
   };
   useEffect(() => {
     retrieveToken();
-    // AppState.addEventListener("change", retrieveToken);
-    // return () => {
-    //   AppState.removeEventListener("change", retrieveToken);
-    // };
+
     getUserLocationAndNearestAddress();
   }, []);
   return (
-    <View style={[styles.navBar,style]}>
+    <View style={[styles.navBar, style]}>
       <View style={styles.allAdress}>
         <Pressable>
-          <Image style={styles.locationImage} source={localisation}  onPress={() => getUserLocationAndNearestAddress()} />
+          <Image
+            style={styles.locationImage}
+            source={localisation}
+            onPress={() => getUserLocationAndNearestAddress()}
+          />
         </Pressable>
         <View style={styles.adress}>
           <Text style={styles.yourLocation}>Your Location </Text>
@@ -88,7 +90,7 @@ console.log("jiji from page");
         </View>
       </View>
       <View>
-        {loggedIn ? (
+        {loggedIn && activeUser?.type === "client" ? (
           <Pressable
             onPress={() => navigation.navigate("Userprofile")}
             style={styles.userAvatar}
@@ -101,23 +103,21 @@ console.log("jiji from page");
               style={styles.UserImage}
             />
           </Pressable>
-        ) : (
-          null
-          // <View style={styles.authBtnsContainer}>
-          //   <TouchableOpacity
-          //     onPress={() => navigation.navigate("Login")}
-          //     style={styles.authBtn}
-          //   >
-          //     <Text>Login</Text>
-          //   </TouchableOpacity>
-          //   <TouchableOpacity
-          //     onPress={() => navigation.navigate("SignUp")}
-          //     style={styles.authBtn}
-          //   >
-          //     <Text>Sign Up</Text>
-          //   </TouchableOpacity>
-          // </View>
-        )}
+        ) : null}
+        {loggedIn && activeUser?.type === "agency" ? (
+          <Pressable
+            onPress={() => navigation.navigate("AgencyProfile")}
+            style={styles.userAvatar}
+          >
+            <Image
+              source={{
+                uri: activeUser?.avatar,
+              }}
+              alt="userPic"
+              style={styles.UserImage}
+            />
+          </Pressable>
+        ) : null}
       </View>
     </View>
   );
@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   authBtnsContainer: {
-    paddingRight:20,
-    height: height*.1,
+    paddingRight: 20,
+    height: height * 0.1,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
   allAdress: {
-    paddingLeft:10,
+    paddingLeft: 10,
     flex: 1,
     flexDirection: "row",
     width: 200,

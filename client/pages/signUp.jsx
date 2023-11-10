@@ -83,6 +83,7 @@ const SignUp = ({ navigation, props }) => {
     setPhoneError("");
     setPasswordError("");
     setConfirmedError("");
+    setIdCardError("")
 
     if (value === "") {
       if (placeholder === "Username") {
@@ -92,7 +93,7 @@ const SignUp = ({ navigation, props }) => {
         setEmailError("Email cannot be empty.");
         return;
       } else if (placeholder === "id card") {
-        setEmailError("card Id  cannot be empty.");
+        setIdCardError("card Id  cannot be empty.");
         return;
       } else if (placeholder === "Phone") {
         setPhoneError("Phone Number cannot be empty.");
@@ -140,8 +141,8 @@ const SignUp = ({ navigation, props }) => {
           setPasswordError("Password should be at least 8 characters long.");
           return;
         }
-        const passwordRegex =
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).*$/;
+
         if (!passwordRegex.test(value)) {
           setPasswordError(
             "Password should include a mix of uppercase letters, lowercase letters, numbers, and special characters."
@@ -157,6 +158,14 @@ const SignUp = ({ navigation, props }) => {
         } else {
           setConfirmedError("");
         }
+      }else if(placeholder==="id card"){
+        if (inputForm.idCard.length!==7 ) {
+          setConfirmedError("Your id should be 8 numbers");
+          return;
+        }
+        else{
+          setIdCardError("")
+        }
       }
     }
   };
@@ -164,14 +173,11 @@ const SignUp = ({ navigation, props }) => {
     setShow(true);
   };
 
-  const onChangeDate = (selectedDate) => {
-    if (selectedDate) {
-      // setShow(Platform.OS === "ios");
-      setInputForm({ ...inputForm, dateOfBirth: selectedDate });
-    }
-    // const currentDate = selectedDate || date;
-    // setInputForm({ ...inputForm, dateOfBirth: selectedDate });
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setInputForm({ ...inputForm, dateOfBirth: currentDate });
   };
+
 
   return (
     <ScrollView style={styles.container}>
@@ -380,15 +386,10 @@ const SignUp = ({ navigation, props }) => {
               }}
             />
           </View>
-        </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignContent: "center",
-          }}
-        >
-          <TouchableOpacity onPress={showDatepicker}>
+            {idCardError ? (
+            <Text style={{ color: "red" }}>{emailError}</Text>
+          ) : null}
+          <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
             <Calendar style={styles.icon2} />
             <LinearGradient
               colors={["#EFEFF9", "#EFEFF9"]}
@@ -398,20 +399,25 @@ const SignUp = ({ navigation, props }) => {
               <Text>Date of Birth</Text>
             </LinearGradient>
           </TouchableOpacity>
-          {show && (
+           {show && (
             <DateTimePicker
-              testID="dateTimePicker"
-              value={inputForm.dateOfBirth}
-              mode="date"
-              is24Hour={true}
-              display="default"
-              onChangeText={(text) => {
-                setInputForm(text);
-              }}
-            />
+            value={inputForm.dateOfBirth}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              if (event.type === 'dismissed') {
+                setShow(false);
+              } else if (event.type === 'set'){
+                const currentDate = selectedDate || inputForm.dateOfBirth;
+                setInputForm({...inputForm, dateOfBirth: currentDate})
+                setShow(false)
+              }
+            }}
+          />
           )}
         </View>
         <TouchableOpacity
+        style={{paddingRight:10}}
           disabled={!checkUp}
           activeOpacity={0.8}
           onPress={() => {
@@ -423,7 +429,7 @@ const SignUp = ({ navigation, props }) => {
             locations={[0, 1]}
             style={styles.buttonContainer}
           >
-            <Text style={styles.buttonText}>{"Sign Up"}</Text>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </LinearGradient>
         </TouchableOpacity>
         <Pressable
@@ -443,25 +449,7 @@ const SignUp = ({ navigation, props }) => {
           style={styles.separatorContainer}
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
-        >
-          <View style={styles.separator} />
-          <Text style={{ color: "grey" }}>Or sign in with</Text>
-          <View style={styles.separator} />
-        </View>
-        <View style={styles.extraSignContainer}>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
-            <View style={styles.extraSign}>
-              <Image style={styles.GoogleCss} source={GooglePng} />
-              <Text style={styles.googleText}>Google</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
-            <View style={styles.extraSign}>
-              <Image style={styles.FacebookCss} source={FaceBookPng} />
-              <Text style={styles.googleText}>Facebook</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        ></View>
       </View>
     </ScrollView>
   );

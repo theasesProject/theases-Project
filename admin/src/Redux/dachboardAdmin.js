@@ -25,10 +25,10 @@ export const updateStateBlock = createAsyncThunk(
 );
 export const approveRequest = createAsyncThunk(
   "user/approveRequest",
-  async (input) => {
+  async (id) => {
     try {
       const response = await axios.post(
-        `http://127.0.0.1:5000/api/agency/addAgency`,{UserId:input.id,companyNumber:input.companyNumber,transportation:input.transportation,name:input.agencyName,deposit:input.deposit,address:input.address}
+        `http://127.0.0.1:5000/api/agency/addAgency/${id}`
       );
 
       return response.data;

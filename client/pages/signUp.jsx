@@ -25,7 +25,7 @@ import GooglePng from "../assets/googleIcon.png";
 import FaceBookPng from "../assets/facebookIcon.png";
 import { SignUpClick } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
-import DateTimePicker from "@react-native-community/datetimepicker";
+// import DateTimePicker from "@react-native-community/datetimepicker";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
@@ -83,7 +83,6 @@ const SignUp = ({ navigation, props }) => {
     setPhoneError("");
     setPasswordError("");
     setConfirmedError("");
-    setIdCardError("")
 
     if (value === "") {
       if (placeholder === "Username") {
@@ -93,7 +92,7 @@ const SignUp = ({ navigation, props }) => {
         setEmailError("Email cannot be empty.");
         return;
       } else if (placeholder === "id card") {
-        setIdCardError("card Id  cannot be empty.");
+        setEmailError("card Id  cannot be empty.");
         return;
       } else if (placeholder === "Phone") {
         setPhoneError("Phone Number cannot be empty.");
@@ -141,8 +140,8 @@ const SignUp = ({ navigation, props }) => {
           setPasswordError("Password should be at least 8 characters long.");
           return;
         }
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).*$/;
-
+        const passwordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/;
         if (!passwordRegex.test(value)) {
           setPasswordError(
             "Password should include a mix of uppercase letters, lowercase letters, numbers, and special characters."
@@ -158,14 +157,6 @@ const SignUp = ({ navigation, props }) => {
         } else {
           setConfirmedError("");
         }
-      }else if(placeholder==="id card"){
-        if (inputForm.idCard.length!==7 ) {
-          setConfirmedError("Your id should be 8 numbers");
-          return;
-        }
-        else{
-          setIdCardError("")
-        }
       }
     }
   };
@@ -173,11 +164,14 @@ const SignUp = ({ navigation, props }) => {
     setShow(true);
   };
 
-  const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setInputForm({ ...inputForm, dateOfBirth: currentDate });
+  const onChangeDate = (selectedDate) => {
+    if (selectedDate) {
+      // setShow(Platform.OS === "ios");
+      setInputForm({ ...inputForm, dateOfBirth: selectedDate });
+    }
+    // const currentDate = selectedDate || date;
+    // setInputForm({ ...inputForm, dateOfBirth: selectedDate });
   };
-
 
   return (
     <ScrollView style={styles.container}>
@@ -386,10 +380,15 @@ const SignUp = ({ navigation, props }) => {
               }}
             />
           </View>
-            {idCardError ? (
-            <Text style={{ color: "red" }}>{emailError}</Text>
-          ) : null}
-          <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+          }}
+        >
+          <TouchableOpacity onPress={showDatepicker}>
             <Calendar style={styles.icon2} />
             <LinearGradient
               colors={["#EFEFF9", "#EFEFF9"]}
@@ -399,25 +398,20 @@ const SignUp = ({ navigation, props }) => {
               <Text>Date of Birth</Text>
             </LinearGradient>
           </TouchableOpacity>
-           {show && (
+          {/* {show && (
             <DateTimePicker
-            value={inputForm.dateOfBirth}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate) => {
-              if (event.type === 'dismissed') {
-                setShow(false);
-              } else if (event.type === 'set'){
-                const currentDate = selectedDate || inputForm.dateOfBirth;
-                setInputForm({...inputForm, dateOfBirth: currentDate})
-                setShow(false)
-              }
-            }}
-          />
-          )}
+              testID="dateTimePicker"
+              value={inputForm.dateOfBirth}
+              mode="date"
+              is24Hour={true}
+              display="default"
+              onChangeText={(text) => {
+                setInputForm(text);
+              }}
+            />
+          )} */}
         </View>
         <TouchableOpacity
-        style={{paddingRight:10}}
           disabled={!checkUp}
           activeOpacity={0.8}
           onPress={() => {

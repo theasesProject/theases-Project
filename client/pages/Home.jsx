@@ -11,7 +11,6 @@ import {
   Modal,
 } from "react-native";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
-import SwipeUpDown from "react-native-swipe-up-down";
 import LinearGradient from "expo-linear-gradient";
 import axios from "axios";
 import CardCar from "../components/CardCar.jsx";
@@ -25,16 +24,14 @@ import NavBar from "../components/NavBar.jsx";
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
-import ItemMini from "../components/ItemMini.jsx";
-import { Swipeable } from "react-native-gesture-handler";
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
+
 import io from "socket.io-client";
 import { selectUser, setUser } from "../store/userSlice";
 import NavBarAgency from "../components/NavBarAgency.jsx";
 
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
   const dispatch = useDispatch();
-  const [isVisibleSwipe, setIsVisibleSwipe] = useState(false);
   const activeUser = useSelector(selectUser);
   const allCars = useSelector((state) => state.car.allCars);
   const fixedData = useSelector((state) => state.car.fixedData);
@@ -43,15 +40,6 @@ function Home({ navigation }) {
   const scrollViewRef = useRef();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [nothing, setNothing] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
-  // console.log("CAR TABLE!!!!!!!!!!!!!!!!", allCars);
-  const swipeUpDownRef = useRef();
-  const handlePress = () => {
-    if (swipeUpDownRef.current) {
-      swipeUpDownRef.current.showFull();
-      // setIsVisibleSwipe(true)
-    }
-  };
   const [notifications, setNotifications] = useState([]);
   const [notificationModalVisible, setNotificationModalVisible] =
     useState(false);
@@ -117,9 +105,6 @@ console.log('selim',activeUser);
     <View style={styles.homePage}>
       <ScrollView
         ref={scrollViewRef}
-        // onScroll={(event) => {
-        //   setScrollPosition(event.nativeEvent.contentOffset.y);
-        // }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -132,14 +117,7 @@ console.log('selim',activeUser);
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
         {!loading ? (
           allCars?.map((element, i) => (
-            <View style={styles.allcars} key={i}>
-              <CardCar
-                setNothing={setNothing}
-                key={i}
-                oneCar={element}
-                handlePress={handlePress}
-              />
-            </View>
+            <CardCar setNothing={setNothing} key={i} oneCar={element} />
           ))
         ) : (
           <>
@@ -203,34 +181,8 @@ console.log('selim',activeUser);
             </View>
           </>
         )}
+        <CarDetails />
       </ScrollView>
-      {/* <Swipeable
-  friction={2}
-  leftThreshold={100}
-  rightThreshold={100}
-  overshootFriction={2}
-  overshootLeft={false}
-  overshootRight={false}
-  onSwipeableLeftOpen={() => {}}
-  onSwipeableRightOpen={() => {}}
-> */}
-      <SwipeUpDown
-        itemFull={<CarDetails />}
-        ref={swipeUpDownRef}
-        extraMarginTop={140}
-        scrollEnabled={false}
-        nestedScrollEnabled={false}
-        animation="easeInEaseOut"
-        style={{
-          height: "100%",
-          width:"100%",
-          borderTopEndRadius:50,
-          backgroundColor: "lightgrey",
-          //  backgroundColor: 'transparent'
-        }}
-      />
-      {/* </Swipeable> */}
-
      {activeUser?.type==='agency'? <NavBarAgency/>:<NavBar />}
       <Modal
         animationType="slide"

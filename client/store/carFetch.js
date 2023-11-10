@@ -11,7 +11,6 @@ const initialState = {
   fixedData: [],
   bookMarks: [],
   succes: null,
-  RentDetails:{}
 };
 export const getOnecarById = createAsyncThunk(
   "car/getOnecarById",
@@ -175,11 +174,11 @@ const carSlice = createSlice({
   initialState,
   reducers: {
     filterCars: (state, action) => {
-      state.allCars = action.payload
+      state.allCars = action.payload;
     },
-    saveDetails: (state,action)=>{
-      state.RentDetails=action.payload
-    }
+    setCarDetails: (state, action) => {
+      state.OneCar = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
@@ -310,5 +309,5 @@ const carSlice = createSlice({
     });
   },
 });
-export const { filterCars,saveDetails } = carSlice.actions;
+export const { filterCars, setCarDetails } = carSlice.actions;
 export default carSlice.reducer;

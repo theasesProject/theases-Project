@@ -39,7 +39,7 @@ function MyCars() {
         id: carId,
         AgencyId: activeUser.Agency.UserId,
       }))
-     dispatch(getallCarByAgency(activeUser.Agency.UserId))
+    //  dispatch(getallCarByAgency(activeUser.Agency.UserId))
  
   };
   const ccc = [];
@@ -49,7 +49,7 @@ function MyCars() {
       outputRange: [0, 10, 30],
       extrapolate: "clamp",
     });
-
+// console.log(agencyCars);
     return (
       <View style={styles.rightActions}>
         <TouchableOpacity
@@ -83,6 +83,17 @@ function MyCars() {
                     uri: agencycar?.carImage?.media,
                   }}
                 />
+
+          
+                {console.log('here',agencycar.car)}
+              <View style={styles.text}>
+                 <Text style={styles.emptyText}>{agencycar.car.model}</Text>
+                 <Text style={styles.emptyText}>{agencycar.car.brand}</Text>
+                 <Text style={styles.emptyText}>{agencycar.car.typevehicle}</Text>
+                 <Text style={styles.emptyText}>{agencycar.car.typeOfFuel}</Text>
+                 <Text style={styles.emptyText}>{agencycar.car.characteristics}</Text>
+
+              </View>
                 {/* Rest of your car item code */}
               </View>
             </Swipeable>
@@ -122,10 +133,16 @@ const styles = StyleSheet.create({
     // marginHorizontal: 7,
     // marginVertical: 7,
     flexDirection: "column",
-    gap: 10,
+    // gap: 10,
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
+  },
+  text:{
+    // backgroundColor:"red",
+    flex:1,
+    justifyContent:'center',
+    alignContent: "center",
   },
   favoriteCar: {
     marginBottom: 10,
@@ -170,10 +187,11 @@ const styles = StyleSheet.create({
   carCard: {
     marginTop: "7%",
     borderColor: "grey",
-    borderWidth: 2,
+    borderWidth: 1,
     width: width * 0.9,
     height: height * 0.2,
     borderRadius: 10,
+    flexDirection:"row",
   },
   car: {
     width: 200,
@@ -232,10 +250,10 @@ const styles = StyleSheet.create({
   deleteButton: {
     justifyContent: "center",
     backgroundColor: "red",
-    padding: 10,
-    marginRight: 10,
+    // padding: 10,
+    // marginRight: 10,
     // marginBottom: 10,
-    height: height * 0.2,
+    // height: height * 0.2,
   },
   deleteButtonText: {
     color: "white",

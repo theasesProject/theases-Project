@@ -23,6 +23,10 @@ import Mape from "./pages/Mape.jsx";
 import Conversation from "./pages/Conversation.jsx";
 import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
+import Report from "./pages/Report.jsx";
+// import Remobg from "./pages/removeBackground.jsx";
+("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
+
 import Booking from "./pages/Booking.jsx";
 import AgencyService from "./pages/AgencyService.jsx";
 import MyCars from "./pages/MyCars.jsx";
@@ -43,6 +47,11 @@ function App() {
             name="AgencyService"
             component={AgencyService}
             options={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="Report"
+            component={Report}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Booking"

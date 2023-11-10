@@ -8,6 +8,12 @@ module.exports = ( DataTypes, connection) => {
       type : DataTypes.INTEGER,
       allowNull: false,
     },
+    type: {
+      type : DataTypes.STRING,
+    },
+    imageUrl:{
+      type : DataTypes.STRING,
+    }
   });
   return Messages;
 };

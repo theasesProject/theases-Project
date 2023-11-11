@@ -1,9 +1,12 @@
 const express = require("express");
 // const { Expo } = require("expo-server-sdk");
 require("./models");
+const socketIo = require("socket.io");
 const cors = require("cors");
 const app = express();
-const port = 5000;
+// const port = 5000;
+const http = require("http");
+const server = http.createServer(app);
 
 const dotenv = require("dotenv");
 const bodyparser = require("body-parser");
@@ -36,33 +39,96 @@ app.use("/api/request", requestRouter);
 app.use("/api/media", mediaRouter);
 app.use("/api/booking", bookingRouter);
 app.use("/api/chat", chatRouter);
-app.listen(5000, function () {
-  console.log("Server is running on port 5000", port);
+
+// app.listen(5000, function () {
+//   console.log("Server is running on port 5000", port);
+// });
+
+app.use(function (err, req, res, next) {
+  console.log(err);
+
+  if (err.status === 404) res.status(404).json({ message: "Not found" });
+  else res.status(500).json({ message: "Something looks wrong :( !!!" });
+});
+const io = socketIo(server, {
+  cors: {
+    origin: "http://your-react-native-app-ip:your-react-native-app-port", // Update with your React Native app details
+    methods: ["GET", "POST"],
+  },
 });
 
-// app.post("/send-notification", async (req, res) => {
-//   try {
-//     const { to, title, body } = req.body;
+// Set up middleware
 
-//     if (!Expo.isExpoPushToken(to)) {
-//       return res.status(400).json({ error: "Invalid Expo Push Token" });
-//     }
+// Create a map to store online users
+let onlineUsers = new Map();
+console.log(onlineUsers, "online");
+// Function to add a new user to the onlineUsers map
+const addNewUser = (userId, socketId) => {
+  if (!onlineUsers.has(userId)) {
+    onlineUsers.set(userId, { socketId });
+    console.log(userId, socketId, "userId");
+  }
+};
 
-//     const messages = [
-//       {
-//         to,
-//         sound: "default",
-//         title,
-//         body,
-//         data: { someData: "goes here" },
-//       },
-//     ];
+// Function to remove a user when they disconnect
+const removeUser = (socketId) => {
+  onlineUsers.forEach((user, key) => {
+    if (user.socketId === socketId) {
+      onlineUsers.delete(key);
+    }
+  });
+};
 
-//     const receipts = await expo.sendPushNotificationsAsync(messages);
-//     console.log(receipts, "received");
-//     res.json({ success: true });
-//   } catch (error) {
-//     console.error("Error sending push notification:", error);
-//     res.status(500).json({ error: "Failed to send push notification" });
-//   }
-// });
+// Event listener for new socket connections
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
+
+  // Event listener for when a new user joins
+  socket.on("newUser", (userId) => {
+    console.log(`New user added: ${userId}`);
+    addNewUser(userId, socket.id);
+  });
+
+  // Event listener for when the agency accepts a service
+  socket.on("acceptService", ({ senderId, receiverId, message }) => {
+    const receiver = onlineUsers.get(receiverId);
+    if (receiver) {
+      // Emit a "serviceAccepted" event to the user
+      io.to(receiver.socketId).emit("serviceAccepted", {
+        senderId,
+        message,
+      });
+      console.log("rejected", receiver);
+    } else {
+      console.log(`User with UserId ${receiverId} not found or offline.`);
+    }
+  });
+
+  // Event listener for when the agency rejects a service
+  socket.on("rejectService", ({ senderId, receiverId, message }) => {
+    const receiver = onlineUsers.get(receiverId);
+    if (receiver) {
+      // Emit a "serviceRejected" event to the user
+
+      io.to(receiver.socketId).emit("serviceRejected", {
+        senderId,
+        message,
+      });
+      console.log("rejected", receiver);
+    } else {
+      console.log(`User with UserId ${receiverId} not found or offline.`);
+    }
+  });
+
+  // Event listener for disconnect
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
+    removeUser(socket.id);
+  });
+});
+
+// Start the server on a specified port
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

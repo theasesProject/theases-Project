@@ -29,7 +29,6 @@ function Booking() {
   const activeUser = useSelector(selectUser);
   const succes = useSelector((state) => state.booking.succes);
   const [total, setTotal] = useState(0);
-  console.log(selectedStartDate, selectedEndDate, "eee");
 
   // if (selectedStartDate && selectedEndDate) {
   //   calculTotalPrice();
@@ -43,6 +42,7 @@ function Booking() {
           endDate: selectedEndDate.format("YYYY-MM-DD").toString(),
           UserId: activeUser.id,
           CarId: oneCar.id,
+          amount: total,
         })
       );
     } else {
@@ -62,23 +62,7 @@ function Booking() {
   const calculTotalPrice = () => {
     const startDate = moment(selectedStartDate);
     const endDate = moment(selectedEndDate);
-    console.log(
-      Boolean(selectedStartDate),
-      "start",
-      "and the start day is",
-      selectedStartDate
-    );
-    console.log(
-      Boolean(selectedEndDate),
-      "endDate",
-      "and the end day is ",
-      selectedEndDate
-    );
 
-    console.log(
-      !!(selectedStartDate && selectedEndDate),
-      "za3ma true wala false"
-    );
     if (selectedStartDate && selectedEndDate) {
       const durationInDays = endDate.diff(startDate, "days") + 1;
       console.log(durationInDays, "durationInDays");

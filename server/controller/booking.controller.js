@@ -13,7 +13,7 @@ function getDatesInRange(startDate, endDate) {
 }
 module.exports = {
   CreateBooking: async function (req, res) {
-    const { CarId, UserId, startDate, endDate } = req.body;
+    const { CarId, UserId, startDate, endDate, amount } = req.body;
 
     const conflictingRental = await db.Service.findOne({
       where: {
@@ -49,6 +49,7 @@ module.exports = {
       UserId: UserId,
       startDate,
       endDate,
+      amount,
     });
 
     // Insert records for unavailable dates
@@ -156,37 +157,26 @@ module.exports = {
       const serviceObj = [];
       const { agencyId } = req.params;
 
-      const services = await db.Service.findAll({
+      const services = await db.Car.findAll({
         where: {
-          UserId: agencyId,
+          AgencyId: agencyId,
+        },
+        include: [
+          {
+            model: db.Service,
+          },
+        ],
+        where: {
+          "$Service.id$": { [db.Sequelize.Op.not]: null },
         },
       });
 
-      for (const service of services) {
-        console.log(service.CarId, "service");
-        const car = await db.Car.findOne({
-          where: { id: service.CarId },
-        });
-        console.log(car, "car");
-        const carImage = await db.Media.findOne({
-          where: { CarId: service.CarId },
-        });
+      for (var i = 0; services.length > i; i++) {
         const user = await db.User.findOne({
-          where: { id: service.UserId * 1 },
+          where: { id: services[i].Service.UserId },
         });
-        const serviceInfo = {
-          car: car,
-          carImage: carImage,
-          user: user,
-          service: service,
-        };
-        serviceObj.push(serviceInfo);
-      }
 
-      if (!services || services.length === 0) {
-        return res
-          .status(404)
-          .json({ message: "No services found for the agency." });
+        serviceObj.push({ service: services[i], User: user });
       }
 
       return res.json(serviceObj);

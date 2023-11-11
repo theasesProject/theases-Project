@@ -24,7 +24,8 @@ import NavBar from "../components/NavBar.jsx";
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
-
+import io from "socket.io-client";
+const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
 import { selectUser, setUser } from "../store/userSlice";
 import registerNNPushToken from "native-notify";
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
@@ -39,7 +40,28 @@ function Home({ navigation }) {
   const scrollViewRef = useRef();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [nothing, setNothing] = useState("");
+  useEffect(() => {
+    socket.emit("newUser", activeUser.id);
+    console.log("newUser", activeUser.id);
+    socket.on("serviceAccepted", ({ senderId, message }) => {
+      console.log(
+        `Received service acceptance from ${senderId}. Message: ${message}`
+      );
+      // Handle the service acceptance on the React Native side as needed
+    });
 
+    socket.on("serviceRejected", ({ senderId, message }) => {
+      console.log(
+        `Received service rejection from ${senderId}. Message: ${message}`
+      );
+      // Handle the service rejection on the React Native side as needed
+    });
+
+    return () => {
+      socket.off("serviceAccepted");
+      socket.off("serviceRejected");
+    };
+  }, [dispatch]);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
@@ -63,7 +85,6 @@ function Home({ navigation }) {
       console.error("error coming from home", e);
     }
   };
-  console.log("all", allCars);
 
   // useEffect(() => {
   //   if (!loading && scrollViewRef.current) {

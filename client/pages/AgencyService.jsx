@@ -20,75 +20,10 @@ import carImage from "../assets/Brands/BMW.png";
 import userImage from "../assets/user.jpg";
 import { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import { registerIndieID, unregisterIndieDevice } from "native-notify";
+import io from "socket.io-client";
 import axios from "axios";
-// import * as Device from "expo-device";
-
-// import Constants from "expo-constants";
-
-// Notifications.setNotificationHandler({
-//   handleNotification: async () => ({
-//     shouldShowAlert: true,
-//     shouldPlaySound: false,
-//     shouldSetBadge: false,
-//   }),
-// });
-
-// // Can use this function below or use Expo's Push Notification Tool from: https://expo.dev/notifications
-// async function sendPushNotification(expoPushToken) {
-//   const message = {
-//     to: expoPushToken,
-//     sound: "default",
-//     title: "Original Title",
-//     body: "And here is the body!",
-//     data: { someData: "goes here" },
-//   };
-
-//   await fetch("https://exp.host/--/api/v2/push/send", {
-//     method: "POST",
-//     headers: {
-//       Accept: "application/json",
-//       "Accept-encoding": "gzip, deflate",
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(message),
-//   });
-// }
-
-// async function registerForPushNotificationsAsync() {
-//   let token;
-
-//   if (Platform.OS === "android") {
-//     Notifications.setNotificationChannelAsync("default", {
-//       name: "default",
-//       importance: Notifications.AndroidImportance.MAX,
-//       vibrationPattern: [0, 250, 250, 250],
-//       lightColor: "#FF231F7C",
-//     });
-//   }
-
-//   if (Device.isDevice) {
-//     const { status: existingStatus } =
-//       await Notifications.getPermissionsAsync();
-//     let finalStatus = existingStatus;
-//     if (existingStatus !== "granted") {
-//       const { status } = await Notifications.requestPermissionsAsync();
-//       finalStatus = status;
-//     }
-//     if (finalStatus !== "granted") {
-//       alert("Failed to get push token for push notification!");
-//       return;
-//     }
-//     token = await Notifications.getExpoPushTokenAsync({
-//       projectId: Constants.expoConfig.extra.eas.projectId,
-//     });
-//     console.log(token);
-//   } else {
-//     alert("Must use physical device for Push Notifications");
-//   }
-
-//   return token.data;
-// }
+const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+import PushNotification from "react-native-push-notification";
 
 function AgencyService() {
   const dispatch = useDispatch();
@@ -97,56 +32,48 @@ function AgencyService() {
 
   useEffect(() => {
     dispatch(allServiceForAgency(activeUser.id));
-    // registerForPushNotificationsAsync();
+    socket.on("serviceAccepted", ({ senderId, message }) => {
+      console.log(
+        `Service accepted from user ${senderId}. Message: ${message}`
+      );
+      // You can handle the accepted service on the client side as needed
+    });
+
+    // Event listener for when a service is rejected
+    socket.on("serviceRejected", ({ senderId, message }) => {
+      console.log(
+        `Service rejected from user ${senderId}. Message: ${message}`
+      );
+      // You can handle the rejected service on the client side as needed
+    });
+
+    // Cleanup the event listeners when the component is unmounted
+    return () => {
+      socket.off("serviceAccepted");
+      socket.off("serviceRejected");
+    };
+
+    // };
   }, [dispatch]);
-
-  // const [expoPushToken, setExpoPushToken] = useState("");
-  // const [notification, setNotification] = useState(false);
-  // const notificationListener = useRef();
-  // const responseListener = useRef();
-
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync().then((token) =>
-  //     setExpoPushToken(token)
-  //   );
-
-  //   notificationListener.current =
-  //     Notifications.addNotificationReceivedListener((notification) => {
-  //       setNotification(notification);
-  //     });
-
-  //   responseListener.current =
-  //     Notifications.addNotificationResponseReceivedListener((response) => {
-  //       console.log(response);
-  //     });
-
-  //   return () => {
-  //     Notifications.removeNotificationSubscription(
-  //       notificationListener.current
-  //     );
-  //     Notifications.removeNotificationSubscription(responseListener.current);
-  //   };
-  // }, []);
 
   const acceptService = (idservice, message, id) => {
     const obj = { id: idservice, acceptation: "accepted" };
     dispatch(UpdateServiceByAgency(obj));
-    notification(id);
+    socket.emit("acceptService", {
+      senderId: activeUser.id,
+      receiverId: id,
+      message: `Service request accepted: ${message}`,
+    });
   };
 
-  const notification = (id) => {
-    axios.post(`https://app.nativenotify.com/api/indie/notification`, {
-      subID: `${id}`,
-      appId: 14608,
-      appToken: "0IjK45dvxv48dlwYcWDWTR",
-      title: "Booking",
-      message: "you are succes to booking",
-    });
-    console.log(id, "notifcation");
-  };
-  const rejectService = (idservice, message) => {
+  const rejectService = (idservice, message, id) => {
     const obj = { id: idservice, acceptation: "rejected" };
     dispatch(UpdateServiceByAgency(obj));
+    socket.emit("rejectService", {
+      senderId: activeUser.id,
+      receiverId: id,
+      message: `Service request rejected: ${message}`,
+    });
   };
 
   return (
@@ -156,28 +83,32 @@ function AgencyService() {
           allService.map((service, i) => (
             <View key={i} style={styles.cardContainer}>
               <View style={styles.userContainer}>
-                <Text style={styles.name}>{service.user.userName} </Text>
+                <Text style={styles.name}>{service.User.userName} </Text>
                 <Text style={styles.text}>want to rent you car </Text>
-                <Text style={styles.name}>{service.car.model} </Text>
+                <Text style={styles.name}>{service.service.model} </Text>
               </View>
               <View style={styles.carContainer}>
                 <Text style={styles.text}>From </Text>
                 <Text style={styles.time}>
-                  {moment(service.service.startDate)
-                    .format("YYYY-MM-DD")
-                    .toString()}
+                  {service.Service
+                    ? service.Service.startDate.split("T").join("-").toString()
+                    : "N/A"}
                 </Text>
                 <Text style={styles.text}>To</Text>
                 <Text style={styles.time}>
-                  {moment(service.service.endDate)
-                    .format("YYYY-MM-DD")
-                    .toString()}{" "}
+                  {service.Service
+                    ? service.Service.startDate.split("T").join("-").toString()
+                    : "N/A"}
                 </Text>
               </View>
               <View style={styles.actionContainer}>
                 <TouchableOpacity
                   onPress={() => {
-                    rejectService(service.service.id, service.car.model);
+                    rejectService(
+                      service.service.Service.id,
+                      service.service.model,
+                      service.User.id
+                    );
                   }}
                   style={styles.rejectButton}
                 >
@@ -186,9 +117,10 @@ function AgencyService() {
                 <TouchableOpacity
                   onPress={() => {
                     acceptService(
-                      service.service.UserId,
-                      service.service.id,
-                      service.car.model
+                      service.service.Service.Id,
+
+                      service.service.model,
+                      service.User.id
                     );
                   }}
                   style={styles.acceptButton}

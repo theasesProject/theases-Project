@@ -97,7 +97,7 @@ const Dashboard = () => {
                     >
                       {user.stateBlocked === false ? "block" : "Unblock"}
                     </button>
-                    <div>
+                    {/* <div>
                       <div
                         class="modal fade"
                         id="exampleModal"
@@ -146,7 +146,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </td>
                 </tr>
               );

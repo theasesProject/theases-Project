@@ -18,7 +18,7 @@ export const CreateBooking = createAsyncThunk(
 
         params
       );
-
+      console.log(response.data, "booking");
       return response.data;
     } catch (error) {
       console.log(error);

@@ -20,21 +20,18 @@
         "whenInUse": "LOCATION"
       }
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "package": "android.package",
+      "googleServiceFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "WRITE_EXTERNAL_STORAGE"
-      ]
+      "permissions": ["WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -55,7 +52,7 @@
   },
   "extra": {
     "eas": {
-      "projectId": "your-project-id-here"
+      "projectId": "0548a6cd-e601-4042-a6ad-93ddea191d5d"
     }
   }
 }

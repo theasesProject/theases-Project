@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
+  Dimensions,
 } from "react-native";
 import Logo from "../assets/tempLogo.png";
 import Google from "../assets/googleIcon.png";
@@ -21,6 +22,8 @@ import { fetchUser, selectUser } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerIndieID, unregisterIndieDevice } from "native-notify";
+const { width, height } = Dimensions.get("screen");
+
 function Login({ navigation }) {
   const [color, setColor] = useState("#6C77BF");
   const [color2, setColor2] = useState("#6C77BF");
@@ -149,7 +152,7 @@ function Login({ navigation }) {
     <View style={styles.loginPage}>
       <View style={styles.headers}>
         <View style={styles.logoContainer}>
-          <Image source={Logo} alt="logo" />
+          <Image source={Logo} alt="logo" style={styles.logo} />
         </View>
         <Text style={styles.welcome}>Welcome Back</Text>
         <Text style={styles.paragraph}>
@@ -297,6 +300,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
+  },
+  logo: {
+    height: height * 0.15,
+    width: width * 0.61,
   },
   welcome: {
     fontSize: 24,

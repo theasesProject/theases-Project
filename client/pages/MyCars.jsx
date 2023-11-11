@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getallCarByAgency } from "../store/carFetch";
+import { getallCarByAgency, deletedAgencyCar } from "../store/carFetch";
 import { logUserOut, selectUser } from "../store/userSlice";
 import NavBarAgency from "../components/NavBarAgency";
 const { height, width } = Dimensions.get("screen");
@@ -19,7 +19,11 @@ import car2 from "../assets/car2.png";
 import star from "../assets/star.jpg";
 import deleteImge from "../assets/delete.jpg";
 import { Swipeable } from "react-native-gesture-handler"; // Import Swipeable
+import { useNavigation, useRoute } from "@react-navigation/native";
+
 function MyCars() {
+  const navigation = useNavigation();
+
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const agencyCars = useSelector((state) => state.car.agencyCar);
@@ -29,8 +33,14 @@ function MyCars() {
   }, [dispatch]);
 
   const handleDeleteCar = (carId) => {
-    // Implement your delete logic here
-    // You can dispatch an action or call an API to delete the car
+    console.log(carId);
+    dispatch(
+      deletedAgencyCar({
+        id: carId,
+        AgencyId: activeUser.Agency.UserId,
+      })
+    );
+    //  dispatch(getallCarByAgency(activeUser.Agency.UserId))
   };
   const ccc = [];
   const renderRightActions = (progress, dragX, carId) => {
@@ -39,7 +49,7 @@ function MyCars() {
       outputRange: [0, 10, 30],
       extrapolate: "clamp",
     });
-
+    // console.log(agencyCars);
     return (
       <View style={styles.rightActions}>
         <TouchableOpacity
@@ -67,14 +77,27 @@ function MyCars() {
               }
             >
               <View style={styles.carCard}>
-                {agencycar.carImage ? (
-                  <Image
-                    style={styles.car}
-                    source={{
-                      uri: agencycar.carImage?.media,
-                    }}
-                  />
-                ) : null}
+                <Image
+                  style={styles.car}
+                  source={{
+                    uri: agencycar?.carImage?.media,
+                  }}
+                />
+
+                {console.log("here", agencycar.car)}
+                <View style={styles.text}>
+                  <Text style={styles.emptyText}>{agencycar.car.model}</Text>
+                  <Text style={styles.emptyText}>{agencycar.car.brand}</Text>
+                  <Text style={styles.emptyText}>
+                    {agencycar.car.typevehicle}
+                  </Text>
+                  <Text style={styles.emptyText}>
+                    {agencycar.car.typeOfFuel}
+                  </Text>
+                  <Text style={styles.emptyText}>
+                    {agencycar.car.characteristics}
+                  </Text>
+                </View>
                 {/* Rest of your car item code */}
               </View>
             </Swipeable>
@@ -114,10 +137,16 @@ const styles = StyleSheet.create({
     // marginHorizontal: 7,
     // marginVertical: 7,
     flexDirection: "column",
-    gap: 10,
+    // gap: 10,
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
+  },
+  text: {
+    // backgroundColor:"red",
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
   },
   favoriteCar: {
     marginBottom: 10,
@@ -162,10 +191,11 @@ const styles = StyleSheet.create({
   carCard: {
     marginTop: "7%",
     borderColor: "grey",
-    borderWidth: 2,
+    borderWidth: 1,
     width: width * 0.9,
     height: height * 0.2,
     borderRadius: 10,
+    flexDirection: "row",
   },
   car: {
     width: 200,
@@ -222,9 +252,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   deleteButton: {
+    justifyContent: "center",
     backgroundColor: "red",
-    padding: 10,
-    marginRight: 10,
+    // padding: 10,
+    // marginRight: 10,
+    // marginBottom: 10,
+    // height: height * 0.2,
   },
   deleteButtonText: {
     color: "white",

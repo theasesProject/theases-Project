@@ -46,6 +46,10 @@ module.exports = (DataTypes, connection) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    isActive:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     }
   });
   User.beforeCreate((User, options) => {

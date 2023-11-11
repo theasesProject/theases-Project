@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,84 +8,140 @@ import {
   ImageBackground,
   Touchable,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
-import dots from "../assets/icons8-three-dots-48.png";
+
 import NavBarAgency from "../components/NavBarAgency";
 import Stats from "../components/Stats";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import MapAgencyProfile from "./MapAgencyProfile";
+import Left from "../assets/Svg/left-long-solid.svg";
+import Dots from "../assets/Svg/three-dots-svgrepo-com.svg";
+import SliderMenu from "../components/SideBar";
 const { width, height } = Dimensions.get("screen");
 
 function AgencyProfile({ navigation }) {
   const activeUser = useSelector(selectUser);
-  console.log("here", activeUser.Agency.companyNumber);
+  const [isSliderOpen, setSliderOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  console.log("here", activeUser);
+  const handleSliderToggle = () => {
+    setSliderOpen(!isSliderOpen);
+  };
+  // const toggleVisibility = () => {
+  //   setIsVisible(!isVisible);
+  // };
   return (
     <View>
-      <ScrollView style={styles.agency}>
-        <View style={styles.vbgImg}>
-          <ImageBackground
-            source={{
-              uri: activeUser.Agency.backgroundImage,
+      <View style={styles.trial}>
+        <View style={styles.trle}>
+          <Left />
+        </View>
+
+        <View style={styles.trri}>
+          <Pressable
+            style={styles.trri}
+            onPress={() => {
+              handleSliderToggle();
             }}
-            style={styles.bgim}
-          />
-        </View>
-        <View style={styles.vav}>
-          <View style={styles.bvav}>
-            <ImageBackground
-              source={{
-                uri: activeUser.avatar,
-              }}
-              style={styles.avatar}
-            />
-          </View>
-        </View>
-
-        <View style={styles.acna}>
-          <View style={styles.leftSection}>
-            <Text style={styles.leac}>{activeUser.Agency.name}</Text>
-            <Text style={styles.number}>{activeUser.Agency.companyNumber}</Text>
-          </View>
-          <View style={styles.rightSection}>
-            <Image source={dots} />
-          </View>
-        </View>
-
-        <View style={styles.stats}>
-          <Stats />
-        </View>
-
-        <View>
-          <TouchableOpacity
-            style={styles.map}
-            onPress={() => navigation.navigate("MapAgencyProfile")}
           >
-            <View style={styles.btn}>
-              <Text style={styles.temap}>Map</Text>
-            </View>
-          </TouchableOpacity>
+            <Dots />
+          </Pressable>
         </View>
-      </ScrollView>
-      <View>
-        <NavBarAgency style={styles.foot} />
+      </View>
+      <View style={styles.agency}>
+        <SliderMenu
+          isOpen={isSliderOpen}
+          onClose={handleSliderToggle}
+          navigation={navigation}
+        />
+        {isVisible && activeUser.Agency ? (
+          <ScrollView>
+            <View style={styles.vbgImg}>
+              <ImageBackground
+                source={{
+                  uri: activeUser.Agency.backgroundImage,
+                }}
+                style={styles.bgim}
+              />
+            </View>
+            <View style={styles.vav}>
+              <View style={styles.bvav}>
+                <Image
+                  source={{
+                    uri: activeUser.avatar,
+                  }}
+                  style={styles.avatar}
+                />
+              </View>
+            </View>
+
+            <View style={styles.acna}>
+              <View style={styles.leftSection}>
+                <Text style={styles.leac}>{activeUser.Agency.name}</Text>
+                <Text style={styles.number}>
+                  {activeUser.Agency.companyNumber}
+                </Text>
+              </View>
+              <View style={styles.rightSection}>
+                <Text>
+                  {activeUser.Agency.transportation
+                    ? "With Delivery"
+                    : "Without Delivery"}
+                </Text>
+                <Text>{activeUser.Agency.createdAt.slice(0, 10)}</Text>
+                {/* <Image source={dots} /> */}
+              </View>
+            </View>
+
+            <View style={styles.stats}>
+              <Stats />
+            </View>
+          </ScrollView>
+        ) : null}
+        <View style={styles.foot}>
+          <NavBarAgency />
+        </View>
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  agency: {
+  trial: {
+    height: "6%",
     width: width,
-    height: height * 0.89,
+    // backgroundColor:'green',
+    flexDirection: "row",
+    paddingHorizontal: width * 0.07,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  trle: {
+    // flex: 1,
+    // paddingRight: 200,
+    // backgroundColor:'red'
+  },
+  trri: {
+    width: width * 0.1,
+  },
+
+  agency: {
+    zIndex: 0,
+    width: width,
+    height: "94%",
   },
   vbgImg: {
     height: height * 0.25,
     width: width,
+    borderBottomColor: "#6a78c1",
+    borderWidth: 3,
   },
   bgim: {
-    height: height * 0.25,
-    width: width,
-    borderRadius: 5,
+    height: "100%",
+    width: "100%",
+    // objectFit:'cover'
   },
   vav: {
     marginTop: -height * 0.07,
@@ -93,47 +149,53 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bvav: {
-    borderRadius: 10,
+    // borderRadius: 10,
     //    width:width*0.25,
-    borderWidth: 1.25,
-
+    // borderWidth: 1.25,
+    // padding: 23,
     // height:height*0.12,
+    marginTop: -height * 0.02,
   },
   avatar: {
     height: height * 0.12,
     width: width * 0.25,
+    borderWidth: 2,
+    borderColor: "#6a78c1",
+    borderRadius: 75,
   },
   acna: {
     // flex: 1,
     flexDirection: "row",
-    padding: 10,
+    padding: 20,
     // height:height*0.01,
     // backgroundColor:"lightgrey",
   },
   leftSection: {
     flex: 1, // Takes up 50% of the container's width
     // backgroundColor: 'lightblue', // Optional background color for the left section
-    height: height * 0.12,
-
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderRadius: 10,
+    // height: height * 0.08,
+    marginTop: -height * 0.06,
+    // marginLeft:height*0.01,
+    // alignItems: "center",
+    // justifyContent: "center",
+    // borderWidth: 1,
+    // borderRadius: 10,
   },
   leac: {
-    fontSize: 33,
+    fontSize: 21,
     fontStyle: "italic",
   },
   rightSection: {
-    height: height * 0.12,
-    alignItems: "center",
+    // height: height * 0.12,
+    // alignItems: "center",
     justifyContent: "center",
-    marginLeft: 20,
+    marginTop: -height * 0.06,
+    marginLeft: 100,
     flex: 1, // Takes up 50% of the container's width
     // backgroundColor: 'lightgreen', // Optional background color for the right section
   },
   stats: {
-    height: height * 0.35,
+    height: height * 0.5,
     padding: 20, // Adjust the value as needed to move the "Stats" section up
     // flex: 1,
     // backgroundColor: "green",
@@ -148,7 +210,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: height * 0.05,
     width: width * 0.2,
-    backgroundColor: "white",
+    // backgroundColor: "white",
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 5,
@@ -157,7 +219,7 @@ const styles = StyleSheet.create({
   foot: {
     justifyContent: "flex-end", // Align the component to the bottom
     alignItems: "center",
-    backgroundColor: "lightgray",
+    // backgroundColor: "lightgray",
   },
 });
 export default AgencyProfile;

@@ -7,7 +7,7 @@ module.exports = {
     try {
       const allCars = await db.Car.findAll({
         include: [
-          { model: db.Media, as: "Media" },
+          // { model: db.Media, as: "Media" },
           { model: db.Agency, as: "Agency" },
         ],
       });
@@ -121,13 +121,16 @@ module.exports = {
 
   deletedAgencyCar: async function (req, res) {
     try {
+      // console.log("from controller", req.body);
+      console.log("id:", req.params.id);
+      console.log("agencyId:", req.params.AgencyId);
       const deletedCar = await db.Car.destroy({
         where: {
-          id: req.body.id,
-          AgencyId: req.body.AgencyId,
+          id: req.params.id,
+          AgencyId: req.params.AgencyId,
         },
       });
-      console.log("ee", deletedCar);
+      console.log("ee", "deletedCar");
       res.json(deletedCar);
     } catch (error) {
       throw error;

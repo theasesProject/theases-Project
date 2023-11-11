@@ -26,9 +26,31 @@ const Dashboard = () => {
     dispatch(updateStateBlock(id));
     console.log(id, "update");
   };
-
-  const handleApproveRequest = (id) => {
-    dispatch(approveRequest(id));
+  // const [input, setInput] = useState({})
+  var input = {};
+  const handleApproveRequest = (
+    id,
+    address,
+    Media,
+    companyNumber,
+    deposit,
+    transportation,
+    agencyName
+  ) => {
+    // setInput(id, address, Media, companyNumber, deposit, transportation, agencyName)
+    dispatch(
+      approveRequest(
+        (input = {
+          id,
+          address,
+          Media,
+          companyNumber,
+          deposit,
+          transportation,
+          agencyName,
+        })
+      )
+    );
   };
 
   const handleDeclineRequest = (id) => {
@@ -69,8 +91,7 @@ const Dashboard = () => {
               <th>BlockedUser</th>
             </tr>
 
-            {allUsers.map((user) => {
-              console.log(user.id, "user");
+            {allUsers?.map((user) => {
               return (
                 <tr>
                   <td>{user.userName}</td>
@@ -162,7 +183,7 @@ const Dashboard = () => {
               <th>approve/decline</th>
             </tr>
 
-            {allRequests.map((request) => {
+            {allRequests?.map((request) => {
               return (
                 <tr>
                   <td>{request.id}</td>
@@ -274,7 +295,17 @@ const Dashboard = () => {
                                 type="button"
                                 className="btn btn-primary"
                                 data-dismiss="modal"
-                                onClick={() => handleApproveRequest(request.id)}
+                                onClick={() =>
+                                  handleApproveRequest(
+                                    request.id,
+                                    request.address,
+                                    request.Media,
+                                    request.companyNumber,
+                                    request.deposit,
+                                    request.transportation,
+                                    request.agencyName
+                                  )
+                                }
                               >
                                 Yes
                               </button>

@@ -10,6 +10,7 @@ import {
   RefreshControl,
   Modal,
 } from "react-native";
+import SwipeUpDown from "react-native-swipe-up-down";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import LinearGradient from "expo-linear-gradient";
 import axios from "axios";
@@ -40,6 +41,20 @@ function Home({ navigation }) {
   const scrollViewRef = useRef();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [nothing, setNothing] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const swipeUpDownRef = useRef();
+  const handlePress = () => {
+    if (swipeUpDownRef.current) {
+      swipeUpDownRef.current.showFull();
+      // setIsVisibleSwipe(true)
+    }
+  };
+  const [notifications, setNotifications] = useState([]);
+  const [notificationModalVisible, setNotificationModalVisible] =
+    useState(false);
+
+  const [notificationText, setNotificationText] = useState("");
+
   useEffect(() => {
     socket.emit("newUser", activeUser.id);
     console.log("newUser", activeUser.id);
@@ -62,10 +77,11 @@ function Home({ navigation }) {
       socket.off("serviceRejected");
     };
   }, [dispatch]);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
-  }, [dispatch]);
+  });
 
   const updateFilteredCars = (filteredCarData) => {
     dispatch(filterCars(filteredCarData));
@@ -99,6 +115,9 @@ function Home({ navigation }) {
     <View style={styles.homePage}>
       <ScrollView
         ref={scrollViewRef}
+        // onScroll={(event) => {
+        //   setScrollPosition(event.nativeEvent.contentOffset.y);
+        // }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -111,7 +130,14 @@ function Home({ navigation }) {
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
         {!loading ? (
           allCars?.map((element, i) => (
-            <CardCar setNothing={setNothing} key={i} oneCar={element} />
+            <View style={styles.allcars} key={i}>
+              <CardCar
+                setNothing={setNothing}
+                key={i}
+                oneCar={element}
+                handlePress={handlePress}
+              />
+            </View>
           ))
         ) : (
           <>
@@ -175,9 +201,53 @@ function Home({ navigation }) {
             </View>
           </>
         )}
-        <CarDetails />
       </ScrollView>
-      <NavBar />
+      {/* <Swipeable
+  friction={2}
+  leftThreshold={100}
+  rightThreshold={100}
+  overshootFriction={2}
+  overshootLeft={false}
+  overshootRight={false}
+  onSwipeableLeftOpen={() => {}}
+  onSwipeableRightOpen={() => {}}
+> */}
+      <SwipeUpDown
+        itemFull={<CarDetails />}
+        ref={swipeUpDownRef}
+        extraMarginTop={140}
+        scrollEnabled={false}
+        nestedScrollEnabled={false}
+        animation="easeInEaseOut"
+        style={{
+          height: "100%",
+          width: "100%",
+          borderTopEndRadius: 50,
+          backgroundColor: "lightgrey",
+          //  backgroundColor: 'transparent'
+        }}
+      />
+      {/* </Swipeable> */}
+
+      {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={notificationModalVisible}
+        onRequestClose={() => {
+          setNotificationModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>{notificationText}</Text>
+          <TouchableOpacity
+            onPress={() => setNotificationModalVisible(false)}
+            style={styles.modalCloseButton}
+          >
+            <Text>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -200,8 +270,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {},
   allcars: {
-    // padding: 20,
-    // paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   notificationsContainer: {
     flex: 1,
@@ -245,5 +314,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-
 export default Home;

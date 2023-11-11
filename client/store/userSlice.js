@@ -8,6 +8,7 @@ const initialState = {
   loggedIn: false,
   status: "idle",
   error: null,
+  reporter:{}
 };
 console.log("hi");
 
@@ -27,7 +28,14 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
 });
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-
+export const MakeReport = createAsyncThunk("user/createReport", async (inputForm) => {
+  try {
+    const task = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/report/create`, inputForm)
+    return task.data
+  } catch (error) {
+    console.error(JSON.stringify(error));
+  }
+})
 export const SignUpClick = createAsyncThunk(
   "user/SignUps",
   async (inputForm, thunkAPI) => {
@@ -66,7 +74,18 @@ export const logUserOut = createAsyncThunk("user/logout", async () => {
   } catch (e) {
     console.error("error coming from home", e);
   }
-});
+}
+)
+export const handleToken = createAsyncThunk("user/handleToken", async () => {
+  try {
+    const token = await AsyncStorage.getItem("UserToken");
+    const UserData = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/token`,token)
+    return UserData.data
+  } catch (er) {
+    console.error(er);
+  }
+})
+
 
 const userSlice = createSlice({
   name: "user",
@@ -96,10 +115,13 @@ const userSlice = createSlice({
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
-    builder.addCase(logUserOut.fulfilled, (state) => {
-      state.loggedIn = false;
-    });
+      })
+      .addCase(logUserOut.fulfilled, (state) => {
+        state.loggedIn = false
+      })
+      .addCase(handleToken.fulfilled,(state,action)=>{
+        state.reporter=action.payload
+      })
   },
 });
 

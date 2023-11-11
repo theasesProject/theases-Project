@@ -11,6 +11,7 @@ const initialState = {
   fixedData: [],
   bookMarks: [],
   succes: null,
+  RentDetails:{}
 };
 export const getOnecarById = createAsyncThunk(
   "car/getOnecarById",
@@ -45,12 +46,12 @@ export const getallCarByAgency = createAsyncThunk(
 
 export const deletedAgencyCar = createAsyncThunk(
   "car/deletedAgencyCar",
-  async (Agency, car) => {
+  async (body) => {
+    const {id,AgencyId} = body;
     try {
+      console.log(body, "body");
       const response = await axios.delete(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar`,
-        { AgencyId: Agency, id: car }
-      );
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar/${id}/${AgencyId}`);
 
       return response.data;
     } catch (error) {
@@ -174,11 +175,11 @@ const carSlice = createSlice({
   initialState,
   reducers: {
     filterCars: (state, action) => {
-      state.allCars = action.payload;
+      state.allCars = action.payload
     },
-    setCarDetails: (state, action) => {
-      state.OneCar = action.payload;
-    },
+    saveDetails: (state,action)=>{
+      state.RentDetails=action.payload
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
@@ -309,5 +310,5 @@ const carSlice = createSlice({
     });
   },
 });
-export const { filterCars, setCarDetails } = carSlice.actions;
+export const { filterCars,saveDetails } = carSlice.actions;
 export default carSlice.reducer;

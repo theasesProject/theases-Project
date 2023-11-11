@@ -13,14 +13,16 @@ import MapViewDirections from "react-native-maps-directions";
 // import { google_api } from '../env';
 import { SvgXml } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
-import { List } from "../store/agencySlice";
+import { List, getAgencyData } from "../store/agencySlice";
 const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
 const MapForUser = () => {
     const agecies = useSelector((state)=>state.agency.list );
-console.log(agecies,'Map');
+console.log('agencies in map',agecies.data);
 const dispatch = useDispatch();
-
+useEffect(()=>{
+    dispatch(getAgencyData())
+},[dispatch])
 
   
   const [location, setLocation] = useState(null);

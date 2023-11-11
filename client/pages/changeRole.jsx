@@ -122,7 +122,7 @@ function ChangeRole({ navigation }) {
             return cloudinaryResponse;
           } catch (err) {
             console.error("Cloudinary Upload Error:", err);
-            return null;
+            return;
           }
         })
       );

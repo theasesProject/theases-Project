@@ -29,6 +29,10 @@ module.exports = (DataTypes, connection) => {
       allowNull: false,
       defaultValue: "pending",
     },
+    amount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
   return Service;
 };

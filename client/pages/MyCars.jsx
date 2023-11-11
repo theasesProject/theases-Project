@@ -38,9 +38,9 @@ function MyCars() {
       deletedAgencyCar({
         id: carId,
         AgencyId: activeUser.Agency.UserId,
-      }))
+      })
+    );
     //  dispatch(getallCarByAgency(activeUser.Agency.UserId))
- 
   };
   const ccc = [];
   const renderRightActions = (progress, dragX, carId) => {
@@ -49,7 +49,7 @@ function MyCars() {
       outputRange: [0, 10, 30],
       extrapolate: "clamp",
     });
-// console.log(agencyCars);
+    // console.log(agencyCars);
     return (
       <View style={styles.rightActions}>
         <TouchableOpacity
@@ -84,16 +84,20 @@ function MyCars() {
                   }}
                 />
 
-          
-                {console.log('here',agencycar.car)}
-              <View style={styles.text}>
-                 <Text style={styles.emptyText}>{agencycar.car.model}</Text>
-                 <Text style={styles.emptyText}>{agencycar.car.brand}</Text>
-                 <Text style={styles.emptyText}>{agencycar.car.typevehicle}</Text>
-                 <Text style={styles.emptyText}>{agencycar.car.typeOfFuel}</Text>
-                 <Text style={styles.emptyText}>{agencycar.car.characteristics}</Text>
-
-              </View>
+                {console.log("here", agencycar.car)}
+                <View style={styles.text}>
+                  <Text style={styles.emptyText}>{agencycar.car.model}</Text>
+                  <Text style={styles.emptyText}>{agencycar.car.brand}</Text>
+                  <Text style={styles.emptyText}>
+                    {agencycar.car.typevehicle}
+                  </Text>
+                  <Text style={styles.emptyText}>
+                    {agencycar.car.typeOfFuel}
+                  </Text>
+                  <Text style={styles.emptyText}>
+                    {agencycar.car.characteristics}
+                  </Text>
+                </View>
                 {/* Rest of your car item code */}
               </View>
             </Swipeable>
@@ -138,10 +142,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  text:{
+  text: {
     // backgroundColor:"red",
-    flex:1,
-    justifyContent:'center',
+    flex: 1,
+    justifyContent: "center",
     alignContent: "center",
   },
   favoriteCar: {
@@ -191,7 +195,7 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     height: height * 0.2,
     borderRadius: 10,
-    flexDirection:"row",
+    flexDirection: "row",
   },
   car: {
     width: 200,

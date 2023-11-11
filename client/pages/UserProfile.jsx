@@ -30,7 +30,7 @@ function Userprofile({ navigation }) {
 
   const handleLogout = () => {
     dispatch(logoutUser());
-
+    dispatch(logUserOut());
     navigation.navigate("Home");
   };
   console.log("active User Profileeeeeeeeee", activeUser);

@@ -16,6 +16,7 @@ const Dashboard = () => {
   const ReviewData = useSelector(selectReviews);
   const allUsers = useSelector((state) => state.user.allUsers);
   const allRequests = useSelector((state) => state.user.requests);
+  const [userId, setUserId] = useState();
   useEffect(() => {
     dispatch(fetchReviews());
     dispatch(getAllUsers());
@@ -23,13 +24,33 @@ const Dashboard = () => {
   }, [dispatch]);
   const handleBlock = (id) => {
     dispatch(updateStateBlock(id));
-    console.log(user, "update");
+    console.log(id, "update");
   };
   // const [input, setInput] = useState({})
-  var input={}
-  const handleApproveRequest = (id, address, Media, companyNumber, deposit, transportation, agencyName) => {
+  var input = {};
+  const handleApproveRequest = (
+    id,
+    address,
+    Media,
+    companyNumber,
+    deposit,
+    transportation,
+    agencyName
+  ) => {
     // setInput(id, address, Media, companyNumber, deposit, transportation, agencyName)
-    dispatch(approveRequest(input={id, address, Media, companyNumber, deposit, transportation, agencyName}));
+    dispatch(
+      approveRequest(
+        (input = {
+          id,
+          address,
+          Media,
+          companyNumber,
+          deposit,
+          transportation,
+          agencyName,
+        })
+      )
+    );
   };
 
   const handleDeclineRequest = (id) => {
@@ -50,7 +71,7 @@ const Dashboard = () => {
       console.error("Invalid location data.");
     }
   }
-
+  console.log(allUsers, "all");
   return (
     <div>
       <div>
@@ -78,6 +99,9 @@ const Dashboard = () => {
                   <td>{user.type}</td>
                   <td>
                     <button
+                      onClick={() => {
+                        setUserId(user.id);
+                      }}
                       type="button"
                       className="btn btn-primary"
                       data-toggle="modal"
@@ -94,9 +118,9 @@ const Dashboard = () => {
                     >
                       {user.stateBlocked === false ? "block" : "Unblock"}
                     </button>
-                    <div>
+                    {/* <div>
                       <div
-                        className="modal fade"
+                        class="modal fade"
                         id="exampleModal"
                         tabindex="-1"
                         role="dialog"
@@ -114,7 +138,7 @@ const Dashboard = () => {
                               </h5>
                               <button
                                 type="button"
-                                className="close"
+                                class="close"
                                 data-dismiss="modal"
                                 aria-label="Close"
                               >
@@ -122,21 +146,20 @@ const Dashboard = () => {
                               </button>
                             </div>
 
-                            <div className="modal-footer">
+                            <div class="modal-footer">
                               <button
                                 type="button"
-                                className="btn btn-secondary"
+                                class="btn btn-secondary"
                                 data-dismiss="modal"
                               >
                                 Close
                               </button>
                               <button
                                 onClick={() => {
-                                  handleBlock(user.id);
+                                  handleBlock(userId);
                                 }}
                                 type="button"
-                                className="btn btn-primary"
-                                data-dismiss="modal"
+                                class="btn btn-primary"
                               >
                                 Yes
                               </button>
@@ -144,7 +167,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </td>
                 </tr>
               );
@@ -272,7 +295,17 @@ const Dashboard = () => {
                                 type="button"
                                 className="btn btn-primary"
                                 data-dismiss="modal"
-                                onClick={() => handleApproveRequest(request.id, request.address, request.Media, request.companyNumber, request.deposit, request.transportation, request.agencyName)}
+                                onClick={() =>
+                                  handleApproveRequest(
+                                    request.id,
+                                    request.address,
+                                    request.Media,
+                                    request.companyNumber,
+                                    request.deposit,
+                                    request.transportation,
+                                    request.agencyName
+                                  )
+                                }
                               >
                                 Yes
                               </button>

@@ -21,13 +21,6 @@ function FiltredCar() {
 
   return (
     <View style={styles.homePage}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Home");
-        }}
-      >
-        <Image style={styles.backImage} source={back}></Image>
-      </TouchableOpacity>
       <ScrollView>
         <View>
           {avaibleCar
@@ -68,7 +61,6 @@ function FiltredCar() {
 }
 const styles = StyleSheet.create({
   homePage: {
-    marginTop: "20%",
     flex: 1,
     backgroundColor: "rgb(219, 217, 224)",
     alignItems: "center",

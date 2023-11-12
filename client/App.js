@@ -35,75 +35,9 @@ import { StripeProvider } from "@stripe/stripe-react-native";
 import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 const Stack = createStackNavigator();
-// import * as Device from "expo-device";
-// import * as Notifications from "expo-notifications";
-
-// import React, { useState, useRef, useEffect } from "react";
-
-// Notifications.setNotificationHandler({
-//   handleNotification: async () => ({
-//     shouldShowAlert: true,
-//     shouldPlaySound: false,
-//     shouldSetBadge: false,
-//   }),
-// });
 
 function App() {
-  // const [expoPushToken, setExpoPushToken] = useState("");
-  // const [notification, setNotification] = useState(false);
-  // const notificationListener = useRef();
-  // const responseListener = useRef();
-
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync().then((token) =>
-  //     setExpoPushToken(token)
-  //   );
-
-  //   notificationListener.current =
-  //     Notifications.addNotificationReceivedListener((notification) => {
-  //       setNotification(notification);
-  //     });
-
-  //   responseListener.current =
-  //     Notifications.addNotificationResponseReceivedListener((response) => {
-  //       console.log(response);
-  //     });
-
-  //   return () => {
-  //     Notifications.removeNotificationSubscription(
-  //       notificationListener.current
-  //     );
-  //     Notifications.removeNotificationSubscription(responseListener.current);
-  //   };
-  // }, []);
-
   return (
-    // <View
-    //   style={{
-    //     flex: 1,
-    //     alignItems: "center",
-    //     justifyContent: "space-around",
-    //   }}
-    // >
-    //   <Text>Your expo push token: {expoPushToken}</Text>
-    //   <View style={{ alignItems: "center", justifyContent: "center" }}>
-    //     <Text>
-    //       Title: {notification && notification.request.content.title}{" "}
-    //     </Text>
-    //     <Text>Body: {notification && notification.request.content.body}</Text>
-    //     <Text>
-    //       Data:{" "}
-    //       {notification && JSON.stringify(notification.request.content.data)}
-    //     </Text>
-    //   </View>
-    //   <Button
-    //     title="Press to schedule a notification"
-    //     onPress={async () => {
-    //       await schedulePushNotification();
-    //     }}
-    //   />
-    // </View>
-
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
@@ -139,7 +73,7 @@ function App() {
               options={{ headerShown: true }}
             />
             <Stack.Screen
-              name="favorites"
+              name="Favorites"
               component={Favorites}
               options={{ headerShown: true }}
             />
@@ -227,12 +161,12 @@ function App() {
             <Stack.Screen
               name="AdvancedSearch"
               component={AdvancedSearch}
-              options={{ headerShown: false }}
+              options={{ headerShown: true }}
             />
             <Stack.Screen
               name="FiltredCar"
               component={FiltredCar}
-              options={{ headerShown: false }}
+              options={{ headerShown: true }}
             />
 
             <Stack.Screen
@@ -262,47 +196,5 @@ function App() {
     </Provider>
   );
 }
-// async function schedulePushNotification() {
-//   await Notifications.scheduleNotificationAsync({
-//     content: {
-//       title: "You've got mail! 📬",
-//       body: "hello aymen",
-//       data: { data: "goes here" },
-//     },
-//     trigger: { seconds: 2 },
-//   });
-// }
 
-// async function registerForPushNotificationsAsync() {
-//   let token;
-
-//   if (Platform.OS === "android") {
-//     await Notifications.setNotificationChannelAsync("default", {
-//       name: "default",
-//       importance: Notifications.AndroidImportance.MAX,
-//       vibrationPattern: [0, 250, 250, 250],
-//       lightColor: "#FF231F7C",
-//     });
-//   }
-
-//   if (Device.isDevice) {
-//     const { status: existingStatus } =
-//       await Notifications.getPermissionsAsync();
-//     let finalStatus = existingStatus;
-//     if (existingStatus !== "granted") {
-//       const { status } = await Notifications.requestPermissionsAsync();
-//       finalStatus = status;
-//     }
-//     if (finalStatus !== "granted") {
-//       alert("Failed to get push token for push notification!");
-//       return;
-//     }
-//     token = (await Notifications.getExpoPushTokenAsync()).data;
-//     console.log(token);
-//   } else {
-//     alert("Must use physical device for Push Notifications");
-//   }
-
-//   return token;
-// }
 export default App;

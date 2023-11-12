@@ -159,8 +159,8 @@ const SignUp = ({ navigation, props }) => {
           setConfirmedError("");
         }
       }else if(placeholder==="id card"){
-        if (inputForm.idCard.length!==7 ) {
-          setConfirmedError("Your id should be 8 numbers");
+        if (inputForm.idCard.length!==8 ) {
+          setIdCardError("Your id should be 8 numbers long");
           return;
         }
         else{
@@ -226,6 +226,7 @@ const SignUp = ({ navigation, props }) => {
               autoCapitalize="none"
               style={styles.input}
               placeholder="Email"
+              keyboardType="email-address"
               onChangeText={(text) => {
                 setInputForm({ ...inputForm, email: text.trim() });
                 setCheckUp(
@@ -253,6 +254,7 @@ const SignUp = ({ navigation, props }) => {
               }}
               autoCapitalize="none"
               style={styles.input}
+              keyboardType="phone-pad"
               placeholder="Phone"
               onChangeText={(text) => {
                 setInputForm({ ...inputForm, phoneNumber: text.trim() });
@@ -369,10 +371,11 @@ const SignUp = ({ navigation, props }) => {
                 checkInput(inputForm.idCard, "id card");
               }}
               autoCapitalize="none"
+              keyboardType="phone-pad"
               value={inputForm.idCard}
               style={styles.input}
               placeholder="id card"
-              secureTextEntry={isSecure2}
+              // secureTextEntry={isSecure2}
               onChangeText={(text) => {
                 setInputForm({ ...inputForm, idCard: text });
                 setCheckUp(
@@ -386,8 +389,8 @@ const SignUp = ({ navigation, props }) => {
               }}
             />
           </View>
-            {idCardError ? (
-            <Text style={{ color: "red" }}>{emailError}</Text>
+            {idCardError? (
+            <Text style={{ color: "red" }}>{idCardError}</Text>
           ) : null}
           <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
             <Calendar style={styles.icon2} />
@@ -624,7 +627,7 @@ const styles = StyleSheet.create({
   buttonContainer2: {
     // backgroundColor: "red",
     borderRadius: 5,
-    height: height * 0.06,
+    height: height * 0.05,
     padding: 10,
     alignItems: "center",
     marginTop: 15,

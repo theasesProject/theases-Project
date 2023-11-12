@@ -56,7 +56,7 @@ function AgencyProfile({ navigation }) {
         <View style={styles.vbgImg}>
           <ImageBackground
             source={{
-              uri: activeUser.Agency.backgroundImage,
+              uri: activeUser?.Agency?.backgroundImage,
             }}
             style={styles.bgim}
           />
@@ -65,7 +65,7 @@ function AgencyProfile({ navigation }) {
           <View style={styles.bvav}>
             <Image
               source={{
-                uri: activeUser.avatar,
+                uri: activeUser?.avatar,
               }}
               style={styles.avatar}
             />
@@ -74,13 +74,13 @@ function AgencyProfile({ navigation }) {
 
         <View style={styles.acna}>
           <View style={styles.leftSection}>
-            <Text style={styles.leac}>{activeUser.Agency.name}</Text>
-            <Text style={styles.number}>{activeUser.Agency.companyNumber}</Text>
+            <Text style={styles.leac}>{activeUser?.Agency.name}</Text>
+            <Text style={styles.number}>{activeUser?.Agency.companyNumber}</Text>
           </View>
           <View style={styles.rightSection}>    
 
-<Text >{activeUser.Agency.transportation?"With Delivery":"Without Delivery"}</Text>
-<Text >{ activeUser.Agency.createdAt.slice(0,10)}</Text>
+<Text >{activeUser?.Agency.transportation?"With Delivery":"Without Delivery"}</Text>
+<Text >{ activeUser?.Agency.createdAt.slice(0,10)}</Text>
             {/* <Image source={dots} /> */}
           </View>
         </View>

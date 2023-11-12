@@ -10,8 +10,8 @@ import {
   RefreshControl,
   Modal,
 } from "react-native";
-import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import SwipeUpDown from "react-native-swipe-up-down";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import LinearGradient from "expo-linear-gradient";
 import axios from "axios";
 import CardCar from "../components/CardCar.jsx";
@@ -25,16 +25,14 @@ import NavBar from "../components/NavBar.jsx";
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
-import ItemMini from "../components/ItemMini.jsx";
-import { Swipeable } from "react-native-gesture-handler";
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 import io from "socket.io-client";
+const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
 import { selectUser, setUser } from "../store/userSlice";
-import NavBarAgency from "../components/NavBarAgency.jsx";
-
+import registerNNPushToken from "native-notify";
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
+  registerNNPushToken(14608, "0IjK45dvxv48dlwYcWDWTR");
   const dispatch = useDispatch();
-  const [isVisibleSwipe, setIsVisibleSwipe] = useState(false);
   const activeUser = useSelector(selectUser);
   const allCars = useSelector((state) => state.car.allCars);
   const fixedData = useSelector((state) => state.car.fixedData);
@@ -44,7 +42,6 @@ function Home({ navigation }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [nothing, setNothing] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  // console.log("CAR TABLE!!!!!!!!!!!!!!!!", allCars);
   const swipeUpDownRef = useRef();
   const handlePress = () => {
     if (swipeUpDownRef.current) {
@@ -57,10 +54,34 @@ function Home({ navigation }) {
     useState(false);
 
   const [notificationText, setNotificationText] = useState("");
+
+  useEffect(() => {
+    socket.emit("newUser", activeUser.id);
+    console.log("newUser", activeUser.id);
+    socket.on("serviceAccepted", ({ senderId, message }) => {
+      console.log(
+        `Received service acceptance from ${senderId}. Message: ${message}`
+      );
+      // Handle the service acceptance on the React Native side as needed
+    });
+
+    socket.on("serviceRejected", ({ senderId, message }) => {
+      console.log(
+        `Received service rejection from ${senderId}. Message: ${message}`
+      );
+      // Handle the service rejection on the React Native side as needed
+    });
+
+    return () => {
+      socket.off("serviceAccepted");
+      socket.off("serviceRejected");
+    };
+  }, [dispatch]);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
-  }, [dispatch]);
+  });
 
   const updateFilteredCars = (filteredCarData) => {
     dispatch(filterCars(filteredCarData));
@@ -80,30 +101,7 @@ function Home({ navigation }) {
       console.error("error coming from home", e);
     }
   };
-  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to Socket.IO server");
-    });
 
-    socket.on("notification", (message) => {
-      console.log("messageFront");
-      setNotificationText(message);
-      setNotificationModalVisible(true);
-      setTimeout(() => {
-        setNotificationModalVisible(false);
-      }, 10000);
-    });
-
-    socket.on("connect_error", (error) => {
-      console.error("Socket.IO connection error:", error);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-console.log('selim',activeUser);
   // useEffect(() => {
   //   if (!loading && scrollViewRef.current) {
   //     scrollViewRef.current.scrollTo({
@@ -223,15 +221,15 @@ console.log('selim',activeUser);
         animation="easeInEaseOut"
         style={{
           height: "100%",
-          width:"100%",
-          borderTopEndRadius:50,
+          width: "100%",
+          borderTopEndRadius: 50,
           backgroundColor: "lightgrey",
           //  backgroundColor: 'transparent'
         }}
       />
       {/* </Swipeable> */}
 
-     {activeUser?.type==='agency'? <NavBarAgency/>:<NavBar />}
+      {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
       <Modal
         animationType="slide"
         transparent={true}
@@ -316,5 +314,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-
 export default Home;

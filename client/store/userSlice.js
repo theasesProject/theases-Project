@@ -3,19 +3,17 @@ import axios from "axios";
 // import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Define an initial state for the user slice
 const initialState = {
   data: {},
   loggedIn: false,
-  status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
+  status: "idle",
   error: null,
   reporter:{}
 };
+console.log("hi");
 
-// Define an async thunk to fetch a user from the database
 const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   try {
-    // Replace this with your actual API call to fetch the user
     const response = await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/token`,
       {

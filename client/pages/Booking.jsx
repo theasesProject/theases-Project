@@ -28,19 +28,21 @@ function Booking() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const succes = useSelector((state) => state.booking.succes);
+  const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    dispatch(GetUnavailableDatesForCar(oneCar.id));
-  }, [dispatch]);
-
+  // if (selectedStartDate && selectedEndDate) {
+  //   calculTotalPrice();
+  // }
   const createBooking = () => {
     if (selectedStartDate && selectedEndDate) {
+      // calculTotalPrice();
       dispatch(
         CreateBooking({
           startDate: selectedStartDate.format("YYYY-MM-DD").toString(),
           endDate: selectedEndDate.format("YYYY-MM-DD").toString(),
           UserId: activeUser.id,
           CarId: oneCar.id,
+          amount: total,
         })
       );
     } else {
@@ -56,22 +58,62 @@ function Booking() {
     }
     return dates;
   };
+
+  const calculTotalPrice = () => {
+    const startDate = moment(selectedStartDate);
+    const endDate = moment(selectedEndDate);
+
+    if (selectedStartDate && selectedEndDate) {
+      const durationInDays = endDate.diff(startDate, "days") + 1;
+      console.log(durationInDays, "durationInDays");
+      let pricePerDay = oneCar.price;
+      if (durationInDays > 7) {
+        pricePerDay = oneCar.priceWeekly;
+      }
+      if (durationInDays > 29) {
+        pricePerDay = oneCar.priceMonthly;
+      }
+
+      // Calculate the total price
+      const total = durationInDays * pricePerDay;
+      console.log(total, "total");
+      setTotal(total);
+    } else if (startDate && !endDate) {
+      setTotal(0);
+    }
+  };
+
   const handleDateSelect = (date) => {
-    if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+    if (!selectedStartDate && !selectedEndDate) {
       setSelectedStartDate(date);
-      setSelectedEndDate(null); // Reset the end date.
+      setSelectedEndDate(null);
       setMarkedDates({
         [date]: { selectedDayColor: "red", startingDay: true, endingDay: true },
       });
     } else if (moment(date).isSame(selectedStartDate, "day")) {
       setSelectedStartDate(null);
+      setSelectedEndDate(null);
       setMarkedDates({}); // Clear all markings.
     } else if (moment(date).isAfter(selectedStartDate, "day")) {
+      // if (!!selectedEndDate) {
       setSelectedEndDate(date);
       setMarkedDates({
         ...markedDates,
         [date]: { color: "green" },
       });
+      // }
+      // else {
+      //   // Handle case where a new end date is selected
+      //   setSelectedStartDate(date);
+      //   setSelectedEndDate(null);
+      //   setMarkedDates({
+      //     [date]: {
+      //       selectedDayColor: "red",
+      //       startingDay: true,
+      //       endingDay: true,
+      //     },
+      //   });
+      // }
 
       const datesInRange = getDatesInRange(selectedStartDate, date);
       const markedDatesInRange = datesInRange.reduce((result, date) => {
@@ -88,9 +130,12 @@ function Booking() {
         },
         [date]: { ...markedDates[date], startingDay: true },
       });
+    } else if (selectedEndDate && !selectedStartDate) {
+      setSelectedEndDate(null);
+      setSelectedStartDate(null);
     }
+    calculTotalPrice();
   };
-
   const markDatesRed = () => {
     const markedRedDates = {};
 
@@ -100,6 +145,17 @@ function Booking() {
 
     return markedRedDates;
   };
+
+  useEffect(() => {
+    dispatch(GetUnavailableDatesForCar(oneCar.id));
+    calculTotalPrice();
+    // {
+    //   selectedStartDate && selectedEndDate ? calculTotalPrice() : null;
+    // }
+    // {
+    //   !selectedEndDate ? handleDateSelect() : null;
+    // }
+  }, [dispatch, selectedStartDate, selectedEndDate]);
 
   return (
     <View style={styles.page}>
@@ -129,6 +185,9 @@ function Booking() {
       <TouchableOpacity style={styles.bookNow} onPress={() => createBooking()}>
         <Text>Book Now</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.total}>
+        <Text>{total}$</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -148,6 +207,11 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow",
     height: 50,
     width: 100,
+  },
+  total: {
+    backgroundColor: "red",
+    width: 100,
+    height: 100,
   },
 });
 

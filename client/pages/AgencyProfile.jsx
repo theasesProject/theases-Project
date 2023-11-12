@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     // backgroundColor:'red'
   },
   trri: {
-    width: width * 0.1
+    width: width * 0.1,
   },
 
   agency: {
@@ -214,7 +214,6 @@ const styles = StyleSheet.create({
   },
   temap: { fontSize: 25, color: "lightblue" },
   foot: {
-    flex: 1,
     justifyContent: "flex-end", // Align the component to the bottom
     alignItems: "center",
     // backgroundColor: "lightgray",

@@ -10,6 +10,8 @@ import { List, getAgencyData } from "../store/agencySlice";
 import { useNavigation } from "@react-navigation/native";
 import Slider from '@react-native-community/slider';
 const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
+import * as geolib from 'geolib';
+
 
 
 const MapForUser = ({}) => {
@@ -104,86 +106,71 @@ const MapForUser = ({}) => {
       });
     };
   
-    return (
-      <View style={styles.container}>
-      <MapView style={styles.map} region={mapRegion}>
-  {/* Sample Marker */}
-  {getLocation && (
-    <Marker
-      coordinate={{
-        latitude: getLocation.latitude,
-        longitude: getLocation.longitude,
-      }}
-      title="Your location"
-    >
-      <SvgXml xml={Person} width="30" height="30" />
-    </Marker>
-  )}
-
-  {agencies?.data?.map((agency) => (
-    <Marker
-      coordinate={{
-        latitude: JSON.parse(agency.address).latitude,
-        longitude: JSON.parse(agency.address).longitude,
-      }}
-      description={agency.address.city}
-      key={agency.id}
-      title={agency.name}
-    >
-      <SvgXml xml={agen} width="30" height="30" />
-
-      {/* Custom Callout */}
-      <Callout
-        style={styles.calloutContainer}
-        onPress={() => {
-          navigation.navigate('AgencyProfileUser', { agencyId: agency.id });
-        }}
-      >
-        <View>
-          <Text style={styles.agencyName}>{agency.name}</Text>
-          <Text>Check the Agency's Page</Text>
+   
+      return (
+        <View style={styles.container}>
+          <MapView style={styles.map} region={mapRegion}>
+            {/* Sample Marker */}
+            {getLocation && (
+              <Marker
+                coordinate={{
+                  latitude: getLocation.latitude,
+                  longitude: getLocation.longitude,
+                }}
+                title="Your location"
+              >
+                {/* SVG for person marker */}
+              </Marker>
+            )}
+    
+            {agencies?.data?.map((agency) => {
+              const agencyLocation = {
+                latitude: JSON.parse(agency.address).latitude,
+                longitude: JSON.parse(agency.address).longitude,
+              };
+    
+              // Calculate the distance between user and agency
+              const distance = geolib.getDistance(
+                { latitude: getLocation.latitude, longitude: getLocation.longitude },
+                agencyLocation
+              );
+    
+              // Check if the distance is within the filter radius
+              if (distance <= filterRadius * 1000) {
+                return (
+                  <Marker
+                    coordinate={agencyLocation}
+                    description={agency.address.city}
+                    key={agency.id}
+                    title={agency.name}
+                  >
+                    {/* SVG for agency marker */}
+                  </Marker>
+                );
+              } else {
+                return null; // Exclude markers outside the filter radius
+              }
+            })}
+    
+            {getLocation && (
+              <Circle
+                center={{
+                  latitude: getLocation.latitude,
+                  longitude: getLocation.longitude,
+                }}
+                radius={filterRadius * 1000}
+                fillColor="rgba(255, 0, 0, 0.1)"
+                strokeWidth={1}
+                strokeColor="rgba(255, 0, 0, 0.3)"
+              />
+            )}
+          </MapView>
+    
+          {/* Zoom In and Zoom Out buttons */}
+          {/* ... (rest of your code) */}
         </View>
-      </Callout>
-    </Marker>
-  ))}
-
-  {getLocation && (
-    <Circle
-      center={{
-        latitude: getLocation.latitude,
-        longitude: getLocation.longitude,
-      }}
-      radius={filterRadius * 1000} // Convert filter radius to meters
-      fillColor="rgba(255, 0, 0, 0.1)"
-      strokeWidth={1}
-      strokeColor="rgba(255, 0, 0, 0.3)"
-    />
-  )}
-</MapView>
-
-        {/* Zoom In and Zoom Out buttons */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={handleZoomIn} style={styles.zoomButton}>
-            <Text>+</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleZoomOut} style={styles.zoomButton}>
-            <Text>-</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.sliderContainer}>
-    <Text>Filter Radius: {sliderValue} km</Text>
-    <Slider
-      style={{ width: '80%', height: 40 }}
-      minimumValue={1}
-      maximumValue={50}
-      step={1}
-      value={sliderValue}
-      onValueChange={handleSliderChange}
-    />
-  </View>
-      </View>
-    );
-  };
+      );
+    };
   
   const styles = StyleSheet.create({
     container: {

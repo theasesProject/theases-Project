@@ -47,13 +47,13 @@ const CarDetails = () => {
                 type Of Energy
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.typeOfFuel}
+                {carData?.typeOfFuel}
               </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>price</Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.price}
+                {carData?.price}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -61,7 +61,7 @@ const CarDetails = () => {
                 period
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.period}
+                {carData?.period}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -69,7 +69,7 @@ const CarDetails = () => {
                 Advance
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.deposit}
+                {carData?.deposit}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -77,7 +77,7 @@ const CarDetails = () => {
                 type of car
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.typevehicle}
+                {carData?.typevehicle}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -85,7 +85,7 @@ const CarDetails = () => {
                 Status
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.status}
+                {carData?.status}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -93,7 +93,7 @@ const CarDetails = () => {
                 horsePower
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.horsePower}
+                {carData?.horsePower}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -101,7 +101,7 @@ const CarDetails = () => {
                 createdAt
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.createdAt}
+                {carData?.createdAt}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -109,7 +109,7 @@ const CarDetails = () => {
                 transportation
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.Agency.transportation ? "true" : "false"}
+                {carData?.Agency?.transportation ? "true" : "false"}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -117,7 +117,7 @@ const CarDetails = () => {
                 address
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.Agency.address}
+                {carData?.Agency?.address}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -125,7 +125,7 @@ const CarDetails = () => {
                 company Number
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.Agency.companyNumber}
+                {carData?.Agency?.companyNumber}
               </Text>
             </View>
             <View style={styles.descContainer}>
@@ -133,7 +133,7 @@ const CarDetails = () => {
                 Company name
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData.Agency.name}
+                {carData?.Agency?.name}
               </Text>
             </View>
           </ScrollView>

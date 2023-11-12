@@ -1,5 +1,5 @@
 const express = require("express");
-// const { Expo } = require("expo-server-sdk");
+
 require("./models");
 const socketIo = require("socket.io");
 const cors = require("cors");
@@ -7,10 +7,11 @@ const app = express();
 // const port = 5000;
 const http = require("http");
 const server = http.createServer(app);
-
+const { Expo } = require("expo-server-sdk");
+const expo = new Expo();
 const dotenv = require("dotenv");
 const bodyparser = require("body-parser");
-// const expo = new Expo();
+
 const logger = require("morgan");
 var jwt = require("jsonwebtoken");
 app.set("TOKEN_SECRET", `${process.env.JWT_SECRET_KEY}`);
@@ -46,6 +47,41 @@ app.use("/api/payment", paymentRouter);
 // app.listen(5000, function () {
 //   console.log("Server is running on port 5000", port);
 // });
+const acceptServiceNotification = async (receiver, message) => {
+  const messages = [
+    {
+      to: receiver.expoPushToken,
+      sound: "default",
+      title: "Service Accepted",
+      body: `Service request accepted: ${message}`,
+    },
+  ];
+
+  try {
+    await expo.sendPushNotificationsAsync(messages);
+    console.log("Notification sent successfully");
+  } catch (error) {
+    console.error("Error sending notification:", error);
+  }
+};
+
+const rejectServiceNotification = async (receiver, message) => {
+  const messages = [
+    {
+      to: receiver.expoPushToken,
+      sound: "default",
+      title: "Service Rejected",
+      body: `Service request rejected: ${message}`,
+    },
+  ];
+
+  try {
+    await expo.sendPushNotificationsAsync(messages);
+    console.log("Notification sent successfully");
+  } catch (error) {
+    console.error("Error sending notification:", error);
+  }
+};
 
 app.use(function (err, req, res, next) {
   console.log(err);
@@ -55,82 +91,65 @@ app.use(function (err, req, res, next) {
 });
 const io = socketIo(server, {
   cors: {
-    origin: "http://your-react-native-app-ip:your-react-native-app-port", // Update with your React Native app details
+    origin: `http://${process.env.EXPO_PUBLIC_SERVER_IP}:8081`, // Update with your React Native app details
     methods: ["GET", "POST"],
   },
 });
 
-// Set up middleware
+// Use an array to store online users
+const onlineUsers = [];
 
-// Create a map to store online users
-let onlineUsers = new Map();
-console.log(onlineUsers, "online");
-// Function to add a new user to the onlineUsers map
-const addNewUser = (userId, socketId) => {
-  if (!onlineUsers.has(userId)) {
-    onlineUsers.set(userId, { socketId });
-    console.log(userId, socketId, "userId");
-  }
-};
-
-// Function to remove a user when they disconnect
-const removeUser = (socketId) => {
-  onlineUsers.forEach((user, key) => {
-    if (user.socketId === socketId) {
-      onlineUsers.delete(key);
-    }
-  });
-};
-
-// Event listener for new socket connections
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  // Event listener for when a new user joins
-  socket.on("newUser", (userId) => {
-    console.log(`New user added: ${userId}`);
-    addNewUser(userId, socket.id);
+  socket.on("login", ({ userId, expoPushToken }) => {
+    // Add the user to the onlineUsers array
+    onlineUsers.push({ userId, socketId: socket.id, expoPushToken });
+    console.log(onlineUsers, "onlineUser");
   });
 
-  // Event listener for when the agency accepts a service
   socket.on("acceptService", ({ senderId, receiverId, message }) => {
-    const receiver = onlineUsers.get(receiverId);
+    const receiver = onlineUsers.find((user) => user.userId === 1); // Replace 1 with the desired receiverId
+    console.log(receiver, "receiver");
     if (receiver) {
-      // Emit a "serviceAccepted" event to the user
-      io.to(receiver.socketId).emit("serviceAccepted", {
-        senderId,
-        message,
+      io.to(receiver.socketId).emit("receive-notification", {
+        title: "Service Accepted",
+        message: `Service request accepted: ${message}`,
       });
-      console.log("rejected", receiver);
+      acceptServiceNotification(receiver, message);
+      console.log("service accept", receiver);
     } else {
       console.log(`User with UserId ${receiverId} not found or offline.`);
     }
   });
 
-  // Event listener for when the agency rejects a service
   socket.on("rejectService", ({ senderId, receiverId, message }) => {
-    const receiver = onlineUsers.get(receiverId);
+    const receiver = onlineUsers.find((user) => user.userId === receiverId);
     if (receiver) {
-      // Emit a "serviceRejected" event to the user
-
-      io.to(receiver.socketId).emit("serviceRejected", {
-        senderId,
-        message,
+      io.to(receiver.socketId).emit("receive-notification", {
+        title: "Service Rejected",
+        message: `Service request rejected: ${message}`,
       });
-      console.log("rejected", receiver);
+      rejectServiceNotification(receiver, message);
+      console.log("service reject", receiver);
     } else {
       console.log(`User with UserId ${receiverId} not found or offline.`);
     }
   });
 
-  // Event listener for disconnect
   socket.on("disconnect", () => {
     console.log(`User disconnected: ${socket.id}`);
-    removeUser(socket.id);
+    // Remove the disconnected user from the onlineUsers array
+    const disconnectedUserIndex = onlineUsers.findIndex(
+      (user) => user.socketId === socket.id
+    );
+    if (disconnectedUserIndex !== -1) {
+      const disconnectedUser = onlineUsers.splice(disconnectedUserIndex, 1)[0];
+      console.log(`User with UserId ${disconnectedUser.userId} disconnected.`);
+    }
   });
 });
 
-// Start the server on a specified port
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

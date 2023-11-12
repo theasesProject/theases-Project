@@ -1,4 +1,3 @@
-// import * as Rn from "react-native";r
 import { useState, useRef } from "react";
 import {
   Image,
@@ -40,15 +39,12 @@ const SignUp = ({ navigation, props }) => {
       console.log(inputForm);
       dispatch(SignUpClick(inputForm))
         .then((response) => {
-          // Check if the dispatch was successful
           console.log("RESPONSE§§§", response.meta);
           if (response.meta.requestStatus === "fulfilled") {
-            // Navigate to the desired location
             navigation.navigate("Home");
           }
         })
         .catch((error) => {
-          // Handle any errors from the dispatch here
           console.error(error);
         });
     }
@@ -77,13 +73,12 @@ const SignUp = ({ navigation, props }) => {
   const [isSecure2, setIsecure2] = useState(true);
 
   const checkInput = (value, placeholder) => {
-    // Clear all errors
     setNameError("");
     setEmailError("");
     setPhoneError("");
     setPasswordError("");
     setConfirmedError("");
-    setIdCardError("")
+    setIdCardError("");
 
     if (value === "") {
       if (placeholder === "Username") {
@@ -158,13 +153,12 @@ const SignUp = ({ navigation, props }) => {
         } else {
           setConfirmedError("");
         }
-      }else if(placeholder==="id card"){
-        if (inputForm.idCard.length!==7 ) {
+      } else if (placeholder === "id card") {
+        if (inputForm.idCard.length !== 7) {
           setConfirmedError("Your id should be 8 numbers");
           return;
-        }
-        else{
-          setIdCardError("")
+        } else {
+          setIdCardError("");
         }
       }
     }
@@ -177,7 +171,6 @@ const SignUp = ({ navigation, props }) => {
     const currentDate = selectedDate || date;
     setInputForm({ ...inputForm, dateOfBirth: currentDate });
   };
-
 
   return (
     <ScrollView style={styles.container}>
@@ -386,7 +379,7 @@ const SignUp = ({ navigation, props }) => {
               }}
             />
           </View>
-            {idCardError ? (
+          {idCardError ? (
             <Text style={{ color: "red" }}>{emailError}</Text>
           ) : null}
           <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
@@ -399,25 +392,25 @@ const SignUp = ({ navigation, props }) => {
               <Text>Date of Birth</Text>
             </LinearGradient>
           </TouchableOpacity>
-           {show && (
+          {show && (
             <DateTimePicker
-            value={inputForm.dateOfBirth}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate) => {
-              if (event.type === 'dismissed') {
-                setShow(false);
-              } else if (event.type === 'set'){
-                const currentDate = selectedDate || inputForm.dateOfBirth;
-                setInputForm({...inputForm, dateOfBirth: currentDate})
-                setShow(false)
-              }
-            }}
-          />
+              value={inputForm.dateOfBirth}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                if (event.type === "dismissed") {
+                  setShow(false);
+                } else if (event.type === "set") {
+                  const currentDate = selectedDate || inputForm.dateOfBirth;
+                  setInputForm({ ...inputForm, dateOfBirth: currentDate });
+                  setShow(false);
+                }
+              }}
+            />
           )}
         </View>
         <TouchableOpacity
-        style={{paddingRight:10}}
+          style={{ paddingRight: 10 }}
           disabled={!checkUp}
           activeOpacity={0.8}
           onPress={() => {
@@ -470,9 +463,6 @@ const styles = StyleSheet.create({
     width: "10%",
     height: 20,
     zIndex: 1,
-
-    // height: height * 0.01,
-    // width: width * 0.01,
   },
   icon2: {
     position: "absolute",
@@ -481,16 +471,12 @@ const styles = StyleSheet.create({
     width: "10%",
     height: 20,
     zIndex: 1,
-
-    // height: height * 0.01,
-    // width: width * 0.01,
   },
   SignUpContainer: {
-    // height: height,
     flex: 1,
     paddingTop: 50,
     paddingBottom: 50,
-    // backgroundColor: "#fff",
+
     alignItems: "center",
     justifyContent: "center",
   },
@@ -514,7 +500,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: "grey",
     borderRadius: 5,
-    // overflow: "hidden",
+
     flexDirection: "row",
     gap: width * 0.01,
     backgroundColor: "#F3F4F6",
@@ -544,8 +530,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center",
   },
   InputContainer: {
     height: "auto",
@@ -584,7 +568,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingLeft: 40,
-    // paddingLeft: 10,
+
     zIndex: -1,
     height: 50,
     width: width * 0.8,
@@ -596,7 +580,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonContainer: {
-    // backgroundColor: "red",
     borderRadius: 5,
     padding: 10,
     alignItems: "center",
@@ -604,7 +587,6 @@ const styles = StyleSheet.create({
     width: width * 0.8,
   },
   buttonContainer2: {
-    // backgroundColor: "red",
     borderRadius: 5,
     height: height * 0.06,
     padding: 10,

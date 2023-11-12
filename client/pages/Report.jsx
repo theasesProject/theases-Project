@@ -14,7 +14,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useDispatch, useSelector } from "react-redux";
 import { List, getAgencyData, loading } from "../store/agencySlice";
 import { MakeReport, handleToken, selectUser } from "../store/userSlice";
-import AgencyReported from '../components/AgencyReported.jsx'
+import AgencyReported from "../components/AgencyReported.jsx";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -30,8 +30,8 @@ const ReportAgency = () => {
   const AgencyList = useSelector(List)?.data;
   const Loading = useSelector(loading);
   const [form, setForm] = useState({});
-  const [selected,setSelected]=useState(null)
-  const activeUser = useSelector(selectUser)
+  const [selected, setSelected] = useState(null);
+  const activeUser = useSelector(selectUser);
   const handleSearchChange = (text) => {
     setSearch(text);
   };
@@ -39,30 +39,28 @@ const ReportAgency = () => {
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent default form submission behavior
     setForm({
-      Reported:selected,
-      content:issueDescription,
-      Date:timeline,
-      sender:activeUser.type,
-      UserId:activeUser.id,
+      Reported: selected,
+      content: issueDescription,
+      Date: timeline,
+      sender: activeUser.type,
+      UserId: activeUser.id,
     });
-    dispatch(MakeReport(form))
+    dispatch(MakeReport(form));
   };
   const checkUser = async () => {
     try {
-    //   const tokenResponse = await AsyncStorage.getItem("UserToken");
-      dispatch(handleToken()).then((response)=>console.log(response))
-    } catch(err) {
-        console.error(err);
+      dispatch(handleToken()).then((response) => console.log(response));
+    } catch (err) {
+      console.error(err);
     }
   };
 
   const handleChangeForm = (newForm) => {
-    setForm(newForm)
-  }
+    setForm(newForm);
+  };
 
   useEffect(() => {
-    // checkUser()
-    console.log("i a m lo gg ed in ",activeUser);
+    console.log("i a m lo gg ed in ", activeUser);
     setsender();
     dispatch(getAgencyData())
       .then(console.log(AgencyList))
@@ -79,7 +77,7 @@ const ReportAgency = () => {
           refreshing={refreshing}
           onRefresh={() => {
             setRefreshing(true);
-            // Call your data fetching function here, then set refreshing to false
+
             dispatch(getAgencyData())
               .then(() => setRefreshing(false))
               .catch((er) => {
@@ -99,14 +97,20 @@ const ReportAgency = () => {
           placeholder="Search For Agency.."
         />
         <View style={search ? styles.resContainer : styles.hidden}>
-
-        {!Loading &&
-          AgencyList?.filter((agency) =>
-          agency.name.toLowerCase().includes(search.toLowerCase())
-          ).map((e, i) => (
-            <AgencyReported setSelected={setSelected} selected={selected} e={e} key={i} form={form} setForm={handleChangeForm}/>
+          {!Loading &&
+            AgencyList?.filter((agency) =>
+              agency.name.toLowerCase().includes(search.toLowerCase())
+            ).map((e, i) => (
+              <AgencyReported
+                setSelected={setSelected}
+                selected={selected}
+                e={e}
+                key={i}
+                form={form}
+                setForm={handleChangeForm}
+              />
             ))}
-            </View>
+        </View>
         <TextInput
           style={styles.inputDesc}
           onChangeText={setIssueDescription}
@@ -146,8 +150,7 @@ const styles = StyleSheet.create({
     height: "auto",
     borderWidth: 0.5,
     borderRadius: 5,
-    // borderTopLeftRadius: 5,
-    // borderTopRightRadius: 5,
+
     padding: 8,
   },
   agencyName: {
@@ -182,7 +185,7 @@ const styles = StyleSheet.create({
   inputDesc: {
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
-    // height: height * 0.2,
+
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 10,
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
   },
   dateButton: {
     backgroundColor: "white",
-    // borderRadius: 7,
+
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderWidth: 1,
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: "white",
-    // borderRadius: 7,
+
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderWidth: 1,

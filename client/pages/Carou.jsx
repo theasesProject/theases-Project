@@ -54,13 +54,11 @@ function Carou() {
         carouselRef.current.next(nextSlide);
       }
 
-      // Add a fade-out animation
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 1000,
         useNativeDriver: false,
       }).start(() => {
-        // Reset the opacity after the animation is complete
         fadeAnim.setValue(1);
       });
     } else if (activeSlide === 2) {
@@ -69,7 +67,6 @@ function Carou() {
   };
 
   const renderItem = ({ item, index }) => {
-    // Apply the opacity animation to the components
     const animatedStyle = {
       opacity: fadeAnim,
     };

@@ -18,7 +18,7 @@ import GreyHeart from "../assets/Svg/car-svgrepo-com.svg";
 import car2 from "../assets/car2.png";
 import star from "../assets/star.jpg";
 import deleteImge from "../assets/delete.jpg";
-import { Swipeable } from "react-native-gesture-handler"; // Import Swipeable
+import { Swipeable } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 function MyCars() {
@@ -40,7 +40,6 @@ function MyCars() {
         AgencyId: activeUser.Agency.UserId,
       })
     );
-    //  dispatch(getallCarByAgency(activeUser.Agency.UserId))
   };
   const ccc = [];
   const renderRightActions = (progress, dragX, carId) => {
@@ -49,7 +48,7 @@ function MyCars() {
       outputRange: [0, 10, 30],
       extrapolate: "clamp",
     });
-    // console.log(agencyCars);
+
     return (
       <View style={styles.rightActions}>
         <TouchableOpacity
@@ -84,7 +83,6 @@ function MyCars() {
                   }}
                 />
 
-                {console.log("here", agencycar.car)}
                 <View style={styles.text}>
                   <Text style={styles.emptyText}>{agencycar.car.model}</Text>
                   <Text style={styles.emptyText}>{agencycar.car.brand}</Text>
@@ -98,7 +96,6 @@ function MyCars() {
                     {agencycar.car.characteristics}
                   </Text>
                 </View>
-                {/* Rest of your car item code */}
               </View>
             </Swipeable>
           ))
@@ -121,29 +118,23 @@ function MyCars() {
 }
 
 const styles = StyleSheet.create({
-  // Your existing styles remain the same
-  // ...
   NavBar: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    // paddingBottom: 5,
-    // ... rest of your styles
   },
   container: {
     flex: 1,
     height: height,
-    // marginHorizontal: 7,
-    // marginVertical: 7,
+
     flexDirection: "column",
-    // gap: 10,
+
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
   },
   text: {
-    // backgroundColor:"red",
     flex: 1,
     justifyContent: "center",
     alignContent: "center",
@@ -163,17 +154,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "grey",
   },
-  // heart: {
-  //   width: 60,
-  //   height: 55,
-  // },
+
   message: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    // paddingTop: 180,
-    // gap: 20,
   },
 
   emptyText1: {
@@ -254,10 +240,6 @@ const styles = StyleSheet.create({
   deleteButton: {
     justifyContent: "center",
     backgroundColor: "red",
-    // padding: 10,
-    // marginRight: 10,
-    // marginBottom: 10,
-    // height: height * 0.2,
   },
   deleteButtonText: {
     color: "white",

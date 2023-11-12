@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   Modal,
 } from "react-native";
 import SwipeUpDown from "react-native-swipe-up-down";
+import NavBarAgency from "../components/NavBarAgency.jsx";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import LinearGradient from "expo-linear-gradient";
 import axios from "axios";
@@ -25,13 +26,30 @@ import NavBar from "../components/NavBar.jsx";
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
-import io from "socket.io-client";
 const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
 import { selectUser, setUser } from "../store/userSlice";
-import registerNNPushToken from "native-notify";
+import io from "socket.io-client";
+
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+async function schedulePushNotification(notification) {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: notification,
+    },
+    trigger: { seconds: 1 },
+  });
+}
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
-  registerNNPushToken(14608, "0IjK45dvxv48dlwYcWDWTR");
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allCars = useSelector((state) => state.car.allCars);
@@ -43,41 +61,39 @@ function Home({ navigation }) {
   const [nothing, setNothing] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const swipeUpDownRef = useRef();
+  const [messages, setMessages] = useState([]);
   const handlePress = () => {
     if (swipeUpDownRef.current) {
       swipeUpDownRef.current.showFull();
-      // setIsVisibleSwipe(true)
     }
   };
-  const [notifications, setNotifications] = useState([]);
-  const [notificationModalVisible, setNotificationModalVisible] =
-    useState(false);
-
-  const [notificationText, setNotificationText] = useState("");
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   useEffect(() => {
-    socket.emit("newUser", activeUser.id);
-    console.log("newUser", activeUser.id);
-    socket.on("serviceAccepted", ({ senderId, message }) => {
-      console.log(
-        `Received service acceptance from ${senderId}. Message: ${message}`
-      );
-      // Handle the service acceptance on the React Native side as needed
-    });
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
 
-    socket.on("serviceRejected", ({ senderId, message }) => {
-      console.log(
-        `Received service rejection from ${senderId}. Message: ${message}`
-      );
-      // Handle the service rejection on the React Native side as needed
-    });
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
 
     return () => {
-      socket.off("serviceAccepted");
-      socket.off("serviceRejected");
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, [dispatch]);
-
+  }, []);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
@@ -111,13 +127,35 @@ function Home({ navigation }) {
   //     });
   //   }
   // }, [loading]);
+
+  useEffect(() => {
+    socket.emit("login", { userId: activeUser.id, expoPushToken });
+
+    socket.on("receive-notification", (notification) => {
+      schedulePushNotification(notification);
+      console.log(notification, "notifcarion");
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          _id: notification.id,
+          text: notification.message,
+          createdAt: new Date(),
+          user: {
+            _id: notification.senderId,
+            name: "Service",
+          },
+        },
+      ]);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket, expoPushToken]);
+
   return (
     <View style={styles.homePage}>
       <ScrollView
         ref={scrollViewRef}
-        // onScroll={(event) => {
-        //   setScrollPosition(event.nativeEvent.contentOffset.y);
-        // }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -202,16 +240,26 @@ function Home({ navigation }) {
           </>
         )}
       </ScrollView>
-      {/* <Swipeable
-  friction={2}
-  leftThreshold={100}
-  rightThreshold={100}
-  overshootFriction={2}
-  overshootLeft={false}
-  overshootRight={false}
-  onSwipeableLeftOpen={() => {}}
-  onSwipeableRightOpen={() => {}}
-> */}
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
+        <Text>Your expo push token: {expoPushToken}</Text>
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <Text>
+            Title: {notification && notification.request.content.title}{" "}
+          </Text>
+          <Text>Body: {notification && notification.request.content.body}</Text>
+          <Text>
+            Data:{" "}
+            {notification && JSON.stringify(notification.request.content.data)}
+          </Text>
+        </View>
+      </View>
+
       <SwipeUpDown
         itemFull={<CarDetails />}
         ref={swipeUpDownRef}
@@ -224,39 +272,16 @@ function Home({ navigation }) {
           width: "100%",
           borderTopEndRadius: 50,
           backgroundColor: "lightgrey",
-          //  backgroundColor: 'transparent'
         }}
       />
-      {/* </Swipeable> */}
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={notificationModalVisible}
-        onRequestClose={() => {
-          setNotificationModalVisible(false);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>{notificationText}</Text>
-          <TouchableOpacity
-            onPress={() => setNotificationModalVisible(false)}
-            style={styles.modalCloseButton}
-          >
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    // paddingBottom: 10,
-    // paddingTop: 20,
-  },
+  header: {},
   SearchBar: {},
   NavBar: {
     height: height * 0.05,
@@ -274,8 +299,7 @@ const styles = StyleSheet.create({
   },
   notificationsContainer: {
     flex: 1,
-    // margin: 10,
-    // padding: 10,
+
     borderRadius: 10,
     backgroundColor: "white",
     shadowColor: "#000",
@@ -293,7 +317,6 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     fontSize: 14,
-    // marginTop: 5,
   },
   modalContainer: {
     flex: 1,
@@ -314,4 +337,37 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  return token;
+}
 export default Home;

@@ -134,8 +134,8 @@ function Home({ navigation }) {
   useEffect(() => {
     socket.emit("login", { userId: activeUser?.id, expoPushToken });
 
-    socket.on("receive-notification", async (notification) => {
-      await schedulePushNotification(notification);
+    socket.on("receive-notification",  (notification) => {
+       schedulePushNotification(notification);
       console.log("notification here", notification, "notifcarion");
       setMessages((prevMessages) => [
         ...prevMessages,

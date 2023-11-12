@@ -42,7 +42,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   const handleStarPress = () => {
     setStarSelected(!starSelected);
   };
-  
+
   const handleHeartPress = async () => {
     // setHeartSelected(!heartSelected);
     // if (!heartSelected) {
@@ -78,7 +78,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
     setDone(false);
     checkBookMarked();
   }, []);
-
+console.log('heeeereeeee',oneCar);
   return (
     <View style={styles.card}>
       <Pressable style={styles.Image}  onPress={handleRent}>

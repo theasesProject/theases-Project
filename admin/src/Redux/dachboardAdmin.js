@@ -7,6 +7,7 @@ const initialState = {
   loading: false,
   error: null,
   oneUser: {},
+  refreshed:false
 };
 export const updateStateBlock = createAsyncThunk(
   "user/updateStateBlock",
@@ -26,10 +27,12 @@ export const updateStateBlock = createAsyncThunk(
 export const approveRequest = createAsyncThunk(
   "user/approveRequest",
   async (input,id) => {
+    console.log(input.name);
     try {
-      // const response = await axios.post(
-      //   `http://127.0.0.1:5000/api/agency/addAgency`,{UserId:input.id,companyNumber:input.companyNumber,transportation:input.transportation,name:input.agencyName,deposit:input.deposit,address:input.address}
-      // );
+      const response = await axios.post(
+        `http://127.0.0.1:5000/api/agency/addAgency`,{UserId:input.id,companyNumber:input.companyNumber,transportation:input.transportation,name:input.agencyName,deposit:input.deposit,
+        address:input.address}
+      );
        await axios.delete(
         `http://127.0.0.1:5000/api/request/accept/${input.id}`
       )
@@ -43,6 +46,7 @@ export const declineRequest = createAsyncThunk(
   "user/approveRequest",
   async (id) => {
     try {
+      console.log(id);
       const response = await axios.delete(
         `http://127.0.0.1:5000/api/request/decline/${id}`
       );
@@ -82,7 +86,11 @@ export const getAllRequests = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    triggerRefresh:(state)=>{
+      state.refreshed=!state.refreshed
+    }
+  },
 
   extraReducers: (builder) => {
     builder.addCase(getAllUsers.pending, (state) => {
@@ -127,5 +135,5 @@ const userSlice = createSlice({
     });
   },
 });
-
+export const {triggerRefresh}=userSlice.actions
 export default userSlice.reducer;

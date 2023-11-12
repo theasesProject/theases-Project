@@ -3,6 +3,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 const ReqRow = ({
+  setRequest,
+  openModal,
+  setTypeModal,
   request,
   handleApproveRequest,
   handleDeclineRequest,
@@ -14,6 +17,7 @@ const ReqRow = ({
   return (
     <tr>
       <td>{request.id}</td>
+      <td>{request.agencyName}</td>
       <td>
         <button
           className="btn btn-primary"
@@ -51,16 +55,15 @@ const ReqRow = ({
             type="button"
             className="btn btn-primary"
             onClick={() => {
-              handleApproveRequest(
-                request.id,
-                request.address,
-                request.Media,
-                request.companyNumber,
-                request.deposit,
-                request.transportation,
-                request.agencyName
-              ),
-               dispatch(getAllRequests());
+              setTypeModal("request")
+              setRequest({id:request.id,
+                address:request.address,
+                Media:request.Media,
+                companyNumber:request.companyNumber,
+                deposit:request.deposit,
+                transportation:request.transportation,
+                agencyName:request.agencyName})
+              openModal()
             }}
             style={{
               padding: "0.5rem 2.5rem",
@@ -75,7 +78,14 @@ const ReqRow = ({
             type="button"
             className="btn btn-primary"
             onClick={() => {
-              handleDeclineRequest(request.id), getAllRequests();
+              try {
+                setTypeModal("reject")
+                setRequest(request.id)
+                openModal()
+              } catch (error) {
+                console.log(error)
+              }
+              // handleDeclineRequest(request.id), getAllRequests();
             }}
             style={{
               padding: "0.5rem 2.5rem",

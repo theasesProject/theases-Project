@@ -10,6 +10,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAllCarByDate } from "../store/bookingSlice";
 import SelectDropdown from "react-native-select-dropdown";
 
+import { ScrollView } from "react-native-gesture-handler";
 function AdvancedSearch() {
   const navigation = useNavigation();
   const allCars = useSelector((state) => state.car.allCars);
@@ -104,8 +105,8 @@ function AdvancedSearch() {
   };
 
   const prices = () => {
-    let minPrice = allCars[0].price;
-    let maxPrice = allCars[0].price;
+    let minPrice = allCars[0]?.price;
+    let maxPrice = allCars[0]?.price;
     for (const car of allCars) {
       const price = car.price;
       if (price < minPrice) {
@@ -131,138 +132,158 @@ function AdvancedSearch() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>All Cars</Text>
-      </View>
+      <ScrollView>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>All Cars</Text>
+        </View>
 
-      <Slider
-        style={styles.slider}
-        minimumValue={sliderValue}
-        maximumValue={sliderValue2}
-        onValueChange={handleSliderChange}
-        minimumTrackTintColor="#4485C5"
-        maximumTrackTintColor="black"
-        maximumTrackTintSize="bold"
-        thumbTintColor="#6C77BF"
-        trackWidth={styles.slider.width}
-        thumbWidth={styles.slider.height}
-        step={10}
-      />
-      {renderButton(
-        `${priceSearched}$`,
-        () => handleButtonPress(sliderValue),
-        ["#6C77BF", "#4485C5"],
-        true
-      )}
+        <Slider
+          style={styles.slider}
+          minimumValue={sliderValue}
+          maximumValue={sliderValue2}
+          onValueChange={handleSliderChange}
+          minimumTrackTintColor="#4485C5"
+          maximumTrackTintColor="black"
+          maximumTrackTintSize="bold"
+          thumbTintColor="#6C77BF"
+          trackWidth={styles.slider.width}
+          thumbWidth={styles.slider.height}
+          step={10}
+        />
+        {renderButton(
+          `${priceSearched}$`,
+          () => handleButtonPress(sliderValue),
+          ["#6C77BF", "#4485C5"],
+          true
+        )}
 
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Types</Text>
-      </View>
-      <View style={styles.typesContainer}>
-        {renderButton(
-          "Commercial",
-          () => handleTypeVehcule("Commercial"),
-          ["#6C77BF", "#4485C5"],
-          isPressed
-        )}
-        {renderButton(
-          "Sports",
-          () => handleTypeVehcule("Sports"),
-          ["#6C77BF", "#4485C5"],
-          isPressed1
-        )}
-        {renderButton(
-          "Luxury",
-          () => handleTypeVehcule("Luxury"),
-          ["#6C77BF", "#4485C5"],
-          isPressed2
-        )}
-      </View>
-      <View style={styles.typesContainer}>
-        {renderButton(
-          "Economical",
-          () => handleTypeVehcule("Economical"),
-          ["#6C77BF", "#4485C5"],
-          isPressed3
-        )}
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Characteristics</Text>
-      </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Types</Text>
+        </View>
+        <View style={styles.typesContainer}>
+          {renderButton(
+            "Commercial",
+            () => handleTypeVehcule("Commercial"),
+            ["#6C77BF", "#4485C5"],
+            isPressed
+          )}
+          {renderButton(
+            "Sports",
+            () => handleTypeVehcule("Sports"),
+            ["#6C77BF", "#4485C5"],
+            isPressed1
+          )}
+          {renderButton(
+            "Luxury",
+            () => handleTypeVehcule("Luxury"),
+            ["#6C77BF", "#4485C5"],
+            isPressed2
+          )}
+        </View>
+        <View style={styles.typesContainer}>
+          {renderButton(
+            "Economical",
+            () => handleTypeVehcule("Economical"),
+            ["#6C77BF", "#4485C5"],
+            isPressed3
+          )}
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Characteristics</Text>
+        </View>
 
-      <View style={styles.typesContainer}>
-        {renderButton(
-          "Automatic",
-          () => handleTypeVehcule("Automatic"),
-          ["#6C77BF", "#4485C5"],
-          isPressed4
-        )}
-        {renderButton(
-          "Semi",
-          () => handleTypeVehcule("Semi-Automatic"),
-          ["#6C77BF", "#4485C5"],
-          isPressed5
-        )}
-        {renderButton(
-          "Manual",
-          () => handleTypeVehcule("Manual"),
-          ["#6C77BF", "#4485C5"],
-          isPressed6
-        )}
-      </View>
+        <View style={styles.typesContainer}>
+          {renderButton(
+            "Automatic",
+            () => handleTypeVehcule("Automatic"),
+            ["#6C77BF", "#4485C5"],
+            isPressed4
+          )}
+          {renderButton(
+            "Semi",
+            () => handleTypeVehcule("Semi-Automatic"),
+            ["#6C77BF", "#4485C5"],
+            isPressed5
+          )}
+          {renderButton(
+            "Manual",
+            () => handleTypeVehcule("Manual"),
+            ["#6C77BF", "#4485C5"],
+            isPressed6
+          )}
+        </View>
 
-      <Text style={styles.titleText}>Down Payment:</Text>
-      <View style={styles.dropdownContainer}>
-        <SelectDropdown
-          onSelect={(selectedItem, index) => {
-            handleDropdownSelect(index, selectedItem);
+        <Text style={styles.titleText}>Down Payment:</Text>
+        <View style={styles.dropdownContainer}>
+          <SelectDropdown
+            onSelect={(selectedItem, index) => {
+              handleDropdownSelect(index, selectedItem);
+            }}
+            buttonStyle={styles.dropdown}
+            dropdownStyle={styles.dropdownOptions}
+            defaultButtonText="select"
+            data={depositOptions}
+            dropdownIconPosition="right"
+          />
+        </View>
+        <Text style={styles.titleText}>Search by Date</Text>
+        <View style={styles.dateContainer}>
+          {renderButton(
+            `Start Date ${startDate || ""}`,
+            showStartDatePicker,
+            ["#6C77BF", "#4485C5"],
+            isPressed4
+          )}
+          <DateTimePickerModal
+            isVisible={isStartDatePickerVisible}
+            mode="date"
+            onConfirm={handleStartDateConfirm}
+            onCancel={hideStartDatePicker}
+          />
+
+          {renderButton(
+            `End Date  ${endDate || ""}`,
+            showEndDatePicker,
+            ["#6C77BF", "#4485C5"],
+            isPressed4
+          )}
+          <DateTimePickerModal
+            isVisible={isEndDatePickerVisible}
+            mode="date"
+            onConfirm={handleEndDateConfirm}
+            onCancel={hideEndDatePicker}
+          />
+        </View>
+        <View style={styles.typesContainer2}>
+          <Text style={styles.titleText}>Search by Map</Text>
+          <LinearGradient
+            style={styles.map}
+            colors={["#6C77BF", "#4485C5"]}
+            locations={[0, 1]}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                fetchData();
+                navigation.navigate("MapForUser");
+              }}
+            >
+              <Text>Search by Map</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </View>
+
+        <TouchableOpacity
+          style={styles.showResult}
+          onPress={() => {
+            fetchData();
+            navigation.navigate("FiltredCar");
           }}
-          buttonStyle={styles.dropdown}
-          dropdownStyle={styles.dropdownOptions}
-          defaultButtonText="select"
-          data={depositOptions}
-          dropdownIconPosition="right"
-        />
-      </View>
-      <Text style={styles.titleText}>Search by Date</Text>
-      <View style={styles.dateContainer}>
-        {renderButton(
-          `Start Date ${startDate || ""}`,
-          showStartDatePicker,
-          ["#6C77BF", "#4485C5"],
-          isPressed4
-        )}
-        <DateTimePickerModal
-          isVisible={isStartDatePickerVisible}
-          mode="date"
-          onConfirm={handleStartDateConfirm}
-          onCancel={hideStartDatePicker}
-        />
-
-        {renderButton(
-          `End Date  ${endDate || ""}`,
-          showEndDatePicker,
-          ["#6C77BF", "#4485C5"],
-          isPressed4
-        )}
-        <DateTimePickerModal
-          isVisible={isEndDatePickerVisible}
-          mode="date"
-          onConfirm={handleEndDateConfirm}
-          onCancel={hideEndDatePicker}
-        />
-      </View>
-      <TouchableOpacity
-        style={styles.showResult}
-        onPress={() => {
-          fetchData();
-          navigation.navigate("FiltredCar");
-        }}
-      >
-        <LinearGradient colors={["#6C77BF", "#4485C5"]} locations={[0, 1]}>
-          <Text style={styles.showResults}>Show Results</Text>
-        </LinearGradient>
-      </TouchableOpacity>
+        >
+          <LinearGradient colors={["#6C77BF", "#4485C5"]} locations={[0, 1]}>
+            <Text style={styles.showResults}>Show Results</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -301,6 +322,14 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 5,
   },
+  typesContainer2: {
+    height: 70,
+
+    flexDirection: "column",
+    padding: 2,
+    gap: 5,
+  },
+
   dropdownContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -344,6 +373,13 @@ const styles = StyleSheet.create({
   backImage: {
     width: 22,
     height: 20,
+  },
+  map: {
+    borderRadius: 5,
+    width: 150,
+    height: 45,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

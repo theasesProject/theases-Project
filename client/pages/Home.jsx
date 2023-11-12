@@ -23,6 +23,7 @@ import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
+
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
@@ -118,22 +119,22 @@ function Home({ navigation }) {
     }
   };
 
-  // useEffect(() => {
-  //   if (!loading && scrollViewRef.current) {
-  //     scrollViewRef.current.scrollTo({
-  //       x: 0,
-  //       y: scrollPosition,
-  //       animated: true,
-  //     });
-  //   }
-  // }, [loading]);
+  useEffect(() => {
+    if (!loading && scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({
+        x: 0,
+        y: scrollPosition,
+        animated: true,
+      });
+    }
+  }, [loading]);
 
   useEffect(() => {
-    socket.emit("login", { userId: activeUser.id, expoPushToken });
+    socket.emit("login", { userId: activeUser?.id, expoPushToken });
 
     socket.on("receive-notification", (notification) => {
       schedulePushNotification(notification);
-      console.log(notification, "notifcation");
+      console.log("notification here", notification, "notifcarion");
       setMessages((prevMessages) => [
         ...prevMessages,
         {

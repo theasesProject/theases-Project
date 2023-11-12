@@ -14,11 +14,16 @@ const { height, width } = Dimensions.get("screen");
 
 const CarDetails = () => {
   const carData = useSelector((state) => state.car.RentDetails);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // {"elllllllllllllllllllllllllll",console.log(carData)}
+    
+  }, []);
   return (
     <View style={styles.CarDetails}>
       <View style={styles.imageContainer}>
-        <Image style={styles.carImage} source={car} />
+        <Image style={styles.carImage}  source={{
+              uri: carData?.Media[0]?.media,
+            }} />
       </View>
       <View style={styles.description}>
         <Text style={styles.carModel}>{carData.model}</Text>
@@ -47,6 +52,7 @@ const CarDetails = () => {
                 type Of Energy
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {console.log(carData)}
                 {carData?.typeOfFuel}
               </Text>
             </View>

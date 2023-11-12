@@ -69,9 +69,11 @@ function CardCar({ oneCar, setNothing, handlePress }) {
     }
   };
   const handleRent = async () => {
-    handlePress();
     dispatch(carDetail(oneCar));
+    dispatch(saveDetails(oneCar));
+    handlePress();
   };
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaa",oneCar);
   useEffect(() => {
     setDone(false);
     checkBookMarked();
@@ -79,8 +81,9 @@ function CardCar({ oneCar, setNothing, handlePress }) {
 console.log('heeeereeeee',oneCar);
   return (
     <View style={styles.card}>
-      <Pressable style={styles.Image} onPress={handleRent}>
-        {oneCar.Media?.length !== 0 ? (
+      <Pressable style={styles.Image}  onPress={handleRent}>
+        {oneCar.Media? (
+          console.log(oneCar.Media),
           <Image
             style={styles.carImage}
             source={{
@@ -88,8 +91,8 @@ console.log('heeeereeeee',oneCar);
             }}
           />
         ) : (
-          <Image style={styles.carImage} source={car} />
-        )}
+          <Image style={styles.carImage} source={car} /> 
+          )} 
 
         {Object.values(activeUser).length ? (
           !done ? (

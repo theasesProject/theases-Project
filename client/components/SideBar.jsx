@@ -17,7 +17,7 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
 
   useEffect(() => {
   Animated.timing(animatedValue, {
-    toValue: isOpen ? 0 : -220,
+    toValue: isOpen ? 0 : -250,
     duration: 300,
     useNativeDriver: false,
   }).start();
@@ -34,8 +34,8 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
       onPanResponderMove: (_, gestureState) => {
         console.log("heeeerreeeee", gestureState.dx);
         if (gestureState.dx > 50) {
-          onClose();
-          console.log("done");
+          onClose()
+          console.log("done")
         }
       },
       onPanResponderRelease: () => {
@@ -98,8 +98,9 @@ const styles = StyleSheet.create({
   sidebar: {
     position: "absolute",
     top: 0,
-    height: "92.5%",
+    height: "82.5%",
     width: "60%",
+    borderRadius:10,
     backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: { width: 5, height: 0 },

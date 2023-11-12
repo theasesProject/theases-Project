@@ -160,6 +160,7 @@ function Login({ navigation }) {
           <IdentifierIcon style={styles.inputIcon} />
           <TextInput
             autoCapitalize="none"
+            keyboardType="email-address"
             onChangeText={(content) => handleChangeIdentifier(content)}
             placeholder="email or phone number"
             style={styles.identifierInput}

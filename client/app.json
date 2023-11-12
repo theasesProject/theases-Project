@@ -43,16 +43,6 @@
           "iCloudContainerEnvironment": "Production"
         }
       ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "0548a6cd-e601-4042-a6ad-93ddea191d5d"
-      }
-    }
-  },
-  "extra": {
-    "eas": {
-      "projectId": "0548a6cd-e601-4042-a6ad-93ddea191d5d"
-    }
-  }
+    ]}
+   
 }

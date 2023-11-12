@@ -21,7 +21,7 @@ import axios from "axios";
 import { fetchUser, selectUser } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { registerIndieID, unregisterIndieDevice } from "native-notify";
+// import { registerIndieID, unregisterIndieDevice } from "native-notify";
 const { width, height } = Dimensions.get("screen");
 
 function Login({ navigation }) {

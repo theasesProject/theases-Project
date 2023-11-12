@@ -33,6 +33,7 @@ import AgencyProfile from "./pages/AgencyProfile.jsx";
 import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import MapForUser from "./pages/MapForUser.jsx";
+import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 const Stack = createStackNavigator();
 // import * as Device from "expo-device";
 // import * as Notifications from "expo-notifications";
@@ -106,7 +107,7 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+        
             <Stack.Screen
               name="Home"
               component={Home}
@@ -245,6 +246,11 @@ function App() {
               component={AgencyProfile}
               options={{ headerShown: false }}
             />
+              <Stack.Screen
+              name="AgencyProfileUser"
+              component={AgencyProfileUser}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="MapAgencyProfile"
               component={MapAgencyProfile}
@@ -256,47 +262,47 @@ function App() {
     </Provider>
   );
 }
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: "hello aymen",
-      data: { data: "goes here" },
-    },
-    trigger: { seconds: 2 },
-  });
-}
+// async function schedulePushNotification() {
+//   await Notifications.scheduleNotificationAsync({
+//     content: {
+//       title: "You've got mail! 📬",
+//       body: "hello aymen",
+//       data: { data: "goes here" },
+//     },
+//     trigger: { seconds: 2 },
+//   });
+// }
 
-async function registerForPushNotificationsAsync() {
-  let token;
+// async function registerForPushNotificationsAsync() {
+//   let token;
 
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
+//   if (Platform.OS === "android") {
+//     await Notifications.setNotificationChannelAsync("default", {
+//       name: "default",
+//       importance: Notifications.AndroidImportance.MAX,
+//       vibrationPattern: [0, 250, 250, 250],
+//       lightColor: "#FF231F7C",
+//     });
+//   }
 
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-  } else {
-    alert("Must use physical device for Push Notifications");
-  }
+//   if (Device.isDevice) {
+//     const { status: existingStatus } =
+//       await Notifications.getPermissionsAsync();
+//     let finalStatus = existingStatus;
+//     if (existingStatus !== "granted") {
+//       const { status } = await Notifications.requestPermissionsAsync();
+//       finalStatus = status;
+//     }
+//     if (finalStatus !== "granted") {
+//       alert("Failed to get push token for push notification!");
+//       return;
+//     }
+//     token = (await Notifications.getExpoPushTokenAsync()).data;
+//     console.log(token);
+//   } else {
+//     alert("Must use physical device for Push Notifications");
+//   }
 
-  return token;
-}
+//   return token;
+// }
 export default App;

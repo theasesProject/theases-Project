@@ -22,16 +22,17 @@ import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
+import NavBarAgency from "../components/NavBarAgency.jsx";
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
 import io from "socket.io-client";
 const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
 import { selectUser, setUser } from "../store/userSlice";
-import registerNNPushToken from "native-notify";
+// import registerNNPushToken from "native-notify";
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
-  registerNNPushToken(14608, "0IjK45dvxv48dlwYcWDWTR");
+  // registerNNPushToken(14608, "0IjK45dvxv48dlwYcWDWTR");
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allCars = useSelector((state) => state.car.allCars);
@@ -230,7 +231,7 @@ function Home({ navigation }) {
       {/* </Swipeable> */}
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={notificationModalVisible}
@@ -247,7 +248,7 @@ function Home({ navigation }) {
             <Text>Close</Text>
           </TouchableOpacity>
         </View>
-      </Modal>
+      </Modal> */}
     </View>
   );
 }

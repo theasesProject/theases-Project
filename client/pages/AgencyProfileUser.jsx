@@ -9,7 +9,7 @@ import { getOne ,OneAgency} from "../store/agencySlice";
 import { useDispatch, useSelector } from "react-redux";
 import {  OneUserbid, getOneById } from "../store/userSlice";
 import { getallCarByAgency } from "../store/carFetch";
-function AgencyProfileUser(){
+function AgencyProfileUser({navigation}){
 const ag= useSelector(OneAgency)
 
 

@@ -161,6 +161,7 @@ function ChangeRole({ navigation }) {
       <TextInput
         value={form.companyNumber}
         onChangeText={handleChangeCompanyPhone}
+        keyboardType="phone-pad"
         placeholder="Enter Your Agency Number"
         style={styles.input}
       />

@@ -74,6 +74,7 @@ function Home({ navigation }) {
   const responseListener = useRef();
 
   useEffect(() => {
+    
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
     );
@@ -120,6 +121,7 @@ function Home({ navigation }) {
   };
 
   useEffect(() => {
+    
     if (!loading && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
         x: 0,
@@ -130,11 +132,11 @@ function Home({ navigation }) {
   }, [loading]);
 
   useEffect(() => {
-   socket.emit("login", { userId: activeUser?.id, expoPushToken });
+    socket.emit("login", { userId: activeUser?.id, expoPushToken });
 
-   socket.on("receive-notification",async (notification) => {
+    socket.on("receive-notification", async (notification) => {
       await schedulePushNotification(notification);
-      console.log('notification here', notification, "notifcarion");
+      console.log("notification here", notification, "notifcarion");
       setMessages((prevMessages) => [
         ...prevMessages,
         {

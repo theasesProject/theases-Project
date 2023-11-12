@@ -138,7 +138,7 @@ function AddAgencyCar({ navigation }) {
   ];
   const selectImage = async () => {
     if (img.length >= 3) {
-      return setError("You can't add more than six images");
+      return setError("You can't add more than three images");
     }
 
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -229,22 +229,23 @@ function AddAgencyCar({ navigation }) {
       borderColor: "grey",
       borderRadius: 4,
       color: "black",
-      paddingRight: 30,
-      marginTop: "5%", // to ensure the text is never behind the icon
+      gap: 5,
+      // to ensure the text is never behind the icon
     },
     inputAndroid: {
-      fontSize: 14,
+      fontSize: 16,
       paddingHorizontal: 10,
       paddingVertical: 8,
       borderWidth: 2,
       borderColor: "lightgrey",
       borderRadius: 10,
-      color: "grey",
-      fontWidth: "bold",
+      gap: 5,
+      color: "black",
+      marginTop: "1%",
+      marginBottom: "1%",
       paddingRight: 30,
       justifyContent: "center",
       height: 40,
-      // to ensure the text is never behind the icon
     },
   };
 
@@ -391,19 +392,19 @@ function AddAgencyCar({ navigation }) {
           />
           <RemoveBackground />
 
-          <View style={styles.picture}>
-            <Pressable
-              onPress={selectImage}
+          {/* <View style={styles.picture}>
+            <TouchableOpacity
               style={styles.addImgTextContainer}
               activeOpacity={0.8}
             >
-              <Text style={styles.input2}>ADD PICTURE</Text>
-
               {imgError !== "" && (
                 <Text style={styles.errorText}>{imgError}</Text>
               )}
-            </Pressable>
-          </View>
+              <Text onPress={selectImage} style={styles.input2}>
+                ADD PICTURE
+              </Text>
+            </TouchableOpacity>
+          </View> */}
           <View style={styles.imgsContainer}>
             {img.map((uri, index) => (
               <View key={index} style={styles.imgContainer}>

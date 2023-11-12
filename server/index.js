@@ -113,8 +113,8 @@ io.on("connection", (socket) => {
     console.log(receiver, "receiver");
     if (receiver) {
       io.to(receiver.socketId).emit("receive-notification", {
-        title: "Service Accepted",
-        message: `Service request accepted: ${message}`,
+        title: "Booking Accepted",
+        message: `Booking request accepted for the car: ${message}`,
       });
       acceptServiceNotification(receiver, message);
       console.log("service accept", receiver);
@@ -127,8 +127,8 @@ io.on("connection", (socket) => {
     const receiver = onlineUsers.find((user) => user.userId === receiverId);
     if (receiver) {
       io.to(receiver.socketId).emit("receive-notification", {
-        title: "Service Rejected",
-        message: `Service request rejected: ${message}`,
+        title: "Booking Rejected",
+        message: `Your Booking request rejected for the car: ${message}`,
       });
       rejectServiceNotification(receiver, message);
       console.log("service reject", receiver);

@@ -133,7 +133,7 @@ function Home({ navigation }) {
 
     socket.on("receive-notification", (notification) => {
       schedulePushNotification(notification);
-      console.log(notification, "notifcarion");
+      console.log(notification, "notifcation");
       setMessages((prevMessages) => [
         ...prevMessages,
         {

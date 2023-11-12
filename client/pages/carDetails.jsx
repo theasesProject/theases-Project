@@ -17,7 +17,6 @@ const CarDetails = () => {
   useEffect(() => {}, []);
   return (
     <View style={styles.CarDetails}>
-      {/* <ScrollView> */}
       <View style={styles.imageContainer}>
         <Image style={styles.carImage} source={car} />
       </View>
@@ -38,98 +37,121 @@ const CarDetails = () => {
           <Text style={{ fontSize: 18.5, fontWeight: "600" }}>
             Specification
           </Text>
-          <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true} horizontal={true}>
+          <ScrollView
+            style={styles.scrollContainer}
+            nestedScrollEnabled={true}
+            horizontal={true}
+          >
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              type Of Energy
+                type Of Energy
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.typeOfFuel}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.typeOfFuel}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>price</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.price}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              price
+                period
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.price}</Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              period
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.period}
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.period}</Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
                 Advance
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.deposit}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.deposit}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              type of car
+                type of car
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.typevehicle}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.typevehicle}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-               Status
+                Status
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.status}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.status}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              horsePower
+                horsePower
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.horsePower}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.horsePower}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              createdAt
+                createdAt
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.createdAt}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.createdAt}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              transportation
+                transportation
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.Agency.transportation ? "true" : "false"}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.Agency.transportation ? "true" : "false"}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              address
+                address
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.Agency.address}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.Agency.address}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              company Number
+                company Number
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.Agency.companyNumber}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.Agency.companyNumber}
+              </Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-              Company name
+                Company name
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{carData.Agency.name}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData.Agency.name}
+              </Text>
             </View>
           </ScrollView>
         </View>
-        {/* <Text>{carData.characteristics}</Text>
-        {/* <Text>{carData.CarMedia[0]?carData.CarMedia:"no Images"} */}
       </View>
-      {/* </ScrollView> */}
     </View>
   );
 };
 const styles = StyleSheet.create({
-  scrollContainer:{
-    marginLeft:-height*.01
+  scrollContainer: {
+    marginLeft: -height * 0.01,
   },
   container_n2: {
     gap: 10,
     paddingTop: 10,
   },
   descContainer: {
-    marginLeft:10,
+    marginLeft: 10,
     gap: 10,
     padding: 5,
     alignItems: "center",
@@ -149,12 +171,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   CarDetails: {
-    height: height ,
-    backgroundColor:"white",
-    // justifyContent: "center",
+    height: height,
+    backgroundColor: "white",
   },
   carImage: {
-    // padding: 10,
     width: 430,
     borderRadius: 10,
     height: height * 0.25,

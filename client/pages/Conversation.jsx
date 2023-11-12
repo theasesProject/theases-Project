@@ -52,7 +52,7 @@ function Conversation() {
       const result = await DocumentPicker.getDocumentAsync();
       console.log(result);
       if (!result.canceled) {
-        socket.emit('send-document', {
+        socket.emit("send-document", {
           name: result.name,
           type: result.type,
           uri: result.uri,
@@ -62,7 +62,6 @@ function Conversation() {
       console.error(error);
     }
   };
-  
 
   const sendMessage = async (message) => {
     if (message !== "") {
@@ -87,7 +86,6 @@ function Conversation() {
   useEffect(() => {
     socket.emit("join-room", room.id + "");
     socket.on("receive-message", (data) => {
-      // console.log(data);
       allMes.push(data);
       setAllMes((allMes) => [...allMes, data]);
     });
@@ -101,7 +99,6 @@ function Conversation() {
         scrollViewRef.current?.scrollToEnd({ animated: true });
       }
     );
-    console.log(room);
 
     return () => {
       keyboardDidShowListener.remove();
@@ -132,7 +129,7 @@ function Conversation() {
           </Text>
         </View>
         <Pressable>
-        <Phone />
+          <Phone />
         </Pressable>
       </View>
       <ScrollView

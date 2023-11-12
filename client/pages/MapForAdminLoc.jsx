@@ -9,7 +9,7 @@ import { SvgXml } from "react-native-svg";
 const MapComponent = ({ navigation }) => {
   const [getLocation,setGetLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState({
-    latitude: 36.842278, // Replace with your default values
+    latitude: 36.842278,
     longitude: 10.187765,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
@@ -79,7 +79,6 @@ const agen=`<?xml version="1.0" encoding="utf-8"?>
       dispatch(locAgn(JSON.stringify(selectedLocation)));
       navigation.navigate("changeRole");
     } else {
-      // Handle the case where no location is selected.
     }
   };
   // const customMapStyle = [

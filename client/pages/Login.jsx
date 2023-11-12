@@ -89,10 +89,8 @@ function Login({ navigation }) {
   };
 
   const identifierValidation = (identifier) => {
-    // Regular expression for email
     const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
 
-    // Regular expression for phone number (this example assumes a simple format)
     const phonePattern = /^[\d\+\-]+$/;
 
     if (emailPattern.test(identifier)) {
@@ -122,14 +120,12 @@ function Login({ navigation }) {
           password: form.password,
         }
       );
-      //  console.log(await response.data)
+
       setError(null);
       storeData("token", response.data);
 
-      // console.log("token: ", retrieveData("token"));
       dispatch(fetchUser(response.data)).then(async (response) => {
         await AsyncStorage.setItem("UserToken", response?.meta.arg);
-        // registerIndieID(`${activeUser.id}`, 14608, "0IjK45dvxv48dlwYcWDWTR");
       });
 
       navigation.navigate("Home");

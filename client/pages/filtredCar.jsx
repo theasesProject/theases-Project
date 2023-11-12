@@ -15,10 +15,10 @@ import { useEffect } from "react";
 import star from "../assets/star.jpg";
 function FiltredCar() {
   const navigation = useNavigation();
-  // const filteredCars = useSelector((state) => state.car.carFiltred);
+
   const avaibleCar = useSelector((state) => state.booking.avaibleCar);
   console.log(avaibleCar, "avaible");
-  // useEffect(()=>)
+
   return (
     <View style={styles.homePage}>
       <TouchableOpacity
@@ -29,50 +29,13 @@ function FiltredCar() {
         <Image style={styles.backImage} source={back}></Image>
       </TouchableOpacity>
       <ScrollView>
-        {/* {filteredCars */}
-        {/* ? filteredCars.map((element, i) => ( */}
-        {/* <View key={i} style={styles.all}> */}
-        {/* <View style={styles.carCard}> */}
-        {/* <View style={styles.items}> */}
-        {/* <View style={styles.deleted2}> */}
-        {/* <Image style={styles.delete} source={deleteImge} /> */}
-        {/* </View> */}
-        {/* <Image */}
-        {/* style={styles.car} */}
-        {/* source={{ */}
-        {/* uri: element.Media[0]?.media, */}
-        {/* }} */}
-        {/* /> */}
-        {/* <View style={styles.detail}> */}
-        {/* <Text style={styles.title}>{element.model}</Text> */}
-        {/* <View style={styles.stars}> */}
-        {/* <Image style={styles.star} source={star} /> */}
-        {/* <Image style={styles.star} source={star} /> */}
-        {/* <Image style={styles.star} source={star} /> */}
-        {/* <Image style={styles.star} source={star} /> */}
-        {/* <Image style={styles.star} source={star} /> */}
-        {/* </View> */}
-
-        {/* <Text style={styles.price}> */}
-        {/* ${element.price}/{element.period} */}
-        {/* </Text> */}
-        {/* </View> */}
-        {/* </View> */}
-        {/* </View> */}
-
-        {/* <CardCar key={i} oneCar={element} /> */}
-        {/* </View> */}
-        {/* )) */}
-        {/* : null} */}
         <View>
           {avaibleCar
             ? avaibleCar.map((element, i) => (
                 <View key={i} style={styles.all}>
                   <View style={styles.carCard}>
                     <View style={styles.items}>
-                      <View style={styles.deleted2}>
-                        {/* <Image style={styles.delete} source={deleteImge} /> */}
-                      </View>
+                      <View style={styles.deleted2}></View>
                       <Image
                         style={styles.car}
                         source={{
@@ -95,8 +58,6 @@ function FiltredCar() {
                       </View>
                     </View>
                   </View>
-
-                  {/* <CardCar key={i} oneCar={element} /> */}
                 </View>
               ))
             : null}
@@ -137,17 +98,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "grey",
   },
-  // heart: {
-  //   width: 60,
-  //   height: 55,
-  // },
+
   message: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    // paddingTop: 180,
-    // gap: 20,
   },
 
   emptyText1: {

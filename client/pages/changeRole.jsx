@@ -175,7 +175,6 @@ function ChangeRole({ navigation }) {
         style={styles.check}
         onClick={() => {
           setForm({ ...form, transportation: !form.transportation });
-          // setIsChecked(!isChecked);
         }}
         isChecked={form.transportation}
         leftText="Deliver cars to users locations"

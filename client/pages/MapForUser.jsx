@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View,  Text, Button, StyleSheet, TouchableOpacity, Linking, Pressable,} from "react-native";
-import MapView, { Marker,Callout  } from "react-native-maps";
+import MapView, { Marker,Callout ,Circle } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 // import { google_api } from '../env';
@@ -8,13 +8,15 @@ import { SvgXml } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 import { List, getAgencyData } from "../store/agencySlice";
 import { useNavigation } from "@react-navigation/native";
-
+import Slider from '@react-native-community/slider';
 const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
 
 const MapForUser = ({}) => {
   const navigation = useNavigation();
-
+  const [filterRadius, setFilterRadius] = useState(10); // Initial filter radius in kilometers
+  const [sliderValue, setSliderValue] = useState(10); // Initial slider value
+  
     const agencies = useSelector((state) => state.agency.list);
    
     const dispatch = useDispatch();
@@ -51,6 +53,11 @@ const MapForUser = ({}) => {
         });
       })();
     }, []);
+    const handleSliderChange = (value) => {
+      setSliderValue(value);
+      // Convert the slider value to kilometers and update the filter radius
+      setFilterRadius(value);
+    };
     const agen=`<?xml version="1.0" encoding="utf-8"?>
     <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
     <svg fill="#DC143C"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -99,49 +106,61 @@ const MapForUser = ({}) => {
   
     return (
       <View style={styles.container}>
-        <MapView style={styles.map} region={mapRegion}>
-          {/* Sample Marker */}
-          {getLocation && (
-             <Marker   coordinate={{ latitude: getLocation.latitude, longitude: getLocation.longitude }}            title="Your location">
-         
-             <SvgXml xml={Person} width="30" height="30" />
-              </Marker>
-          )}
-  
+      <MapView style={styles.map} region={mapRegion}>
+  {/* Sample Marker */}
+  {getLocation && (
+    <Marker
+      coordinate={{
+        latitude: getLocation.latitude,
+        longitude: getLocation.longitude,
+      }}
+      title="Your location"
+    >
+      <SvgXml xml={Person} width="30" height="30" />
+    </Marker>
+  )}
+
   {agencies?.data?.map((agency) => (
-  <Marker
-    coordinate={{
-      latitude: JSON.parse(agency.address).latitude,
-      longitude: JSON.parse(agency.address).longitude,
-    }}
-    description={agency.address.city}
-    key={agency.id}
-    title={agency.name}
-  >
-    <SvgXml xml={agen} width="30" height="30" />
+    <Marker
+      coordinate={{
+        latitude: JSON.parse(agency.address).latitude,
+        longitude: JSON.parse(agency.address).longitude,
+      }}
+      description={agency.address.city}
+      key={agency.id}
+      title={agency.name}
+    >
+      <SvgXml xml={agen} width="30" height="30" />
 
-    {/* Custom Callout */}
-    
-    
-         <Callout style={styles.calloutContainer} onPress={() => {
-            navigation.navigate('AgencyProfileUser', { agencyId: agency.id });
-          }}>
-       
-       
-         <View>
-            <Text  style={styles.agencyName}>{agency.name}</Text>
-          <Text  >Check the Agency's Page</Text>  
-        
+      {/* Custom Callout */}
+      <Callout
+        style={styles.calloutContainer}
+        onPress={() => {
+          navigation.navigate('AgencyProfileUser', { agencyId: agency.id });
+        }}
+      >
+        <View>
+          <Text style={styles.agencyName}>{agency.name}</Text>
+          <Text>Check the Agency's Page</Text>
+        </View>
+      </Callout>
+    </Marker>
+  ))}
 
-             </View>
-    
-     </Callout>
-   
-  </Marker>
-))}
+  {getLocation && (
+    <Circle
+      center={{
+        latitude: getLocation.latitude,
+        longitude: getLocation.longitude,
+      }}
+      radius={filterRadius * 1000} // Convert filter radius to meters
+      fillColor="rgba(255, 0, 0, 0.1)"
+      strokeWidth={1}
+      strokeColor="rgba(255, 0, 0, 0.3)"
+    />
+  )}
+</MapView>
 
-        </MapView>
-  
         {/* Zoom In and Zoom Out buttons */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleZoomIn} style={styles.zoomButton}>
@@ -151,6 +170,17 @@ const MapForUser = ({}) => {
             <Text>-</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.sliderContainer}>
+    <Text>Filter Radius: {sliderValue} km</Text>
+    <Slider
+      style={{ width: '80%', height: 40 }}
+      minimumValue={1}
+      maximumValue={50}
+      step={1}
+      value={sliderValue}
+      onValueChange={handleSliderChange}
+    />
+  </View>
       </View>
     );
   };
@@ -201,7 +231,13 @@ const MapForUser = ({}) => {
           color: "#fff",
           fontWeight: "bold",
         },
-
+        sliderContainer: {
+          position: 'absolute',
+          bottom: 20,
+          left: '10%',
+          width: '80%',
+          alignItems: 'center',
+        },
   });
   
   export default MapForUser;

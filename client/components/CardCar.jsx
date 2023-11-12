@@ -17,11 +17,17 @@ import RatingStar from "../assets/Svg/RatingStar.svg";
 import BookMark from "../assets/Svg/bookMark.svg";
 import TopCorner from "../assets/Svg/BookMarkDone.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateBookMark, removedBookMark, saveDetails } from "../store/carFetch.js";
+import {
+  CreateBookMark,
+  removedBookMark,
+  saveDetails,
+  carDetail,
+} from "../store/carFetch.js";
 import axios from "axios";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
 import { Booking } from "../pages/Booking.jsx";
+
 function CardCar({ oneCar, setNothing, handlePress }) {
   const [starSelected, setStarSelected] = useState(false);
   // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
@@ -52,7 +58,6 @@ function CardCar({ oneCar, setNothing, handlePress }) {
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/check/${activeUser.id}/${oneCar.id}`
       );
       if (task.data) {
-        // console.log("taskkkkkkkkkkkkkk", task.data);
         setNothing("");
         setDone(true);
       } else {
@@ -64,7 +69,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   };
   const handleRent = async () => {
     handlePress();
-    dispatch(saveDetails(oneCar));
+    dispatch(carDetails(oneCar));
   };
   useEffect(() => {
     setDone(false);
@@ -73,8 +78,8 @@ function CardCar({ oneCar, setNothing, handlePress }) {
 
   return (
     <View style={styles.card}>
-      <Pressable style={styles.Image}  onPress={handleRent}>
-        {oneCar.Media?.length !== 0 ? (
+      <Pressable style={styles.Image} onPress={handleRent}>
+        {/* {oneCar.Media?.length !== 0 ? (
           <Image
             style={styles.carImage}
             source={{
@@ -83,7 +88,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           />
         ) : (
           <Image style={styles.carImage} source={car} />
-        )}
+        )} */}
 
         {Object.values(activeUser).length ? (
           !done ? (
@@ -106,7 +111,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
             <View style={styles.bookingCar}>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(setCarDetails(oneCar));
+                  dispatch(carDetail(oneCar));
                   navigation.navigate("Booking");
                 }}
               >

@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { selectUser, setUser } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env";
+
 import { useDispatch } from "react-redux";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
@@ -53,11 +53,10 @@ const EditProfile = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      // Use the selected assets from the "assets" array
       const selectedAsset = result.assets[0];
       try {
         const cloudinaryResponse = await cloudinaryUpload(selectedAsset.uri);
-        // cloudinaryResponse is the link of the img ready to be pushed in database
+
         console.log("img link: ", cloudinaryResponse);
         setImg(cloudinaryResponse);
         setForm({ ...form, avatar: cloudinaryResponse });

@@ -63,29 +63,7 @@ function AdvancedSearch() {
       })
     );
   };
-  // const create = () => {
-  //   const filterCriteria = {
-  //     price: [sliderValue, priceSearched],
-  //     typevehicle: typeVehicule,
-  //     characteristics: chara,
-  //   };
-  //   dispatch(fetchFilteredCars(filterCriteria));
-  // };
 
-  // const fetchData = async () => {
-  //   if (startDate && endDate) {
-  //     dispatch(
-  //       getAllCarByDate({
-  //         startDate: startDate,
-  //         endDate: endDate,
-  //         price: [sliderValue, priceSearched],
-  //         typevehicle: typeVehicule,
-  //         characteristics: chara,
-  //         deposit: deposits,
-  //       })
-  //     );
-  //   }
-  // };
   const deposit = [
     "0%",
     "10%",

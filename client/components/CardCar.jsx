@@ -42,6 +42,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   const handleStarPress = () => {
     setStarSelected(!starSelected);
   };
+  
   const handleHeartPress = async () => {
     // setHeartSelected(!heartSelected);
     // if (!heartSelected) {
@@ -78,17 +79,17 @@ function CardCar({ oneCar, setNothing, handlePress }) {
 
   return (
     <View style={styles.card}>
-      <Pressable style={styles.Image} onPress={handleRent}>
+      <Pressable style={styles.Image}  onPress={handleRent}>
         {/* {oneCar.Media?.length !== 0 ? (
-          <Image
-            style={styles.carImage}
-            source={{
-              uri: oneCar?.Media[0]?.media,
-            }}
-          />
-        ) : (
-          <Image style={styles.carImage} source={car} />
-        )} */}
+          // <Image
+          //   style={styles.carImage}
+          //   source={{
+          //     uri: oneCar?.Media[0]?.media,
+          //   }}
+          // />
+        ) : ( */}
+          {/* <Image style={styles.carImage} source={car} /> */}
+        {/* )} */}
 
         {Object.values(activeUser).length ? (
           !done ? (

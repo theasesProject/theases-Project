@@ -32,6 +32,8 @@ import MyCars from "./pages/MyCars.jsx";
 import AgencyProfile from "./pages/AgencyProfile.jsx";
 import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import MapForUser from "./pages/MapForUser.jsx";
+import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 const Stack = createStackNavigator();
 // import * as Device from "expo-device";
 // import * as Notifications from "expo-notifications";
@@ -105,11 +107,16 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator>
             <Stack.Screen
               name="Home"
               component={Home}
               options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="MapForUser"
+              component={MapForUser}
+              options={{ headerShown: true }}
             />
             <Stack.Screen
               name="AgencyService"
@@ -237,6 +244,11 @@ function App() {
             <Stack.Screen
               name="AgencyProfile"
               component={AgencyProfile}
+              options={{ headerShown: false }}
+            />
+              <Stack.Screen
+              name="AgencyProfileUser"
+              component={AgencyProfileUser}
               options={{ headerShown: false }}
             />
             <Stack.Screen

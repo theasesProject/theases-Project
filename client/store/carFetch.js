@@ -91,11 +91,15 @@ export const fetchFilteredCars = createAsyncThunk(
 export const createCar = createAsyncThunk("car/createCar", async (params) => {
   if (!params) return;
   try {
+    console.log(params,'here')
     const response = await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/newCar`,
       params.body
-    );
+    ); 
+    console.log('response',response.data);
     const requestId = response.data.id;
+   
+  
     await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media

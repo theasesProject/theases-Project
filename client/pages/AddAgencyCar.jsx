@@ -34,12 +34,15 @@ function AddAgencyCar({ navigation }) {
   const [char, setChar] = useState("");
   const [periodRent, setPeriodRent] = useState("");
   const [price, setPrice] = useState("");
+  const [priceWeekly, setPriceWeekly] = useState("");
+  const [priceMonthly, setPriceMonthly] = useState("");
   const [description, setDesciption] = useState("");
   const [warranty, setWarrranty] = useState(false);
   const [modelError, setModelError] = useState("");
   const [brandError, setBrandError] = useState("");
   const [priceError, setPriceError] = useState("");
-  const [periodError, setPeriodError] = useState("");
+  const [priceErrorWeekly, setPriceWeeklyError] = useState("");
+  const [priceErrorMonthly, setPriceMonthlyError] = useState("");
   const [typeError, setTypeError] = useState("");
   const [charError, setCharError] = useState("");
   const [imgError, setImgError] = useState("");
@@ -54,8 +57,10 @@ function AddAgencyCar({ navigation }) {
       setBrandError("Please enter your car brand");
     } else if (price === "") {
       setPriceError("Please enter your car price ");
-    } else if (periodRent === "") {
-      setPeriodError("Please enter your car period");
+    } else if (priceErrorWeekly === "") {
+      setPriceWeeklyError("Please enter your car price of the week");
+    } else if (priceErrorMonthly === "") {
+      setPriceMonthlyError("Please enter your car price of the month");
     } else if (type === "") {
       setTypeError("Please enter your car type Vehicle");
     } else if (char === "") {
@@ -67,7 +72,8 @@ function AddAgencyCar({ navigation }) {
         model: model,
         brand: brandCar,
         price: price,
-        period: periodRent,
+        priceWeekly: priceWeekly,
+        priceMonthly:priceMonthly,
         status: "available",
         horsePower: horse,
         typeOfFuel: fuel,
@@ -124,11 +130,7 @@ function AddAgencyCar({ navigation }) {
     { label: "Manual", value: "Manual" },
     { label: "Semi-Automatic", value: "Semi-Automatic" },
   ];
-  const period = [
-    { label: "daily", value: "daily" },
-    { label: "weekly", value: "weekly" },
-    { label: "monthly", value: "monthly" },
-  ];
+
   const types = [
     { label: "Economical", value: "Economical" },
     { label: "Luxury", value: "Luxury" },
@@ -136,7 +138,7 @@ function AddAgencyCar({ navigation }) {
     { label: "Commercial", value: "Commercial" },
   ];
   const selectImage = async () => {
-    if (img.length >= 3) {
+    if (img.length >= 6) {
       return setError("You can't add more than six images");
     }
 
@@ -197,6 +199,12 @@ function AddAgencyCar({ navigation }) {
   const handlePrice = (price) => {
     setPrice(price);
   };
+  const handlePriceWeekly = (price) => {
+    setPriceWeekly(price);
+  };
+  const handlePriceMonthly = (price) => {
+    setPriceMonthly(price);
+  };
   const handleHorse = (horse) => {
     setHorse(horse);
   };
@@ -218,23 +226,25 @@ function AddAgencyCar({ navigation }) {
       fontSize: 16,
       paddingVertical: 12,
       paddingHorizontal: 10,
-      borderWidth: 1,
-      borderColor: "gray",
+      borderWidth: 3,
+      borderColor: "grey",
       borderRadius: 4,
       color: "black",
-      paddingRight: 30, // to ensure the text is never behind the icon
+      paddingRight: 30,
+      marginTop: "5%", // to ensure the text is never behind the icon
     },
     inputAndroid: {
-      fontSize: 16,
+      fontSize: 14,
       paddingHorizontal: 10,
       paddingVertical: 8,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: "lightgrey",
       borderRadius: 10,
-      color: "black",
+      color: "grey",
+      // fontWidth: "bold",
       paddingRight: 30,
       justifyContent: "center",
-
+      height: 40,
       // to ensure the text is never behind the icon
     },
   };
@@ -280,14 +290,34 @@ function AddAgencyCar({ navigation }) {
           value={price}
           keyboardType="number-pad"
           onChangeText={handlePrice}
-          placeholder="rental price by period"
+          placeholder=" price by day"
           style={styles.input}
         />
         {priceError !== "" && (
           <Text style={styles.errorText}>{priceError}</Text>
         )}
+        <TextInput
+          value={priceWeekly}
+          keyboardType="number-pad"
+          onChangeText={handlePriceWeekly}
+          placeholder="price by week"
+          style={styles.input}
+        />
+        {priceError !== "" && (
+          <Text style={styles.errorText}>{priceErrorWeekly}</Text>
+        )}
+        <TextInput
+          value={priceMonthly}
+          keyboardType="number-pad"
+          onChangeText={handlePriceMonthly}
+          placeholder="price by month"
+          style={styles.input}
+        />
+        {priceError !== "" && (
+          <Text style={styles.errorText}>{priceErrorMonthly}</Text>
+        )}
 
-        <RNPickerSelect
+        {/* <RNPickerSelect
           placeholder={{
             label: "period ",
             value: null,
@@ -299,7 +329,7 @@ function AddAgencyCar({ navigation }) {
         />
         {periodError !== "" && (
           <Text style={styles.errorText}>{periodError}</Text>
-        )}
+        )} */}
 
         <TextInput
           value={horse}
@@ -413,7 +443,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     flexDirection: "column",
     backgroundColor: "white",
-    gap: 12,
+    gap: 16,
   },
   container: {
     flex: 1,

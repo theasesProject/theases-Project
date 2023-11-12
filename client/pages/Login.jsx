@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
+  Dimensions,
 } from "react-native";
 import Logo from "../assets/tempLogo.png";
 import Google from "../assets/googleIcon.png";
@@ -17,9 +18,11 @@ import Close from "../assets/Svg/eyeClose.svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { fetchUser } from "../store/userSlice";
-import { useDispatch } from "react-redux";
+import { fetchUser, selectUser } from "../store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { registerIndieID, unregisterIndieDevice } from "native-notify";
+const { width, height } = Dimensions.get("screen");
 
 function Login({ navigation }) {
   const [color, setColor] = useState("#6C77BF");
@@ -33,7 +36,7 @@ function Login({ navigation }) {
   const [formChecked, setFormChecked] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-
+  const activeUser = useSelector(selectUser);
   const storeData = async (key, value) => {
     try {
       await AsyncStorage.setItem(key, value);
@@ -86,10 +89,8 @@ function Login({ navigation }) {
   };
 
   const identifierValidation = (identifier) => {
-    // Regular expression for email
     const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
 
-    // Regular expression for phone number (this example assumes a simple format)
     const phonePattern = /^[\d\+\-]+$/;
 
     if (emailPattern.test(identifier)) {
@@ -119,11 +120,10 @@ function Login({ navigation }) {
           password: form.password,
         }
       );
-      //  console.log(await response.data)
+
       setError(null);
       storeData("token", response.data);
 
-      console.log("token: ", retrieveData("token"));
       dispatch(fetchUser(response.data)).then(async (response) => {
         await AsyncStorage.setItem("UserToken", response?.meta.arg);
       });
@@ -148,7 +148,7 @@ function Login({ navigation }) {
     <View style={styles.loginPage}>
       <View style={styles.headers}>
         <View style={styles.logoContainer}>
-          <Image source={Logo} alt="logo" />
+          <Image source={Logo} alt="logo" style={styles.logo} />
         </View>
         <Text style={styles.welcome}>Welcome Back</Text>
         <Text style={styles.paragraph}>
@@ -297,6 +297,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
+  },
+  logo: {
+    height: height * 0.15,
+    width: width * 0.61,
   },
   welcome: {
     fontSize: 24,

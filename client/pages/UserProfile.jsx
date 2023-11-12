@@ -19,12 +19,10 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 import change from "../assets/change.png";
 import CarIcon from "../assets/Svg/car-side-solid";
-// import { useNavigation } from "@react-navigation/native";
 
 import NavBar from "../components/NavBar";
 
 function Userprofile({ navigation }) {
-  // const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const dispatch = useDispatch();
 
@@ -177,7 +175,7 @@ const styles = StyleSheet.create({
   },
   logoutBtnContainer: {
     position: "absolute",
-    bottom: 70, // adjust this value as needed
+    bottom: 70,
     left: 20,
     width: "100%",
     borderTopColor: "#e5e6e8",
@@ -189,7 +187,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    // ... rest of your styles
   },
   logoutBtn: {
     flexDirection: "row",

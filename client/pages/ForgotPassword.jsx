@@ -11,7 +11,6 @@ import Logo from "../assets/tempLogo.png";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import { DOMAIN_NAME } from "../env";
 
 const ForgotPassword = ({ navigation }) => {
   const [identifier, setIdentifier] = useState("");
@@ -53,10 +52,8 @@ const ForgotPassword = ({ navigation }) => {
   };
 
   const identifierValidation = (identifier) => {
-    // Regular expression for email
     const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
 
-    // Regular expression for phone number (this example assumes a simple format)
     const phonePattern = /^[\d\+\-]+$/;
 
     if (emailPattern.test(identifier)) {

@@ -6,51 +6,77 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Platform,
 } from "react-native";
 import {
   allServiceForAgency,
   UpdateServiceByAgency,
 } from "../store/bookingSlice";
+
 const { width, height } = Dimensions.get("screen");
 import { selectUser, setUser } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import carImage from "../assets/Brands/BMW.png";
 import userImage from "../assets/user.jpg";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import io from "socket.io-client";
 
+import axios from "axios";
+import io from "socket.io-client";
+import PushNotification from "react-native-push-notification";
 function AgencyService() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allService = useSelector((state) => state.booking.allServiceByAgency);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+  const [modalVisible, setModalVisible] = useState(false);
+
   useEffect(() => {
     dispatch(allServiceForAgency(activeUser.id));
 
-    socket;
+    socket.on("receive-notification", (data) => {
+      console.log("Received Notification:", data);
+
+      PushNotification.localNotification({
+        channelId: "default",
+        title: data.title,
+        message: data.message,
+      });
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+
+    return () => {
+      socket.off("receive-notification");
+      socket.off("disconnect");
+    };
   }, [dispatch]);
 
-  const acceptService = (idservice, message) => {
+  const acceptService = (idservice, id, message) => {
     const obj = { id: idservice, acceptation: "accepted" };
+    console.log(activeUser, "activeUser");
     dispatch(UpdateServiceByAgency(obj));
-
-    // Send a notification to ProfileLandingPage
-    socket.emit("notification", {
-      UserId: activeUser.id,
+    console.log("Accepting service:", idservice, message, id);
+    socket.emit("acceptService", {
+      senderId: activeUser.id,
+      receiverId: id,
       message: `Service request accepted: ${message}`,
     });
   };
 
-  const rejectService = (idservice, message) => {
+  const rejectService = (idservice, message, id) => {
     const obj = { id: idservice, acceptation: "rejected" };
     dispatch(UpdateServiceByAgency(obj));
 
-    socket.emit("notification", {
-      UserId: activeUser.id,
+    socket.emit("rejectService", {
+      senderId: activeUser.id,
+      receiverId: id,
       message: `Service request rejected: ${message}`,
     });
   };
+
   return (
     <View style={styles.pageContainer}>
       <ScrollView style={styles.scrollContainer}>
@@ -58,28 +84,37 @@ function AgencyService() {
           allService.map((service, i) => (
             <View key={i} style={styles.cardContainer}>
               <View style={styles.userContainer}>
-                <Text style={styles.name}>{service.user.userName} </Text>
+                <Text style={styles.name}>{service.User.userName} </Text>
                 <Text style={styles.text}>want to rent you car </Text>
-                <Text style={styles.name}>{service.car.model} </Text>
+                <Text style={styles.name}>{service.service.model} </Text>
               </View>
               <View style={styles.carContainer}>
                 <Text style={styles.text}>From </Text>
                 <Text style={styles.time}>
-                  {moment(service.service.startDate)
-                    .format("YYYY-MM-DD")
+                  {service.service?.Service.startDate
+                    .split("T")
+                    .join("-")
                     .toString()}
                 </Text>
                 <Text style={styles.text}>To</Text>
                 <Text style={styles.time}>
-                  {moment(service.service.endDate)
-                    .format("YYYY-MM-DD")
-                    .toString()}{" "}
+                  {service.service?.Service.startDate
+                    .split("T")
+                    .join("-")
+                    .toString()}
                 </Text>
+              </View>
+              <View>
+                <Text>{service.service?.Service.amount}</Text>
               </View>
               <View style={styles.actionContainer}>
                 <TouchableOpacity
                   onPress={() => {
-                    rejectService(service.service.id, service.car.model);
+                    rejectService(
+                      service.service.Service.id,
+                      service.service.model,
+                      service.User.id
+                    );
                   }}
                   style={styles.rejectButton}
                 >
@@ -87,7 +122,12 @@ function AgencyService() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    acceptService(service.service.id, service.car.model);
+                    acceptService(
+                      service?.service.Service.id,
+
+                      service.service.model,
+                      service.User.id
+                    );
                   }}
                   style={styles.acceptButton}
                 >
@@ -127,13 +167,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   userContainer: {
-    // flex: 1,
     flexDirection: "row",
-    // alignItems: "center",
+
     justifyContent: "space-between",
   },
   carContainer: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",

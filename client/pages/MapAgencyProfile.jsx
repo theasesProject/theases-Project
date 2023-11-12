@@ -1,15 +1,20 @@
-
 import React, { useState } from "react";
-import { View, StyleSheet, Button, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Button,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { FontAwesome } from "@expo/vector-icons";
-import MapViewDirections from "react-native-maps-directions"; // Import Directions
+import MapViewDirections from "react-native-maps-directions";
 import axios from "axios";
 import ResultSearch from "../components/ResultsSearch";
-import { Svg, Circle } from 'react-native-svg'; // Import SVG components
+import { Svg, Circle } from "react-native-svg";
 
-const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y"; // Replace with your Google API key
-const directions_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y"; // Replace with your Directions API key
+const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
+const directions_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
 const MapAgencyProfile = ({ navigation }) => {
   const [mapRegion, setMapRegion] = useState({
@@ -30,7 +35,6 @@ const MapAgencyProfile = ({ navigation }) => {
       latitude: selectedLatitude,
       longitude: selectedLongitude,
     });
-  
   };
 
   const searchLocation = async () => {
@@ -40,9 +44,7 @@ const MapAgencyProfile = ({ navigation }) => {
       if (response.data && response.data.results) {
         setSearchResults(response.data.results);
       }
-    } catch (error) {
-      // Handle any errors
-    }
+    } catch (error) {}
   };
 
   const handleZoomIn = () => {
@@ -81,14 +83,17 @@ const MapAgencyProfile = ({ navigation }) => {
         )}
         {selectedLocation && (
           <MapViewDirections
-            origin={{ latitude: mapRegion.latitude, longitude: mapRegion.longitude }}
+            origin={{
+              latitude: mapRegion.latitude,
+              longitude: mapRegion.longitude,
+            }}
             destination={selectedLocation}
             apikey={directions_api}
             strokeWidth={3}
             strokeColor="blue"
           />
         )}
-        {/* Add a Marker for current location using the SVG icon */}
+
         {mapRegion && (
           <Marker coordinate={mapRegion} anchor={{ x: 0.5, y: 0.5 }}>
             <Svg width="24" height="24" viewBox="0 0 24 24">
@@ -102,7 +107,9 @@ const MapAgencyProfile = ({ navigation }) => {
           style={styles.searchInput}
           placeholder="Search for a location"
           value={searchText}
-          onChangeText={(text) => { setSearchText(text), searchLocation(); }}
+          onChangeText={(text) => {
+            setSearchText(text), searchLocation();
+          }}
         />
         <TouchableOpacity style={styles.searchButton} onPress={searchLocation}>
           <FontAwesome name="search" size={24} color="black" />
@@ -117,7 +124,7 @@ const MapAgencyProfile = ({ navigation }) => {
               latitude: location.geometry.location.lat,
               longitude: location.geometry.location.lng,
             });
-            setSearchResults([]); // Clear search results
+            setSearchResults([]);
           }}
         />
       )}
@@ -162,4 +169,3 @@ const styles = StyleSheet.create({
 });
 
 export default MapAgencyProfile;
-

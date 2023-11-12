@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,8 +10,9 @@ import {
   RefreshControl,
   Modal,
 } from "react-native";
-import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import SwipeUpDown from "react-native-swipe-up-down";
+import NavBarAgency from "../components/NavBarAgency.jsx";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import LinearGradient from "expo-linear-gradient";
 import axios from "axios";
 import CardCar from "../components/CardCar.jsx";
@@ -22,19 +23,35 @@ import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
+
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
-import ItemMini from "../components/ItemMini.jsx";
-import { Swipeable } from "react-native-gesture-handler";
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
-import io from "socket.io-client";
+const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
 import { selectUser, setUser } from "../store/userSlice";
-import NavBarAgency from "../components/NavBarAgency.jsx";
+import io from "socket.io-client";
 
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+async function schedulePushNotification(notification) {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: notification,
+    },
+    trigger: { seconds: 1 },
+  });
+}
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
   const dispatch = useDispatch();
-  const [isVisibleSwipe, setIsVisibleSwipe] = useState(false);
   const activeUser = useSelector(selectUser);
   const allCars = useSelector((state) => state.car.allCars);
   const fixedData = useSelector((state) => state.car.fixedData);
@@ -44,23 +61,45 @@ function Home({ navigation }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [nothing, setNothing] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  // console.log("CAR TABLE!!!!!!!!!!!!!!!!", allCars);
   const swipeUpDownRef = useRef();
+  const [messages, setMessages] = useState([]);
   const handlePress = () => {
     if (swipeUpDownRef.current) {
       swipeUpDownRef.current.showFull();
-      // setIsVisibleSwipe(true)
     }
   };
-  const [notifications, setNotifications] = useState([]);
-  const [notificationModalVisible, setNotificationModalVisible] =
-    useState(false);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-  const [notificationText, setNotificationText] = useState("");
+  useEffect(() => {
+    
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
-  }, [dispatch]);
+  });
 
   const updateFilteredCars = (filteredCarData) => {
     dispatch(filterCars(filteredCarData));
@@ -80,46 +119,46 @@ function Home({ navigation }) {
       console.error("error coming from home", e);
     }
   };
-  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to Socket.IO server");
-    });
+    
+    if (!loading && scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({
+        x: 0,
+        y: scrollPosition,
+        animated: true,
+      });
+    }
+  }, [loading]);
 
-    socket.on("notification", (message) => {
-      console.log("messageFront");
-      setNotificationText(message);
-      setNotificationModalVisible(true);
-      setTimeout(() => {
-        setNotificationModalVisible(false);
-      }, 10000);
-    });
+  useEffect(() => {
+    socket.emit("login", { userId: activeUser?.id, expoPushToken });
 
-    socket.on("connect_error", (error) => {
-      console.error("Socket.IO connection error:", error);
+    socket.on("receive-notification", async (notification) => {
+      await schedulePushNotification(notification);
+      console.log("notification here", notification, "notifcarion");
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          _id: notification.id,
+          text: notification.message,
+          createdAt: new Date(),
+          user: {
+            _id: notification.senderId,
+            name: "Service",
+          },
+        },
+      ]);
     });
-
     return () => {
       socket.disconnect();
     };
-  }, []);
-console.log('selim',activeUser);
-  // useEffect(() => {
-  //   if (!loading && scrollViewRef.current) {
-  //     scrollViewRef.current.scrollTo({
-  //       x: 0,
-  //       y: scrollPosition,
-  //       animated: true,
-  //     });
-  //   }
-  // }, [loading]);
+  }, [socket, expoPushToken]);
+
   return (
     <View style={styles.homePage}>
       <ScrollView
         ref={scrollViewRef}
-        // onScroll={(event) => {
-        //   setScrollPosition(event.nativeEvent.contentOffset.y);
-        // }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -204,16 +243,26 @@ console.log('selim',activeUser);
           </>
         )}
       </ScrollView>
-      {/* <Swipeable
-  friction={2}
-  leftThreshold={100}
-  rightThreshold={100}
-  overshootFriction={2}
-  overshootLeft={false}
-  overshootRight={false}
-  onSwipeableLeftOpen={() => {}}
-  onSwipeableRightOpen={() => {}}
-> */}
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
+        <Text>Your expo push token: {expoPushToken}</Text>
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <Text>
+            Title: {notification && notification.request.content.title}{" "}
+          </Text>
+          <Text>Body: {notification && notification.request.content.body}</Text>
+          <Text>
+            Data:{" "}
+            {notification && JSON.stringify(notification.request.content.data)}
+          </Text>
+        </View>
+      </View>
+
       <SwipeUpDown
         itemFull={<CarDetails />}
         ref={swipeUpDownRef}
@@ -223,42 +272,19 @@ console.log('selim',activeUser);
         animation="easeInEaseOut"
         style={{
           height: "100%",
-          width:"100%",
-          borderTopEndRadius:50,
+          width: "100%",
+          borderTopEndRadius: 50,
           backgroundColor: "lightgrey",
-          //  backgroundColor: 'transparent'
         }}
       />
-      {/* </Swipeable> */}
 
-     {activeUser?.type==='agency'? <NavBarAgency/>:<NavBar />}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={notificationModalVisible}
-        onRequestClose={() => {
-          setNotificationModalVisible(false);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>{notificationText}</Text>
-          <TouchableOpacity
-            onPress={() => setNotificationModalVisible(false)}
-            style={styles.modalCloseButton}
-          >
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    // paddingBottom: 10,
-    // paddingTop: 20,
-  },
+  header: {},
   SearchBar: {},
   NavBar: {
     height: height * 0.05,
@@ -272,13 +298,11 @@ const styles = StyleSheet.create({
   },
   searchContainer: {},
   allcars: {
-    // padding: 20,
-    // paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   notificationsContainer: {
     flex: 1,
-    // margin: 10,
-    // padding: 10,
+
     borderRadius: 10,
     backgroundColor: "white",
     shadowColor: "#000",
@@ -296,7 +320,6 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     fontSize: 14,
-    // marginTop: 5,
   },
   modalContainer: {
     flex: 1,
@@ -318,4 +341,36 @@ const styles = StyleSheet.create({
   },
 });
 
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  return token;
+}
 export default Home;

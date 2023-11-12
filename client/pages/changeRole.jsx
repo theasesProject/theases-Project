@@ -122,7 +122,7 @@ function ChangeRole({ navigation }) {
             return cloudinaryResponse;
           } catch (err) {
             console.error("Cloudinary Upload Error:", err);
-            return null;
+            return;
           }
         })
       );
@@ -176,7 +176,6 @@ function ChangeRole({ navigation }) {
         style={styles.check}
         onClick={() => {
           setForm({ ...form, transportation: !form.transportation });
-          // setIsChecked(!isChecked);
         }}
         isChecked={form.transportation}
         leftText="Deliver cars to users locations"

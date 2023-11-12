@@ -15,23 +15,23 @@ import { StatusBar } from "expo-status-bar";
 import CalendarPicker from "react-native-calendar-picker";
 import { GetUnavailableDatesForCar } from "../store/bookingSlice";
 import { useNavigation } from "@react-navigation/native";
-// import { Calendar } from "react-native-calendars";
+
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
+
 function Booking() {
   const navigation = useNavigation();
+
   const unavailableDate = useSelector((state) => state.booking.unavailableDate);
   const oneCar = useSelector((state) => state.car.OneCar);
+  console.log(oneCar, "onecar");
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const succes = useSelector((state) => state.booking.succes);
-
-  useEffect(() => {
-    dispatch(GetUnavailableDatesForCar(oneCar.id));
-  }, [dispatch]);
+  const [total, setTotal] = useState(0);
 
   const createBooking = () => {
     if (selectedStartDate && selectedEndDate) {
@@ -41,6 +41,7 @@ function Booking() {
           endDate: selectedEndDate.format("YYYY-MM-DD").toString(),
           UserId: activeUser.id,
           CarId: oneCar.id,
+          amount: total,
         })
       );
     } else {
@@ -56,21 +57,45 @@ function Booking() {
     }
     return dates;
   };
+
+  const calculTotalPrice = () => {
+    const startDate = moment(selectedStartDate);
+    const endDate = moment(selectedEndDate);
+
+    if (selectedStartDate && selectedEndDate) {
+      const durationInDays = endDate.diff(startDate, "days") + 1;
+
+      let pricePerDay = oneCar.price;
+      if (durationInDays > 7) {
+        pricePerDay = oneCar.priceWeekly;
+      }
+      if (durationInDays > 29) {
+        pricePerDay = oneCar.priceMonthly;
+      }
+
+      const total = durationInDays * pricePerDay;
+      console.log(total, "total");
+      setTotal(total);
+    } else if (startDate && !endDate) {
+      setTotal(0);
+    }
+  };
+
   const handleDateSelect = (date) => {
-    if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+    if (!selectedStartDate && !selectedEndDate) {
       setSelectedStartDate(date);
-      setSelectedEndDate(null); // Reset the end date.
+      setSelectedEndDate(null);
       setMarkedDates({
-        [date]: { selectedDayColor: "red", startingDay: true, endingDay: true },
+        [date]: { startingDay: true, endingDay: true },
       });
     } else if (moment(date).isSame(selectedStartDate, "day")) {
       setSelectedStartDate(null);
-      setMarkedDates({}); // Clear all markings.
+      setSelectedEndDate(null);
+      setMarkedDates({});
     } else if (moment(date).isAfter(selectedStartDate, "day")) {
       setSelectedEndDate(date);
       setMarkedDates({
         ...markedDates,
-        [date]: { color: "green" },
       });
 
       const datesInRange = getDatesInRange(selectedStartDate, date);
@@ -88,9 +113,12 @@ function Booking() {
         },
         [date]: { ...markedDates[date], startingDay: true },
       });
+    } else if (selectedEndDate && !selectedStartDate) {
+      setSelectedEndDate(null);
+      setSelectedStartDate(null);
     }
+    calculTotalPrice();
   };
-
   const markDatesRed = () => {
     const markedRedDates = {};
 
@@ -101,33 +129,47 @@ function Booking() {
     return markedRedDates;
   };
 
+  useEffect(() => {
+    dispatch(GetUnavailableDatesForCar(oneCar.id));
+    calculTotalPrice();
+  }, [dispatch, selectedStartDate, selectedEndDate]);
+
   return (
     <View style={styles.page}>
       <CalendarPicker
         allowRangeSelection={true}
         onDateChange={(date) => handleDateSelect(date)}
-        // markedDates={markedDates}
         markedDates={{
           ...markedDates,
-          ...markDatesRed(), // Add red dates to the markedDates
+          ...markDatesRed(),
         }}
         todayBackgroundColor="blue"
         selectedDayColor="#daddf0"
         selectedDayTextColor="white"
+        selectedDisabledDatesTextStyle={{ color: "red" }}
         scaleFactor={375}
         textStyle={{
-          // fontFamily: "Cochin",
           color: "black",
 
           fontSize: 18,
         }}
         previousTitle="<"
         nextTitle=">"
-        // customStyles={customStyles}
+        disabledDates={unavailableDate}
       />
-      <View></View>
-      <TouchableOpacity style={styles.bookNow} onPress={() => createBooking()}>
-        <Text>Book Now</Text>
+
+      <Text>{total}$</Text>
+
+      <TouchableOpacity
+        style={{ paddingRight: 10 }}
+        onPress={() => createBooking()}
+      >
+        <LinearGradient
+          colors={["#6C77BF", "#4485C5"]}
+          style={styles.buttonContainer}
+        >
+          <Text style={styles.buttonText}>Book Now</Text>
+        </LinearGradient>
       </TouchableOpacity>
     </View>
   );
@@ -148,6 +190,24 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow",
     height: 50,
     width: 100,
+  },
+  total: {
+    backgroundColor: "red",
+    width: 100,
+    height: 100,
+  },
+  buttonContainer: {
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+    marginVertical: 15,
+    width: 100,
+  },
+
+  buttonText: {
+    fontSize: 18,
+    color: "#fff",
+    textAlign: "center",
   },
 });
 

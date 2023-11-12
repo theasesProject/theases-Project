@@ -9,6 +9,7 @@ import back from "../assets/back.png";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAllCarByDate } from "../store/bookingSlice";
 import SelectDropdown from "react-native-select-dropdown";
+import { ScrollView } from "react-native-gesture-handler";
 function AdvancedSearch() {
   const navigation = useNavigation();
   const allCars = useSelector((state) => state.car.allCars);
@@ -126,8 +127,8 @@ function AdvancedSearch() {
   };
 
   const prices = () => {
-    let minPrice = allCars[0].price;
-    let maxPrice = allCars[0].price;
+    let minPrice = allCars[0]?.price;
+    let maxPrice = allCars[0]?.price;
     for (const car of allCars) {
       const price = car.price;
       if (price < minPrice) {
@@ -141,6 +142,7 @@ function AdvancedSearch() {
 
   return (
     <View style={styles.homePage}>
+      <ScrollView>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("Home");
@@ -312,6 +314,18 @@ function AdvancedSearch() {
           <Text style={styles.showResults}>Show Results</Text>
         </LinearGradient>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.showResult}
+        onPress={() => {
+          fetchData();
+          navigation.navigate("MapForUser");
+        }}
+      >
+        <LinearGradient colors={["#6C77BF", "#4485C5"]} locations={[0, 1]}>
+          <Text style={styles.showResults}>Search by Map</Text>
+        </LinearGradient>
+      </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }

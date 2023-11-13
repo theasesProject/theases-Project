@@ -32,10 +32,7 @@ function AgencyService() {
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const openModal = (service) => {
-    setSelectedService(service);
-    setModalVisible(true);
-  };
+
   useEffect(() => {
     dispatch(allServiceForAgency(activeUser.id));
 
@@ -69,7 +66,6 @@ function AgencyService() {
       receiverId: id,
       message: `Service request accepted: ${message}`,
     });
-    setModalVisible(false);
   };
 
   const rejectService = (idservice, message, id) => {
@@ -81,88 +77,69 @@ function AgencyService() {
       receiverId: id,
       message: `Service request rejected: ${message}`,
     });
-    setModalVisible(false);
   };
 
   return (
     <View style={styles.pageContainer}>
       <ScrollView style={styles.scrollContainer}>
         {allService ? (
-          allService.map((service, i) => (
-            <View key={i} style={styles.cardContainer}>
-              <View style={styles.userContainer}>
-                <Text style={styles.name}>{service.User.userName} </Text>
-                <Text style={styles.text}>want to rent you car </Text>
-                <Text style={styles.name}>{service.service.model} </Text>
-              </View>
-              <View style={styles.carContainer}>
-                <Text style={styles.text}>From </Text>
-                <Text style={styles.time}>
-                  {moment(service.service?.Service.startDate).format(
-                    "YYYY-MM-DD"
-                  )}
-                </Text>
-                <Text style={styles.text}>To</Text>
-                <Text style={styles.time}>
-                  {moment(service.service?.Service.startDate).format(
-                    "YYYY-MM-DD"
-                  )}
-                </Text>
-              </View>
-              <View>
-                {/* <Text>{service.service?.Service.amount}</Text> */}
-              </View>
-
-              <TouchableOpacity
-                onPress={() => openModal(service)}
-                style={styles.acceptButton}
-              >
-                <Text>Details</Text>
-              </TouchableOpacity>
-
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-              >
-                <View style={styles.modalView}>
-                  <Text style={styles.name}>User:{service.User.userName} </Text>
-                  <Text>want to rent your car</Text>
-                  <Text style={styles.name}>
-                    Model:{service.service.model}{" "}
-                  </Text>
-                  <Text>price:{service.service?.Service.amount}</Text>
-                  <View style={styles.actionContainer}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        rejectService(
-                          service.service.Service.id,
-                          service.service.model,
-                          service.User.id
-                        );
-                      }}
-                      style={styles.rejectButton}
-                    >
-                      <Text>Reject</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => {
-                        acceptService(
-                          service?.service.Service.id,
-
-                          service.service.model,
-                          service.User.id
-                        );
-                      }}
-                      style={styles.acceptButton}
-                    >
-                      <Text>Accept</Text>
-                    </TouchableOpacity>
-                  </View>
+          allService
+            .slice()
+            .reverse()
+            .map((service, i) => (
+              <View key={i} style={styles.cardContainer}>
+                <View style={styles.userContainer}>
+                  <Text style={styles.name}>{service.User.userName} </Text>
+                  <Text style={styles.text}>want to rent you car </Text>
+                  <Text style={styles.name}>{service.service.model} </Text>
                 </View>
-              </Modal>
-            </View>
-          ))
+                <View style={styles.carContainer}>
+                  <Text style={styles.text}>From </Text>
+                  <Text style={styles.time}>
+                    {moment(service.service?.Service.startDate).format(
+                      "YYYY-MM-DD"
+                    )}
+                  </Text>
+                  <Text style={styles.text}>To</Text>
+                  <Text style={styles.time}>
+                    {moment(service.service?.Service.startDate).format(
+                      "YYYY-MM-DD"
+                    )}
+                  </Text>
+                </View>
+                <View>
+                  {/* <Text>{service.service?.Service.amount}</Text> */}
+                </View>
+
+                <View style={styles.actionContainer}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      rejectService(
+                        service.service.Service.id,
+                        service.service.model,
+                        service.User.id
+                      );
+                    }}
+                    style={styles.rejectButton}
+                  >
+                    <Text>Reject</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      acceptService(
+                        service?.service.Service.id,
+
+                        service.service.model,
+                        service.User.id
+                      );
+                    }}
+                    style={styles.acceptButton}
+                  >
+                    <Text>Accept</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))
         ) : (
           <Text>Nothing</Text>
         )}

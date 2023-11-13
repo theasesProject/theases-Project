@@ -41,13 +41,13 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-        <Stack.Navigator>
+          <Stack.Navigator>
             <Stack.Screen
               name="Home"
               component={Home}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="MapForUser"
               component={MapForUser}
               options={{ headerShown: true }}
@@ -73,7 +73,7 @@ function App() {
               options={{ headerShown: true }}
             />
             <Stack.Screen
-              name="Favorites"
+              name="favorites"
               component={Favorites}
               options={{ headerShown: true }}
             />
@@ -180,7 +180,7 @@ function App() {
               component={AgencyProfile}
               options={{ headerShown: false }}
             />
-              <Stack.Screen
+            <Stack.Screen
               name="AgencyProfileUser"
               component={AgencyProfileUser}
               options={{ headerShown: false }}

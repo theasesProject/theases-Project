@@ -143,7 +143,7 @@ function Home({ navigation }) {
           createdAt: new Date(),
           user: {
             _id: notification.senderId,
-            name: "Service",
+            name: "Services",
           },
         },
       ]);
@@ -151,7 +151,7 @@ function Home({ navigation }) {
     return () => {
       socket.disconnect();
     };
-  }, [socket, expoPushToken]);
+  }, [socket, , expoPushToken]);
 
   return (
     <View style={styles.homePage}>
@@ -168,16 +168,19 @@ function Home({ navigation }) {
         </View>
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
         {!loading ? (
-          allCars?.map((element, i) => (
-            <View style={styles.allcars} key={i}>
-              <CardCar
-                setNothing={setNothing}
-                key={i}
-                oneCar={element}
-                handlePress={handlePress}
-              />
-            </View>
-          ))
+          allCars
+            .slice()
+            .reverse()
+            ?.map((element, i) => (
+              <View style={styles.allcars} key={i}>
+                <CardCar
+                  setNothing={setNothing}
+                  key={i}
+                  oneCar={element}
+                  handlePress={handlePress}
+                />
+              </View>
+            ))
         ) : (
           <>
             <View style={{ alignItems: "center", paddingTop: 20 }}>

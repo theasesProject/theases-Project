@@ -90,6 +90,7 @@ function Home({ navigation }) {
       });
 
     return () => {
+      
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );

@@ -4,7 +4,7 @@ import "../../styles/dashboard/page.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReviews, selectReviews } from "@/Redux/adminSlice";
 import LineChart from "../../components/LineChart";
-import Select from 'react-select';
+import Select from "react-select";
 import {
   getAllUsers,
   updateStateBlock,
@@ -20,10 +20,10 @@ import ReqRow from "../../components/ReqRow.jsx";
 import TableAdmin from "@/components/tableAdmin.jsx";
 const Dashboard = () => {
   const options = [
-    { value: 'year', label: 'Year' },
-    { value: 'month', label: 'Month' },
-    { value: 'week', label: 'Week' },
-    { value: 'day', label: 'Day' },
+    { value: "year", label: "Year" },
+    { value: "month", label: "Month" },
+    { value: "week", label: "Week" },
+    { value: "day", label: "Day" },
   ];
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const openModal = () => {
@@ -51,9 +51,9 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(fetchReviews());
     dispatch(getAllUsers());
-    dispatch(getAllRequests());
+    dispatch(getAllRequests()).then(console.log(allRequests));
     console.log(allUsers);
-    loading?setRefresh(!refresh):null
+    loading ? setRefresh(!refresh) : null;
   }, [dispatch, refresh]);
   const handleBlock = (id) => {
     try {
@@ -112,47 +112,54 @@ const Dashboard = () => {
     }
   }
   return (
-    <div style={{
-      fontFamily:"MuseoModerno"
-    }}>
+    <div
+      style={{
+        fontFamily: "MuseoModerno",
+      }}
+    >
       <div>
         <h1>Dashboard</h1>
         <p>Welcome to your special dashboard!</p>
         {/* <label style={{ */}
-          {/* width: "200px" */}
+        {/* width: "200px" */}
         {/* }}> */}
         Interval:
-        <div style={{
-  display:"flex",
-  flexDirection:"row",
-  width: '85%'
-}}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: "85%",
+          }}
+        >
+          <Select
+            value={options.find((option) => option.value === interval)}
+            onChange={(selectedOption) =>
+              handleIntervalChange(selectedOption.value)
+            }
+            options={options}
+            styles={{ container: (provided) => ({ ...provided, flex: 1 }) }}
+          />
 
-  <Select 
-    value={options.find(option => option.value === interval)}
-    onChange={selectedOption => handleIntervalChange(selectedOption.value)}
-    options={options}
-    styles={{ container: (provided) => ({ ...provided, flex: 1 }) }}
-  />
-
-  <Select 
-    value={options.find(option => option.value === interval)}
-    onChange={selectedOption => handleIntervalChange2(selectedOption.value)}
-    options={options}
-    styles={{ container: (provided) => ({ ...provided, flex: 1 }) }}
-  />
-
-</div>
-
-      {/* </label> */}
-      <div style={{
-        display:"flex",
-        flexDirection:"row",
-        width:"100%"
-      }}>
-      <LineChart allUsers={allUsers} interval={interval} />
-      <LineChart allUsers={allRequests} interval={interval2} />
-      </div>
+          <Select
+            value={options.find((option) => option.value === interval)}
+            onChange={(selectedOption) =>
+              handleIntervalChange2(selectedOption.value)
+            }
+            options={options}
+            styles={{ container: (provided) => ({ ...provided, flex: 1 }) }}
+          />
+        </div>
+        {/* </label> */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+          }}
+        >
+          <LineChart allUsers={allUsers} interval={interval} />
+          <LineChart allUsers={allRequests} interval={interval2} />
+        </div>
         <div>
           <h2>Your Data</h2>
           <p>Here's where you can see all your Users...</p>
@@ -233,8 +240,8 @@ const Dashboard = () => {
             width: "20rem",
             height: "15rem",
             borderRadius: 7,
-            backgroundColor: "black",
-            color: "white",
+            backgroundColor: "white",
+            color: "black",
             margin: "auto",
             display: "flex",
             flexDirection: "column",
@@ -257,11 +264,14 @@ const Dashboard = () => {
           <button
             style={{
               background: "linear-gradient(to right, #6C77BF, #4485C5)",
-              padding: 5,
+              // padding: 5,
+              fontWeight: "400",
               borderWidth: ".15rem",
               height: "2rem",
               width: "4rem",
               borderRadius: 7,
+              borderWidth: "0px",
+              borderColor: "white",
             }}
             onClick={() => {
               if (modalType === "user") {
@@ -281,11 +291,14 @@ const Dashboard = () => {
           <button
             style={{
               background: "linear-gradient(to right, #6C77BF, #4485C5)",
-              padding: 5,
+              // padding: 5
+              fontWeight: "400",
               borderWidth: ".15rem",
               height: "2rem",
               width: "4rem",
+              borderWidth: "0px",
               borderRadius: 7,
+              borderColor: "white",
             }}
             onClick={closeModal}
           >

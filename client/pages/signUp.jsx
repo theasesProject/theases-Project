@@ -1,4 +1,3 @@
-// import * as Rn from "react-native";r
 import { useState, useRef } from "react";
 import {
   Image,
@@ -19,6 +18,7 @@ import Lock from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import Calendar from "../assets/Svg/calendar.svg";
+import IdCard from "../assets/Svg/idCard.svg";
 import { LinearGradient } from "expo-linear-gradient";
 const { width, height } = Dimensions.get("screen");
 import GooglePng from "../assets/googleIcon.png";
@@ -40,15 +40,12 @@ const SignUp = ({ navigation, props }) => {
       console.log(inputForm);
       dispatch(SignUpClick(inputForm))
         .then((response) => {
-          // Check if the dispatch was successful
           console.log("RESPONSE§§§", response.meta);
           if (response.meta.requestStatus === "fulfilled") {
-            // Navigate to the desired location
             navigation.navigate("Home");
           }
         })
         .catch((error) => {
-          // Handle any errors from the dispatch here
           console.error(error);
         });
     }
@@ -77,13 +74,12 @@ const SignUp = ({ navigation, props }) => {
   const [isSecure2, setIsecure2] = useState(true);
 
   const checkInput = (value, placeholder) => {
-    // Clear all errors
     setNameError("");
     setEmailError("");
     setPhoneError("");
     setPasswordError("");
     setConfirmedError("");
-    setIdCardError("")
+    setIdCardError("");
 
     if (value === "") {
       if (placeholder === "Username") {
@@ -159,12 +155,11 @@ const SignUp = ({ navigation, props }) => {
           setConfirmedError("");
         }
       }else if(placeholder==="id card"){
-        if (inputForm.idCard.length!==7 ) {
-          setConfirmedError("Your id should be 8 numbers");
+        if (inputForm.idCard.length!==8 ) {
+          setIdCardError("Your id should be 8 numbers long");
           return;
-        }
-        else{
-          setIdCardError("")
+        } else {
+          setIdCardError("");
         }
       }
     }
@@ -177,7 +172,6 @@ const SignUp = ({ navigation, props }) => {
     const currentDate = selectedDate || date;
     setInputForm({ ...inputForm, dateOfBirth: currentDate });
   };
-
 
   return (
     <ScrollView style={styles.container}>
@@ -226,6 +220,7 @@ const SignUp = ({ navigation, props }) => {
               autoCapitalize="none"
               style={styles.input}
               placeholder="Email"
+              keyboardType="email-address"
               onChangeText={(text) => {
                 setInputForm({ ...inputForm, email: text.trim() });
                 setCheckUp(
@@ -253,6 +248,7 @@ const SignUp = ({ navigation, props }) => {
               }}
               autoCapitalize="none"
               style={styles.input}
+              keyboardType="phone-pad"
               placeholder="Phone"
               onChangeText={(text) => {
                 setInputForm({ ...inputForm, phoneNumber: text.trim() });
@@ -362,17 +358,18 @@ const SignUp = ({ navigation, props }) => {
             <Text style={{ color: "red" }}>{confirmedError}</Text>
           ) : null}
           <View style={styles.inputHolder}>
-            <Lock style={styles.icon} />
+            <IdCard style={styles.icon2} />
             <TextInput
               ref={inputRefConfirmed}
               onBlur={() => {
                 checkInput(inputForm.idCard, "id card");
               }}
               autoCapitalize="none"
+              keyboardType="phone-pad"
               value={inputForm.idCard}
               style={styles.input}
               placeholder="id card"
-              secureTextEntry={isSecure2}
+              // secureTextEntry={isSecure2}
               onChangeText={(text) => {
                 setInputForm({ ...inputForm, idCard: text });
                 setCheckUp(
@@ -386,11 +383,11 @@ const SignUp = ({ navigation, props }) => {
               }}
             />
           </View>
-            {idCardError ? (
-            <Text style={{ color: "red" }}>{emailError}</Text>
+            {idCardError? (
+            <Text style={{ color: "red" }}>{idCardError}</Text>
           ) : null}
           <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
-            <Calendar style={styles.icon2} />
+            <Calendar style={styles.icon3} />
             <LinearGradient
               colors={["#EFEFF9", "#EFEFF9"]}
               locations={[0, 1]}
@@ -399,25 +396,25 @@ const SignUp = ({ navigation, props }) => {
               <Text>Date of Birth</Text>
             </LinearGradient>
           </TouchableOpacity>
-           {show && (
+          {show && (
             <DateTimePicker
-            value={inputForm.dateOfBirth}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate) => {
-              if (event.type === 'dismissed') {
-                setShow(false);
-              } else if (event.type === 'set'){
-                const currentDate = selectedDate || inputForm.dateOfBirth;
-                setInputForm({...inputForm, dateOfBirth: currentDate})
-                setShow(false)
-              }
-            }}
-          />
+              value={inputForm.dateOfBirth}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                if (event.type === "dismissed") {
+                  setShow(false);
+                } else if (event.type === "set") {
+                  const currentDate = selectedDate || inputForm.dateOfBirth;
+                  setInputForm({ ...inputForm, dateOfBirth: currentDate });
+                  setShow(false);
+                }
+              }}
+            />
           )}
         </View>
         <TouchableOpacity
-        style={{paddingRight:10}}
+          style={{ paddingRight: 10 }}
           disabled={!checkUp}
           activeOpacity={0.8}
           onPress={() => {
@@ -470,27 +467,28 @@ const styles = StyleSheet.create({
     width: "10%",
     height: 20,
     zIndex: 1,
-
-    // height: height * 0.01,
-    // width: width * 0.01,
   },
   icon2: {
+    position: "absolute",
+    top: 25,
+    right: "87%",
+    width: "10%",
+    height: 20,
+    zIndex: 1,
+  },
+  icon3: {
     position: "absolute",
     top: 25,
     right: "85%",
     width: "10%",
     height: 20,
     zIndex: 1,
-
-    // height: height * 0.01,
-    // width: width * 0.01,
   },
   SignUpContainer: {
-    // height: height,
     flex: 1,
     paddingTop: 50,
     paddingBottom: 50,
-    // backgroundColor: "#fff",
+
     alignItems: "center",
     justifyContent: "center",
   },
@@ -514,7 +512,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: "grey",
     borderRadius: 5,
-    // overflow: "hidden",
+
     flexDirection: "row",
     gap: width * 0.01,
     backgroundColor: "#F3F4F6",
@@ -544,8 +542,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center",
   },
   InputContainer: {
     height: "auto",
@@ -584,7 +580,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingLeft: 40,
-    // paddingLeft: 10,
+
     zIndex: -1,
     height: 50,
     width: width * 0.8,
@@ -596,7 +592,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonContainer: {
-    // backgroundColor: "red",
     borderRadius: 5,
     padding: 10,
     alignItems: "center",
@@ -604,9 +599,8 @@ const styles = StyleSheet.create({
     width: width * 0.8,
   },
   buttonContainer2: {
-    // backgroundColor: "red",
     borderRadius: 5,
-    height: height * 0.06,
+    height: height * 0.05,
     padding: 10,
     alignItems: "center",
     marginTop: 15,

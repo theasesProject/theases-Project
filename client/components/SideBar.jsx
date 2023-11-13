@@ -1,47 +1,57 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
+  Animated,
   PanResponder,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
 
 const Sidebar = ({ isOpen, onClose, navigation }) => {
-  if (!isOpen) {
-    return null;
-  }
-
   const dispatch = useDispatch();
+
+  const animatedValue = useRef(new Animated.Value(-300)).current;
+
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: isOpen ? 0 : -250,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [isOpen, animatedValue]);
+
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {},
-      onPanResponderMove: (evt, gestureState) => {
-        if (gestureState.dx < -50) {
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        // Set a threshold to start recognizing horizontal gestures
+
+        return Math.abs(gestureState.dx) > 10;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        console.log("heeeerreeeee", gestureState.dx);
+        if (gestureState.dx > 50) {
           onClose();
-        } else if (gestureState.dx > 50) {
-          onClose();
+          console.log("done");
         }
       },
-      onPanResponderRelease: () => {},
+      onPanResponderRelease: () => {
+        // Additional logic on release if needed
+      },
     })
   ).current;
 
-  if (!isOpen) {
-    return null;
-  }
   const handleLogout = () => {
     dispatch(logoutUser());
     navigation.navigate("Home");
   };
 
   return (
-    <View
-      style={[styles.sidebar, styles.swipeContainer]}
+    <Animated.View
+      style={[styles.sidebar, { right: animatedValue }]}
       {...panResponder.panHandlers}
     >
       <TouchableOpacity onPress={() => navigation.navigate("Home")}>
@@ -80,7 +90,7 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
         <Text style={styles.text}>Logout</Text>
         <View style={styles.line} />
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -88,9 +98,9 @@ const styles = StyleSheet.create({
   sidebar: {
     position: "absolute",
     top: 0,
-    right: 0,
-    height: "100%",
-    width: "80%", // Adjust the width as needed
+    height: "82.5%",
+    width: "60%",
+    borderRadius: 10,
     backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: { width: 5, height: 0 },
@@ -105,15 +115,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-  },
-  swipeContainer: {
-    // Additional styles for the container that handles swipe gestures
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: "100%",
-    zIndex: 1,
   },
   line: {
     borderBottomWidth: 1,

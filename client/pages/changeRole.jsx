@@ -2,10 +2,10 @@ import {
   View,
   TextInput,
   StyleSheet,
-  TouchableOpacity,
   Image,
   Text,
   Pressable,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CreateAgency } from "../store/agencySlice";
 import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
+import Loc from "../assets/Svg/loc.svg";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
 function ChangeRole({ navigation }) {
@@ -122,7 +123,7 @@ function ChangeRole({ navigation }) {
             return cloudinaryResponse;
           } catch (err) {
             console.error("Cloudinary Upload Error:", err);
-            return null;
+            return;
           }
         })
       );
@@ -152,151 +153,236 @@ function ChangeRole({ navigation }) {
   }, [agencyLocation]);
   return (
     <View style={styles.changeRolePage}>
-      <TextInput
-        value={form.name}
-        onChangeText={handleChangeName}
-        placeholder="Enter Your Agency Name"
-        style={styles.input}
-      />
-      <TextInput
-        value={form.companyNumber}
-        onChangeText={handleChangeCompanyPhone}
-        placeholder="Enter Your Agency Number"
-        style={styles.input}
-      />
-      {!agencyLocation ? (
-        <TouchableOpacity onPress={() => navigation.navigate("mapforAgency")}>
-          <Text style={styles.input}>Set your Agency Location </Text>
-        </TouchableOpacity>
-      ) : (
-        <Text>Your Agency location is:{loc}</Text>
-      )}
-      <CheckBox
-        style={styles.check}
-        onClick={() => {
-          setForm({ ...form, transportation: !form.transportation });
-          // setIsChecked(!isChecked);
-        }}
-        isChecked={form.transportation}
-        leftText="Deliver cars to users locations"
-        checkBoxColor="#4485C5"
-      />
-
-      <View style={styles.dropdownContainer}>
-        <Text style={styles.dropdownTitle}>Down Payment:</Text>
-        <SelectDropdown
-          onSelect={(selectedItem, index) => {
-            handleDropdownSelect(index, selectedItem);
-          }}
-          buttonStyle={styles.dropdown}
-          dropdownStyle={styles.dropdownOptions}
-          defaultButtonText="select"
-          data={deposit}
-          dropdownIconPosition="right"
+      <ScrollView contentContainerStyle={{ padding: 10, flexGrow: 1 }}>
+        <TextInput
+          value={form.name}
+          onChangeText={handleChangeName}
+          placeholder="Enter Your Agency Name"
+          style={styles.input}
         />
-      </View>
-      <Pressable
-        onPress={selectImage}
-        style={styles.addImgTextContainer}
-        activeOpacity={0.8}
-        onPressIn={() => {
-          setColor("darkblue");
-        }}
-        onPressOut={() => setColor("#6C77BF")}
-      >
-        <Text style={{ color: color }}>add images</Text>
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      </Pressable>
-      <View style={styles.imgsContainer}>
-        {selectedDocuments.map((uri, index) => (
-          <View key={index} style={styles.imgContainer}>
-            <Pressable onPress={() => handleDelete(uri)}>
-              <Image source={xBtn} style={styles.xBtn} />
-            </Pressable>
-            <Image source={{ uri }} style={styles.img} />
-          </View>
-        ))}
-      </View>
-      <TouchableOpacity
-        style={styles.submitBtnContainer}
-        activeOpacity={0.8}
-        onPress={createNewAgency}
-      >
-        <LinearGradient
-          colors={["#6C77BF", "#4485C5"]}
-          locations={[0, 1]}
-          style={styles.submitBtn}
+        <TextInput
+          value={form.companyNumber}
+          onChangeText={handleChangeCompanyPhone}
+          keyboardType="phone-pad"
+          placeholder="Enter Your Agency Number"
+          style={styles.input}
+        />
+        {!agencyLocation ? (
+          <Pressable
+            style={{
+              borderWidth: 1,
+              borderColor: "#6C77BF",
+              borderRadius: 5,
+              marginBottom: 10,
+              backgroundColor: "white",
+              display: "flex",
+              height: 50,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={() => navigation.navigate("mapforAgency")}
+          >
+            <Loc style={styles.icon} />
+            <Text style={styles.inputIcon}>Use Your Agency Location </Text>
+          </Pressable>
+        ) : (
+          <Text>{loc}</Text>
+        )}
+        <CheckBox
+          style={styles.check}
+          onClick={() => {
+            setForm({ ...form, transportation: !form.transportation });
+          }}
+          isChecked={form.transportation}
+          leftText="Deliver cars to users locations"
+          checkBoxColor="#6C77BF"
+          activeOpacity={2}
+        />
+
+        <View style={styles.dropdownContainer}>
+          <Text style={styles.dropdownTitle}>
+            pick your default deposit value...
+          </Text>
+          <SelectDropdown
+            onSelect={(selectedItem, index) => {
+              handleDropdownSelect(index, selectedItem);
+            }}
+            buttonStyle={styles.dropdown}
+            dropdownStyle={{ ...styles.dropdownOptions, height: 250 }} // adjust the height as needed
+            defaultButtonText={
+              <Text style={{ fontSize: 14, color: "gray" }}>deposit: </Text>
+            }
+            data={deposit}
+            dropdownIconPosition="right"
+          />
+        </View>
+        <Pressable
+          onPress={selectImage}
+          style={styles.addImgTextContainer}
+          activeOpacity={0.8}
+          onPressIn={() => {
+            setColor("darkblue");
+          }}
+          onPressOut={() => setColor("#6C77BF")}
         >
-          <Text style={styles.submitBtnContent}>submit</Text>
-        </LinearGradient>
-      </TouchableOpacity>
+          <Pressable
+            style={{
+              // paddingRight: 250,
+              marginBottom: 10,
+            }}
+            onPress={selectImage}
+            activeOpacity={0.8}
+          >
+            <LinearGradient
+              colors={["#6C77BF", "#4485C5"]}
+              locations={[0, 1]}
+              style={styles.addImgTextContainer}
+            >
+              <Text style={{ color: "white" }}>add images</Text>
+            </LinearGradient>
+          </Pressable>
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        </Pressable>
+        <View style={styles.imgsContainer}>
+          {selectedDocuments.map((uri, index) => (
+            <View key={index} style={styles.imgContainer}>
+              <Pressable onPress={() => handleDelete(uri)}>
+                <Image source={xBtn} style={styles.xBtn} />
+              </Pressable>
+              <Image source={{ uri }} style={styles.img} />
+            </View>
+          ))}
+        </View>
+        <Pressable
+          style={styles.submitBtnContainer}
+          activeOpacity={0.8}
+          onPress={createNewAgency}
+        >
+          <LinearGradient
+            colors={["#6C77BF", "#4485C5"]}
+            locations={[0, 1]}
+            style={styles.submitBtn}
+          >
+            <Text style={styles.submitBtnContent}>submit</Text>
+          </LinearGradient>
+        </Pressable>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   changeRolePage: {
+    backgroundColor: "rgb(233, 231, 238)",
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     paddingVertical: 30,
     flexDirection: "column",
     justifyContent: "center",
     gap: 10,
   },
   input: {
+    borderWidth: 1,
+    borderColor: "#6C77BF",
     width: "100%",
     backgroundColor: "white",
-    borderRadius: 10,
+    marginBottom: 10,
+    borderRadius: 5,
     height: 50,
-    paddingHorizontal: 10,
-    fontSize: 16,
+    // paddingHorizontal: 10,
+    fontSize: 14,
     padding: 10,
   },
+  inputIcon: {
+    // paddingLeft:35,
+    // width: "100%",
+    // backgroundColor: "white",
+    borderRadius: 5,
+    borderRadius: 5,
+
+    paddingRight: 140,
+    // paddingHorizontal: 10,
+    fontSize: 14,
+    padding: 10,
+  },
+  icon: {
+    position: "absolute",
+    top: 16,
+    right: "90%",
+    width: "10%",
+    zIndex: 1,
+  },
   check: {
+    borderWidth: 1,
+    borderColor: "#6C77BF",
     width: "100%",
+    marginBottom: 10,
     justifyContent: "center",
-    borderRadius: 10,
+    borderRadius: 5,
     height: 50,
-    paddingHorizontal: 10,
+    // fontSize:14,
+    backgroundColor: "white",
+    // paddingHorizontal: 10,
     padding: 10,
   },
   dropdownContainer: {
+    borderWidth: 1,
+    borderColor: "#6C77BF",
+    marginBottom: 10,
     width: "100%",
     flexDirection: "row",
     backgroundColor: "white",
-    borderRadius: 10,
+    borderRadius: 5,
     height: 50,
     paddingHorizontal: 10,
-    fontSize: 16,
+    // fontSize: 16,
+
     alignItems: "center",
     justifyContent: "space-between",
   },
   dropdownTitle: {
-    fontSize: 16,
+    fontSize: 14,
   },
   dropdown: {
     backgroundColor: "white",
+    height: 47,
     width: "30%",
   },
   dropdownOptions: {
     backgroundColor: "white",
-    borderRadius: 10,
+    borderRadius: 5,
   },
   addImgTextContainer: {
-    paddingHorizontal: 10,
+    marginLeft: -49,
+    borderRadius: 5,
+    height: 30,
+    width: "80%",
+    color: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    // paddingBottom:10,
+    // paddingTop:10,
+    // height:"1px",
+    // paddingHorizontal: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
+    // alignItems:"center",
+    // justifyContent: "space-between",
   },
   errorText: {
     color: "red",
   },
   imgsContainer: {
+    borderWidth: 1,
+    borderColor: "#6C77BF",
+    borderRadius: 5,
     flexWrap: "wrap",
     flexDirection: "row",
     gap: 15,
     backgroundColor: "white",
     padding: 10,
-    height: "47%",
+    height: "30%",
+    marginBottom: 10,
   },
   imgContainer: {
     position: "relative",
@@ -320,7 +406,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   submitBtn: {
-    borderRadius: 10,
+    borderRadius: 5,
     height: 50,
     width: "100%",
     color: "white",

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View, Text, Button, Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CarDetails from "./pages/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
@@ -32,17 +32,25 @@ import AgencyProfile from "./pages/AgencyProfile.jsx";
 import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import MapForUser from "./pages/MapForUser.jsx";
+import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 const Stack = createStackNavigator();
+
 function App() {
   return (
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator>
             <Stack.Screen
               name="Home"
               component={Home}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MapForUser"
+              component={MapForUser}
+              options={{ headerShown: true }}
             />
             <Stack.Screen
               name="AgencyService"
@@ -70,7 +78,7 @@ function App() {
               options={{ headerShown: true }}
             />
             <Stack.Screen
-              name="favorites"
+              name="Favorites"
               component={Favorites}
               options={{ headerShown: true }}
             />
@@ -151,12 +159,12 @@ function App() {
             <Stack.Screen
               name="AdvancedSearch"
               component={AdvancedSearch}
-              options={{ headerShown: false }}
+              options={{ headerShown: true }}
             />
             <Stack.Screen
               name="FiltredCar"
               component={FiltredCar}
-              options={{ headerShown: false }}
+              options={{ headerShown: true }}
             />
 
             <Stack.Screen
@@ -168,6 +176,11 @@ function App() {
             <Stack.Screen
               name="AgencyProfile"
               component={AgencyProfile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AgencyProfileUser"
+              component={AgencyProfileUser}
               options={{ headerShown: false }}
             />
             <Stack.Screen

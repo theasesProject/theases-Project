@@ -1,4 +1,4 @@
-module.exports = ( DataTypes, connection) => {
+module.exports = (DataTypes, connection) => {
   const Car = connection.define("Car", {
     model: {
       type: DataTypes.STRING,
@@ -12,10 +12,15 @@ module.exports = ( DataTypes, connection) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    period: {
-      type: DataTypes.ENUM("daily", "weekly", "monthly"),
+    priceWeekly: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
+    priceMonthly: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+
     status: {
       type: DataTypes.ENUM("available", "rented"),
       allowNull: false,
@@ -41,17 +46,17 @@ module.exports = ( DataTypes, connection) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    acceptation:{
-      type:DataTypes.ENUM("rejected","accepted","pending"),
-      allowNull:false,
-      defaultValue:"pending"
+    acceptation: {
+      type: DataTypes.ENUM("rejected", "accepted", "pending"),
+      allowNull: false,
+      defaultValue: "pending",
     },
-    typevehicle:{
-      type:DataTypes.ENUM("Economical","Luxury","Sports","Commercial")
+    typevehicle: {
+      type: DataTypes.ENUM("Economical", "Luxury", "Sports", "Commercial"),
     },
-    characteristics:{
-      type:DataTypes.ENUM("Automatic","Manual","Semi-Automatic")
-    }
+    characteristics: {
+      type: DataTypes.ENUM("Automatic", "Manual", "Semi-Automatic"),
+    },
   });
   return Car;
 };

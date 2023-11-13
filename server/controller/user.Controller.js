@@ -163,6 +163,7 @@ module.exports = {
     try {
       const user = await User.findByPk(userId);
       if (user) {
+        console.log('here controller selim ',user);
         res.json(user);
       } else {
         res.status(404).json({ message: "User not found" });

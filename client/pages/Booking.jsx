@@ -6,8 +6,12 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
+  Dimensions,
+  Modal,
+  TouchableHighlight,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+const { width, height } = Dimensions.get("screen");
 import * as Calendar from "expo-calendar";
 import { useSelector, useDispatch } from "react-redux";
 import { CreateBooking } from "../store/bookingSlice";
@@ -15,36 +19,40 @@ import { StatusBar } from "expo-status-bar";
 import CalendarPicker from "react-native-calendar-picker";
 import { GetUnavailableDatesForCar } from "../store/bookingSlice";
 import { useNavigation } from "@react-navigation/native";
-// import { Calendar } from "react-native-calendars";
+
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
+
 function Booking() {
   const navigation = useNavigation();
+  const [roleModalVisible, setRoleModalVisible] = useState(false);
+  const [agreed, setAgreed] = useState(false);
   const unavailableDate = useSelector((state) => state.booking.unavailableDate);
   const oneCar = useSelector((state) => state.car.OneCar);
+  console.log(oneCar, "onecar");
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
-  const succes = useSelector((state) => state.booking.succes);
-
-  useEffect(() => {
-    dispatch(GetUnavailableDatesForCar(oneCar.id));
-  }, [dispatch]);
+  const error = useSelector((state) => state.booking.error);
+  const [total, setTotal] = useState(0);
 
   const createBooking = () => {
     if (selectedStartDate && selectedEndDate) {
-      dispatch(
-        CreateBooking({
-          startDate: selectedStartDate.format("YYYY-MM-DD").toString(),
-          endDate: selectedEndDate.format("YYYY-MM-DD").toString(),
-          UserId: activeUser.id,
-          CarId: oneCar.id,
-        })
-      );
-    } else {
-      alert("Please select both a start date and an end date.");
+      if (error) {
+        alert("error to create");
+      } else {
+        dispatch(
+          CreateBooking({
+            startDate: selectedStartDate.format("YYYY-MM-DD").toString(),
+            endDate: selectedEndDate.format("YYYY-MM-DD").toString(),
+            UserId: activeUser.id,
+            CarId: oneCar.id,
+            amount: total,
+          })
+        );
+      }
     }
   };
   const getDatesInRange = (start, end) => {
@@ -56,21 +64,79 @@ function Booking() {
     }
     return dates;
   };
+  const showRoleModal = () => {
+    if (!selectedStartDate || !selectedEndDate) {
+      alert("Please select both a start date and an end date.");
+    } else {
+      const datesInRange = getDatesInRange(selectedStartDate, selectedEndDate);
+      const datesInRangeFormatted = datesInRange.map((date) =>
+        moment(date).format("YYYY-MM-DD")
+      );
+
+      const isDatesAvailable = datesInRangeFormatted.every(
+        (date) => !unavailableDate.includes(date)
+      );
+      console.log(unavailableDate, "unavailableDate");
+      console.log(isDatesAvailable, "isDatesAvailable");
+
+      if (!isDatesAvailable) {
+        alert(
+          "Some or all of the selected dates are not available. Please choose different dates."
+        );
+      } else {
+        setRoleModalVisible(true);
+      }
+    }
+  };
+
+  const handleRoleResponse = (response) => {
+    setRoleModalVisible(false);
+    if (response === "agree") {
+      createBooking();
+      alert("Congratulations! Your booking was successful.");
+      navigation.navigate("Home");
+    } else {
+      setRoleModalVisible(false);
+    }
+  };
+  const calculTotalPrice = () => {
+    const startDate = moment(selectedStartDate);
+    const endDate = moment(selectedEndDate);
+
+    if (selectedStartDate && selectedEndDate) {
+      const durationInDays = endDate.diff(startDate, "days") + 1;
+
+      let pricePerDay = oneCar.price;
+      if (durationInDays > 7) {
+        pricePerDay = oneCar.priceWeekly;
+      }
+      if (durationInDays > 29) {
+        pricePerDay = oneCar.priceMonthly;
+      }
+
+      const total = durationInDays * pricePerDay;
+      console.log(total, "total");
+      setTotal(total);
+    } else if (startDate && !endDate) {
+      setTotal(0);
+    }
+  };
+
   const handleDateSelect = (date) => {
-    if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+    if (!selectedStartDate && !selectedEndDate) {
       setSelectedStartDate(date);
-      setSelectedEndDate(null); // Reset the end date.
+      setSelectedEndDate(null);
       setMarkedDates({
-        [date]: { selectedDayColor: "red", startingDay: true, endingDay: true },
+        [date]: { startingDay: true, endingDay: true },
       });
     } else if (moment(date).isSame(selectedStartDate, "day")) {
       setSelectedStartDate(null);
-      setMarkedDates({}); // Clear all markings.
+      setSelectedEndDate(null);
+      setMarkedDates({});
     } else if (moment(date).isAfter(selectedStartDate, "day")) {
       setSelectedEndDate(date);
       setMarkedDates({
         ...markedDates,
-        [date]: { color: "green" },
       });
 
       const datesInRange = getDatesInRange(selectedStartDate, date);
@@ -88,9 +154,12 @@ function Booking() {
         },
         [date]: { ...markedDates[date], startingDay: true },
       });
+    } else if (selectedEndDate && !selectedStartDate) {
+      setSelectedEndDate(null);
+      setSelectedStartDate(null);
     }
+    calculTotalPrice();
   };
-
   const markDatesRed = () => {
     const markedRedDates = {};
 
@@ -101,42 +170,105 @@ function Booking() {
     return markedRedDates;
   };
 
+  useEffect(() => {
+    dispatch(GetUnavailableDatesForCar(oneCar.id));
+    calculTotalPrice();
+  }, [dispatch, selectedStartDate, selectedEndDate]);
+
   return (
     <View style={styles.page}>
-      <CalendarPicker
-        allowRangeSelection={true}
-        onDateChange={(date) => handleDateSelect(date)}
-        // markedDates={markedDates}
-        markedDates={{
-          ...markedDates,
-          ...markDatesRed(), // Add red dates to the markedDates
-        }}
-        todayBackgroundColor="blue"
-        selectedDayColor="#daddf0"
-        selectedDayTextColor="white"
-        scaleFactor={375}
-        textStyle={{
-          // fontFamily: "Cochin",
-          color: "black",
+      <View>
+        <CalendarPicker
+          allowRangeSelection={true}
+          onDateChange={(date) => handleDateSelect(date)}
+          markedDates={{
+            ...markedDates,
+            ...markDatesRed(),
+          }}
+          todayBackgroundColor="blue"
+          selectedDayColor="#daddf0"
+          selectedDayTextColor="white"
+          selectedDisabledDatesTextStyle={{ color: "red" }}
+          scaleFactor={375}
+          textStyle={{
+            color: "black",
 
-          fontSize: 18,
+            fontSize: 18,
+          }}
+          previousTitle="<"
+          nextTitle=">"
+          disabledDates={unavailableDate}
+        />
+      </View>
+      <View>
+        <View style={styles.total1}>
+          <Text style={styles.total}>{total}$</Text>
+        </View>
+        <TouchableOpacity style={{ paddingLeft: 12 }} onPress={showRoleModal}>
+          <LinearGradient
+            colors={["#6C77BF", "#4485C5"]}
+            style={styles.buttonContainer}
+          >
+            <Text style={styles.buttonText}>Book Now</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={roleModalVisible}
+        onRequestClose={() => {
+          setRoleModalVisible(!roleModalVisible);
         }}
-        previousTitle="<"
-        nextTitle=">"
-        // customStyles={customStyles}
-      />
-      <View></View>
-      <TouchableOpacity style={styles.bookNow} onPress={() => createBooking()}>
-        <Text>Book Now</Text>
-      </TouchableOpacity>
+      >
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>
+            1:Driver's License Verification: The client must possess a valid and
+            current driver's license. Provide a clear photocopy or image of the
+            driver's license for verification.{" "}
+          </Text>
+          <Text style={styles.modalText}>
+            {" "}
+            2:Insurance Agreement: Understandand agree to the insurance terms
+            and conditions. Provide necessary insurance information if required.
+            Responsible Driving: Ensure responsible and safe driving during the
+            rental period.
+          </Text>
+
+          <Text style={styles.modalText}>
+            3:traffic laws and regulations. Return Conditions: Return the car in
+            the same condition it was received. Report any damages or issues
+            immediately.
+          </Text>
+
+          <Text style={styles.modalText}>
+            {" "}
+            4:Rental Duration: Abide by the agreed-upon rental duration. Notify
+            in advance if an extension is needed.
+          </Text>
+
+          <View style={styles.buttonContainer}>
+            <TouchableHighlight
+              style={{ ...styles.button, backgroundColor: "#2196F3" }}
+              onPress={() => handleRoleResponse("agree")}
+            >
+              <Text style={styles.buttonText}>Agree</Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight
+              style={{ ...styles.button, backgroundColor: "#2196F3" }}
+              onPress={() => handleRoleResponse("reject")}
+            >
+              <Text style={styles.buttonText}>Reject</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  calender: {
-    backgroundColor: "red",
-  },
   Pick: {
     width: "100%",
     height: 50,
@@ -144,10 +276,67 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: "bold",
   },
+  page: {
+    backgroundColor: "white",
+    padding: 20,
+  },
   bookNow: {
     backgroundColor: "yellow",
     height: 50,
     width: 100,
+  },
+  total: {
+    padding: 10,
+    color: "blue",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  buttonContainer: {
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+    marginVertical: 15,
+    width: width * 0.8,
+  },
+  total1: {
+    alignItems: "center",
+    padding: 10,
+  },
+
+  buttonText: {
+    fontSize: 18,
+    color: "#fff",
+    textAlign: "center",
+  },
+
+  button: {
+    backgroundColor: "#6C77BF",
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+    marginVertical: 15,
+    width: width * 0.8,
+  },
+
+  buttonText: {
+    fontSize: 18,
+    color: "#fff",
+    textAlign: "center",
+  },
+
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    elevation: 5,
+  },
+
+  modalText: {
+    fontSize: 14,
+    marginBottom: 10,
+    color: "grey",
   },
 });
 

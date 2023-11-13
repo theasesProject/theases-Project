@@ -62,7 +62,6 @@ const ForgotPassword = ({ navigation }) => {
   };
 
   const identifierValidation = (identifier) => {
-    // Regular expression for email
     const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
     if (emailPattern.test(identifier)) {
       return "email";

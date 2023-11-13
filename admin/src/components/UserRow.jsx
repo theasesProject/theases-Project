@@ -27,7 +27,7 @@ const UserRow = ({ openModal, setUser, user, handleBlock, setTypeModal }) => {
           style={{
             padding: "0.5rem 2.5rem",
             borderRadius: "0.3125rem",
-            background: "red",
+            background: "#9250bc",
             padding:10,
             width:"8rem",
             color: "#fff",
@@ -35,7 +35,7 @@ const UserRow = ({ openModal, setUser, user, handleBlock, setTypeModal }) => {
             animation: 'buttonFadeIn 0.5s ease'
           }}
         >
-          {!user.stateBlocked ? "block" : "Unblock"}
+          {!user.stateBlocked ? "Block" : "Unblock"}
         </button>
       </td>
     </tr>

@@ -18,6 +18,7 @@ import Lock from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import Calendar from "../assets/Svg/calendar.svg";
+import IdCard from "../assets/Svg/idCard.svg";
 import { LinearGradient } from "expo-linear-gradient";
 const { width, height } = Dimensions.get("screen");
 import GooglePng from "../assets/googleIcon.png";
@@ -357,7 +358,7 @@ const SignUp = ({ navigation, props }) => {
             <Text style={{ color: "red" }}>{confirmedError}</Text>
           ) : null}
           <View style={styles.inputHolder}>
-            <Lock style={styles.icon} />
+            <IdCard style={styles.icon2} />
             <TextInput
               ref={inputRefConfirmed}
               onBlur={() => {
@@ -386,7 +387,7 @@ const SignUp = ({ navigation, props }) => {
             <Text style={{ color: "red" }}>{idCardError}</Text>
           ) : null}
           <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
-            <Calendar style={styles.icon2} />
+            <Calendar style={styles.icon3} />
             <LinearGradient
               colors={["#EFEFF9", "#EFEFF9"]}
               locations={[0, 1]}
@@ -468,6 +469,14 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   icon2: {
+    position: "absolute",
+    top: 25,
+    right: "87%",
+    width: "10%",
+    height: 20,
+    zIndex: 1,
+  },
+  icon3: {
     position: "absolute",
     top: 25,
     right: "85%",

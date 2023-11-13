@@ -393,7 +393,7 @@ function AddAgencyCar({ navigation }) {
           />
           <RemoveBackground />
 
-          {/* <View style={styles.picture}>
+          <View style={styles.picture}>
             <TouchableOpacity
               style={styles.addImgTextContainer}
               activeOpacity={0.8}
@@ -405,7 +405,7 @@ function AddAgencyCar({ navigation }) {
                 ADD PICTURE
               </Text>
             </TouchableOpacity>
-          </View> */}
+          </View>
           <View style={styles.imgsContainer}>
             {img.map((uri, index) => (
               <View key={index} style={styles.imgContainer}>

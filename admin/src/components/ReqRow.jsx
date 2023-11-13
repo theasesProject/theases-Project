@@ -24,7 +24,7 @@ const ReqRow = ({
           style={{
             padding: "0.5rem 2.5rem",
             borderRadius: "0.3125rem",
-            background: "red",
+            background: "#7abaf2",
             color: "#fff",
           }}
           onClick={() => {
@@ -41,7 +41,7 @@ const ReqRow = ({
           style={{
             padding: "0.5rem 2.5rem",
             borderRadius: "0.3125rem",
-            background: "red",
+            background: "#7abaf2",
             color: "#fff",
           }}
           onClick={() => handlePapers(request.Media)}
@@ -68,7 +68,7 @@ const ReqRow = ({
             style={{
               padding: "0.5rem 2.5rem",
               borderRadius: "0.3125rem",
-              background: "blue",
+              background: "#04bfbf",
               color: "#fff",
             }}
           >
@@ -90,7 +90,7 @@ const ReqRow = ({
             style={{
               padding: "0.5rem 2.5rem",
               borderRadius: "0.3125rem",
-              background: "red",
+              background: "#9250bc",
               color: "#fff",
             }}
           >

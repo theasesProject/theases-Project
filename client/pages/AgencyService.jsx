@@ -58,7 +58,7 @@ function AgencyService() {
 
   const acceptService = (idservice, id, message) => {
     const obj = { id: idservice, acceptation: "accepted" };
-    console.log(activeUser, "activeUser");
+  
     dispatch(UpdateServiceByAgency(obj));
     console.log("Accepting service:", idservice, message, id);
     socket.emit("acceptService", {

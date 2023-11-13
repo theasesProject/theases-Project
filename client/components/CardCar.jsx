@@ -42,7 +42,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   const handleStarPress = () => {
     setStarSelected(!starSelected);
   };
-  
+
   const handleHeartPress = async () => {
     // setHeartSelected(!heartSelected);
     // if (!heartSelected) {
@@ -73,7 +73,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
     dispatch(saveDetails(oneCar));
     handlePress();
   };
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaaa",oneCar);
+
   useEffect(() => {
     setDone(false);
     checkBookMarked();

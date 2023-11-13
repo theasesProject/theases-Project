@@ -23,7 +23,7 @@ function AgencyProfile({ navigation }) {
   const activeUser = useSelector(selectUser);
   const [isSliderOpen, setSliderOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  console.log("here", activeUser);
+ 
   const handleSliderToggle = () => {
     setSliderOpen(!isSliderOpen);
   };

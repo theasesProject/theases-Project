@@ -6,13 +6,15 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  TouchableOpacity,
+  Text,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import axios from "axios";
 
-const apiKey = "hM4Tnd79Kjf9fbEYSwzw86BF";
+const apiKey = "fJpvXML3yJUyMTw6sps4Nv3u";
 var Buffer = require("buffer/").Buffer;
 const RemoveBackground = () => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -122,21 +124,37 @@ const RemoveBackground = () => {
 
   return (
     <View style={styles.container}>
-      <Button title="Select Images" onPress={selectImages} />
+      <View style={styles.picture}>
+        <TouchableOpacity onPress={selectImages}>
+          <Text style={styles.input2}>Select Images</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView>
-        {selectedImages.map((imageUri, index) => (
-          <View key={index}>
-            <Image source={{ uri: imageUri }} style={styles.image} />
-            <Button
-              title="Remove Background"
-              onPress={() => removeBackground(imageUri)}
-            />
-          </View>
-        ))}
+        <View style={styles.picture}>
+          {selectedImages.map((imageUri, index) => (
+            <View key={index}>
+              <Image source={{ uri: imageUri }} style={styles.image} />
+              <Text
+                style={styles.input2}
+                onPress={() => removeBackground(imageUri)}
+              >
+                Remove Background
+              </Text>
+            </View>
+          ))}
+        </View>
       </ScrollView>
-      {processedImages.length > 0 && (
-        <Button title="Save to Gallery" onPress={saveToGallery} />
-      )}
+
+      <View style={styles.picture}>
+        <TouchableOpacity
+          style={styles.addImgTextContainer}
+          onPress={saveToGallery}
+        >
+          {processedImages.length > 0 && (
+            <Text style={styles.input2}>Save to Gallery</Text>
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -151,6 +169,31 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     marginBottom: 20,
+  },
+  input2: {
+    fontSize: 18,
+    justifyContent: "flex-start",
+    color: "black",
+    borderColor: "lightgrey",
+    width: "100%",
+    height: 40,
+    borderRadius: 8,
+    textAlign: "center",
+    padding: 4,
+    borderWidth: 2,
+  },
+  picture: {
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    borderColor: "yellow",
+    borderRadius: 5,
+    marginBottom: "5%",
+  },
+  addImgTextContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

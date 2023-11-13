@@ -100,11 +100,9 @@ module.exports = {
       const userid= await db.User.findOne({
         where: { id: agencyById.UserId * 1 },
       })
-      const agencyCars=await db.Car.findOne({
-        where:{AgencyId:agencyById.id}
-      })
-      console.log(agencyById,userid,agencyCars);
-      res.status(200).send({agencyById,userid,agencyCars});
+     
+      console.log(agencyById,userid);
+      res.status(200).send({agencyById,userid});
     } catch (error) {
       throw error;
     }

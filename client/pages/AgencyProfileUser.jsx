@@ -9,42 +9,45 @@ import { getOne ,OneAgency} from "../store/agencySlice";
 import { useDispatch, useSelector } from "react-redux";
 import {  OneUserbid, getOneById } from "../store/userSlice";
 import { getallCarByAgency } from "../store/carFetch";
+import CardCar from "../components/CardCar";
+import car from "../assets/car2.png";
+
 function AgencyProfileUser({navigation}){
 const ag= useSelector(OneAgency)
-
+const agencyCars = useSelector((state) => state.car.agencyCar);
+const loading = useSelector((state) => state.car.loading);
 
     const route = useRoute();
     const dispatch = useDispatch();
     const { agencyId } = route.params;
 
 
-console.log('herrre front ',ag.agencyCars,'heeeerrreee selim');  
+  
+console.log(ag,'agency here');
+// const handleHeartPress = async () => {
+//   // setHeartSelected(!heartSelected);
+//   // if (!heartSelected) {
+//   setHeartClicked(!isHeartClicked);
 
+//   dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
+//   // } else if (heartSelected) {
+//   // dispatch(removedBookMark(oneCar.id));
+//   // }
+// };
 
 useEffect(()=>{
-    dispatch(getOne(agencyId));
-
+    dispatch(getallCarByAgency(agencyId));
+dispatch(getOne(agencyId))
 },[dispatch])
-const us= useSelector(OneUserbid)
+const handleRent = async () => {
+  // dispatch(carDetail(oneCar));
+  // dispatch(saveDetails(oneCar));
+  handlePress();
+};
 
     return (
 <View>
-      <View style={styles.trial}>
-        <View style={styles.trle}>
-          <Pressable onPress={()=>navigation.navigate('Home')}>
-          <Left />
-          </Pressable>
-        </View>
-
-        <View style={styles.trri}>
-          <Pressable
-            style={styles.trri}
-     
-          >
-            <Dots />
-          </Pressable>
-        </View>
-      </View>
+      
       <View style={styles.agency}>
         <ScrollView>
         <View style={styles.vbgImg}>
@@ -81,20 +84,73 @@ source={{
              
               </View>
             </View>
+         
+           <View style={styles.mape}> 
+         { agencyCars?.map((element, i) => (
+
+            <View key={i} style={styles.card}>
+            <Pressable style={styles.Image}  onPress={handleRent}>
+              {element? (
+                // console.log('ele in map',element.car),
+                <Image
+                  style={styles.carImage}
+                  source={{
+                    uri: element?.carImage.media,
+                  }}
+                />
+              ) : (
+                <Image style={styles.carImage} source={car} /> 
+                )} 
+      
+              
+            </Pressable>
+            <View style={styles.carDetails}>
+              <View style={styles.NameAvaib}>
+                <Text style={styles.carName}>{element.car.model}</Text>
+                <Text style={styles.avaible}>{element.car.status}</Text>
+              </View>
+              <View style={styles.PriceStar}>
+                <View style={styles.booking}>
+                  <Text style={styles.carPrice}>
+                    ${element.car.price}/Daily
+                  </Text>
+                  <View style={styles.bookingCar}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        dispatch(carDetail(element.car));
+                        navigation.navigate("Booking");
+                      }}
+                    >
+                      <Text style={styles.bookingCar1}>Booking</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.reviews}>
+                  {/* <TouchableOpacity onPress={handleStarPress}>
+                    <Image style={styles.heart} source={starImage} />
+                  </TouchableOpacity> */}
+                  <Text style={styles.avaible}>(150 review)</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        
 
 
 
+
+
+        )) }
+        </View>
         </ScrollView>
 
    
        
-
+ 
         
         </View>
-        <View style={styles.foot}> 
-          {/* <NavBar /> */}
-        </View>
-   
+      
+    <NavBar />
     </View>
 
 
@@ -103,28 +159,16 @@ source={{
     )
 }
 const styles = StyleSheet.create({
-    trial: {
-      height: "6%",
-      width: width,
-      // backgroundColor:'green',
-      flexDirection: "row",
-      paddingHorizontal: width * 0.07,
-      alignItems: "center",
-      justifyContent: "space-between",
+   
+    mape:{
+      gap:30,
+      paddingHorizontal:30,
     },
-    trle: {
-      // flex: 1,
-      // paddingRight: 200,
-      // backgroundColor:'red'
-    },
-    trri: {
-      width: width * 0.1,
-    },
-  
+   
     agency: {
     //   zIndex: 0,
       width: width,
-      height: "94%",
+      height: "93%",
     },
     vbgImg: {
       height: height * 0.25,
@@ -214,6 +258,91 @@ const styles = StyleSheet.create({
       justifyContent: "flex-end", // Align the component to the bottom
       alignItems: "center",
       backgroundColor: "green",
+    },
+    card: {
+      backgroundColor: "white",
+      height: height * 0.35,
+      borderRadius: 10,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 20,
+      paddingVertical: 110,
+      
+    },
+    barText: {
+      width: 360,
+      height: 35,
+      borderRadius: 10,
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+  
+    carImage: {
+      width: width * 0.8,
+      height: 150,
+    },
+    heart: {
+      width: 30,
+      height: 28,
+    },
+    Image: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "flex-start",
+      gap: 10,
+      height: 150,
+    },
+    NameAvaib: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      gap: 180,
+    },
+    PriceStar: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    reviews: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      gap: 10,
+    },
+    carName: {
+      fontSize: 18,
+      fontWeight: "bold",
+      color: "black",
+    },
+    avaible: {
+      fontSize: 15,
+      fontWeight: "bold",
+      color: "green",
+    },
+    carPrice: {
+      fontSize: 17,
+      paddingLeft: width * 0.5,
+      fontWeight: "bold",
+      color: "#6C77BF",
+      fontSize: 14,
+      color: "rgb(130, 124, 140)",
+    },
+    carPrice: {
+      fontSize: 18,
+      fontWeight: "bold",
+      color: "rgb(172, 133, 234)",
+    },
+    bookingCar: {
+      borderWidth: 2,
+      width: 120,
+      height: 30,
+      justifyContent: "center",
+      alignItems: "center",
+      borderColor: "lightgrey",
+      borderRadius: 5,
+      backgroundColor: "lightblue",
+    },
+    bookingCar1: {
+      fontSize: 16,
+      fontWeight: "bold",
     },
   });
 export default AgencyProfileUser

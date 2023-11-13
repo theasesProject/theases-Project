@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAgencyData } from "../store/agencySlice";
 import ItineraryModal from "../components/ItinerairyModal.jsx"; // Import your ItineraryModal component
 import { useNavigation } from "@react-navigation/native";
+
+
 const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
 const MapForUser = ({}) => {
@@ -29,6 +31,7 @@ const MapForUser = ({}) => {
   };
   const [filterRadius, setFilterRadius] = useState(10);
   const [sliderValue, setSliderValue] = useState(10);
+  const [estimatedDuration, setEstimatedDuration] = useState(null);
 
   const agencies = useSelector((state) => state.agency.list);
   const [selectedAgency, setSelectedAgency] = useState(null);
@@ -101,7 +104,7 @@ const MapForUser = ({}) => {
       longitudeDelta: 0.0421,
     });
   };
-  const agen=`<?xml version="1.0" encoding="utf-8"?>
+  const agen = `<?xml version="1.0" encoding="utf-8"?>
   <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
   <svg fill="#DC143C"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
      viewBox="0 0 256 253" enable-background="new 0 0 256 253" xml:space="preserve">
@@ -125,13 +128,40 @@ const MapForUser = ({}) => {
     c0,6.477,6.755,31.47,31.727,31.47c21.689,0,31.202-19.615,31.202-31.47c0,11.052,7.41,31.447,31.464,31.447
     c21.733,0,31.363-20.999,31.363-31.447c0,14.425,9.726,26.416,22.954,30.154V233H42V98.594C55.402,94.966,65.29,82.895,65.29,68.346
     z M222.832,22H223V2H34v20L2,54h252L222.832,22z"/>
-  </svg>`
+  </svg>`;
 
   const Person = `<svg xmlns="http://www.w3.org/2000/svg" fill=#A9A9A9 viewBox="0 0 320 512"><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z"/></svg>`;
   const handleNavigateToProfile = () => {
     // Add logic to navigate to the agency's profile screen
     if (selectedAgency) {
       navigation.navigate("AgencyProfileUser", { agencyId: selectedAgency.id });
+    }
+  };
+  const getTime = async () => {
+    if (
+      getLocation &&
+      getLocation.latitude &&
+      getLocation.longitude &&
+      selectedAgency
+    ) {
+      try {
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/directions/json?origin=${
+            getLocation.latitude
+          },${getLocation.longitude}&destination=${
+            JSON.parse(selectedAgency.address).latitude
+          },${JSON.parse(selectedAgency.address).longitude}&key=${google_api}`
+        );
+        const data = await response.json();
+        if (data.status === "OK") {
+          const duration = data.routes[0].legs[0].duration.text;
+          setEstimatedDuration(duration);
+        } else {
+          console.error("Error calculating route: ", data.status);
+        }
+      } catch (error) {
+        console.error("Error fetching route data: ", error);
+      }
     }
   };
   return (
@@ -157,7 +187,10 @@ const MapForUser = ({}) => {
 
           if (getLocation && getLocation.latitude && getLocation.longitude) {
             const distance = geolib.getDistance(
-              { latitude: getLocation.latitude, longitude: getLocation.longitude },
+              {
+                latitude: getLocation.latitude,
+                longitude: getLocation.longitude,
+              },
               agencyLocation
             );
 
@@ -192,9 +225,12 @@ const MapForUser = ({}) => {
             strokeColor="rgba(255, 0, 0, 0.3)"
           />
         )}
-         {itineraryMode && selectedAgency && (
+        {itineraryMode && selectedAgency && (
           <MapViewDirections
-            origin={{ latitude: getLocation.latitude, longitude: getLocation.longitude }}
+            origin={{
+              latitude: getLocation.latitude,
+              longitude: getLocation.longitude,
+            }}
             destination={{
               latitude: JSON.parse(selectedAgency.address).latitude,
               longitude: JSON.parse(selectedAgency.address).longitude,
@@ -206,19 +242,16 @@ const MapForUser = ({}) => {
         )}
       </MapView>
 
-      {/* Zoom In and Zoom Out buttons */}
-      <View style={styles.buttonContainer}>
-        
+      <View style={styles.buttonContainerzoom}>
         <TouchableOpacity onPress={handleZoomIn} style={styles.zoomButton}>
           <Text>+</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleZoomOut} style={styles.zoomButton}>
           <Text>-</Text>
         </TouchableOpacity>
-       
+        
       </View>
 
-      {/* Slider for filter radius */}
       <View style={styles.sliderContainer}>
         <Text>Filter Radius: {sliderValue} km</Text>
         <Slider
@@ -231,29 +264,31 @@ const MapForUser = ({}) => {
         />
       </View>
 
-      {/* Button to set itinerary */}
       <View style={styles.buttonContainer}>
-        {/* <TouchableOpacity onPress={() => handleSetItinerary(selectedAgency)}>
-          <View style={styles.setItineraryButton}>
-            <Text>Set Itinerary</Text>
-          </View>
-         </TouchableOpacity>  */}
-          <TouchableOpacity onPress={handleNavigateToProfile}>
+        <TouchableOpacity onPress={handleNavigateToProfile}>
           <View style={styles.setItineraryButton}>
             <Text>Go to Profile</Text>
           </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={getTime}>
+          <View style={styles.setItineraryButton}>
+            <Text>Estimated Time</Text>
+          </View>
         
+          {estimatedDuration?(
+          <View style={styles.setItineraryButton}>
+            <Text>{estimatedDuration}</Text>
+            </View>):null}
         </TouchableOpacity>
       </View>
    
-      {/* Itinerary Modal */}
+
       <ItineraryModal
         isVisible={isModalVisible}
         agency={selectedAgency}
         closeModal={() => setModalVisible(false)}
         startItinerary={() => handleStartItinerary(selectedAgency)}
       />
-
     </View>
   );
 };
@@ -264,6 +299,12 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  buttonContainerzoom: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    flexDirection: "column",
   },
   buttonContainer: {
     position: "absolute",
@@ -285,10 +326,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   setItineraryButton: {
-    backgroundColor: "green", // Adjust the color as needed
+    backgroundColor: "white", // Adjust the color as needed
     padding: 15,
     margin: 5,
-right: "100%",
+    right: "100%",
     borderRadius: 5,
     navigateToProfileButton: {
       backgroundColor: "green", // Adjust the color as needed

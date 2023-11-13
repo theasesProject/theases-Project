@@ -14,7 +14,7 @@ import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import axios from "axios";
 
-const apiKey = "hM4Tnd79Kjf9fbEYSwzw86BF";
+const apiKey = "fJpvXML3yJUyMTw6sps4Nv3u";
 var Buffer = require("buffer/").Buffer;
 const RemoveBackground = () => {
   const [selectedImages, setSelectedImages] = useState([]);

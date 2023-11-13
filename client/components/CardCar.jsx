@@ -73,12 +73,12 @@ function CardCar({ oneCar, setNothing, handlePress }) {
     dispatch(saveDetails(oneCar));
     handlePress();
   };
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaaa",oneCar);
+
   useEffect(() => {
     setDone(false);
     checkBookMarked();
   }, []);
-console.log('heeeereeeee',oneCar);
+
   return (
     <View style={styles.card}>
       <Pressable style={styles.Image}  onPress={handleRent}>
@@ -143,7 +143,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
-    // paddingVertical: 110,
+    paddingVertical: 110,
+    
   },
   barText: {
     width: 360,

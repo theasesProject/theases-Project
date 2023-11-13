@@ -21,7 +21,9 @@ function Bookings() {
   const allCarsByAgency = useSelector((state) => state.car.agencyCar);
   const loading = useSelector((state) => state.car.loading);
   useEffect(() => {
-    activeUser.Agency?dispatch(getallCarByAgency(activeUser.Agency.id)):null
+    activeUser.Agency
+      ? dispatch(getallCarByAgency(activeUser.Agency.id))
+      : null;
   }, [dispatch]);
   const handleDeled = (car) => {
     deletedAgencyCar(activeUser.id, car);
@@ -29,8 +31,13 @@ function Bookings() {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.favouriteText}>All Cars</Text>
+      <ScrollView contentContainerStyle={{ padding: 10, flexGrow: 1 }}>
+        <View style={{
+          justifyContent:"center",
+          alignItems:"center"
+        }}>
+          <Text style={styles.favouriteText}>All Cars</Text>
+        </View>
         {loading ? (
           activeUser.type === "agency" ? (
             allCarsByAgency?.map((OneCar, i) => (
@@ -97,7 +104,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 7,
     marginVertical: 7,
-    marginTop: "12%",
+    // marginTop: "12%",
     flexDirection: "column",
     gap: 10,
     backgroundColor: "white",
@@ -138,7 +145,11 @@ const styles = StyleSheet.create({
   },
   favouriteText: {
     color: "black",
+    width: 500,
     fontWeight: "bold",
+    borderBottomWidth: 0.5,
+
+    borderBottomColor: "black",
     fontSize: 18,
   },
   carCard: {

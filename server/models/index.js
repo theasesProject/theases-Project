@@ -14,7 +14,7 @@ connection
   });
 
 // connection.sync({ alter: true });
-// connection.sync({ force: true });
+connection.sync({ force: true });
 
 const db = {};
 db.connection = connection;

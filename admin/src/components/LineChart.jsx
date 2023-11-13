@@ -6,26 +6,31 @@ const LineChart = ({ allUsers, interval }) => {
 
   useEffect(() => {
     // Transform the data
-    console.log(allUsers);
-    const usersPerDate = allUsers.reduce((acc, user) => {
-      let date;
-      if (interval === "year") {
-        date = new Date(user.createdAt).getFullYear().toString();
-      } else if (interval === "month") {
-        date = new Date(user.createdAt).toLocaleString("default", { month: "long", year: "numeric" });
-      } else if (interval === "week") {
-        date = new Date(user.createdAt).toLocaleString("default", { week: "numeric", year: "numeric" });
-      } else if (interval === "day") {
-        date = new Date(user.createdAt).toISOString().split('T')[0];
-      } else {
-        date = new Date(user.createdAt).toISOString().split('T')[0]; // Get the date part of the timestamp
-      }
-      acc[date] = (acc[date] || 0) + 1; // Increment the count for this date
-      return acc;
-    }, {});
+
+      // Transform the data
+      console.log(allUsers);
+      const usersPerDate = allUsers?.reduce((acc, user) => {
+        let date;
+        if (interval === "year") {
+          date = new Date(user.createdAt).getFullYear().toString();
+        } else if (interval === "month") {
+          date = new Date(user.createdAt).toLocaleString("default", { month: "long", year: "numeric" });
+        } else if (interval === "week") {
+          date = new Date(user.createdAt).toISOString().split('T')[0]; // Replaced 'week' with 'day'
+        } else if (interval === "day") {
+          date = new Date(user.createdAt).toISOString().split('T')[0];
+        } else {
+          date = new Date(user.createdAt).toISOString().split('T')[0]; // Get the date part of the timestamp
+        }
+        acc[date] = (acc[date] || 0) + 1; // Increment the count for this date
+        return acc;
+      }, {});
+    
+
+    
 
     // Convert the object to an array of { date, users } objects
-    const data = Object.entries(usersPerDate).map(([date, users]) => ({ date, users }));
+    const data = Object.entries(usersPerDate||{}).map(([date, users]) => ({ date, users }));
 
     // Clear the previous chart
     d3.select(ref.current).selectAll("*").remove();

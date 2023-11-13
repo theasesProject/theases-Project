@@ -94,13 +94,13 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           <Image style={styles.carImage} source={car} /> 
           )} 
 
-        {Object.values(activeUser).length ? (
+        {/* {Object.values(activeUser).length ? (
           !done ? (
             <BookMark onPress={handleHeartPress} />
           ) : (
             <TopCorner />
           )
-        ) : null}
+        ) : null} */}
       </Pressable>
       <View style={styles.carDetails}>
         <View style={styles.NameAvaib}>
@@ -123,12 +123,12 @@ function CardCar({ oneCar, setNothing, handlePress }) {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.reviews}>
+          {/* <View style={styles.reviews}>
             <TouchableOpacity onPress={handleStarPress}>
               <Image style={styles.heart} source={starImage} />
             </TouchableOpacity>
             <Text style={styles.avaible}>(150 review)</Text>
-          </View>
+          </View> */}
         </View>
       </View>
     </View>
@@ -138,13 +138,13 @@ function CardCar({ oneCar, setNothing, handlePress }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    height: height * 0.3,
-    borderRadius: 10,
+    height: height * 0.31,
+    width:width*.9,
+    borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 110,
-    
+    // paddingHorizontal: 20,
+    // paddingVertical: 110,
   },
   barText: {
     width: 360,
@@ -155,20 +155,29 @@ const styles = StyleSheet.create({
   },
 
   carImage: {
-    width: width * 0.8,
-    height: 150,
+    // width:width*.85,
+    width: '100%', // Take the full width of the Image div
+    // borderRadius:8,
+    borderTopLeftRadius:8,
+    borderTopRightRadius:8,
+    height: height*.21,
   },
   heart: {
     width: 30,
     height: 28,
   },
   Image: {
+    // width: width * 0.85,
+    width: '100%', // Take the full width of the Image div
+    display: "flex",
+    paddingBottom:1,
     flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "flex-start",
+    justifyContent: "center", // Center the carImage horizontally
+    alignItems: "center", // Center the carImage vertically
     gap: 10,
-    height: 150,
+    height: height * 0.18,
   },
+  
   NameAvaib: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -183,6 +192,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     gap: 10,
+  },
+  carDetails:{
+paddingTop:10
   },
   carName: {
     fontSize: 18,

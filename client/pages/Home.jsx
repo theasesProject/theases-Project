@@ -42,6 +42,7 @@ Notifications.setNotificationHandler({
   }),
 });
 async function schedulePushNotification(notification) {
+  console.log(notification, "bbb");
   await Notifications.scheduleNotificationAsync({
     content: {
       title: notification,
@@ -89,7 +90,6 @@ function Home({ navigation }) {
       });
 
     return () => {
-      
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
@@ -131,8 +131,8 @@ function Home({ navigation }) {
   }, [loading]);
 
   useEffect(() => {
-    socket.emit("login", { userId: activeUser?.id, expoPushToken });
-
+    socket.emit("login", { userId: activeUser?.id });
+    console.log({ userId: activeUser?.id }, " { userId: activeUser?.id }");
     socket.on("receive-notification", (notification) => {
       schedulePushNotification(notification);
       console.log("notification here", notification, "notifcarion");
@@ -279,6 +279,14 @@ function Home({ navigation }) {
           backgroundColor: "lightgrey",
         }}
       />
+      <Text
+        on
+        onPress={() => {
+          navigation.navigate("Notification");
+        }}
+      >
+        Notifcation{" "}
+      </Text>
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>

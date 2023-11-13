@@ -31,6 +31,7 @@ const reportRouter = require("./router/reports");
 const bookingRouter = require("./router/booking.Router");
 const paymentRouter = require("./router/payment.Route");
 const chatRouter = require("./router/chat.router");
+const routerNotification = require("./router/notificationRouter");
 //!routers
 app.use("/api/car", carRouter);
 app.use("/api/users", userRouter);
@@ -44,6 +45,7 @@ app.use("/api/report", reportRouter);
 app.use("/api/booking", bookingRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/notification", routerNotification);
 // app.listen(5000, function () {
 //   console.log("Server is running on port 5000", port);
 // });
@@ -102,15 +104,16 @@ const onlineUsers = [];
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  socket.on("login", ({ userId, expoPushToken }) => {
+  socket.on("login", ({ userId }) => {
     // Add the user to the onlineUsers array
-    onlineUsers.push({ userId, socketId: socket.id, expoPushToken });
-    console.log(onlineUsers, "onlineUser");
+    onlineUsers.push({ userId, socketId: socket.id });
+    console.log(userId, "onlineUser");
   });
 
-  socket.on("acceptService", ({ senderId, receiverId, message }) => {
+  socket.on("acceptService", ({ message, receiverId }) => {
+    console.log(receiverId, "receiver");
     const receiver = onlineUsers.find((user) => user.userId === 1); // Replace 1 with the desired receiverId
-    console.log(receiver, "receiver");
+    console.log(onlineUsers, "receiver");
     if (receiver) {
       io.to(receiver.socketId).emit("receive-notification", {
         title: "Booking Accepted",

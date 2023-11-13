@@ -21,8 +21,8 @@ import carImage from "../assets/Brands/BMW.png";
 import userImage from "../assets/user.jpg";
 import { useEffect, useRef, useState } from "react";
 import moment from "moment";
+import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 
-import axios from "axios";
 import io from "socket.io-client";
 import PushNotification from "react-native-push-notification";
 function AgencyService() {
@@ -57,10 +57,15 @@ function AgencyService() {
   }, [dispatch]);
 
   const acceptService = (idservice, id, message) => {
+    console.log(idservice, id, message, "message");
     const obj = { id: idservice, acceptation: "accepted" };
-  
+
     dispatch(UpdateServiceByAgency(obj));
-    console.log("Accepting service:", idservice, message, id);
+    const notificationData = {
+      UserId: id,
+      notification: `Your service request has been accepted for the car:${message} `,
+    };
+    dispatch(createNotifcationForSpecifiqueUser(notificationData));
     socket.emit("acceptService", {
       senderId: activeUser.id,
       receiverId: id,
@@ -71,7 +76,12 @@ function AgencyService() {
   const rejectService = (idservice, message, id) => {
     const obj = { id: idservice, acceptation: "rejected" };
     dispatch(UpdateServiceByAgency(obj));
-
+    const notificationData = {
+      UserId: id,
+      notification: `Your service request has been rejected for the car:${message}`,
+    };
+    console.log(message, id, "user");
+    dispatch(createNotifcationForSpecifiqueUser(notificationData));
     socket.emit("rejectService", {
       senderId: activeUser.id,
       receiverId: id,
@@ -102,7 +112,7 @@ function AgencyService() {
                   </Text>
                   <Text style={styles.text}>To</Text>
                   <Text style={styles.time}>
-                    {moment(service.service?.Service.startDate).format(
+                    {moment(service.service?.Service.endDate).format(
                       "YYYY-MM-DD"
                     )}
                   </Text>
@@ -116,6 +126,7 @@ function AgencyService() {
                     onPress={() => {
                       rejectService(
                         service.service.Service.id,
+
                         service.service.model,
                         service.User.id
                       );
@@ -128,9 +139,8 @@ function AgencyService() {
                     onPress={() => {
                       acceptService(
                         service?.service.Service.id,
-
-                        service.service.model,
-                        service.User.id
+                        service.User.id,
+                        service.service.model
                       );
                     }}
                     style={styles.acceptButton}

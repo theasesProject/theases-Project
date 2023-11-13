@@ -25,7 +25,7 @@ import Bookings from "./pages/Bookings.jsx";
 import Report from "./pages/Report.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
-
+import Notification from "./pages/Notifcation.jsx";
 import Booking from "./pages/Booking.jsx";
 import AgencyService from "./pages/AgencyService.jsx";
 import MyCars from "./pages/MyCars.jsx";
@@ -41,7 +41,7 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName="Home">
             <Stack.Screen
               name="Home"
               component={Home}
@@ -50,6 +50,11 @@ function App() {
             <Stack.Screen
               name="MapForUser"
               component={MapForUser}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Notification"
+              component={Notification}
               options={{ headerShown: true }}
             />
             <Stack.Screen

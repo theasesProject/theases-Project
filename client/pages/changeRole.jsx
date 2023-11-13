@@ -6,6 +6,7 @@ import {
   Text,
   Pressable,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
@@ -20,6 +21,7 @@ import * as ImagePicker from "expo-image-picker";
 import Loc from "../assets/Svg/loc.svg";
 import { selectUser } from "../store/userSlice";
 import xBtn from "../assets/xBtn.png";
+const { width, height } = Dimensions.get("screen");
 function ChangeRole({ navigation }) {
   const [isChecked, setIsChecked] = useState(false);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
@@ -167,26 +169,16 @@ function ChangeRole({ navigation }) {
           placeholder="Enter Your Agency Number"
           style={styles.input}
         />
-        {!agencyLocation ? (
+        {agencyLocation ? (
           <Pressable
-            style={{
-              borderWidth: 1,
-              borderColor: "#6C77BF",
-              borderRadius: 5,
-              marginBottom: 10,
-              backgroundColor: "white",
-              display: "flex",
-              height: 50,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            style={styles.locationInput}
             onPress={() => navigation.navigate("mapforAgency")}
           >
             <Loc style={styles.icon} />
             <Text style={styles.inputIcon}>Use Your Agency Location </Text>
           </Pressable>
         ) : (
-          <Text>{loc}</Text>
+          <Text style={styles.locationText}>{loc}</Text>
         )}
         <CheckBox
           style={styles.check}
@@ -216,33 +208,16 @@ function ChangeRole({ navigation }) {
             dropdownIconPosition="right"
           />
         </View>
-        <Pressable
-          onPress={selectImage}
-          style={styles.addImgTextContainer}
-          activeOpacity={0.8}
-          onPressIn={() => {
-            setColor("darkblue");
-          }}
-          onPressOut={() => setColor("#6C77BF")}
-        >
-          <Pressable
-            style={{
-              // paddingRight: 250,
-              marginBottom: 10,
-            }}
-            onPress={selectImage}
-            activeOpacity={0.8}
+        <Pressable onPress={selectImage} activeOpacity={0.8}>
+          <LinearGradient
+            colors={["#6C77BF", "#4485C5"]}
+            locations={[0, 1]}
+            style={styles.addImgTextContainer}
           >
-            <LinearGradient
-              colors={["#6C77BF", "#4485C5"]}
-              locations={[0, 1]}
-              style={styles.addImgTextContainer}
-            >
-              <Text style={{ color: "white" }}>add images</Text>
-            </LinearGradient>
-          </Pressable>
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            <Text style={styles.addImgText}>add images</Text>
+          </LinearGradient>
         </Pressable>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
         <View style={styles.imgsContainer}>
           {selectedDocuments.map((uri, index) => (
             <View key={index} style={styles.imgContainer}>
@@ -275,40 +250,47 @@ const styles = StyleSheet.create({
   changeRolePage: {
     backgroundColor: "rgb(233, 231, 238)",
     flex: 1,
-    paddingHorizontal: 5,
-    paddingVertical: 30,
+    paddingHorizontal: width * 0.02,
+    paddingVertical: height * 0.01,
     flexDirection: "column",
     justifyContent: "center",
-    gap: 10,
   },
   input: {
     borderWidth: 1,
     borderColor: "#6C77BF",
     width: "100%",
     backgroundColor: "white",
-    marginBottom: 10,
+    marginBottom: height * 0.01,
     borderRadius: 5,
     height: 50,
-    // paddingHorizontal: 10,
     fontSize: 14,
     padding: 10,
   },
+  locationInput: {
+    borderWidth: 1,
+    borderColor: "#6C77BF",
+    borderRadius: 5,
+    marginBottom: 10,
+    backgroundColor: "white",
+    display: "flex",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   inputIcon: {
-    // paddingLeft:35,
-    // width: "100%",
-    // backgroundColor: "white",
     borderRadius: 5,
     borderRadius: 5,
-
     paddingRight: 140,
-    // paddingHorizontal: 10,
     fontSize: 14,
-    padding: 10,
+  },
+  locationText: {
+    paddingVertical: height * 0.0155,
+    textAlign: "center",
   },
   icon: {
     position: "absolute",
     top: 16,
-    right: "90%",
+    left: "88%",
     width: "10%",
     zIndex: 1,
   },
@@ -320,9 +302,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 5,
     height: 50,
-    // fontSize:14,
     backgroundColor: "white",
-    // paddingHorizontal: 10,
     padding: 10,
   },
   dropdownContainer: {
@@ -335,7 +315,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 50,
     paddingHorizontal: 10,
-    // fontSize: 16,
 
     alignItems: "center",
     justifyContent: "space-between",
@@ -353,21 +332,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   addImgTextContainer: {
-    marginLeft: -49,
     borderRadius: 5,
-    height: 30,
-    width: "80%",
     color: "white",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    // paddingBottom:10,
-    // paddingTop:10,
-    // height:"1px",
-    // paddingHorizontal: 10,
     flexDirection: "row",
-    // alignItems:"center",
-    // justifyContent: "space-between",
+    marginBottom: height * 0.01,
+    paddingVertical: height * 0.015,
+  },
+  addImgText: {
+    color: "white",
+    fontSize: 16,
   },
   errorText: {
     color: "red",
@@ -381,8 +357,8 @@ const styles = StyleSheet.create({
     gap: 15,
     backgroundColor: "white",
     padding: 10,
-    height: "30%",
-    marginBottom: 10,
+    height: "45%",
+    marginBottom: height * 0.01,
   },
   imgContainer: {
     position: "relative",

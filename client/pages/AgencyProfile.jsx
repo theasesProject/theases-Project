@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
-import bg from "../assets/tempLogo.png"
+import bg from "../assets/tempLogo.png";
 import NavBarAgency from "../components/NavBarAgency";
 import Stats from "../components/Stats";
 import Left from "../assets/Svg/left-long-solid.svg";
@@ -23,7 +23,7 @@ function AgencyProfile({ navigation }) {
   const activeUser = useSelector(selectUser);
   const [isSliderOpen, setSliderOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
- 
+
   const handleSliderToggle = () => {
     setSliderOpen(!isSliderOpen);
   };
@@ -31,8 +31,8 @@ function AgencyProfile({ navigation }) {
     <View>
       <View style={styles.trial}>
         <View style={styles.trle}>
-          <Pressable onPress={()=>navigation.navigate('Home')}>
-          <Left />
+          <Pressable onPress={() => navigation.navigate("Home")}>
+            <Left />
           </Pressable>
         </View>
 
@@ -56,16 +56,13 @@ function AgencyProfile({ navigation }) {
         {isVisible && activeUser?.Agency ? (
           <ScrollView>
             <View style={styles.vbgImg}>
-              <ImageBackground
-                source={bg    }
-                style={styles.bgim}
-              />
+              <ImageBackground source={bg} style={styles.bgim} />
             </View>
             <View style={styles.vav}>
               <View style={styles.bvav}>
                 <Image
                   source={{
-                    uri: activeUser.avatar,
+                    uri: activeUser?.avatar,
                   }}
                   style={styles.avatar}
                 />
@@ -74,18 +71,18 @@ function AgencyProfile({ navigation }) {
 
             <View style={styles.acna}>
               <View style={styles.leftSection}>
-                <Text style={styles.leac}>{activeUser.Agency.name}</Text>
+                <Text style={styles.leac}>{activeUser?.Agency.name}</Text>
                 <Text style={styles.number}>
-                  {activeUser.Agency.companyNumber}
+                  {activeUser?.Agency.companyNumber}
                 </Text>
               </View>
               <View style={styles.rightSection}>
                 <Text>
-                  {activeUser.Agency.transportation
+                  {activeUser?.Agency.transportation
                     ? "With Delivery"
                     : "Without Delivery"}
                 </Text>
-                <Text>{activeUser.Agency.createdAt.slice(0, 10)}</Text>
+                <Text>{activeUser?.Agency.createdAt.slice(0, 10)}</Text>
                 {/* <Image source={dots} /> */}
               </View>
             </View>

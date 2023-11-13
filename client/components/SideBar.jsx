@@ -16,12 +16,12 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
   const animatedValue = useRef(new Animated.Value(-300)).current;
 
   useEffect(() => {
-  Animated.timing(animatedValue, {
-    toValue: isOpen ? 0 : -250,
-    duration: 300,
-    useNativeDriver: false,
-  }).start();
-  }, [isOpen, animatedValue])
+    Animated.timing(animatedValue, {
+      toValue: isOpen ? 0 : -250,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [isOpen, animatedValue]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -34,8 +34,8 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
       onPanResponderMove: (_, gestureState) => {
         console.log("heeeerreeeee", gestureState.dx);
         if (gestureState.dx > 50) {
-          onClose()
-          console.log("done")
+          onClose();
+          console.log("done");
         }
       },
       onPanResponderRelease: () => {
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     top: 0,
     height: "82.5%",
     width: "60%",
-    borderRadius:10,
+    borderRadius: 10,
     backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: { width: 5, height: 0 },

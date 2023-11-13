@@ -9,7 +9,6 @@ import store from "./store/store";
 import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
-import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import AddAgencyCar from "./pages/AddAgencyCar.jsx";
@@ -32,6 +31,7 @@ import MyCars from "./pages/MyCars.jsx";
 import AgencyProfile from "./pages/AgencyProfile.jsx";
 import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 const Stack = createStackNavigator();
@@ -41,13 +41,13 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-        <Stack.Navigator>
+          <Stack.Navigator>
             <Stack.Screen
               name="Home"
               component={Home}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="MapForUser"
               component={MapForUser}
               options={{ headerShown: true }}
@@ -56,6 +56,11 @@ function App() {
               name="AgencyService"
               component={AgencyService}
               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="ResetPassword"
+              component={ResetPassword}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Report"
@@ -146,13 +151,6 @@ function App() {
               component={ForgotPassword}
               options={{ headerShown: false }}
             />
-
-            <Stack.Screen
-              name="confirmIdentity"
-              component={ConfirmIdentity}
-              options={{ headerShown: false }}
-            />
-
             <Stack.Screen
               name="editProfile"
               component={EditProfile}
@@ -180,7 +178,7 @@ function App() {
               component={AgencyProfile}
               options={{ headerShown: false }}
             />
-              <Stack.Screen
+            <Stack.Screen
               name="AgencyProfileUser"
               component={AgencyProfileUser}
               options={{ headerShown: false }}

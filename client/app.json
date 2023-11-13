@@ -8,7 +8,7 @@
     "androidNavigationBar": {
       "visible": "sticky-immersive"
     },
-    
+
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/car-logo.png",
@@ -21,8 +21,6 @@
         "whenInUse": "LOCATION"
       }
     },
-   
-
 
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -34,9 +32,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "WRITE_EXTERNAL_STORAGE"
-      ]
+      "permissions": ["WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

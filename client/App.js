@@ -9,7 +9,6 @@ import store from "./store/store";
 import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
-import ConfirmIdentity from "./pages/ConfirmIdentity.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import AddAgencyCar from "./pages/AddAgencyCar.jsx";
@@ -32,6 +31,7 @@ import MyCars from "./pages/MyCars.jsx";
 import AgencyProfile from "./pages/AgencyProfile.jsx";
 import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import ResetPassword from "./pages/ResetPassword.jsx";
 const Stack = createStackNavigator();
 function App() {
   return (
@@ -48,6 +48,11 @@ function App() {
               name="AgencyService"
               component={AgencyService}
               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="ResetPassword"
+              component={ResetPassword}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Report"
@@ -138,13 +143,6 @@ function App() {
               component={ForgotPassword}
               options={{ headerShown: false }}
             />
-
-            <Stack.Screen
-              name="confirmIdentity"
-              component={ConfirmIdentity}
-              options={{ headerShown: false }}
-            />
-
             <Stack.Screen
               name="editProfile"
               component={EditProfile}

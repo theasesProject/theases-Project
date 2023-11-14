@@ -20,7 +20,9 @@ import OneMessage from "../components/OneMessage";
 import Send from "../assets/Svg/send-alt-1-svgrepo-com.svg";
 import Attach from "../assets/Svg/attachFile.svg";
 import * as DocumentPicker from "expo-document-picker";
-import Phone from "../assets/Svg/call.svg";
+import Phone from "../assets/Svg/call.svg"; 
+
+
 
 const socket = io.connect(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:3002`);
 

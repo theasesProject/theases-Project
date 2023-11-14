@@ -34,6 +34,7 @@ import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
+import Dmap from "./pages/Dmap.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -41,11 +42,16 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="MapForUser">
             <Stack.Screen
               name="Home"
               component={Home}
               options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="Dmap"
+              component={Dmap}
+              options={{ headerShown: true }}
             />
              <Stack.Screen
               name="MapForUser"

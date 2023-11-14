@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,23 +7,61 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  Pressable,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+
 import { useSelector } from "react-redux";
-import car from "../assets/car2.png";
 const { height, width } = Dimensions.get("screen");
 
 const CarDetails = () => {
   const carData = useSelector((state) => state.car.RentDetails);
+  console.log("jiiiii", carData);
+  const [text, setText] = useState(`${carData.price}`);
+  const [intervalId, setIntervalId] = useState(null);
+  const [period, setPeriod] = useState("daily");
+  const [periodIntervalId, setPeriodIntervalId] = useState(null);
   useEffect(() => {
-    // {"elllllllllllllllllllllllllll",console.log(carData)}
-    
-  }, []);
+    const newIntervalId = setInterval(() => {
+      if (text === `${carData.price}`) {
+        setText(`${carData.priceWeekly}`);
+      } else if (text === `${carData.priceWeekly}`) {
+        setText(`${carData.priceMonthly}`);
+      } else {
+        setText(`${carData.price}`);
+      }
+    }, 7000);
+
+    setIntervalId(newIntervalId);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(newIntervalId);
+  }, [text]);
+  useEffect(() => {
+    const newPeriodIntervalId = setInterval(() => {
+      if (period === "daily") {
+        setPeriod("weekly");
+      } else if (period === "weekly") {
+        setPeriod("monthly");
+      } else {
+        setPeriod("daily");
+      }
+    }, 7000);
+
+    setPeriodIntervalId(newPeriodIntervalId);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(newPeriodIntervalId);
+  }, [period]);
   return (
     <View style={styles.CarDetails}>
       <View style={styles.imageContainer}>
-        <Image style={styles.carImage}  source={{
-              uri: carData?.Media[0]?.media,
-            }} />
+        <Image
+          style={styles.carImage}
+          source={{
+            uri: carData?.Media[0]?.media,
+          }}
+        />
       </View>
       <View style={styles.description}>
         <Text style={styles.carModel}>{carData.model}</Text>
@@ -38,10 +76,10 @@ const CarDetails = () => {
         >
           available
         </Text>
+        <Text style={{ fontSize: 18.5, fontWeight: "600", paddingBottom: 10 }}>
+          Specification
+        </Text>
         <View style={styles.container_n2}>
-          <Text style={{ fontSize: 18.5, fontWeight: "600" }}>
-            Specification
-          </Text>
           <ScrollView
             style={styles.scrollContainer}
             nestedScrollEnabled={true}
@@ -143,18 +181,79 @@ const CarDetails = () => {
               </Text>
             </View>
           </ScrollView>
+          <View style={styles.lowerDetails}>
+            <Pressable>
+              <LinearGradient
+                colors={["#6C77BF", "#4485C5"]}
+                locations={[0, 1]}
+                style={styles.loginBtn}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 16,
+                  }}
+                >
+                  Rent Now
+                </Text>
+              </LinearGradient>
+            </Pressable>
+            <Pressable style={styles.timedText}>
+              <Text
+                style={{
+                  fontSize: 22,
+                  color: "black",
+                }}
+              >
+                ${text}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  color: "#6C77BF",
+                  paddingLeft: 5,
+                }}
+              >
+                /{period}
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  timedText: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: width * 0.3,
+    // backgroundColor:"red"
+  },
+  lowerDetails: {
+    display: "flex",
+    flexDirection: "row-reverse",
+    gap: 30,
+    // width: width,
+  },
+  loginBtn: {
+    borderRadius: 7,
+    height: height * 0.06,
+    width: width * 0.55,
+    // marginLeft:width*.28,
+    color: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   scrollContainer: {
     marginLeft: -height * 0.01,
   },
   container_n2: {
-    gap: 10,
-    paddingTop: 10,
+    gap: 40,
+    // paddingTop: 10,
   },
   descContainer: {
     marginLeft: 10,

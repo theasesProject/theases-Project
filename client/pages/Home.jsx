@@ -59,6 +59,7 @@ function Home({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const scrollViewRef = useRef();
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [showNav, setShowNav] = useState(true);
   const [nothing, setNothing] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const swipeUpDownRef = useRef();
@@ -66,6 +67,7 @@ function Home({ navigation }) {
   const handlePress = () => {
     if (swipeUpDownRef.current) {
       swipeUpDownRef.current.showFull();
+      setShowNav(false);
     }
   };
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -89,7 +91,6 @@ function Home({ navigation }) {
       });
 
     return () => {
-      
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
@@ -132,7 +133,7 @@ function Home({ navigation }) {
 
   useEffect(() => {
     socket.emit("login", { userId: activeUser?.id, expoPushToken });
-
+    console.log(activeUser);
     socket.on("receive-notification", (notification) => {
       schedulePushNotification(notification);
       console.log("notification here", notification, "notifcarion");
@@ -261,12 +262,11 @@ function Home({ navigation }) {
           </Text>
         </View>
       </View>
-
       <SwipeUpDown
         itemFull={<CarDetails />}
         ref={swipeUpDownRef}
         extraMarginTop={140}
-        scrollEnabled={false}
+        // scrollEnabled={false}
         nestedScrollEnabled={false}
         animation="easeInEaseOut"
         style={{
@@ -276,8 +276,13 @@ function Home({ navigation }) {
           backgroundColor: "lightgrey",
         }}
       />
-
-      {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
+      {showNav ? (
+        activeUser?.type === "agency" ? (
+          <NavBarAgency/>
+        ) : (
+          <NavBar/>
+        )
+      ) : null}
     </View>
   );
 }

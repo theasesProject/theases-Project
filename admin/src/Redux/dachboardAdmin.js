@@ -26,11 +26,11 @@ export const updateStateBlock = createAsyncThunk(
 );
 export const approveRequest = createAsyncThunk(
   "user/approveRequest",
-  async (input,id) => {
+  async (input) => {
     console.log(input.name);
     try {
       const response = await axios.post(
-        `http://127.0.0.1:5000/api/agency/addAgency`,{UserId:input.id,companyNumber:input.companyNumber,transportation:input.transportation,name:input.agencyName,deposit:input.deposit,
+        `http://127.0.0.1:5000/api/agency/addAgency`,{UserId:input.UserId,companyNumber:input.companyNumber,transportation:input.transportation,name:input.agencyName,deposit:input.deposit,
         address:input.address}
       );
        await axios.delete(
@@ -118,6 +118,19 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+    builder.addCase(approveRequest.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(approveRequest.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.oneUser = action.payload;
+    });
+    builder.addCase(approveRequest.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
 
     // get all requests
 

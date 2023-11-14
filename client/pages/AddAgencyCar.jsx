@@ -104,12 +104,10 @@ function AddAgencyCar({ navigation }) {
   const brand = [
     { label: "toyota", value: "toyota" },
     { label: "bmw", value: "bmw" },
-    { label: "peugeot", value: "peugeot" },
-
+    { label: "peugeot", value: "peugeot" }, 
     { label: "ford", value: "ford" },
     { label: "honda", value: "honda" },
     { label: "hyndai", value: "hyndai" },
-    { label: "porch", value: "porch" },
     { label: "renault", value: "renault" },
     { label: "volkswagen", value: "volkswagen" },
     { label: "other", value: "other" },

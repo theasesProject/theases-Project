@@ -115,6 +115,7 @@ const Dashboard = () => {
     <div
       style={{
         fontFamily: "MuseoModerno",
+        padding:10
       }}
     >
       <div>
@@ -141,7 +142,7 @@ const Dashboard = () => {
           />
 
           <Select
-            value={options.find((option) => option.value === interval)}
+            value={options.find((option) => option.value === interval2)}
             onChange={(selectedOption) =>
               handleIntervalChange2(selectedOption.value)
             }

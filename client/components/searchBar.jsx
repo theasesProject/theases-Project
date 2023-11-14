@@ -17,7 +17,7 @@ import Filter from "../assets/Svg/filter.svg";
 import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("screen");
 function SearchBar({ onSearch }) {
-  const [searchedCar, setSearchedCar] = useState("");
+  const [searchedCar, setSearchedCar] = useState();
   const navigation = useNavigation();
 
   const handleSearch = (text) => {

@@ -104,7 +104,7 @@ export const createCar = createAsyncThunk("car/createCar", async (params) => {
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media
     );
-    console.log(body, "body");
+    // console.log(body, "body");
     return response.data;
   } catch (error) {
     console.log(error);

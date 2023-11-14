@@ -87,7 +87,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           <Image
             style={styles.carImage}
             source={{
-              uri: oneCar?.Media[0]?.media,
+              car
             }}
           />
         ) : (

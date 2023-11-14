@@ -27,7 +27,7 @@ const UserRow = ({ openModal, setUser, user, handleBlock, setTypeModal }) => {
           style={{
             padding: "0.5rem 2.5rem",
             borderRadius: "0.3125rem",
-            background: "#9250bc",
+            background:!user.stateBlocked? "#9250bc":"red",
             padding:10,
             width:"8rem",
             color: "#fff",

@@ -20,7 +20,7 @@ import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
 import { useSelector } from "react-redux";
 const { height, width } = Dimensions.get("screen");
-function NavBar({ style }) {
+function NavBar({ style, showNav }) {
   const loggedIn = useSelector((state) => state.user.loggedIn);
 
   const navigation = useNavigation();
@@ -29,7 +29,9 @@ function NavBar({ style }) {
   const isActive = (routeName) =>
     route.name === routeName ? "#6C77BF" : "grey";
   return (
-    <View style={[styles.navBar, style]}>
+    <View
+      style={[styles.navBar, style, (display = showNav ? "block" : "none")]}
+    >
       <Pressable
         style={styles.quarter}
         onPress={() => navigation.navigate("Home")}
@@ -54,17 +56,17 @@ function NavBar({ style }) {
         style={styles.quarter}
         onPress={() => {
           loggedIn
-            ? navigation.navigate("favorites")
+            ? navigation.navigate("Favorites")
             : navigation.navigate("SignUp");
         }}
       >
         <View style={styles.hm}>
           {!loggedIn ? (
-            <SignUp fill={isActive("favorites")} />
+            <SignUp fill={isActive("Favorites")} />
           ) : (
-            <Fa fill={isActive("favorites")} />
+            <Fa fill={isActive("Favorites")} />
           )}
-          <Text style={{ color: isActive("favorites") }}>
+          <Text style={{ color: isActive("Favorites") }}>
             {loggedIn ? "Favorites" : "SignUp"}
           </Text>
         </View>

@@ -57,6 +57,7 @@ const ReqRow = ({
             onClick={() => {
               setTypeModal("request")
               setRequest({id:request.id,
+                UserId:request.UserId,
                 address:request.address,
                 Media:request.Media,
                 companyNumber:request.companyNumber,

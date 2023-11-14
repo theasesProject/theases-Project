@@ -17,7 +17,8 @@
 
     .card-body{
       padding: 15px;
-
+      display: flex;
+      flex-direction: column;
       &.table-full-width{
         padding-left: 0;
         padding-right: 0;

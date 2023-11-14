@@ -84,7 +84,8 @@ function FixedPlugin(props) {
               )}
             </ThemeContext.Consumer>
           </li>
-          <li className="button-container">
+          <li></li>
+          {/* <li className="button-container">
             <Button
               href="https://www.creative-tim.com/product/black-dashboard-react"
               color="primary"
@@ -114,7 +115,7 @@ function FixedPlugin(props) {
             >
               Get pro version
             </Button>
-          </li>
+          </li> */}
         </ul>
       </Dropdown>
     </div>

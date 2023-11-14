@@ -160,7 +160,7 @@
         position: relative;
         text-transform: uppercase;
         cursor: pointer;
-        font-size: $font-size-xs;
+        font-size: 0.72475rem;
         padding: 10px 8px;
         line-height: $line-height-lg;
       }
@@ -257,7 +257,7 @@
       float: left;
       margin-right: 12px;
       line-height: 30px;
-      width: 34px;
+      width: 75px;
       text-align: center;
       color: $opacity-8;
       position: relative;
@@ -277,13 +277,13 @@
     a.logo-mini{
       opacity: 1;
       float: left;
-      width: 34px;
+      width: 75px;
       text-align: center;
       margin-left: 12px;
       margin-right: 12px;
       img {
-        border-radius: 50%;
-        width: 30px;
+        border-radius: 7px;
+        width: 75px;
       }
     }
 

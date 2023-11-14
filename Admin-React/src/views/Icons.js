@@ -1,41 +1,157 @@
-/*!
 
-=========================================================
-* Black Dashboard React v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
-
-// reactstrap components
+import { getAllUsers } from "Redux/adminSlice";
+import { selectAllUsers } from "Redux/adminSlice";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
+import Select from 'react-select';
 
 function Icons() {
+  const options = [
+    { value: 'all', label: 'All Users' },
+    { value: 'clients', label: 'Clients Only' },
+    { value: 'agencies', label: 'Agencies Only' },
+    { value: 'more', label: 'More' },
+  ];
+
+  const customStyles = {
+    menu: (provied, state) => ({
+      ...provied,
+      // width: "15%"
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      background: '#fff',
+      borderColor: state.isFocused ? '#007BFF' : '#ced4da',
+      boxShadow: state.isFocused ? '0 0 0 1px #007BFF' : 'none',
+      '&:hover': {
+        borderColor: '#007BFF',
+      },
+      width: "17rem"
+    }),
+    lineHeight: "2px",
+    height: "2px",
+    minHeight: '20px',
+    option: (provided, state) => ({
+      ...provided,
+      background: state.isFocused ? '#007BFF' : state.isSelected ? '#007BFF' : '#fff',
+      // width: "15%",
+      color: state.isFocused ? '#fff' : state.isSelected ? '#fff' : '#000',
+      width: "17rem",
+    })
+  }
+  const [selectedOption, setSelectedOptions] = useState(null);
+  const handleChange = (chosen) => {
+    setSelectedOptions(chosen)
+  }
+  const dispatch = useDispatch()
+  const allUsers = useSelector(selectAllUsers)
+  useEffect(() => {
+    dispatch(getAllUsers())
+    console.log(allUsers);
+  }, [])
   return (
     <>
       <div className="content">
         <Row>
           <Col md="12">
             <Card>
-              <CardHeader>
-                <h5 className="title">100 Awesome Nucleo Icons</h5>
-                <p className="category">
-                  Handcrafted by our friends from{" "}
-                  <a href="https://nucleoapp.com/?ref=1712">NucleoApp</a>
-                </p>
+              <CardHeader style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                // backgroundColor: "red",
+                height: "3rem"
+              }}>
+                <div>
+                  <h5 className="title">List of Users</h5>
+                  <p className="category">
+                    Manage your users from this tab.
+                  </p>
+                </div>
+                <div style={{
+                  paddingRight: "2rem",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "1rem",
+                  // alignContent:"center",
+                  // textAlign:"center",
+                  alignItems: "center"
+                }}>
+                  Filter By:
+                  <Select
+                    isSearchable={true}
+                    // width="50%"
+                    placeholder={"filter your list..."}
+                    value={selectedOption}
+                    onChange={handleChange}
+                    options={options}
+                    styles={customStyles}
+                  />
+                </div>
               </CardHeader>
               <CardBody className="all-icons">
+                <div style={{
+                  fontSize: "1rem"
+                }}>
+                  All Clients:
+                </div>
                 <Row>
+                  {allUsers.map((user) =>
+                    <Col
+                      className="font-icon-list col-xs-6 col-xs-6"
+                      lg="2"
+                      md="3"
+                      sm="4"
+                    >
+                      <div className="font-icon-detail">
+                        <img src={user.avatar} style={{
+                          height: "35%", width: "35%"
+                        }} />
+                        <p className="userNameCol">{user.userName}</p>
+                      </div>
+                    </Col>
+
+                  )}
+                </Row>
+                <div style={{
+                  padding:"1rem"
+                }}>
+                <div style={{
+                  width: "100%",
+                  height: ".005rem",
+                  backgroundColor: "#4ca9e4"
+                }}></div>
+                </div>
+                <div style={{
+
+                  fontSize: "1rem"
+                }}>
+                  All Agencies:
+                </div>
+                <Row>
+                  {allUsers.map((user) =>
+                    <Col
+                      className="font-icon-list col-xs-6 col-xs-6"
+                      lg="2"
+                      md="3"
+                      sm="4"
+                    >
+                      <div className="font-icon-detail">
+                        <img src={user.avatar} style={{
+                          height: "35%", width: "35%"
+                        }} />
+                        <p className="userNameCol">{user.userName}</p>
+                      </div>
+                    </Col>
+
+                  )}
+                </Row>
+
+
+
+                {/* <Row>
                   <Col
                     className="font-icon-list col-xs-6 col-xs-6"
                     lg="2"
@@ -1136,12 +1252,12 @@ function Icons() {
                       <p>icon-simple-delete</p>
                     </div>
                   </Col>
-                </Row>
+                </Row> */}
               </CardBody>
             </Card>
           </Col>
         </Row>
-      </div>
+      </div >
     </>
   );
 }

@@ -1,17 +1,3 @@
-/*
- =========================================================
- * Black Dashboard React v1.2.0 based on Black Dashboard - v1.2.0
- =========================================================
-
- * Product Page: https://www.creative-tim.com/product/black-dashboard-react
- * Copyright 2023 Creative Tim (https://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
- * Coded by Creative Tim
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
  */
 /*     brand Colors              */
@@ -299,6 +285,7 @@ button,
 [type="reset"],
 [type="submit"] {
   -webkit-appearance: button;
+  appearance:button;
 }
 
 button:not(:disabled),
@@ -358,6 +345,7 @@ progress {
 [type="search"] {
   outline-offset: -2px;
   -webkit-appearance: none;
+  appearance:none
 }
 
 [type="search"]::-webkit-search-decoration {
@@ -4007,7 +3995,7 @@ input[type="button"].btn-block {
   display: block;
   min-height: 1.3125rem;
   padding-left: 3rem;
-  color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .custom-control-inline {
@@ -4092,7 +4080,7 @@ input[type="button"].btn-block {
   ~ .custom-control-label::before {
   border-color: #e14eca;
   background-color: #e14eca;
-  box-shadow: ;
+  box-shadow: 10px 5px 5px black ;
 }
 
 .custom-checkbox
@@ -11507,7 +11495,7 @@ a.text-darker:focus {
   display: inline-block;
   font: normal normal normal 1em/1 "Nucleo";
   vertical-align: middle;
-  speak: none;
+  /* speak: none; */
   text-transform: none;
   -webkit-font-smoothing: antialiased;
   font-size: 1rem;
@@ -13609,7 +13597,7 @@ fieldset[disabled] .btn-link.active {
 }
 .footer .nav {
   display: inline-block;
-  float: left;
+  /* float: left; */
   margin-bottom: 0;
   padding-left: 30px;
   list-style: none;
@@ -19016,6 +19004,14 @@ textarea.form-control {
 .white-content .font-icon-detail i {
   color: #222a42;
 }
+.white-content .userAvatarCol {
+  height: "20%";
+  width: "20%";
+}
+ .userNameCol {
+  font-size: 160;
+}
+
 .white-content .btn:not([data-action]):hover {
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 }

@@ -169,7 +169,7 @@ function ChangeRole({ navigation }) {
           placeholder="Enter Your Agency Number"
           style={styles.input}
         />
-        {agencyLocation ? (
+        {!agencyLocation ? (
           <Pressable
             style={styles.locationInput}
             onPress={() => navigation.navigate("mapforAgency")}

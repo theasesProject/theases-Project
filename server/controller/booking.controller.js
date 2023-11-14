@@ -241,4 +241,29 @@ module.exports = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+  GetAllServicesForUser: async function (req, res) {
+    try {
+      const { userId } = req.params;
+
+      const services = await db.Service.findAll({
+        where: {
+          UserId: userId,
+        },
+        include: [
+          {
+            model: db.Car,
+            include: [
+              { model: db.Media, as: "Media" },
+              { model: db.Agency, as: "Agency" },
+            ],
+          },
+        ],
+      });
+
+      return res.json(services);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
 };

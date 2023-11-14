@@ -19,6 +19,7 @@ module.exports = {
       const newNotifcation = await db.Notifcation.create({
         UserId: req.body.UserId,
         notification: req.body.notification,
+        type: req.body.type,
       });
 
       res.status(200).send(newNotifcation);

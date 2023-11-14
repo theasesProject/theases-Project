@@ -8,6 +8,7 @@ const initialState = {
   unavailableDate: [],
   allServiceByAgency: [],
   avaibleCar: [],
+  allServiceUser: [],
 };
 export const CreateBooking = createAsyncThunk(
   "booking/CreateBooking",
@@ -60,6 +61,20 @@ export const allServiceForAgency = createAsyncThunk(
     try {
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/allServiceForAgency/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const allServiceForUser = createAsyncThunk(
+  "booking/allServiceForUser",
+  async (id) => {
+    try {
+      const response = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/allserviceforUser/${id}`
       );
 
       return response.data;
@@ -148,6 +163,18 @@ const bookingSlice = createSlice({
       state.avaibleCar = action.payload;
     });
     builder.addCase(getAllCarByDate.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(allServiceForUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(allServiceForUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.allServiceUser = action.payload;
+    });
+    builder.addCase(allServiceForUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

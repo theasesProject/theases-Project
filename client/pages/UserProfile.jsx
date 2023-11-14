@@ -58,7 +58,7 @@ function Userprofile({ navigation }) {
           {activeUser?.type === "client" ? (
             <TouchableOpacity
               style={styles.profileOption}
-              onPress={() => navigation.navigate("Bookings")}
+              onPress={() => navigation.navigate("AllBookings")}
             >
               <Image style={styles.icon} source={bkg} />
               <Text>My bookings</Text>
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     left: 20,
     width: "100%",
     borderTopColor: "black",
-    borderTopWidth: .5,
+    borderTopWidth: 0.5,
     paddingTop: 20,
   },
   navBar: {

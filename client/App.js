@@ -34,6 +34,7 @@ import MapAgencyProfile from "./pages/MapAgencyProfile.jsx";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
+import AllBookings from "./pages/AllBookings.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -47,6 +48,12 @@ function App() {
               component={Home}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="AllBookings"
+              component={AllBookings}
+              options={{ headerShown: true }}
+            />
+
             <Stack.Screen
               name="MapForUser"
               component={MapForUser}

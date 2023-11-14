@@ -63,8 +63,10 @@ function AgencyService() {
     dispatch(UpdateServiceByAgency(obj));
     const notificationData = {
       UserId: id,
-      notification: `Your service request has been accepted for the car:${message} `,
+      notification: `Booking Accepted for the car:${message} `,
+      type: "accept",
     };
+
     dispatch(createNotifcationForSpecifiqueUser(notificationData));
     socket.emit("acceptService", {
       senderId: activeUser.id,
@@ -78,9 +80,10 @@ function AgencyService() {
     dispatch(UpdateServiceByAgency(obj));
     const notificationData = {
       UserId: id,
-      notification: `Your service request has been rejected for the car:${message}`,
+      notification: `Booking Rejected for the car:${message}`,
+      type: "reject",
     };
-    console.log(message, id, "user");
+
     dispatch(createNotifcationForSpecifiqueUser(notificationData));
     socket.emit("rejectService", {
       senderId: activeUser.id,

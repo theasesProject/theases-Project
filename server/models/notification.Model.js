@@ -4,6 +4,10 @@ module.exports = (DataTypes, connection) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   });
 
   return Notifcation;

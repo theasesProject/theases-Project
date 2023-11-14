@@ -74,6 +74,7 @@ function Home({ navigation }) {
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  console.log("this is active user", activeUser);
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -131,28 +132,31 @@ function Home({ navigation }) {
   }, [loading]);
 
   useEffect(() => {
-    socket.emit("login", { userId: activeUser?.id });
-    console.log({ userId: activeUser?.id }, " { userId: activeUser?.id }");
-    socket.on("receive-notification", (notification) => {
-      schedulePushNotification(notification);
-      console.log("notification here", notification, "notifcarion");
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          _id: notification.id,
-          text: notification.message,
-          createdAt: new Date(),
-          user: {
-            _id: notification.senderId,
-            name: "Services",
+    if (activeUser?.id) {
+      socket.emit("login", { userId: activeUser?.id });
+      console.log({ userId: activeUser?.id }, " { userId: activeUser?.id }");
+      socket.on("receive-notification", (notification) => {
+        schedulePushNotification(notification);
+        console.log("notification here", notification, "notifcarion");
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            _id: notification.id,
+            text: notification.message,
+            createdAt: new Date(),
+            user: {
+              _id: notification.senderId,
+              name: "Services",
+            },
           },
-        },
-      ]);
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, [socket, , expoPushToken]);
+        ]);
+      });
+    } else {
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [socket, expoPushToken, activeUser.id]);
 
   return (
     <View style={styles.homePage}>

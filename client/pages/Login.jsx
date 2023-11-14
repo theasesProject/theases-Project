@@ -9,8 +9,8 @@ import {
   Dimensions,
 } from "react-native";
 import Logo from "../assets/tempLogo.png";
-import Google from "../assets/googleIcon.png";
-import Facebook from "../assets/facebookIcon.png";
+import google from "../assets/googleIcon.png";
+import facebook from "../assets/facebookIcon.png";
 import IdentifierIcon from "../assets/Svg/user-normal.svg";
 import PasswordIcon from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
@@ -21,6 +21,9 @@ import axios from "axios";
 import { fetchUser, selectUser } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// import * as Google from "expo-auth-session/providers/google";
+// import * as WebBrowser from "expo-web-browser";
+// WebBrowser.maybeCompleteAuthSession();
 // import { registerIndieID, unregisterIndieDevice } from "native-notify";
 const { width, height } = Dimensions.get("screen");
 
@@ -36,6 +39,12 @@ function Login({ navigation }) {
   const [formChecked, setFormChecked] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   // androidClientId: process.env.EXPO_PUBLIC_SHA_1_FINGERPRINT
+  //   androidClientId:
+  //     "1067545398456-jfc4hsmfrm3mhnjh6n35rqavijuroucs.apps.googleusercontent.com",
+  // });
+
   const activeUser = useSelector(selectUser);
   const storeData = async (key, value) => {
     try {
@@ -251,20 +260,23 @@ function Login({ navigation }) {
           <View style={styles.line}></View>
         </View>
         <View style={styles.quickLoginContainer}>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => console.log("google sign")}
+          >
             <View style={styles.quickLogin}>
               <View style={styles.icons}>
-                <Image source={Google} alt="google" style={styles.icons} />
+                <Image source={google} alt="google" style={styles.icons} />
               </View>
-              <Text>Google</Text>
+              <Text>google</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
             <View style={styles.quickLogin}>
               <View style={styles.icons}>
-                <Image source={Facebook} alt="facebook" style={styles.icons} />
+                <Image source={facebook} alt="facebook" style={styles.icons} />
               </View>
-              <Text>Facebook</Text>
+              <Text>facebook</Text>
             </View>
           </TouchableOpacity>
         </View>

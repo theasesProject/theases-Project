@@ -69,23 +69,9 @@ const Dashboard = () => {
       console.error(error);
     }
   };
-  var input = {};
   const handleApproveRequest = (request) => {
     try {
-      dispatch(
-        approveRequest(
-          (input = {
-            id: request.id,
-            address: request.address,
-            Media: request.media,
-            companyNumber: request.companyNumber,
-            deposit: request.deposit,
-            transportation: request.transportation,
-            agencyName: request.agencyName,
-          }),
-          request.id
-        )
-      );
+      dispatch(approveRequest(request));
       setRefresh(!refresh);
       closeModal();
     } catch (error) {
@@ -265,7 +251,6 @@ const Dashboard = () => {
           <button
             style={{
               background: "linear-gradient(to right, #6C77BF, #4485C5)",
-              // padding: 5,
               fontWeight: "400",
               borderWidth: ".15rem",
               height: "2rem",

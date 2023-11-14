@@ -7,13 +7,12 @@ const initialState = {
   loading: false,
   error: null,
   oneUser: {},
-  refreshed:false
+  refreshed: false,
 };
 export const updateStateBlock = createAsyncThunk(
   "user/updateStateBlock",
   async (id) => {
     try {
-      console.log(id, "id");
       const response = await axios.put(
         `http://localhost:5000/api/admin/update/${id}`
       );
@@ -26,16 +25,12 @@ export const updateStateBlock = createAsyncThunk(
 );
 export const approveRequest = createAsyncThunk(
   "user/approveRequest",
-  async (input) => {
-    console.log(input.name);
+  async (request) => {
     try {
       const response = await axios.post(
-        `http://127.0.0.1:5000/api/agency/addAgency`,{UserId:input.UserId,companyNumber:input.companyNumber,transportation:input.transportation,name:input.agencyName,deposit:input.deposit,
-        address:input.address}
+        `http://127.0.0.1:5000/api/agency/addAgency/${request.id}`,
+        { UserId: request.UserId }
       );
-       await axios.delete(
-        `http://127.0.0.1:5000/api/request/accept/${input.id}`
-      )
       return response.data;
     } catch (error) {
       console.log(error);
@@ -87,9 +82,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    triggerRefresh:(state)=>{
-      state.refreshed=!state.refreshed
-    }
+    triggerRefresh: (state) => {
+      state.refreshed = !state.refreshed;
+    },
   },
 
   extraReducers: (builder) => {
@@ -148,5 +143,5 @@ const userSlice = createSlice({
     });
   },
 });
-export const {triggerRefresh}=userSlice.actions
+export const { triggerRefresh } = userSlice.actions;
 export default userSlice.reducer;

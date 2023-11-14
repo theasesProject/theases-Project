@@ -112,9 +112,9 @@ export default function LoginPage() {
 
   return (
     <div className='Admin_Sign_Up'>
-      <Head>
+      {/* <Head>
         <link href='https://fonts.googleapis.com/css?family=Raleway:400,500,300' rel='stylesheet' />
-      </Head>
+      </Head> */}
       <div id="mainButton" className={isOpen ? 'active' : ''}>
 
         <div className="btn-text" onClick={openForm}>Sign In</div>

@@ -9,8 +9,8 @@ import {
   Dimensions,
 } from "react-native";
 import Logo from "../assets/tempLogo.png";
-import Google from "../assets/googleIcon.png";
-import Facebook from "../assets/facebookIcon.png";
+import google from "../assets/googleIcon.png";
+import facebook from "../assets/facebookIcon.png";
 import IdentifierIcon from "../assets/Svg/user-normal.svg";
 import PasswordIcon from "../assets/Svg/lock.svg";
 import Open from "../assets/Svg/eyeOpen.svg";
@@ -18,9 +18,13 @@ import Close from "../assets/Svg/eyeClose.svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { fetchUser } from "../store/userSlice";
-import { useDispatch } from "react-redux";
+import { fetchUser, selectUser } from "../store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// import * as Google from "expo-auth-session/providers/google";
+// import * as WebBrowser from "expo-web-browser";
+// WebBrowser.maybeCompleteAuthSession();
+// import { registerIndieID, unregisterIndieDevice } from "native-notify";
 const { width, height } = Dimensions.get("screen");
 
 function Login({ navigation }) {
@@ -35,7 +39,13 @@ function Login({ navigation }) {
   const [formChecked, setFormChecked] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   // androidClientId: process.env.EXPO_PUBLIC_SHA_1_FINGERPRINT
+  //   androidClientId:
+  //     "1067545398456-jfc4hsmfrm3mhnjh6n35rqavijuroucs.apps.googleusercontent.com",
+  // });
 
+  const activeUser = useSelector(selectUser);
   const storeData = async (key, value) => {
     try {
       await AsyncStorage.setItem(key, value);
@@ -88,10 +98,8 @@ function Login({ navigation }) {
   };
 
   const identifierValidation = (identifier) => {
-    // Regular expression for email
     const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
 
-    // Regular expression for phone number (this example assumes a simple format)
     const phonePattern = /^[\d\+\-]+$/;
 
     if (emailPattern.test(identifier)) {
@@ -121,11 +129,10 @@ function Login({ navigation }) {
           password: form.password,
         }
       );
-      //  console.log(await response.data)
+
       setError(null);
       storeData("token", response.data);
 
-      console.log("token: ", retrieveData("token"));
       dispatch(fetchUser(response.data)).then(async (response) => {
         await AsyncStorage.setItem("UserToken", response?.meta.arg);
       });
@@ -162,6 +169,7 @@ function Login({ navigation }) {
           <IdentifierIcon style={styles.inputIcon} />
           <TextInput
             autoCapitalize="none"
+            keyboardType="email-address"
             onChangeText={(content) => handleChangeIdentifier(content)}
             placeholder="email or phone number"
             style={styles.identifierInput}
@@ -252,20 +260,23 @@ function Login({ navigation }) {
           <View style={styles.line}></View>
         </View>
         <View style={styles.quickLoginContainer}>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => console.log("google sign")}
+          >
             <View style={styles.quickLogin}>
               <View style={styles.icons}>
-                <Image source={Google} alt="google" style={styles.icons} />
+                <Image source={google} alt="google" style={styles.icons} />
               </View>
-              <Text>Google</Text>
+              <Text>google</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
             <View style={styles.quickLogin}>
               <View style={styles.icons}>
-                <Image source={Facebook} alt="facebook" style={styles.icons} />
+                <Image source={facebook} alt="facebook" style={styles.icons} />
               </View>
-              <Text>Facebook</Text>
+              <Text>facebook</Text>
             </View>
           </TouchableOpacity>
         </View>

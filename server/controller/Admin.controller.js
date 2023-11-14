@@ -56,6 +56,7 @@ module.exports = {
   emailLogin: async (req, res) => {
     try {
       const admin = await Admin.findOne({ where: { email: req.body.email } });
+      console.log("this is what admin foundddddd",admin);
       if (!admin.dataValues) {
         return res.status(404).json("Admin does not exist");
       }

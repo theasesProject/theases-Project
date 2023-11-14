@@ -27,7 +27,7 @@ module.exports = {
     }
   },
   // this is the controller that'll fetch all pending requests for the admin, each one will have all its images included
-  getAllUnverifiedRequests: async (req, res) => {
+  getAllUnverifiedRequests: async (req, res,next) => {
     try {
       const response = await Request.findAll({
         where: { verified: false },
@@ -35,16 +35,26 @@ module.exports = {
       });
       res.status(200).send(response);
     } catch (err) {
-      res.status(500).json(err);
+      next(err)
     }
   },
-  declineRequest: async (req, res) => {
+  declineRequest: async (req, res,next) => {
     try {
+      console.log(req.params);
       await Media.destroy({ where: { requestId: req.params.id } });
       await Request.destroy({ where: { id: req.params.id } });
       res.status(204).send("deleted");
     } catch (err) {
-      res.status(500).json(err);
+      next(err)
     }
   },
+  AcceptRequest: async (req, res,next) => {
+    try {
+      const oldImg=await Media.destroy({ where: { requestId: req.params.id } });
+      const oldReq=await Request.destroy({ where: { id: req.params.id } });
+      res.status(204).send({oldImg,oldReq});
+    } catch (err) {
+      next(err);
+    }
+  }
 };

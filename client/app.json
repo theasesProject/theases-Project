@@ -40,6 +40,7 @@
     },
     "android": {
       "package": "android.package",
+      "googleServiceFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -56,6 +57,11 @@
           "iCloudContainerEnvironment": "Production"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "23c0b65b-8ab5-4a64-9a56-0ff2118515ad"
+      }
+    }
   }
 }

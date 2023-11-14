@@ -3,19 +3,18 @@ import axios from "axios";
 // import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Define an initial state for the user slice
 const initialState = {
   data: {},
   loggedIn: false,
-  status: "idle", // Possible values: 'idle', 'loading', 'succeeded', 'failed'
+  status: "idle",
   error: null,
-  reporter:{}
+  reporter:{},
+  oneUser: [{}],
 };
+console.log("hi");
 
-// Define an async thunk to fetch a user from the database
 const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   try {
-    // Replace this with your actual API call to fetch the user
     const response = await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/token`,
       {
@@ -87,6 +86,20 @@ export const handleToken = createAsyncThunk("user/handleToken", async () => {
     console.error(er);
   }
 })
+export const getOneById =createAsyncThunk("user/getOneById",async (id)=>{
+  try {
+
+    const res=await axios.get(
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${id}`
+
+    )
+ 
+    return res.data 
+
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 
 const userSlice = createSlice({
@@ -124,11 +137,25 @@ const userSlice = createSlice({
       .addCase(handleToken.fulfilled,(state,action)=>{
         state.reporter=action.payload
       })
+      .addCase(getOneById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getOneById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.oneUser = action.payload;
+      })
+      .addCase(getOneById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
   },
 });
 
 export default userSlice.reducer;
 export const selectUser = (state) => state.user.data;
 export const logStatus = (state) => state.user.loggedIn;
+
+export const OneUserbid = (state) => state.agency.oneUser;
 export { fetchUser };
 export const { logoutUser, setUser } = userSlice.actions;

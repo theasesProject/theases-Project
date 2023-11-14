@@ -7,7 +7,7 @@ module.exports = {
     try {
       const allCars = await db.Car.findAll({
         include: [
-          // { model: db.Media, as: "Media" },
+          { model: db.Media, as: "Media" },
           { model: db.Agency, as: "Agency" },
         ],
       });
@@ -24,7 +24,8 @@ module.exports = {
         model: req.body.model,
         brand: req.body.brand,
         price: req.body.price,
-        period: req.body.period,
+        priceWeekly: req.body.priceWeekly,
+        priceMonthly: req.body.priceMonthly,
         status: "available",
         horsePower: req.body.horse,
         typeOfFuel: req.body.typeOfFuel,

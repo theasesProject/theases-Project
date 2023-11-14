@@ -6,17 +6,14 @@ import {
   Dimensions,
   Image,
   ImageBackground,
-  Touchable,
   ScrollView,
   Pressable,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
-
+import bg from "../assets/tempLogo.png";
 import NavBarAgency from "../components/NavBarAgency";
 import Stats from "../components/Stats";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import MapAgencyProfile from "./MapAgencyProfile";
 import Left from "../assets/Svg/left-long-solid.svg";
 import Dots from "../assets/Svg/three-dots-svgrepo-com.svg";
 import SliderMenu from "../components/SideBar";
@@ -26,18 +23,17 @@ function AgencyProfile({ navigation }) {
   const activeUser = useSelector(selectUser);
   const [isSliderOpen, setSliderOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  console.log("here", activeUser);
+
   const handleSliderToggle = () => {
     setSliderOpen(!isSliderOpen);
   };
-  // const toggleVisibility = () => {
-  //   setIsVisible(!isVisible);
-  // };
   return (
     <View>
       <View style={styles.trial}>
         <View style={styles.trle}>
-          <Left />
+          <Pressable onPress={() => navigation.navigate("Home")}>
+            <Left />
+          </Pressable>
         </View>
 
         <View style={styles.trri}>
@@ -57,21 +53,16 @@ function AgencyProfile({ navigation }) {
           onClose={handleSliderToggle}
           navigation={navigation}
         />
-        {isVisible && activeUser.Agency ? (
+        {isVisible && activeUser?.Agency ? (
           <ScrollView>
             <View style={styles.vbgImg}>
-              <ImageBackground
-                source={{
-                  uri: activeUser.Agency.backgroundImage,
-                }}
-                style={styles.bgim}
-              />
+              <ImageBackground source={bg} style={styles.bgim} />
             </View>
             <View style={styles.vav}>
               <View style={styles.bvav}>
                 <Image
                   source={{
-                    uri: activeUser.avatar,
+                    uri: activeUser?.avatar,
                   }}
                   style={styles.avatar}
                 />
@@ -80,18 +71,18 @@ function AgencyProfile({ navigation }) {
 
             <View style={styles.acna}>
               <View style={styles.leftSection}>
-                <Text style={styles.leac}>{activeUser.Agency.name}</Text>
+                <Text style={styles.leac}>{activeUser?.Agency.name}</Text>
                 <Text style={styles.number}>
-                  {activeUser.Agency.companyNumber}
+                  {activeUser?.Agency.companyNumber}
                 </Text>
               </View>
               <View style={styles.rightSection}>
                 <Text>
-                  {activeUser.Agency.transportation
+                  {activeUser?.Agency.transportation
                     ? "With Delivery"
                     : "Without Delivery"}
                 </Text>
-                <Text>{activeUser.Agency.createdAt.slice(0, 10)}</Text>
+                <Text>{activeUser?.Agency.createdAt.slice(0, 10)}</Text>
                 {/* <Image source={dots} /> */}
               </View>
             </View>
@@ -112,19 +103,15 @@ const styles = StyleSheet.create({
   trial: {
     height: "6%",
     width: width,
-    // backgroundColor:'green',
+
     flexDirection: "row",
     paddingHorizontal: width * 0.07,
     alignItems: "center",
     justifyContent: "space-between",
   },
-  trle: {
-    // flex: 1,
-    // paddingRight: 200,
-    // backgroundColor:'red'
-  },
+  trle: {},
   trri: {
-    width: width * 0.1
+    width: width * 0.1,
   },
 
   agency: {
@@ -136,12 +123,11 @@ const styles = StyleSheet.create({
     height: height * 0.25,
     width: width,
     borderBottomColor: "#6a78c1",
-    borderWidth: 3,
+    borderBottomWidth: 3,
   },
   bgim: {
-    height: "100%",
+    height: "88%",
     width: "100%",
-    // objectFit:'cover'
   },
   vav: {
     marginTop: -height * 0.07,
@@ -149,11 +135,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bvav: {
-    // borderRadius: 10,
-    //    width:width*0.25,
-    // borderWidth: 1.25,
-    // padding: 23,
-    // height:height*0.12,
     marginTop: -height * 0.02,
   },
   avatar: {
@@ -164,41 +145,26 @@ const styles = StyleSheet.create({
     borderRadius: 75,
   },
   acna: {
-    // flex: 1,
     flexDirection: "row",
     padding: 20,
-    // height:height*0.01,
-    // backgroundColor:"lightgrey",
   },
   leftSection: {
-    flex: 1, // Takes up 50% of the container's width
-    // backgroundColor: 'lightblue', // Optional background color for the left section
-    // height: height * 0.08,
+    flex: 1,
     marginTop: -height * 0.06,
-    // marginLeft:height*0.01,
-    // alignItems: "center",
-    // justifyContent: "center",
-    // borderWidth: 1,
-    // borderRadius: 10,
   },
   leac: {
     fontSize: 21,
     fontStyle: "italic",
   },
   rightSection: {
-    // height: height * 0.12,
-    // alignItems: "center",
     justifyContent: "center",
     marginTop: -height * 0.06,
     marginLeft: 100,
-    flex: 1, // Takes up 50% of the container's width
-    // backgroundColor: 'lightgreen', // Optional background color for the right section
+    flex: 1,
   },
   stats: {
     height: height * 0.5,
-    padding: 20, // Adjust the value as needed to move the "Stats" section up
-    // flex: 1,
-    // backgroundColor: "green",
+    padding: 20,
   },
   map: {
     height: height * 0.15,
@@ -210,17 +176,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: height * 0.05,
     width: width * 0.2,
-    // backgroundColor: "white",
+
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 5,
   },
   temap: { fontSize: 25, color: "lightblue" },
   foot: {
-    flex: 1,
-    justifyContent: "flex-end", // Align the component to the bottom
+    justifyContent: "flex-end",
     alignItems: "center",
-    // backgroundColor: "lightgray",
   },
 });
 export default AgencyProfile;

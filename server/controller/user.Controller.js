@@ -1,8 +1,10 @@
+require("dotenv").config();
 const { db } = require("../models/index");
 const User = db.User;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const nodemailer = require("nodemailer");
+
 // Controller methods for User
 module.exports = {
   bringUsersData: async (req, res, next) => {
@@ -111,7 +113,23 @@ module.exports = {
     }
   },
 
-  // Get user by email
+  // Get all user info by email
+  getUserInfoByEmail: async (req, res) => {
+    try {
+      const user = await User.findOne({
+        where: { email: req.params.email },
+        exclude: "password",
+      });
+      if (!user) {
+        return res.status(404).json("user does not exist");
+      }
+      res.status(200).send(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  // checks by email if a user exists in database
   getUserByEmail: async (req, res) => {
     try {
       const user = await User.findOne({ where: { email: req.params.email } });
@@ -124,7 +142,7 @@ module.exports = {
     }
   },
 
-  // Get user by phone number
+  // checks by phone number if a user exists in database
   getUserByPhoneNumber: async (req, res) => {
     try {
       const user = await User.findOne({
@@ -145,6 +163,7 @@ module.exports = {
     try {
       const user = await User.findByPk(userId);
       if (user) {
+        console.log('here controller selim ',user);
         res.json(user);
       } else {
         res.status(404).json({ message: "User not found" });
@@ -210,6 +229,41 @@ module.exports = {
         return res.send("no match");
       }
       return res.status(200).send("match");
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  sendResetPasswordConfirmationCode: async (req, res) => {
+    let code = "";
+    for (let digit = 0; digit < 5; digit++) {
+      code += Math.floor(Math.random() * 10);
+    }
+    const { email } = req.body;
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      port: 465,
+      host: "smtp.gmail.com",
+      auth: {
+        user: "rentngo.c4@gmail.com",
+        pass: "wdeg xkok redv naue",
+      },
+      secure: true, // true for 465, false for other ports
+    });
+    const mailOptions = {
+      from: "Rent & Go rentngo.c4@gmail.com",
+      to: email,
+      subject: "Reset Password",
+      text: `This is your confirmation code: ${code}`,
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+      // if (err) res.status(500).send(err);
+      if (err) throw err;
+      else res.status(201).send(code);
+    });
+  },
+  confirmResetPasswordConfirmationCode: async (req, res) => {
+    try {
     } catch (err) {
       res.status(500).json(err);
     }

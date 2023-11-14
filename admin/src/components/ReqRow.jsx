@@ -55,18 +55,6 @@ const ReqRow = ({
             type="button"
             className="btn btn-primary"
             onClick={() => {
-<<<<<<< HEAD
-              setTypeModal("request")
-              setRequest({id:request.id,
-                UserId:request.UserId,
-                address:request.address,
-                Media:request.Media,
-                companyNumber:request.companyNumber,
-                deposit:request.deposit,
-                transportation:request.transportation,
-                agencyName:request.agencyName})
-              openModal()
-=======
               setTypeModal("request");
               setRequest({
                 id: request.id,
@@ -79,7 +67,6 @@ const ReqRow = ({
                 agencyName: request.agencyName,
               });
               openModal();
->>>>>>> 9e0d7d5af92a300f4d8f293c4256f0f9e1c2e21c
             }}
             style={{
               padding: "0.5rem 2.5rem",

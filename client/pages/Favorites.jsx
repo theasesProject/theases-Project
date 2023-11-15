@@ -35,37 +35,42 @@ function Favorites() {
     <View style={styles.favoritesPage}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {bookMarks?.length > 0 ? (
-          bookMarks.map((bookmark, i) => (
-            <View key={i} style={styles.carCard}>
-              <View style={styles.items}>
-                <View style={styles.deleted2}>
-                  <TouchableOpacity onPress={handleDelete(bookmark.car.id)}>
-                    <Image style={styles.delete} source={deleteImge} />
-                  </TouchableOpacity>
-                </View>
-                <Image
-                  style={styles.car}
-                  source={{
-                    uri: bookmark.carImage?.media,
-                  }}
-                />
-                <View style={styles.detail}>
-                  <Text style={styles.title}>{bookmark.car?.model}</Text>
-                  <View style={styles.stars}>
-                    <Image style={styles.star} source={star} />
-                    <Image style={styles.star} source={star} />
-                    <Image style={styles.star} source={star} />
-                    <Image style={styles.star} source={star} />
-                    <Image style={styles.star} source={star} />
+          bookMarks
+            .slice()
+            .reverse()
+            .map((bookmark, i) => (
+              <View key={i} style={styles.carCard}>
+                <View style={styles.items}>
+                  <View style={styles.deleted2}>
+                    <TouchableOpacity onPress={handleDelete(bookmark.car.id)}>
+                      <Image style={styles.delete} source={deleteImge} />
+                    </TouchableOpacity>
                   </View>
-                  <Text style={styles.agencyName}>{bookmark.agency?.name}</Text>
-                  <Text style={styles.price}>
-                    ${bookmark.car?.price}/{bookmark.car?.period}
-                  </Text>
+                  <Image
+                    style={styles.car}
+                    source={{
+                      uri: bookmark.carImage?.media,
+                    }}
+                  />
+                  <View style={styles.detail}>
+                    <Text style={styles.title}>{bookmark.car?.model}</Text>
+                    <View style={styles.stars}>
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                    </View>
+                    <Text style={styles.agencyName}>
+                      {bookmark.agency?.name}
+                    </Text>
+                    <Text style={styles.price}>
+                      ${bookmark.car?.price}/{bookmark.car?.period}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          ))
+            ))
         ) : (
           <View style={styles.message}>
             <GreyHeart />

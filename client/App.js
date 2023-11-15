@@ -24,7 +24,7 @@ import Bookings from "./pages/Bookings.jsx";
 import Report from "./pages/Report.jsx";
 // import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
-
+import Notification from "./pages/Notifcation.jsx";
 import Booking from "./pages/Booking.jsx";
 import AgencyService from "./pages/AgencyService.jsx";
 import MyCars from "./pages/MyCars.jsx";
@@ -34,6 +34,7 @@ import { StripeProvider } from "@stripe/stripe-react-native";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
+import AllBookings from "./pages/AllBookings.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -41,15 +42,26 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="AgencyProfile">
+          <Stack.Navigator initialRouteName="Home">
             <Stack.Screen
               name="Home"
               component={Home}
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="AllBookings"
+              component={AllBookings}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
               name="MapForUser"
               component={MapForUser}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Notification"
+              component={Notification}
               options={{ headerShown: true }}
             />
             <Stack.Screen
@@ -78,7 +90,7 @@ function App() {
               options={{ headerShown: true }}
             />
             <Stack.Screen
-              name="Favorites"
+              name="favorites"
               component={Favorites}
               options={{ headerShown: true }}
             />

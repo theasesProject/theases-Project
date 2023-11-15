@@ -8,10 +8,9 @@ const initialState = {
   loggedIn: false,
   status: "idle",
   error: null,
-  reporter:{},
+  reporter: {},
   oneUser: [{}],
 };
-console.log("hi");
 
 const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   try {
@@ -29,19 +28,24 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
 });
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-export const MakeReport = createAsyncThunk("user/createReport", async (inputForm) => {
-  try {
-    const task = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/report/create`, inputForm)
-    return task.data
-  } catch (error) {
-    console.error(JSON.stringify(error));
+export const MakeReport = createAsyncThunk(
+  "user/createReport",
+  async (inputForm) => {
+    try {
+      const task = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/report/create`,
+        inputForm
+      );
+      return task.data;
+    } catch (error) {
+      console.error(JSON.stringify(error));
+    }
   }
-})
+);
 export const SignUpClick = createAsyncThunk(
   "user/SignUps",
   async (inputForm, thunkAPI) => {
     try {
-      console.log(inputForm);
       const task = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`,
         inputForm
@@ -75,32 +79,30 @@ export const logUserOut = createAsyncThunk("user/logout", async () => {
   } catch (e) {
     console.error("error coming from home", e);
   }
-}
-)
+});
 export const handleToken = createAsyncThunk("user/handleToken", async () => {
   try {
     const token = await AsyncStorage.getItem("UserToken");
-    const UserData = await axios.post(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/token`,token)
-    return UserData.data
+    const UserData = await axios.post(
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/token`,
+      token
+    );
+    return UserData.data;
   } catch (er) {
     console.error(er);
   }
-})
-export const getOneById =createAsyncThunk("user/getOneById",async (id)=>{
+});
+export const getOneById = createAsyncThunk("user/getOneById", async (id) => {
   try {
-
-    const res=await axios.get(
+    const res = await axios.get(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${id}`
+    );
 
-    )
- 
-    return res.data 
-
+    return res.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-})
-
+});
 
 const userSlice = createSlice({
   name: "user",
@@ -132,10 +134,10 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(logUserOut.fulfilled, (state) => {
-        state.loggedIn = false
+        state.loggedIn = false;
       })
-      .addCase(handleToken.fulfilled,(state,action)=>{
-        state.reporter=action.payload
+      .addCase(handleToken.fulfilled, (state, action) => {
+        state.reporter = action.payload;
       })
       .addCase(getOneById.pending, (state) => {
         state.loading = true;

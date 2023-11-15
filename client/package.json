@@ -82,6 +82,7 @@
     "react-native-svg-transformer": "^1.1.0",
     "react-native-swipe-up-down": "^1.2.0",
     "react-native-swipe-up-down-fix": "^1.0.8",
+    "react-native-swipeable": "^0.6.0",
     "react-native-web": "^0.19.9",
     "react-native-webview": "^13.6.2",
     "react-redux": "^8.1.3",

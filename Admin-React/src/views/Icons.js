@@ -5,14 +5,22 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
 import Select from 'react-select';
-
+import swal from 'sweetalert';
+import Swal from 'sweetalert2'
+import { updateStateBlock } from "Redux/adminSlice";
+import "../assets/css/nucleo-icons.css"
 function Icons() {
   const options = [
     { value: 'all', label: 'All Users' },
     { value: 'clients', label: 'Clients Only' },
     { value: 'agencies', label: 'Agencies Only' },
-    { value: 'more', label: 'More' },
   ];
+  const sortOptions = [
+    { value: 'name', label: 'Alphabetical Order' },
+    { value: 'createdAt', label: 'Date of Account Creation' },
+    { value: 'carsRented', label: 'Number of Cars Rented' }
+ ];
+ 
 
   const customStyles = {
     menu: (provied, state) => ({
@@ -40,16 +48,39 @@ function Icons() {
       width: "17rem",
     })
   }
-  const [selectedOption, setSelectedOptions] = useState(null);
+  const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'All Users' });
+  const [selectedSortOption, setSelectedSortOptions] = useState({value:"Sort Your List...",label:"Sort Your List..."});
+  const handleBlock = (id) => {
+    try {
+      const user = allUsers.find((user) => user.id === id);
+      if (user) {
+        dispatch(updateStateBlock(id));
+        setRefresh(!refresh);
+      } else {
+        console.log("User not found");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleChange = (chosen) => {
     setSelectedOptions(chosen)
+    console.log(selectedOption);
   }
+  const handleSortChange = (chosen) => {
+    setSelectedSortOptions(chosen)
+    console.log(selectedOption);
+  }
+  const loading = useSelector((state) => state.Admin.loading);
+  const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch()
   const allUsers = useSelector(selectAllUsers)
   useEffect(() => {
     dispatch(getAllUsers())
     console.log(allUsers);
-  }, [])
+    loading ? setRefresh(!refresh) : null;
+
+  }, [dispatch, refresh])
   return (
     <>
       <div className="content">
@@ -71,83 +102,436 @@ function Icons() {
                   </p>
                 </div>
                 <div style={{
-                  paddingRight: "2rem",
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "1rem",
-                  // alignContent:"center",
-                  // textAlign:"center",
-                  alignItems: "center"
+                  display:"flex",
+                  flexDirection:"row"
                 }}>
-                  Filter By:
-                  <Select
-                    isSearchable={true}
-                    // width="50%"
-                    placeholder={"filter your list..."}
-                    value={selectedOption}
-                    onChange={handleChange}
-                    options={options}
-                    styles={customStyles}
-                  />
-                </div>
+                  <div style={{
+                    paddingRight: "2rem",
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "1rem",
+                    // alignContent:"center",
+                    // textAlign:"center",
+                    alignItems: "center"
+                  }}>
+                    Sort By:
+                    <Select
+                      isSearchable={true}
+                      // width="50%"
+                      placeholder={"filter your list..."}
+                      value={selectedSortOption}
+                      onChange={handleSortChange}
+                      options={sortOptions}
+                      styles={customStyles}
+                    />
+                  </div>
+                  <div style={{
+                    paddingRight: "2rem",
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "1rem",
+                    // alignContent:"center",
+                    // textAlign:"center",
+                    alignItems: "center"
+                  }}>
+                    Filter By:
+                    <Select
+                      isSearchable={true}
+                      // width="50%"
+                      placeholder={"filter your list..."}
+                      value={selectedOption}
+                      onChange={handleChange}
+                      options={options}
+                      styles={customStyles}
+                    />
+                  </div></div>
               </CardHeader>
               <CardBody className="all-icons">
-                <div style={{
-                  fontSize: "1rem"
-                }}>
-                  All Clients:
-                </div>
-                <Row>
-                  {allUsers.map((user) =>
-                    <Col
-                      className="font-icon-list col-xs-6 col-xs-6"
-                      lg="2"
-                      md="3"
-                      sm="4"
-                    >
-                      <div className="font-icon-detail">
-                        <img src={user.avatar} style={{
-                          height: "35%", width: "35%"
-                        }} />
-                        <p className="userNameCol">{user.userName}</p>
+                {selectedOption.label === "All Users" ?
+                  (
+                    <>
+                      <div style={{
+                        fontSize: "1rem"
+                      }}>
+                        All Clients:
                       </div>
-                    </Col>
-
-                  )}
-                </Row>
-                <div style={{
-                  padding:"1rem"
-                }}>
-                <div style={{
-                  width: "100%",
-                  height: ".005rem",
-                  backgroundColor: "#4ca9e4"
-                }}></div>
-                </div>
-                <div style={{
-
-                  fontSize: "1rem"
-                }}>
-                  All Agencies:
-                </div>
-                <Row>
-                  {allUsers.map((user) =>
-                    <Col
-                      className="font-icon-list col-xs-6 col-xs-6"
-                      lg="2"
-                      md="3"
-                      sm="4"
-                    >
-                      <div className="font-icon-detail">
-                        <img src={user.avatar} style={{
-                          height: "35%", width: "35%"
-                        }} />
-                        <p className="userNameCol">{user.userName}</p>
+                      <Row>
+                        {allUsers.map((user, i) =>
+                          user.type === "client" ? (
+                            <Col
+                              key={i}
+                              className="font-icon-list col-xs-6 col-xs-6"
+                              lg="2"
+                              md="3"
+                              sm="4"
+                              onClick={() => {
+                                console.log(user);
+                                Swal.fire({
+                                  title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                  html: `
+                                 <b>UserName: </b>${user.userName}
+                                 <br>
+                                 <b>email: </b>${user.email}
+                                 <br>
+                                 <b>phoneNumber: </b>${user.phoneNumber}
+                                 <br>
+                                 <b>type: </b>${user.type}
+                                 <br>
+                                 <b></b>${user.stateBlocked ? "( ◡̀_◡́)" : ""}
+                                `,
+                                  imageUrl: `${user.avatar}`,
+                                  imageWidth: 200,
+                                  imageHeight: 200,
+                                  imageAlt: "Custom image",
+                                  backdrop: `rgba(0,0,123,0.4)`,
+                                  showCloseButton: true,
+                                  showCancelButton: true,
+                                  focusConfirm: false,
+                                  confirmButtonText: `
+                                 <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                `,
+                                  confirmButtonAriaLabel: "Thumbs up, great!",
+                                  customClass: {
+                                    container: 'my-modal',
+                                    confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
+                                    cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                  },
+                                  cancelButtonText: `
+                                 <i class="fa fa-close"></i>
+                                `,
+                                  // cancelButtonAriaLabel: "Thumbs down"
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    Swal.fire({
+                                      title: "Are you sure?",
+                                      text: "You won't be able to revert this!",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonText: "Yes, ban it!",
+                                      cancelButtonText: "No, cancel!"
+                                    }).then((result) => {
+                                      if (result.isConfirmed) {
+                                        handleBlock(user.id)
+                                        Swal.fire({
+                                          title: "Banned!",
+                                          text: "The user has been banned.",
+                                          icon: "success"
+                                        });
+                                      } else if (
+                                        result.dismiss === Swal.DismissReason.cancel
+                                      ) {
+                                        Swal.fire({
+                                          title: "Cancelled",
+                                          text: "The user ban has been cancelled.",
+                                          icon: "error"
+                                        });
+                                      }
+                                    });
+                                  }
+                                });
+                              }}
+                            >
+                              <div className="font-icon-detail">
+                                <img src={user.avatar} style={{
+                                  height: "35%", width: "35%"
+                                }} />
+                                <p className="userNameCol">{user.userName}</p>
+                              </div>
+                            </Col>) : null
+                        )}
+                      </Row>
+                      <div style={{
+                        padding: "1rem"
+                      }}>
+                        <div style={{
+                          width: "100%",
+                          height: ".005rem",
+                          backgroundColor: "#4ca9e4"
+                        }}></div>
                       </div>
-                    </Col>
+                      <div style={{
 
-                  )}
-                </Row>
+                        fontSize: "1rem"
+                      }}>
+                        All Agencies:
+                      </div>
+                      <Row>
+                        {allUsers.map((user, i) =>
+                          user.type === "agency" ? (
+
+                            <Col
+                              key={i}
+                              className="font-icon-list col-xs-6 col-xs-6"
+                              lg="2"
+                              md="3"
+                              sm="4"
+                              onClick={() => {
+                                console.log(user);
+                                Swal.fire({
+                                  title: `<strong>${user.type === "client" ? "User" : "Agency"} <u>Data</u></strong>`,
+                                  html: `
+                                 <b>UserName: </b>${user.userName}
+                                 <br>
+                                 <b>email: </b>${user.email}
+                                 <br>
+                                 <b>phoneNumber: </b>${user.phoneNumber}
+                                 <br>
+                                 <b>type: </b>${user.type}
+                                 <br>
+                                 <b></b>${user.stateBlocked ? "( ◡̀_◡́)" : "✅"}
+                                `,
+                                  imageUrl: `${user.avatar}`,
+                                  imageWidth: 200,
+                                  imageHeight: 200,
+                                  imageAlt: "Custom image",
+                                  backdrop: `
+                                 rgba(0,0,123,0.4)
+                                 url("/images/nyan-cat.gif")
+                                 left top
+                                 no-repeat
+                                `,
+                                  showCloseButton: true,
+                                  showCancelButton: true,
+                                  focusConfirm: false,
+                                  confirmButtonText: `
+                                 <i class="fa fa-ban"></i> ban this User?
+                                `,
+                                  confirmButtonAriaLabel: "Thumbs up, great!",
+                                  cancelButtonText: `
+                                 <i class="fa fa-close"></i>
+                                `,
+                                  cancelButtonAriaLabel: "Thumbs down"
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    Swal.fire({
+                                      title: "Are you sure?",
+                                      text: "You won't be able to revert this!",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonText: "Yes, ban it!",
+                                      cancelButtonText: "No, cancel!"
+                                    }).then((result) => {
+                                      if (result.isConfirmed) {
+                                        Swal.fire({
+                                          title: "Banned!",
+                                          text: "The user has been banned.",
+                                          icon: "success"
+                                        });
+                                      } else if (
+                                        result.dismiss === Swal.DismissReason.cancel
+                                      ) {
+                                        Swal.fire({
+                                          title: "Cancelled",
+                                          text: "The user ban has been cancelled.",
+                                          icon: "error"
+                                        });
+                                      }
+                                    });
+                                  }
+                                });
+                              }}
+
+                            >
+                              <div className="font-icon-detail">
+                                <img src={user.avatar} style={{
+                                  height: "35%", width: "35%"
+                                }} />
+                                <p className="userNameCol">{user.userName}</p>
+                              </div>
+                            </Col>) : null
+
+                        )}
+                      </Row>
+                    </>) : selectedOption.label === "Clients Only" ? (
+                      <>
+                        <div style={{
+                          fontSize: "1rem"
+                        }}>
+                          All Clients:
+                        </div>
+                        <Row>
+                          {allUsers.map((user, i) =>
+                            user.type === "client" ? (
+                              < Col
+                                key={i}
+                                className="font-icon-list col-xs-6 col-xs-6"
+                                lg="2"
+                                md="3"
+                                sm="4"
+                                onClick={() => {
+                                  console.log(user);
+                                  Swal.fire({
+                                    title: `<strong>${user.type === "client" ? "User" : "Agency"} <u>Data</u></strong>`,
+                                    html: `
+                                   <b>UserName: </b>${user.userName}
+                                   <br>
+                                   <b>email: </b>${user.email}
+                                   <br>
+                                   <b>phoneNumber: </b>${user.phoneNumber}
+                                   <br>
+                                   <b>type: </b>${user.type}
+                                   <br>
+                                   <b></b>${user.stateBlocked ? "( ◡̀_◡́)" : "✅"}
+                                  `,
+                                    imageUrl: `${user.avatar}`,
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: "Custom image",
+                                    backdrop: `
+                                   rgba(0,0,123,0.4)
+                                   url("/images/nyan-cat.gif")
+                                   left top
+                                   no-repeat
+                                  `,
+                                    showCloseButton: true,
+                                    showCancelButton: true,
+                                    focusConfirm: false,
+                                    confirmButtonText: `
+                                   <i class="fa fa-ban"></i> ban this User?
+                                  `,
+                                    confirmButtonAriaLabel: "Thumbs up, great!",
+                                    cancelButtonText: `
+                                   <i class="fa fa-close"></i>
+                                  `,
+                                    cancelButtonAriaLabel: "Thumbs down"
+                                  }).then((result) => {
+                                    if (result.isConfirmed) {
+                                      Swal.fire({
+                                        title: "Are you sure?",
+                                        text: "You won't be able to revert this!",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonText: "Yes, ban it!",
+                                        cancelButtonText: "No, cancel!"
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          Swal.fire({
+                                            title: "Banned!",
+                                            text: "The user has been banned.",
+                                            icon: "success"
+                                          });
+                                        } else if (
+                                          result.dismiss === Swal.DismissReason.cancel
+                                        ) {
+                                          Swal.fire({
+                                            title: "Cancelled",
+                                            text: "The user ban has been cancelled.",
+                                            icon: "error"
+                                          });
+                                        }
+                                      });
+                                    }
+                                  });
+                                }}
+                              >
+                                <div className="font-icon-detail">
+                                  <img src={user.avatar} style={{
+                                    height: "35%", width: "35%"
+                                  }} />
+                                  <p className="userNameCol">{user.userName}</p>
+                                </div>
+                              </Col>
+                            ) : null
+                          )}
+                        </Row>
+
+                      </>
+                    ) : selectedOption.label === "Agencies Only" ? (
+                      <>
+                        <div style={{
+
+                          fontSize: "1rem"
+                        }}>
+                          All Agencies:
+                        </div>
+                        <Row>
+                          {allUsers.map((user, i) =>
+                            user.type === "agency" ? (
+                              <Col
+                                key={i}
+                                className="font-icon-list col-xs-6 col-xs-6"
+                                lg="2"
+                                md="3"
+                                sm="4"
+                                onClick={() => {
+                                  console.log(user);
+                                  Swal.fire({
+                                    title: `<strong>${user.type === "client" ? "User" : "Agency"} <u>Data</u></strong>`,
+                                    html: `
+                                   <b>UserName: </b>${user.userName}
+                                   <br>
+                                   <b>email: </b>${user.email}
+                                   <br>
+                                   <b>phoneNumber: </b>${user.phoneNumber}
+                                   <br>
+                                   <b>type: </b>${user.type}
+                                   <br>
+                                   <b></b>${user.stateBlocked ? "( ◡̀_◡́)" : "✅"}
+                                  `,
+                                    imageUrl: `${user.avatar}`,
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: "Custom image",
+                                    backdrop: `
+                                   rgba(0,0,123,0.4)
+                                   url("/images/nyan-cat.gif")
+                                   left top
+                                   no-repeat
+                                  `,
+                                    showCloseButton: true,
+                                    showCancelButton: true,
+                                    focusConfirm: false,
+                                    confirmButtonText: `
+                                   <i class="fa fa-ban"></i> ban this User?
+                                  `,
+                                    confirmButtonAriaLabel: "Thumbs up, great!",
+                                    cancelButtonText: `
+                                   <i class="fa fa-close"></i>
+                                  `,
+                                    cancelButtonAriaLabel: "Thumbs down"
+                                  }).then((result) => {
+                                    if (result.isConfirmed) {
+                                      Swal.fire({
+                                        title: "Are you sure?",
+                                        text: "You won't be able to revert this!",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonText: "Yes, ban it!",
+                                        cancelButtonText: "No, cancel!"
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          Swal.fire({
+                                            title: "Banned!",
+                                            text: "The user has been banned.",
+                                            icon: "success"
+                                          });
+                                        } else if (
+                                          result.dismiss === Swal.DismissReason.cancel
+                                        ) {
+                                          Swal.fire({
+                                            title: "Cancelled",
+                                            text: "The user ban has been cancelled.",
+                                            icon: "error"
+                                          });
+                                        }
+                                      });
+                                    }
+                                  });
+                                }}
+                              >
+                                <div className="font-icon-detail">
+                                  <img src={user.avatar} style={{
+                                    height: "35%", width: "35%"
+                                  }} />
+                                  <p className="userNameCol">{user.userName}</p>
+                                </div>
+                              </Col>
+                            ) : null
+
+                          )}
+                        </Row></>
+                    ) : null
+                }
 
 
 
@@ -157,6 +541,9 @@ function Icons() {
                     lg="2"
                     md="3"
                     sm="4"
+                    onClick={()=>{
+                      swal("Hello there my name is a user")
+                    }}
                   >
                     <div className="font-icon-detail">
                       <i className="tim-icons icon-alert-circle-exc" />

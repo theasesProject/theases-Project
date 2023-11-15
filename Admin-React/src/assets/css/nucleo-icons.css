@@ -44,7 +44,32 @@ Created using IcoMoon - icomoon.io
   color: #FFFFFF;
   font-size: 1.5em;
 }
-
+.my-confirm-button {
+  background-color: #4ca9e4; /* Change this to your preferred color */
+  color: white; /* Change this to your preferred color */
+ }
+ .my-modal {
+  background-image: url('../img/pug-puglie.gif') !important;
+  background-repeat: no-repeat !important;
+  background-size:10% !important;
+  background-position: right bottom !important;
+ }
+ 
+ .ban-button {
+  background-color: #fa4040 !important; /* Red */
+  color: #ffffff; /* White */
+ }
+ 
+ .unban-button {
+  background-color: #7066e0 !important; /* Green */
+  color: #ffffff; /* White */
+ }
+ 
+ .swal-button--confirm {
+  background-color: #e44c4c; /* Change this to your preferred color */
+  color: white; /* Change this to your preferred color */
+ }
+ 
 .font-icon-detail p {
   color: #4ca9e4 !important;
   margin-top: 30px;

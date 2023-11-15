@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import MapView, { Marker, Circle } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
@@ -7,15 +7,17 @@ import { SvgXml } from "react-native-svg";
 import Slider from "@react-native-community/slider";
 import * as geolib from "geolib";
 import { useDispatch, useSelector } from "react-redux";
-import { getAgencyData,getOne } from "../store/agencySlice";
+import { getAgencyData, getOne } from "../store/agencySlice";
 import ItineraryModal from "../components/ItinerairyModal.jsx";
 import { useNavigation } from "@react-navigation/native";
-import { Camera } from "react-native-maps";
+import Loc from "../assets/Svg/loc.svg";
+import Sat from "../assets/Svg/satellite-dish-solid.svg";
+import Carte from "../assets/Svg/map-solid.svg";
+// import { Audio } from 'expo-av';
 
 const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
 const MapForUser = ({}) => {
-
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [getLocation, setGetLocation] = useState(null);
@@ -26,98 +28,17 @@ const MapForUser = ({}) => {
     longitudeDelta: 0.02,
   });
   const [itineraryMode, setItineraryMode] = useState(false);
-
-  const handleToggleItineraryMode = () => {
-    setItineraryMode(!itineraryMode);
-  };
   const [filterRadius, setFilterRadius] = useState(10);
   const [sliderValue, setSliderValue] = useState(10);
   const [estimatedDuration, setEstimatedDuration] = useState(null);
-
+  const [mapType, setMapType] = useState("standard");
   const agencies = useSelector((state) => state.agency.list);
   const [selectedAgency, setSelectedAgency] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [currentAgencyIndex, setCurrentAgencyIndex] = useState(0);
 
-  useEffect(() => {
-    dispatch(getAgencyData());
-   
-  }, [dispatch]);
+  const mapRef = useRef(null);
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      const userLocation = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      setGetLocation(userLocation);
-      setMapRegion({
-        ...mapRegion,
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-      });
-    })();
-  }, [estimatedDuration]);
-
-  const handleSliderChange = (value) => {
-    setSliderValue(value);
-    setFilterRadius(value);
-  };
-
-  const handleZoomIn = () => {
-    const newLatitudeDelta = mapRegion.latitudeDelta / 2;
-    const newLongitudeDelta = mapRegion.longitudeDelta / 2;
-    setMapRegion({
-      ...mapRegion,
-      latitudeDelta: newLatitudeDelta,
-      longitudeDelta: newLongitudeDelta,
-    });
-  };
-
-  const handleZoomOut = () => {
-    const newLatitudeDelta = mapRegion.latitudeDelta * 2;
-    const newLongitudeDelta = mapRegion.longitudeDelta * 2;
-    setMapRegion({
-      ...mapRegion,
-      latitudeDelta: newLatitudeDelta,
-      longitudeDelta: newLongitudeDelta,
-    });
-  };
-
-  const mapRef = React.useRef(null); 
-
-  const handleSetItinerary = (agency) => {
-    setSelectedAgency(agency);
-    setTimeout(()=>{setModalVisible(true)},1500)
-    getTime()
-
-    const agencyLocation = {
-      latitude: JSON.parse(agency.address).latitude,
-      longitude: JSON.parse(agency.address).longitude,
-    };
-    mapRef.current.fitToCoordinates([agencyLocation], {
-      animated: true,
-      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-    });
-  };
-
-  const handleStartItinerary = () => {
-  
-    handleToggleItineraryMode();
-    setModalVisible(false);
-  
-    setMapRegion({
-      latitude: getLocation.latitude,
-      longitude: getLocation.longitude,
-      latitudeDelta: 0.002,
-      longitudeDelta: 0.001,
-    });
-  };
   const agen = `<?xml version="1.0" encoding="utf-8"?>
   <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
   <svg fill="#DC143C"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -145,12 +66,335 @@ const MapForUser = ({}) => {
   </svg>`;
 
   const Person = `<svg xmlns="http://www.w3.org/2000/svg" fill=#001170 viewBox="0 0 320 512"><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z"/></svg>`;
-  const handleNavigateToProfile = () => {
-    // Add logic to navigate to the agency's profile screen
-    if (selectedAgency) {
-      navigation.navigate("AgencyProfileUser", { agencyId: selectedAgency.id });
+
+  const customMapStyle = [
+    {
+      featureType: "administrative",
+      elementType: "geometry",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "administrative.land_parcel",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "administrative.land_parcel",
+      elementType: "geometry",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "administrative.locality",
+      elementType: "geometry",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "administrative.locality",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "administrative.neighborhood",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "administrative.neighborhood",
+      elementType: "geometry",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "administrative.province",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "administrative.province",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "landscape",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "poi",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "road",
+      elementType: "geometry",
+      stylers: [
+        {
+          color: "#a9afd1",
+        },
+      ],
+    },
+    {
+      featureType: "road",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "road",
+      elementType: "labels.icon",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "road.arterial",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "road.highway",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "road.highway.controlled_access",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "road.local",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "transit",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "transit.line",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "transit.station",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "transit.station.bus",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "transit.station.rail",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+    {
+      featureType: "water",
+      elementType: "geometry.fill",
+      stylers: [
+        {
+          color: "#89bdd7",
+        },
+      ],
+    },
+    {
+      featureType: "water",
+      elementType: "labels.text",
+      stylers: [
+        {
+          visibility: "off",
+        },
+      ],
+    },
+  ];
+  useEffect(() => {
+    dispatch(getAgencyData());
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   // Load the sound file
+  //   const playSound = async () => {
+  //     const { sound } = await Audio.Sound.createAsync(
+  //       require('./assets/welcome.mp3')
+  //     );
+  //     await sound.playAsync();
+  //   };
+
+  //   // Play the sound when the component mounts
+  //   playSound();
+
+  //   // Unload the sound when the component unmounts
+  //   return async () => {
+  //     await sound.unloadAsync();
+  //   };
+  // }, []);
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      const userLocation = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      setGetLocation(userLocation);
+      setMapRegion({
+        ...mapRegion,
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+      });
+    })();
+  }, [estimatedDuration, mapRegion]);
+
+  const handleSliderChange = (value) => {
+    setSliderValue(value);
+    setFilterRadius(value);
+  };
+
+  const handleSetItinerary = (agency) => {
+    setSelectedAgency(agency);
+    setTimeout(() => setModalVisible(true), 1500);
+    getTime();
+
+    const agencyLocation = {
+      latitude: JSON.parse(agency.address).latitude,
+      longitude: JSON.parse(agency.address).longitude,
+    };
+    mapRef.current.fitToCoordinates([agencyLocation], {
+      animated: true,
+      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+    });
+  };
+
+  const handleStartItinerary = () => {
+    handleToggleItineraryMode();
+    setModalVisible(false);
+
+    setMapRegion({
+      latitude: getLocation.latitude,
+      longitude: getLocation.longitude,
+      latitudeDelta: 0.002,
+      longitudeDelta: 0.001,
+    });
+  };
+
+  const handleToggleItineraryMode = () => {
+    setItineraryMode(!itineraryMode);
+  };
+
+  const handleToggleMapType = () => {
+    setMapType((prevMapType) =>
+      prevMapType === "standard" ? "satellite" : "standard"
+    );
+  };
+
+  const handleZoomToUser = () => {
+    if (getLocation && getLocation.latitude && getLocation.longitude) {
+      mapRef.current.animateToRegion({
+        latitude: getLocation.latitude,
+        longitude: getLocation.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.02,
+      });
+    } else {
+      Alert.alert("Location not available", "Please enable location services.");
     }
   };
+
   const getTime = async () => {
     if (
       getLocation &&
@@ -178,292 +422,52 @@ const MapForUser = ({}) => {
       }
     }
   };
-  const customMapStyle =[
-    {
-      "featureType": "administrative",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.land_parcel",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.land_parcel",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.locality",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.locality",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.neighborhood",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.neighborhood",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.province",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.province",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "landscape",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#a9afd1"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.icon",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road.arterial",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway.controlled_access",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road.local",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.line",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.station",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.station.bus",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.station.rail",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#89bdd7"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "labels.text",
-      "stylers": [
-        {
-          "visibility": "off"
-        }
-      ]
+  const handleNavigateToProfile = () => {
+    // Add logic to navigate to the agency's profile screen
+    if (selectedAgency) {
+      navigation.navigate("AgencyProfileUser", { agencyId: selectedAgency.id });
     }
-  ]
-  const [mapType, setMapType] = useState("standard"); // Added state for map type
-  const [tiltAngle, setTiltAngle] = useState(0);
-  const handleToggleMapType = () => {
-    // Toggle between standard and satellite view
-    setMapType((prevMapType) =>
-      prevMapType === "standard" ? "satellite" : "standard"
-    );
   };
-  // const handleSetImagery45 = () => {
-  //   if (tiltAngle === 0) {
-  //     console.log('heere');
-  //     mapRef.current.setCamera({
-  //       center: {
-  //         latitude: mapRegion.latitude,
-  //         longitude: mapRegion.longitude,
-  //       },
-  //       pitch: 45,
-  //       zoom: mapRegion.latitudeDelta,
-  //     });
-  //     setTiltAngle(45);
-  //   } else {
-  //     mapRef.current.setCamera({
-  //       center: {
-  //         latitude: mapRegion.latitude,
-  //         longitude: mapRegion.longitude,
-  //       },
-  //       pitch: 0,
-  //       zoom: mapRegion.latitudeDelta,
-  //     });
-  //     setTiltAngle(0);
-  //   }
-  // };
-  
+  const handleNextAgency = () => {
+    if (agencies.data && agencies.data.length > 0) {
+      const nextIndex = (currentAgencyIndex + 1) % agencies.data.length;
+      setCurrentAgencyIndex(nextIndex);
+
+      const nextAgency = agencies.data[nextIndex];
+      const nextAgencyLocation = {
+        latitude: JSON.parse(nextAgency.address).latitude,
+        longitude: JSON.parse(nextAgency.address).longitude,
+      };
+
+      mapRef.current.animateToRegion({
+        latitude: nextAgencyLocation.latitude,
+        longitude: nextAgencyLocation.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.02,
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
-    <MapView
-  ref={mapRef}
-  style={styles.map}
-  region={mapRegion}
-  customMapStyle={mapType === "satellite" ? customMapStyle : []}
-  mapType={mapType === "satellite" ? "satellite" : "standard"} // Set map type
-  onLayout={() => {
-    // Set the initial camera position
-    mapRef.current.setCamera({
-      center: {
-        latitude: getLocation.latitude,
-        longitude: getLocation.longitude,
-      },
-      pitch: 45,
-      zoom: getLocation.latitudeDelta,
-    });
-  }}
->
-  
-        {getLocation && getLocation.latitude && getLocation.longitude && (
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        region={mapRegion}
+        customMapStyle={customMapStyle}
+        mapType={mapType}
+        onLayout={() => {
+          mapRef.current.setCamera({
+            center: {
+              latitude: getLocation.latitude,
+              longitude: getLocation.longitude,
+            },
+            pitch: 45,
+            zoom: mapRegion.latitudeDelta,
+          });
+        }}
+      >
+        {getLocation && getLocation?.latitude && getLocation?.longitude && (
           <Marker
             coordinate={{
               latitude: getLocation.latitude,
@@ -481,7 +485,7 @@ const MapForUser = ({}) => {
             longitude: JSON.parse(agency.address).longitude,
           };
 
-          if (getLocation && getLocation.latitude && getLocation.longitude) {
+          if (getLocation && getLocation?.latitude && getLocation?.longitude) {
             const distance = geolib.getDistance(
               {
                 latitude: getLocation.latitude,
@@ -509,7 +513,7 @@ const MapForUser = ({}) => {
             return null;
           }
         })}
-        {getLocation && getLocation.latitude && getLocation.longitude && (
+        {getLocation && getLocation?.latitude && getLocation?.longitude && (
           <Circle
             center={{
               latitude: getLocation.latitude,
@@ -538,35 +542,34 @@ const MapForUser = ({}) => {
         )}
       </MapView>
 
-      <View style={styles.buttonContainerzoom}>
-        <TouchableOpacity onPress={handleZoomIn} style={styles.zoomButton}>
-          <Text>+</Text>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          onPress={handleToggleMapType}
+          style={styles.changeView}
+        >
+          {mapType === "satellite" ? <Carte /> : <Sat />}
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleZoomOut} style={styles.zoomButton}>
-          <Text>-</Text>
+
+        <TouchableOpacity onPress={handleNextAgency} style={styles.zoomButton}>
+          <Text>Next Agency</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleToggleMapType}  style={styles.zoomButton}>
-          <Text>Satellite view </Text>
+        <TouchableOpacity onPress={handleZoomToUser} style={styles.locsvg}>
+          <Loc />
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={handleSetImagery45} style ={styles.zoomButton}>
-          <Text>Set Imagery to 45°</Text>
-        </TouchableOpacity> */}
       </View>
-
-      <View style={styles.sliderContainer}>
-        <Text>Filter Radius: {sliderValue} km</Text>
-        <Slider
-          style={{ width: "80%", height: 40 }}
-          minimumValue={1}
-          maximumValue={50}
-          step={1}
-          value={sliderValue}
-          onValueChange={handleSliderChange}
-        />
+      <View style={styles.locslide}>
+        <View style={styles.sliderContainer}>
+          <Text>Filter Radius: {sliderValue} km</Text>
+          <Slider
+            style={{ width: "80%", height: 40 }}
+            minimumValue={1}
+            maximumValue={50}
+            step={1}
+            value={sliderValue}
+            onValueChange={handleSliderChange}
+          />
+        </View>
       </View>
-
-   
-
       <ItineraryModal
         isVisible={isModalVisible}
         handleNavigateToProfile={handleNavigateToProfile}
@@ -586,12 +589,6 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  buttonContainerzoom: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-    flexDirection: "column",
-  },
   buttonContainer: {
     position: "absolute",
     top: 20,
@@ -602,28 +599,24 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 15,
     margin: 5,
+
     borderRadius: 5,
+  },
+  changeView: {
+    paddingLeft: 40,
+  },
+  locsvg: {
+    paddingLeft: 40,
+    // margin: 5,
   },
   sliderContainer: {
+    flex: 1,
     position: "absolute",
+    backgroundColor: "transparent",
     bottom: 20,
-    left: 0,
-    width: "80%",
+    width: "100%",
     alignItems: "center",
-  },
-  setItineraryButton: {
-    backgroundColor: "white", // Adjust the color as needed
-    padding: 15,
-    margin: 5,
-    right: "100%",
-    borderRadius: 5,
-    navigateToProfileButton: {
-      backgroundColor: "green", // Adjust the color as needed
-      padding: 15,
-      margin: 5,
-      borderRadius: 5,
-      right: "100%",
-    },
+    justifyContent: "center",
   },
 });
 

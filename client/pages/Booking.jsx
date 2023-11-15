@@ -19,10 +19,10 @@ import { StatusBar } from "expo-status-bar";
 import CalendarPicker from "react-native-calendar-picker";
 import { GetUnavailableDatesForCar } from "../store/bookingSlice";
 import { useNavigation } from "@react-navigation/native";
-
+import io from "socket.io-client";
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
-
+import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 function Booking() {
   const navigation = useNavigation();
   const [roleModalVisible, setRoleModalVisible] = useState(false);
@@ -37,7 +37,7 @@ function Booking() {
   const activeUser = useSelector(selectUser);
   const error = useSelector((state) => state.booking.error);
   const [total, setTotal] = useState(0);
-
+  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const createBooking = () => {
     if (selectedStartDate && selectedEndDate) {
       if (error) {
@@ -50,6 +50,7 @@ function Booking() {
             UserId: activeUser.id,
             CarId: oneCar.id,
             amount: total,
+            acceptation: "pending",
           })
         );
       }
@@ -94,6 +95,18 @@ function Booking() {
     if (response === "agree") {
       createBooking();
       alert("Congratulations! Your booking was successful.");
+      const notificationData = {
+        UserId: oneCar.AgencyId,
+        notification: `You have request  for the car:${oneCar.model} from the client ${activeUser.userName}`,
+        type: "request",
+      };
+
+      dispatch(createNotifcationForSpecifiqueUser(notificationData));
+      socket.emit("request", {
+        senderId: activeUser.id,
+        receiverId: oneCar.AgencyId,
+        message: `Service request accepted: ${oneCar.model}`,
+      });
       navigation.navigate("Home");
     } else {
       setRoleModalVisible(false);

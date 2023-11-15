@@ -5,6 +5,7 @@ const {
   UpdateService,
   GetAllServicesForAgency,
   GetAvailableCars,
+  GetAllServicesForUser,
 } = require("../controller/booking.controller");
 const express = require("express");
 const bookingRouter = express.Router();
@@ -20,4 +21,5 @@ bookingRouter.put("/updatebooking", UpdateService);
 bookingRouter.get("/allServiceForAgency/:agencyId", GetAllServicesForAgency);
 
 bookingRouter.post("/avaibleCar", GetAvailableCars);
+bookingRouter.get("/allserviceforUser/:userId", GetAllServicesForUser);
 module.exports = bookingRouter;

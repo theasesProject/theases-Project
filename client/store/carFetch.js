@@ -49,7 +49,6 @@ export const deletedAgencyCar = createAsyncThunk(
   async (body) => {
     const { id, AgencyId } = body;
     try {
-      console.log(body, "body");
       const response = await axios.delete(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar/${id}/${AgencyId}`
       );
@@ -65,7 +64,7 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     const response = await axios.get(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCars`
     );
-    console.log(response.data, "response");
+
     return response.data;
   } catch (error) {
     console.log(JSON.stringify(error));
@@ -76,12 +75,11 @@ export const fetchFilteredCars = createAsyncThunk(
   "car/fetchFilteredCars",
   async (filterCriteria) => {
     try {
-      console.log(filterCriteria, "first");
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/filtredCar`,
         filterCriteria
       );
-      console.log(response.data, "final");
+
       return response.data;
     } catch (error) {
       console.error(error);
@@ -91,20 +89,18 @@ export const fetchFilteredCars = createAsyncThunk(
 export const createCar = createAsyncThunk("car/createCar", async (params) => {
   if (!params) return;
   try {
-    console.log(params,'here')
     const response = await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/newCar`,
       params.body
-    ); 
-    console.log('response',response.data);
+    );
+
     const requestId = response.data.id;
-   
-  
+
     await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media
     );
-    console.log(body, "body");
+
     return response.data;
   } catch (error) {
     console.log(error);
@@ -129,7 +125,6 @@ export const createImgeForCar = createAsyncThunk(
 export const getAllBoolMarks = createAsyncThunk(
   "car/getAllBoolMarks",
   async (id) => {
-    console.log("bookmarks", id);
     try {
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/getAll/${id}`
@@ -145,14 +140,11 @@ export const CreateBookMark = createAsyncThunk(
   "car/CreateBookMark",
   async (body) => {
     try {
-      console.log(body, "body before");
-
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/add`,
         body
       );
 
-      console.log(body, "body");
       return response.data;
     } catch (error) {
       console.log(error);

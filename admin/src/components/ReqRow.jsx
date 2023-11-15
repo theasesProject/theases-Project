@@ -10,9 +10,9 @@ const ReqRow = ({
   handleApproveRequest,
   handleDeclineRequest,
   handlePapers,
-  openLocationInGoogleMaps
+  openLocationInGoogleMaps,
 }) => {
-    const dispatch= useDispatch()
+  const dispatch = useDispatch();
 
   return (
     <tr>
@@ -55,15 +55,18 @@ const ReqRow = ({
             type="button"
             className="btn btn-primary"
             onClick={() => {
-              setTypeModal("request")
-              setRequest({id:request.id,
-                address:request.address,
-                Media:request.Media,
-                companyNumber:request.companyNumber,
-                deposit:request.deposit,
-                transportation:request.transportation,
-                agencyName:request.agencyName})
-              openModal()
+              setTypeModal("request");
+              setRequest({
+                id: request.id,
+                UserId: request.UserId,
+                address: request.address,
+                Media: request.Media,
+                companyNumber: request.companyNumber,
+                deposit: request.deposit,
+                transportation: request.transportation,
+                agencyName: request.agencyName,
+              });
+              openModal();
             }}
             style={{
               padding: "0.5rem 2.5rem",
@@ -79,11 +82,11 @@ const ReqRow = ({
             className="btn btn-primary"
             onClick={() => {
               try {
-                setTypeModal("reject")
-                setRequest(request.id)
-                openModal()
+                setTypeModal("reject");
+                setRequest(request.id);
+                openModal();
               } catch (error) {
-                console.log(error)
+                console.log(error);
               }
               // handleDeclineRequest(request.id), getAllRequests();
             }}

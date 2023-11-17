@@ -7,13 +7,16 @@ const initialState = {
     adminToken: "",
     reviews: [],
     allUsers: [],
+    allCars: [],
     requests: [],
     oneUser: {},
     refreshed: false,
     loggedIn: false,
     error: null,
     loading: false,
-
+    approvedRental: [],
+    PendingRental: [],
+    RejectedRental: []
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -83,7 +86,58 @@ export const getAllRequests = createAsyncThunk(
         }
     }
 );
-
+export const getApprovedServices = createAsyncThunk(
+    "admin/approvedHistory",
+    async () => {
+        try {
+            const response = await axios.get(
+                `http://127.0.0.1:5000/api/booking/rentalHistory`
+            )
+            return response.data
+        } catch (er) {
+            console.error(er);
+        }
+    }
+)
+export const getRejectedServices = createAsyncThunk(
+    "admin/rejectedHistory",
+    async () => {
+        try {
+            const response = await axios.get(
+                `http://127.0.0.1:5000/api/booking/rejectedHistory`
+            )
+            return response.data
+        } catch (er) {
+            console.error(er);
+        }
+    }
+)
+export const getPendingServices = createAsyncThunk(
+    "admin/pendingHistory",
+    async () => {
+        try {
+            const response = await axios.get(
+                `http://127.0.0.1:5000/api/booking/pedningHistory`
+            )
+            return response.data
+        } catch (er) {
+            console.error(er);
+        }
+    }
+)
+export const getAllCars = createAsyncThunk(
+    "admin/getAllCars",
+    async () => {
+        try {
+            const response = await axios.get(
+                `http://127.0.0.1:5000/api/car/allCars`
+            )
+            return response.data
+        } catch (er) {
+            console.error(er);
+        }
+    }
+)
 export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
     try {
         const response = await axios.get(
@@ -108,12 +162,29 @@ export const Login = createAsyncThunk("user/Login", async ({ endPoint, checkedId
         console.error(err);
     }
 });
-
+export const Sort = createAsyncThunk("user/Sort", async (dataType) => {
+    try {
+        let task = {}
+        !dataType.includes("desc") ?
+            task = await axios.get(
+                `http://localhost:5000/api/users/sort/${dataType}`
+            ) :
+            task = await axios.get(
+                `http://localhost:5000/api/users/invSort/${dataType}`
+            )
+        return task.data
+    } catch (er) {
+        console.error(er);
+    }
+})
 
 export const adminSlicer = createSlice({
     name: "admin",
     initialState,
     reducers: {
+        filterUsers: (state, action) => {
+            state.allUsers = action.payload
+        },
         triggerRefresh: (state) => {
             state.refreshed = !state.refreshed;
         },
@@ -134,6 +205,67 @@ export const adminSlicer = createSlice({
         }
     },
     extraReducers: (builder) => {
+
+        builder.addCase(getAllCars.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(getAllCars.fulfilled, (state, action) => {
+            state.loading = false;
+            state.allCars = action.payload;
+        });
+        builder.addCase(getAllCars.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
+        builder.addCase(getApprovedServices.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(getApprovedServices.fulfilled, (state, action) => {
+            state.loading = false;
+            state.approvedRental = action.payload;
+        });
+        builder.addCase(getApprovedServices.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
+        builder.addCase(getRejectedServices.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(getRejectedServices.fulfilled, (state, action) => {
+            state.loading = false;
+            state.RejectedRental = action.payload;
+        });
+        builder.addCase(getRejectedServices.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
+        builder.addCase(getPendingServices.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(getPendingServices.fulfilled, (state, action) => {
+            state.loading = false;
+            state.PendingRental = action.payload;
+        });
+        builder.addCase(getPendingServices.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
+        builder.addCase(Sort.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(Sort.fulfilled, (state, action) => {
+            state.loading = false;
+            state.allUsers = action.payload;
+        });
+        builder.addCase(Sort.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
         builder.addCase(getAllUsers.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -189,10 +321,13 @@ export const adminSlicer = createSlice({
     }
 })
 
-export const { setAdmin, logout, setLoggedIn } = adminSlicer.actions;
+export const { filterUsers, setAdmin, logout, setLoggedIn } = adminSlicer.actions;
 export const selectAdmin = (state) => state.Admin.admin;
 export const selectAllUsers = (state) => state.Admin.allUsers;
-
+export const selectApproved = (state) => state.Admin.approvedRental;
+export const selectPending = (state) => state.Admin.PendingRental;
+export const selectRejected = (state) => state.Admin.RejectedRental;
+export const selectAllCars  = (state) => state.Admin.allCars;
 export const { triggerRefresh } = adminSlicer.actions;
 export const selectReviews = (state) => state.Admin.reviews;
 export const selectLoggedIn = (state) => state.Admin.loggedIn;

@@ -4,32 +4,100 @@ import { selectAllUsers } from "Redux/adminSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
+import SelectSearch from 'react-select-search';
 import Select from 'react-select';
 import swal from 'sweetalert';
 import Swal from 'sweetalert2'
 import { updateStateBlock } from "Redux/adminSlice";
 import "../assets/css/nucleo-icons.css"
+import { Sort } from "Redux/adminSlice";
+import { filterUsers } from "Redux/adminSlice";
 function Icons() {
+  const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'All Users' });
+  const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Sort Your List...", label: "Sort Your List" });
+  const [searchValue, setSearchValue] = useState("")
   const options = [
     { value: 'all', label: 'All Users' },
     { value: 'clients', label: 'Clients Only' },
     { value: 'agencies', label: 'Agencies Only' },
   ];
-  const sortOptions = [
-    { value: 'name', label: 'Alphabetical Order' },
-    { value: 'createdAt', label: 'Date of Account Creation' },
-    { value: 'carsRented', label: 'Number of Cars Rented' }
- ];
- 
+  const replaceSelectedOption = (selectedSortOption) => {
+    const newOptions = [
+      { value: 'A-Z', label: 'Alphabetical Order(A-Z) ↾' },
+      { value: 'createdAt', label: 'Date of Account Creation ↾' },
+      { value: 'carsRented', label: 'Number of Cars Rented ↾' }
+    ];
 
-  const customStyles = {
+    newOptions.forEach((option, index) => {
+      if (option.value === selectedSortOption.value) {
+        newOptions[index] = {
+          value: option.value === 'A-Z' ? 'A-Z-desc' : option.value === 'createdAt' ? 'createdAt-desc' : 'carsRented-desc',
+          label: option.label === 'Alphabetical Order(A-Z) ↾' ? 'Alphabetical Order(A-Z) ⇂' : option.label === 'Date of Account Creation ↾' ? 'Date of Account Creation ⇂' : 'Number of Cars Rented ⇂'
+        };
+      }
+    });
+    return newOptions;
+  };
+  const sortOptions = replaceSelectedOption(selectedSortOption);
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+
+  const handleInputChange = (inputValue, { action }, filteredOptions) => {
+    if (action === 'input-change' && inputValue.length >= 2) {
+      setMenuIsOpen(true);
+      const filtered = allUsers.filter((e) => {
+        console.log(inputValue);
+        return e.userName.includes(inputValue)
+      })
+      filtered[0] ? dispatch(filterUsers(filtered)) : console.log(filtered);
+    }
+    else if (action === 'input-change' && inputValue.length === 0) {
+      setMenuIsOpen(false);
+      dispatch(getAllUsers())
+    }
+  };
+  const handleBlur = () => {
+    setMenuIsOpen(false);
+  };
+  const searchCustomStyles = {
     menu: (provied, state) => ({
       ...provied,
+      background: "#1E1E2F",
       // width: "15%"
     }),
     control: (provided, state) => ({
       ...provided,
-      background: '#fff',
+      background: '#1E1E2F',
+      borderColor: state.isFocused ? '#007BFF' : '#ced4da',
+      boxShadow: state.isFocused ? '0 0 0 1px #007BFF' : 'none',
+      '&:hover': {
+        borderColor: '#007BFF',
+      },
+      width: "25rem"
+    }),
+    lineHeight: "2px",
+    height: "2px",
+    minHeight: '20px',
+    option: (provided, state) => ({
+      ...provided,
+      background: state.isFocused ? 'white' : state.isSelected ? 'white' : '#1E1E2F',
+      // width: "15%",
+      color: state.isFocused ? '#1E1E2F' : state.isSelected ? 'black' : '#fff',
+      width: "25rem",
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: 'white', // Change this to your desired selected value color
+    }),
+  }
+  const customStyles = {
+    menu: (provied, state) => ({
+      ...provied,
+      background: "#1E1E2F",
+      // width: "15%"
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      background: "#1E1E2F",
       borderColor: state.isFocused ? '#007BFF' : '#ced4da',
       boxShadow: state.isFocused ? '0 0 0 1px #007BFF' : 'none',
       '&:hover': {
@@ -42,14 +110,16 @@ function Icons() {
     minHeight: '20px',
     option: (provided, state) => ({
       ...provided,
-      background: state.isFocused ? '#007BFF' : state.isSelected ? '#007BFF' : '#fff',
+      background: state.isFocused ? 'white' : state.isSelected ? 'white' : '#1E1E2F',
       // width: "15%",
-      color: state.isFocused ? '#fff' : state.isSelected ? '#fff' : '#000',
+      color: state.isFocused ? '#1E1E2F' : state.isSelected ? 'black' : '#fff',
       width: "17rem",
-    })
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: 'white', // Change this to your desired selected value color
+    }),
   }
-  const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'All Users' });
-  const [selectedSortOption, setSelectedSortOptions] = useState({value:"Sort Your List...",label:"Sort Your List..."});
   const handleBlock = (id) => {
     try {
       const user = allUsers.find((user) => user.id === id);
@@ -64,17 +134,28 @@ function Icons() {
     }
   };
   const handleChange = (chosen) => {
+    setMenuIsOpen(false);
     setSelectedOptions(chosen)
     console.log(selectedOption);
   }
-  const handleSortChange = (chosen) => {
-    setSelectedSortOptions(chosen)
-    console.log(selectedOption);
+  const handleSortChange = async (chosen) => {
+    try {
+      setSelectedSortOptions(chosen)
+      await dispatch(Sort(chosen.value))
+      console.log(selectedSortOption);
+    } catch (error) {
+      console.error(error);
+    }
+    // setRefresh(!refresh)
   }
   const loading = useSelector((state) => state.Admin.loading);
   const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch()
   const allUsers = useSelector(selectAllUsers)
+  const searchOptions = allUsers?.map(user => ({
+    label: user.userName,
+    value: user.id
+  }));
   useEffect(() => {
     dispatch(getAllUsers())
     console.log(allUsers);
@@ -95,15 +176,30 @@ function Icons() {
                 // backgroundColor: "red",
                 height: "3rem"
               }}>
-                <div>
+                <Select
+                  options={searchOptions}
+                  filterOption={(option, input) => input.length >= 2 && option.label.toLowerCase().includes(input.toLowerCase())}
+                  value={null}
+                  components={{
+                    DropdownIndicator: () => null,
+                    IndicatorSeparator: () => null
+                  }}
+                  styles={searchCustomStyles}
+                  placeholder="find a specific User..."
+                  onInputChange={handleInputChange}
+                  // onChange={handleChange}
+                  onBlur={handleBlur}
+                  menuIsOpen={menuIsOpen}
+                />
+                {/* <div>
                   <h5 className="title">List of Users</h5>
                   <p className="category">
                     Manage your users from this tab.
                   </p>
-                </div>
+                </div> */}
                 <div style={{
-                  display:"flex",
-                  flexDirection:"row"
+                  display: "flex",
+                  flexDirection: "row"
                 }}>
                   <div style={{
                     paddingRight: "2rem",
@@ -118,7 +214,7 @@ function Icons() {
                     <Select
                       isSearchable={true}
                       // width="50%"
-                      placeholder={"filter your list..."}
+                      // placeholder={"filter your list..."}
                       value={selectedSortOption}
                       onChange={handleSortChange}
                       options={sortOptions}
@@ -138,7 +234,7 @@ function Icons() {
                     <Select
                       isSearchable={true}
                       // width="50%"
-                      placeholder={"filter your list..."}
+                      // placeholder={"filter your list..."}
                       value={selectedOption}
                       onChange={handleChange}
                       options={options}
@@ -177,8 +273,8 @@ function Icons() {
                                  <br>
                                  <b>type: </b>${user.type}
                                  <br>
-                                 <b></b>${user.stateBlocked ? "( ◡̀_◡́)" : ""}
-                                `,
+                                 <b>id number: </b>${user.idCard}
+                                                                 `,
                                   imageUrl: `${user.avatar}`,
                                   imageWidth: 200,
                                   imageHeight: 200,
@@ -192,6 +288,7 @@ function Icons() {
                                 `,
                                   confirmButtonAriaLabel: "Thumbs up, great!",
                                   customClass: {
+                                    text: "swal-secondary-text",
                                     container: 'my-modal',
                                     confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
                                     cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
@@ -204,7 +301,8 @@ function Icons() {
                                   if (result.isConfirmed) {
                                     Swal.fire({
                                       title: "Are you sure?",
-                                      text: "You won't be able to revert this!",
+                                      html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                      // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                       icon: "warning",
                                       showCancelButton: true,
                                       confirmButtonText: "Yes, ban it!",
@@ -213,8 +311,8 @@ function Icons() {
                                       if (result.isConfirmed) {
                                         handleBlock(user.id)
                                         Swal.fire({
-                                          title: "Banned!",
-                                          text: "The user has been banned.",
+                                          title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
+                                          text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
                                           icon: "success"
                                         });
                                       } else if (
@@ -233,9 +331,10 @@ function Icons() {
                             >
                               <div className="font-icon-detail">
                                 <img src={user.avatar} style={{
-                                  height: "35%", width: "35%"
+                                  height: "50%", width: "35%"
                                 }} />
-                                <p className="userNameCol">{user.userName}</p>
+                                <p className="userNameCol">{user.userName}<br></br>(
+                                  {user.email})</p>
                               </div>
                             </Col>) : null
                         )}
@@ -268,7 +367,7 @@ function Icons() {
                               onClick={() => {
                                 console.log(user);
                                 Swal.fire({
-                                  title: `<strong>${user.type === "client" ? "User" : "Agency"} <u>Data</u></strong>`,
+                                  title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
                                   html: `
                                  <b>UserName: </b>${user.userName}
                                  <br>
@@ -278,43 +377,46 @@ function Icons() {
                                  <br>
                                  <b>type: </b>${user.type}
                                  <br>
-                                 <b></b>${user.stateBlocked ? "( ◡̀_◡́)" : "✅"}
+                                 <b>id number: </b>${user.idCard}
                                 `,
                                   imageUrl: `${user.avatar}`,
                                   imageWidth: 200,
                                   imageHeight: 200,
                                   imageAlt: "Custom image",
-                                  backdrop: `
-                                 rgba(0,0,123,0.4)
-                                 url("/images/nyan-cat.gif")
-                                 left top
-                                 no-repeat
-                                `,
+                                  backdrop: `rgba(0,0,123,0.4)`,
                                   showCloseButton: true,
                                   showCancelButton: true,
                                   focusConfirm: false,
                                   confirmButtonText: `
-                                 <i class="fa fa-ban"></i> ban this User?
+                                 <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
                                 `,
                                   confirmButtonAriaLabel: "Thumbs up, great!",
+                                  customClass: {
+                                    text: "swal-secondary-text",
+                                    container: 'my-modal',
+                                    confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
+                                    cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                  },
                                   cancelButtonText: `
                                  <i class="fa fa-close"></i>
                                 `,
-                                  cancelButtonAriaLabel: "Thumbs down"
+                                  // cancelButtonAriaLabel: "Thumbs down"
                                 }).then((result) => {
                                   if (result.isConfirmed) {
                                     Swal.fire({
                                       title: "Are you sure?",
-                                      text: "You won't be able to revert this!",
+                                      html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                      // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                       icon: "warning",
                                       showCancelButton: true,
                                       confirmButtonText: "Yes, ban it!",
                                       cancelButtonText: "No, cancel!"
                                     }).then((result) => {
                                       if (result.isConfirmed) {
+                                        handleBlock(user.id)
                                         Swal.fire({
-                                          title: "Banned!",
-                                          text: "The user has been banned.",
+                                          title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
+                                          text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
                                           icon: "success"
                                         });
                                       } else if (
@@ -334,9 +436,10 @@ function Icons() {
                             >
                               <div className="font-icon-detail">
                                 <img src={user.avatar} style={{
-                                  height: "35%", width: "35%"
+                                  height: "50%", width: "35%"
                                 }} />
-                                <p className="userNameCol">{user.userName}</p>
+                                <p className="userNameCol">{user.userName}<br></br>(
+                                  {user.email})</p>
                               </div>
                             </Col>) : null
 
@@ -361,7 +464,7 @@ function Icons() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "User" : "Agency"} <u>Data</u></strong>`,
+                                    title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -371,43 +474,46 @@ function Icons() {
                                    <br>
                                    <b>type: </b>${user.type}
                                    <br>
-                                   <b></b>${user.stateBlocked ? "( ◡̀_◡́)" : "✅"}
+                                   <b>id number: </b>${user.idCard}
                                   `,
                                     imageUrl: `${user.avatar}`,
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
-                                    backdrop: `
-                                   rgba(0,0,123,0.4)
-                                   url("/images/nyan-cat.gif")
-                                   left top
-                                   no-repeat
-                                  `,
+                                    backdrop: `rgba(0,0,123,0.4)`,
                                     showCloseButton: true,
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ban this User?
+                                   <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
+                                    customClass: {
+                                      text: "swal-secondary-text",
+                                      container: 'my-modal',
+                                      confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                    },
                                     cancelButtonText: `
                                    <i class="fa fa-close"></i>
                                   `,
-                                    cancelButtonAriaLabel: "Thumbs down"
+                                    // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
                                     if (result.isConfirmed) {
                                       Swal.fire({
                                         title: "Are you sure?",
-                                        text: "You won't be able to revert this!",
+                                        html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                        // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
                                         confirmButtonText: "Yes, ban it!",
                                         cancelButtonText: "No, cancel!"
                                       }).then((result) => {
                                         if (result.isConfirmed) {
+                                          handleBlock(user.id)
                                           Swal.fire({
-                                            title: "Banned!",
-                                            text: "The user has been banned.",
+                                            title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
+                                            text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
                                             icon: "success"
                                           });
                                         } else if (
@@ -426,9 +532,10 @@ function Icons() {
                               >
                                 <div className="font-icon-detail">
                                   <img src={user.avatar} style={{
-                                    height: "35%", width: "35%"
+                                    height: "50%", width: "35%"
                                   }} />
-                                  <p className="userNameCol">{user.userName}</p>
+                                  <p className="userNameCol">{user.userName}<br></br>(
+                                    {user.email})</p>
                                 </div>
                               </Col>
                             ) : null
@@ -456,7 +563,7 @@ function Icons() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "User" : "Agency"} <u>Data</u></strong>`,
+                                    title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -466,43 +573,46 @@ function Icons() {
                                    <br>
                                    <b>type: </b>${user.type}
                                    <br>
-                                   <b></b>${user.stateBlocked ? "( ◡̀_◡́)" : "✅"}
+                                   <b>id number: </b>${user.idCard}
                                   `,
                                     imageUrl: `${user.avatar}`,
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
-                                    backdrop: `
-                                   rgba(0,0,123,0.4)
-                                   url("/images/nyan-cat.gif")
-                                   left top
-                                   no-repeat
-                                  `,
+                                    backdrop: `rgba(0,0,123,0.4)`,
                                     showCloseButton: true,
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ban this User?
+                                   <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
+                                    customClass: {
+                                      text: "swal-secondary-text",
+                                      container: 'my-modal',
+                                      confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                    },
                                     cancelButtonText: `
                                    <i class="fa fa-close"></i>
                                   `,
-                                    cancelButtonAriaLabel: "Thumbs down"
+                                    // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
                                     if (result.isConfirmed) {
                                       Swal.fire({
                                         title: "Are you sure?",
-                                        text: "You won't be able to revert this!",
+                                        html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                        // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
                                         confirmButtonText: "Yes, ban it!",
                                         cancelButtonText: "No, cancel!"
                                       }).then((result) => {
                                         if (result.isConfirmed) {
+                                          handleBlock(user.id)
                                           Swal.fire({
-                                            title: "Banned!",
-                                            text: "The user has been banned.",
+                                            title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
+                                            text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
                                             icon: "success"
                                           });
                                         } else if (
@@ -521,7 +631,7 @@ function Icons() {
                               >
                                 <div className="font-icon-detail">
                                   <img src={user.avatar} style={{
-                                    height: "35%", width: "35%"
+                                    height: "50%", width: "35%"
                                   }} />
                                   <p className="userNameCol">{user.userName}</p>
                                 </div>

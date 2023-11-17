@@ -70,35 +70,49 @@ let chart1_2_options = {
 // // // used inside src/views/Dashboard.js
 // #########################################
 let chartExample1 = {
-  data1: (canvas) => {
-    let ctx = canvas.getContext("2d");
+  data1: (array) => {
+    // Check if array array is not empty
+    if (array?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
 
-    let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+    // Extract the creation dates from the user data
+    const creationDates = array?.map(user => new Date(user.createdAt));
 
-    gradientStroke.addColorStop(1, "rgba(29,140,248,0.2)");
-    gradientStroke.addColorStop(0.4, "rgba(29,140,248,0.0)");
-    gradientStroke.addColorStop(0, "rgba(29,140,248,0)"); //blue colors
+    // Check if creationDates array is not empty
+    if (creationDates?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
+
+    // Create a labels array for the months
+    const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
+
+    // Create a data array for the user counts
+    const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
-      labels: [
-        "JAN",
-        "FEB",
-        "MAR",
-        "APR",
-        "MAY",
-        "JUN",
-        "JUL",
-        "AUG",
-        "SEP",
-        "OCT",
-        "NOV",
-        "DEC",
-      ],
+      labels: labels,
       datasets: [
         {
-          label: "My First dataset",
+          label: "User Count",
           fill: true,
-          backgroundColor: gradientStroke,
+          backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
           borderWidth: 2,
           borderDash: [],
@@ -110,40 +124,46 @@ let chartExample1 = {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+          data: data,
         },
       ],
     };
   },
-  data2: (canvas) => {
-    let ctx = canvas.getContext("2d");
 
-    let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
 
-    gradientStroke.addColorStop(1, "rgba(29,140,248,0.2)");
-    gradientStroke.addColorStop(0.4, "rgba(29,140,248,0.0)");
-    gradientStroke.addColorStop(0, "rgba(29,140,248,0)"); //blue colors
-
+  data2: (rentalHistory) => {
+    if (rentalHistory?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
+    const creationDates = rentalHistory?.map(user => new Date(user.startDate));
+    if (creationDates?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
+    const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
+    const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
     return {
-      labels: [
-        "JAN",
-        "FEB",
-        "MAR",
-        "APR",
-        "MAY",
-        "JUN",
-        "JUL",
-        "AUG",
-        "SEP",
-        "OCT",
-        "NOV",
-        "DEC",
-      ],
+      labels: labels,
       datasets: [
         {
-          label: "My First dataset",
+          label: "Rental History",
           fill: true,
-          backgroundColor: gradientStroke,
+          backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
           borderWidth: 2,
           borderDash: [],
@@ -155,40 +175,55 @@ let chartExample1 = {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
+          data: data,
         },
       ],
     };
   },
-  data3: (canvas) => {
-    let ctx = canvas.getContext("2d");
 
-    let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+  data3: (array) => {
+    // Check if array array is not empty
+    if (array?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
 
-    gradientStroke.addColorStop(1, "rgba(29,140,248,0.2)");
-    gradientStroke.addColorStop(0.4, "rgba(29,140,248,0.0)");
-    gradientStroke.addColorStop(0, "rgba(29,140,248,0)"); //blue colors
+    // Extract the creation dates from the user data
+    const creationDates = array?.map(user => new Date(user.createdAt));
+
+    // Check if creationDates array is not empty
+    if (creationDates?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
+
+    // Create a labels array for the months
+    const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
+
+    // Create a data array for the user counts
+    const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
-      labels: [
-        "JAN",
-        "FEB",
-        "MAR",
-        "APR",
-        "MAY",
-        "JUN",
-        "JUL",
-        "AUG",
-        "SEP",
-        "OCT",
-        "NOV",
-        "DEC",
-      ],
+      labels: labels,
       datasets: [
         {
-          label: "My First dataset",
+          label: "User Count",
           fill: true,
-          backgroundColor: gradientStroke,
+          backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
           borderWidth: 2,
           borderDash: [],
@@ -200,7 +235,7 @@ let chartExample1 = {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130],
+          data: data,
         },
       ],
     };
@@ -212,22 +247,49 @@ let chartExample1 = {
 // // // used inside src/views/Dashboard.js
 // #########################################
 let chartExample2 = {
-  data: (canvas) => {
-    let ctx = canvas.getContext("2d");
+  data: (array) => {
+    // Check if array array is not empty
+    if (array?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
 
-    let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+    // Extract the creation dates from the user data
+    const creationDates = array?.map(user => new Date(user.createdAt));
 
-    gradientStroke.addColorStop(1, "rgba(29,140,248,0.2)");
-    gradientStroke.addColorStop(0.4, "rgba(29,140,248,0.0)");
-    gradientStroke.addColorStop(0, "rgba(29,140,248,0)"); //blue colors
+    // Check if creationDates array is not empty
+    if (creationDates?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
+
+    // Create a labels array for the months
+    const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
+
+    // Create a data array for the user counts
+    const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
-      labels: ["JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+      labels: labels,
       datasets: [
         {
-          label: "Data",
+          label: "User Count",
           fill: true,
-          backgroundColor: gradientStroke,
+          backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
           borderWidth: 2,
           borderDash: [],
@@ -239,7 +301,7 @@ let chartExample2 = {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: [80, 100, 70, 80, 120, 80],
+          data: data,
         },
       ],
     };
@@ -251,28 +313,61 @@ let chartExample2 = {
 // // // used inside src/views/Dashboard.js
 // #########################################
 let chartExample3 = {
-  data: (canvas) => {
-    let ctx = canvas.getContext("2d");
+  data: (array) => {
+    // Check if array array is not empty
+    if (array?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
 
-    let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+    // Extract the creation dates from the user data
+    const creationDates = array?.map(user => new Date(user.createdAt));
 
-    gradientStroke.addColorStop(1, "rgba(72,72,176,0.1)");
-    gradientStroke.addColorStop(0.4, "rgba(72,72,176,0.0)");
-    gradientStroke.addColorStop(0, "rgba(119,52,169,0)"); //purple colors
+    // Check if creationDates array is not empty
+    if (creationDates?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
+
+    // Create a labels array for the months
+    const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
+
+    // Create a data array for the user counts
+    const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
-      labels: ["USA", "GER", "AUS", "UK", "RO", "BR"],
+      labels: labels,
       datasets: [
         {
-          label: "Countries",
+          label: "User Count",
           fill: true,
-          backgroundColor: gradientStroke,
-          hoverBackgroundColor: gradientStroke,
-          borderColor: "#d048b6",
+          backgroundColor: "rgba(29,140,248,0.2)",
+          borderColor: "#1f8ef1",
           borderWidth: 2,
           borderDash: [],
           borderDashOffset: 0.0,
-          data: [53, 20, 10, 80, 100, 45],
+          pointBackgroundColor: "#1f8ef1",
+          pointBorderColor: "rgba(255,255,255,0)",
+          pointHoverBackgroundColor: "#1f8ef1",
+          pointBorderWidth: 20,
+          pointHoverRadius: 4,
+          pointHoverBorderWidth: 15,
+          pointRadius: 4,
+          data: data,
         },
       ],
     };
@@ -326,34 +421,61 @@ let chartExample3 = {
 // // // used inside src/views/Dashboard.js
 // #########################################
 const chartExample4 = {
-  data: (canvas) => {
-    let ctx = canvas.getContext("2d");
+  data: (array) => {
+    // Check if array array is not empty
+    if (array?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
 
-    let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+    // Extract the creation dates from the user data
+    const creationDates = array?.map(user => new Date(user.createdAt));
 
-    gradientStroke.addColorStop(1, "rgba(66,134,121,0.15)");
-    gradientStroke.addColorStop(0.4, "rgba(66,134,121,0.0)"); //green colors
-    gradientStroke.addColorStop(0, "rgba(66,134,121,0)"); //green colors
+    // Check if creationDates array is not empty
+    if (creationDates?.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: "User Count",
+            data: [],
+          },
+        ],
+      };
+    }
+
+    // Create a labels array for the months
+    const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
+
+    // Create a data array for the user counts
+    const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
-      labels: ["JUL", "AUG", "SEP", "OCT", "NOV"],
+      labels: labels,
       datasets: [
         {
-          label: "My First dataset",
+          label: "User Count",
           fill: true,
-          backgroundColor: gradientStroke,
-          borderColor: "#00d6b4",
+          backgroundColor: "rgba(29,140,248,0.2)",
+          borderColor: "#1f8ef1",
           borderWidth: 2,
           borderDash: [],
           borderDashOffset: 0.0,
-          pointBackgroundColor: "#00d6b4",
+          pointBackgroundColor: "#1f8ef1",
           pointBorderColor: "rgba(255,255,255,0)",
-          pointHoverBackgroundColor: "#00d6b4",
+          pointHoverBackgroundColor: "#1f8ef1",
           pointBorderWidth: 20,
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: [90, 27, 60, 12, 80],
+          data: data,
         },
       ],
     };

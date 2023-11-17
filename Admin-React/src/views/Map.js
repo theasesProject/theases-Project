@@ -25,8 +25,8 @@ const MapWrapper = () => {
   React.useEffect(() => {
     let google = window.google;
     let map = mapRef.current;
-    let lat = "40.748817";
-    let lng = "-73.985428";
+    let lat = "36.89";
+    let lng = "10.18";
     const myLatlng = new google.maps.LatLng(lat, lng);
     const mapOptions = {
       scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
@@ -269,13 +269,16 @@ const MapWrapper = () => {
             {
               color: "#4e6d70",
             },
-          ],
+          ],  
         },
       ],
     };
 
-    map = new google.maps.Map(map, mapOptions);
-
+     map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: -34.397, lng: 150.644},
+      zoom: 8
+     });
+    
     const marker = new google.maps.Marker({
       position: myLatlng,
       map: map,

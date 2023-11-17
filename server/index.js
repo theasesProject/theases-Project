@@ -11,7 +11,6 @@ const { Expo } = require("expo-server-sdk");
 const expo = new Expo();
 const dotenv = require("dotenv");
 const bodyparser = require("body-parser");
-
 const logger = require("morgan");
 var jwt = require("jsonwebtoken");
 app.set("TOKEN_SECRET", `${process.env.JWT_SECRET_KEY}`);

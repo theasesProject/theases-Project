@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useState } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react plugin used to create charts
@@ -49,12 +49,46 @@ import {
   chartExample3,
   chartExample4,
 } from "variables/charts.js";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllUsers } from "Redux/adminSlice";
+import { getAllUsers } from "Redux/adminSlice";
+import { getApprovedServices } from "Redux/adminSlice";
+import { selectApproved } from "Redux/adminSlice";
+import { getPendingServices } from "Redux/adminSlice";
+import { getRejectedServices } from "Redux/adminSlice";
+import { getAllCars } from "Redux/adminSlice";
+import { allCars } from "Redux/adminSlice";
+import { selectAllCars } from "Redux/adminSlice";
+import { selectPending } from "Redux/adminSlice";
+import { selectRejected } from "Redux/adminSlice";
 
-function Dashboard(props) {
+function Dashboard() {
+  const rentalHistory = useSelector(selectApproved)?.historyData
+  const pending = useSelector(selectPending)?.historyData
+  const rejected = useSelector(selectRejected)?.historyData
+  const dispatch = useDispatch()
+  const [refresh, setRefresh] = useState(false);
+  const loading = useSelector((state) => state.Admin.loading);
+  const allUsers = useSelector(selectAllUsers)
+  const allCars = useSelector(selectAllCars)
   const [bigChartData, setbigChartData] = React.useState("data1");
   const setBgChartData = (name) => {
     setbigChartData(name);
   };
+  useEffect(() => {
+    dispatch(getAllUsers())
+    dispatch(getAllCars())
+    dispatch(getApprovedServices())
+    dispatch(getPendingServices())
+    dispatch(getRejectedServices())
+    console.log(rentalHistory);
+    console.log(pending)
+    console.log(rejected)
+    console.log(allUsers)
+    console.log(allCars)
+    loading ? setRefresh(!refresh) : null;
+
+  }, [dispatch, refresh])
   return (
     <>
       <div className="content">
@@ -130,7 +164,7 @@ function Dashboard(props) {
               <CardBody>
                 <div className="chart-area">
                   <Line
-                    data={chartExample1[bigChartData]}
+                    data={bigChartData === "data1" ? chartExample1.data1(rentalHistory) : bigChartData === "data2" ? chartExample1.data1(pending) : bigChartData === "data3" ? chartExample1.data1(rejected) : null}
                     options={chartExample1.options}
                   />
                 </div>
@@ -150,9 +184,10 @@ function Dashboard(props) {
               <CardBody>
                 <div className="chart-area">
                   <Line
-                    data={chartExample2.data}
-                    options={chartExample2.options}
+                    data={chartExample2.data(allUsers)}
+                    options={chartExample1.options}
                   />
+
                 </div>
               </CardBody>
             </Card>
@@ -169,7 +204,7 @@ function Dashboard(props) {
               <CardBody>
                 <div className="chart-area">
                   <Bar
-                    data={chartExample3.data}
+                    data={chartExample3.data(allCars)}
                     options={chartExample3.options}
                   />
                 </div>
@@ -187,7 +222,7 @@ function Dashboard(props) {
               <CardBody>
                 <div className="chart-area">
                   <Line
-                    data={chartExample4.data}
+                    data={chartExample4.data([])}
                     options={chartExample4.options}
                   />
                 </div>

@@ -42,7 +42,6 @@ Notifications.setNotificationHandler({
   }),
 });
 async function schedulePushNotification(notification) {
-  console.log(notification, "bbb");
   await Notifications.scheduleNotificationAsync({
     content: {
       title: notification,
@@ -74,7 +73,6 @@ function Home({ navigation }) {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  console.log("this is active user", activeUser);
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -136,8 +134,8 @@ function Home({ navigation }) {
       socket.emit("login", { userId: activeUser?.id });
       console.log({ userId: activeUser?.id }, " { userId: activeUser?.id }");
       socket.on("receive-notification", (notification) => {
-        schedulePushNotification(notification);
-        console.log("notification here", notification, "notifcarion");
+        schedulePushNotification(notification.title);
+
         setMessages((prevMessages) => [
           ...prevMessages,
           {
@@ -156,7 +154,7 @@ function Home({ navigation }) {
         socket.disconnect();
       };
     }
-  }, [socket, expoPushToken, activeUser?.id]);
+  }, [socket, expoPushToken, activeUser.id]);
 
   return (
     <View style={styles.homePage}>

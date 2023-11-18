@@ -6,7 +6,7 @@ const {
   GetAllServicesForAgency,
   GetAvailableCars,
   GetAllServicesForUser,
-
+  MarkDatesAsUnavailable,
   deletedServiceForUser,
   deletedServiceForagency,
 } = require("../controller/booking.controller");
@@ -28,7 +28,7 @@ bookingRouter.delete(
 bookingRouter.get("/availabledates/:oneCar", GetAvailableDatesForCar);
 
 bookingRouter.put("/updatebooking", UpdateService);
-
+bookingRouter.post("/agencyUpdateDate", MarkDatesAsUnavailable);
 bookingRouter.get("/allServiceForAgency/:agencyId", GetAllServicesForAgency);
 
 bookingRouter.post("/avaibleCar", GetAvailableCars);

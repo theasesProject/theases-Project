@@ -294,4 +294,24 @@ module.exports = {
       console.log(error);
     }
   },
+
+  MarkDatesAsUnavailable: async function (req, res) {
+    try {
+      const { CarId, startDate, endDate } = req.body;
+      const datesInRange = getDatesInRange(startDate, endDate);
+
+      for (const date of datesInRange) {
+        await db.Availability.create({
+          CarId,
+          date,
+          isAvailable: false,
+        });
+      }
+
+      return res.send("Dates marked as unavailable.");
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to mark dates as unavailable.");
+    }
+  },
 };

@@ -159,9 +159,8 @@ module.exports = {
     }
   },
   updateCar: async function (req, res) {
-    const carId = req.params.id;
-
     try {
+      const carId = req.params.id;
       const updatedCar = await db.Car.update(
         {
           price: req.body.price,

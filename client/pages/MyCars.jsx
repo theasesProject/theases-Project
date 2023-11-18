@@ -11,6 +11,7 @@ import {
   Modal,
   TextInput,
 } from "react-native";
+import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,6 +19,10 @@ import {
   deletedAgencyCar,
   updateCar,
 } from "../store/carFetch";
+import {
+  GetUnavailableDatesForCar,
+  updateAgencyDate,
+} from "../store/bookingSlice";
 import { logUserOut, selectUser } from "../store/userSlice";
 import NavBarAgency from "../components/NavBarAgency";
 import car from "../assets/car2.png";
@@ -28,23 +33,26 @@ import star from "../assets/star.jpg";
 import deleteImge from "../assets/delete.jpg";
 import { Swipeable } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
+import CalendarPicker from "react-native-calendar-picker";
 function MyCars() {
   const navigation = useNavigation();
   const [selectedCar, setSelectedCar] = useState(null);
+  const unavailableDate = useSelector((state) => state.booking.unavailableDate);
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const agencyCars = useSelector((state) => state.car.agencyCar);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible1, setModalVisible1] = useState(false);
+  const [openCalender, setOpenCalender] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [markedDates, setMarkedDates] = useState({});
+  console.log(unavailableDate, "unavailableDate");
   const [updatedCarInfo, setUpdatedCarInfo] = useState({
-    price: "",
-    priceWeekly: "",
-    priceMonthly: "",
+    price: selectedCar?.price,
+    priceWeekly: selectedCar?.priceWeekly,
+    priceMonthly: selectedCar?.priceMonthly,
   });
-
-  useEffect(() => {
-    dispatch(getallCarByAgency(activeUser?.Agency.UserId));
-  }, [dispatch]);
 
   const handleDeleteCar = (carId) => {
     console.log(carId);
@@ -55,11 +63,71 @@ function MyCars() {
       })
     );
   };
+  const getDatesInRange = (start, end) => {
+    const dates = [];
+    let currentDate = moment(start);
+    while (currentDate.isSameOrBefore(end, "day")) {
+      dates.push(currentDate.format("YYYY-MM-DD"));
+      currentDate.add(1, "day");
+    }
+    return dates;
+  };
+  const handleDateSelect = (date) => {
+    if (!selectedStartDate && !selectedEndDate) {
+      setSelectedStartDate(date);
+      setSelectedEndDate(null);
+      setMarkedDates({
+        [date]: { startingDay: true, endingDay: true },
+      });
+    } else if (moment(date).isSame(selectedStartDate, "day")) {
+      setSelectedStartDate(null);
+      setSelectedEndDate(null);
+      setMarkedDates({});
+    } else if (moment(date).isAfter(selectedStartDate, "day")) {
+      setSelectedEndDate(date);
+      setMarkedDates({
+        ...markedDates,
+      });
+
+      const datesInRange = getDatesInRange(selectedStartDate, date);
+      const markedDatesInRange = datesInRange.reduce((result, date) => {
+        result[date] = { color: "pink" };
+        return result;
+      }, {});
+
+      setMarkedDates({
+        ...markedDates,
+        ...markedDatesInRange,
+        [selectedStartDate]: {
+          ...markedDates[selectedStartDate],
+          endingDay: true,
+        },
+        [date]: { ...markedDates[date], startingDay: true },
+      });
+    } else if (selectedEndDate && !selectedStartDate) {
+      setSelectedEndDate(null);
+      setSelectedStartDate(null);
+    }
+  };
+  const markDatesRed = () => {
+    const markedRedDates = {};
+
+    unavailableDate.forEach((date) => {
+      markedRedDates[date] = { selectedDayColor: "red" };
+    });
+
+    return markedRedDates;
+  };
 
   const handleUpdateCar = () => {
     dispatch(updateCar({ id: selectedCar?.id, ...updatedCarInfo }));
     setModalVisible(false);
   };
+
+  useEffect(() => {
+    dispatch(getallCarByAgency(activeUser?.Agency.UserId));
+    dispatch(GetUnavailableDatesForCar(selectedCar?.id));
+  }, [dispatch, selectedCar?.id, selectedCar]);
   const renderLeftActions = (progress, dragX, car) => {
     const trans = dragX.interpolate({
       inputRange: [-50, 0],
@@ -86,7 +154,15 @@ function MyCars() {
       </View>
     );
   };
-
+  const UpdateAvaibility = () => {
+    dispatch(
+      updateAgencyDate({
+        CarId: selectedCar?.id,
+        startDate: selectedStartDate,
+        endDate: selectedEndDate,
+      })
+    );
+  };
   const renderRightActions = (progress, dragX, carId) => {
     const trans = dragX.interpolate({
       inputRange: [0, 50],
@@ -142,7 +218,13 @@ function MyCars() {
                     </View>
 
                     <Text style={styles.price}>${agencycar.car?.price}</Text>
-                    <TouchableOpacity style={{ paddingRight: 10 }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setSelectedCar(agencycar?.car);
+                        setModalVisible1(true);
+                      }}
+                      style={{ paddingRight: 10 }}
+                    >
                       <LinearGradient
                         colors={["#88b4e2", "#6C77BF"]}
                         style={styles.buttonContainer1}
@@ -181,7 +263,7 @@ function MyCars() {
               placeholder="Price"
               value={updatedCarInfo.price}
               onChangeText={(text) =>
-                setUpdatedCarInfo({ ...updatedCarInfo, price: text })
+                setUpdatedCarInfo({ ...updatedCarInfo, price: text * 1 })
               }
             />
             <TextInput
@@ -217,6 +299,57 @@ function MyCars() {
           </View>
         </View>
       </Modal>
+      <View>
+        <Modal
+          visible={isModalVisible1}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => setModalVisible1(false)}
+          style={styles.calender}
+        >
+          <View style={styles.calender}>
+            <CalendarPicker
+              allowRangeSelection={true}
+              onDateChange={(date) => handleDateSelect(date)}
+              markedDates={{
+                ...markedDates,
+                ...markDatesRed(),
+              }}
+              todayBackgroundColor="blue"
+              selectedDayColor="#daddf0"
+              selectedDayTextColor="white"
+              selectedDisabledDatesTextStyle={{ color: "red" }}
+              scaleFactor={375}
+              textStyle={{
+                color: "black",
+
+                fontSize: 18,
+              }}
+              previousTitle="<"
+              nextTitle=">"
+              disabledDates={unavailableDate}
+            />
+            <View style={styles.updateButton1}>
+              <LinearGradient
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <TouchableOpacity onPress={UpdateAvaibility}>
+                  <Text>Update Date</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+              <LinearGradient
+                colors={["white", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <TouchableOpacity onPress={() => setModalVisible1(false)}>
+                  <Text>Cancel</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
+          </View>
+        </Modal>
+      </View>
       <NavBarAgency style={styles.NavBar} />
     </View>
   );
@@ -483,6 +616,23 @@ const styles = StyleSheet.create({
     color: "white",
     marginTop: 5,
     textAlign: "center",
+  },
+  calender: {
+    backgroundColor: "white",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+    height: height * 0.5,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: "18%",
+  },
+  updateButton1: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: "10%",
+    marginLeft: "10%",
   },
 });
 

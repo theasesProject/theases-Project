@@ -31,7 +31,7 @@ function Booking() {
   const [agreed, setAgreed] = useState(false);
   const unavailableDate = useSelector((state) => state.booking.unavailableDate);
   const oneCar = useSelector((state) => state.car.OneCar);
-  console.log(oneCar, "onecar");
+
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
@@ -41,7 +41,7 @@ function Booking() {
   const [total, setTotal] = useState(0);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const isTransportationAvailable = oneCar.Agency.transportation;
-  console.log(isTransportationAvailable, "isTransportationAvailable");
+  console.log(unavailableDate, oneCar.id, "unvaibledate");
   const [selectedTime, setSelectedTime] = useState(null);
 
   const timeSlots = [

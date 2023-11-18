@@ -143,7 +143,21 @@ export const getAllCarByDate = createAsyncThunk(
     }
   }
 );
-
+export const updateAgencyDate = createAsyncThunk(
+  "booking/updateAgencyDate",
+  async (body) => {
+    try {
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/agencyUpdateDate`,
+        body
+      );
+      console.log(response.data, "response");
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 const bookingSlice = createSlice({
   name: "booking",
   initialState,
@@ -255,6 +269,18 @@ const bookingSlice = createSlice({
       state.succes = "succes";
     });
     builder.addCase(deletedServiceByUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(updateAgencyDate.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(updateAgencyDate.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = "succes";
+    });
+    builder.addCase(updateAgencyDate.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

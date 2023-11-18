@@ -1,25 +1,19 @@
 import React from "react";
 import {
-  SafeAreaView,
-  ScrollView,
   View,
   Text,
-  Button,
-  Image,
   StyleSheet,
-  TouchableOpacity,
   Pressable,
   Dimensions,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import Svg, { Path } from "react-native-svg";
 import SignUp from ".././assets/Svg/signUpNav.svg";
 import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
 import { useSelector } from "react-redux";
-const { height, width } = Dimensions.get("screen");
+const { height } = Dimensions.get("screen");
 function NavBar({ style }) {
   const loggedIn = useSelector((state) => state.user.loggedIn);
 

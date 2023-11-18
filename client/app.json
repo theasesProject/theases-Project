@@ -56,7 +56,8 @@
         {
           "iCloudContainerEnvironment": "Production"
         }
-      ]
+      ],
+      ["@config-plugins/react-native-webrtc"]
     ],
     "extra": {
       "eas": {

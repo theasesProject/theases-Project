@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Image,
   ScrollView,
@@ -10,21 +10,16 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Keyboard,
-  DocumentSelectionState,
 } from "react-native";
+import * as FileSystem from "expo-file-system";
 const { width, height } = Dimensions.get("window");
 import { useSelector } from "react-redux";
-import io from "socket.io-client";
 import axios from "axios";
 import OneMessage from "../components/OneMessage";
 import Send from "../assets/Svg/send-alt-1-svgrepo-com.svg";
 import Attach from "../assets/Svg/attachFile.svg";
 import * as DocumentPicker from "expo-document-picker";
-import Phone from "../assets/Svg/call.svg"; 
-
-
-
-const socket = io.connect(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:3002`);
+import socket from "../socket-io.front.server"
 
 function Conversation() {
   const room = useSelector((state) => state.chatRoom.room);
@@ -32,6 +27,8 @@ function Conversation() {
   const [allMes, setAllMes] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const scrollViewRef = useRef();
+  const OneMessageMemo = React.memo(OneMessage);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetch = async () => {
     await axios
@@ -49,46 +46,79 @@ function Conversation() {
   const handleInput = (content) => {
     setCurrentMessage(content);
   };
+
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync();
-      console.log(result);
       if (!result.canceled) {
-        socket.emit("send-document", {
-          name: result.name,
-          type: result.type,
-          uri: result.uri,
+        const file = result.assets[0];
+
+        // Read the file as binary data
+        const binaryData = await FileSystem.readAsStringAsync(file.uri, {
+          encoding: FileSystem.EncodingType.Base64,
         });
+
+        // Encode the binary data using btoa
+        const base64Data = btoa(binaryData);
+
+        // Send the Base64 string as part of the message
+        sendMessage(base64Data, file.type);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const sendMessage = async (message) => {
-    if (message !== "") {
-      await axios
-        .post(
+  const isLastMessage = (index) => {
+    if (index < allMes.length - 1) {
+      const currentSenderId = allMes[index].senderId;
+      const nextSenderId = allMes[index + 1].senderId;
+      return currentSenderId !== nextSenderId;
+    }
+    return true; // Last message in the array is always considered the last
+  };
+  const [isSending, setIsSending] = useState(false);
+
+  const sendMessage = async (message, type = undefined) => {
+    if (!isSending && message !== "") {
+      try {
+        setIsSending(true);
+        await socket.emit("send-message", {
+          senderId: user.id,
+          roomId: room.id,
+          message,
+          type,
+        });
+        await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/addMessage`,
           {
             senderId: user.id,
             roomId: room.id,
-            message: currentMessage,
+            message: message,
+            type: type,
           }
-        )
-        .then(async (response) => {
-          await socket.emit("send-message", response.data);
-          setAllMes((allMes) => [...allMes, response.data]);
-          scrollViewRef.current?.scrollToEnd({ animated: true });
+          );
+          setAllMes((allMes) => [
+            ...allMes,
+            { senderId: user.id, message, type },
+          ]);
           setCurrentMessage("");
-        });
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      } catch (error) {
+        console.error("Error sending message:", error);
+      } finally {
+        // Reset the sending flag after the cooldown period (e.g., 2 seconds)
+        setTimeout(() => {
+          setIsSending(false);
+        }, 1000); // Set your desired cooldown time in milliseconds
+      }
     }
   };
 
   useEffect(() => {
     socket.emit("join-room", room.id + "");
     socket.on("receive-message", (data) => {
-      allMes.push(data);
+      // allMes.push(data);
       setAllMes((allMes) => [...allMes, data]);
     });
   }, [socket]);
@@ -130,18 +160,21 @@ function Conversation() {
             {room.name.charAt(0).toUpperCase() + room.name.slice(1)}
           </Text>
         </View>
-        <Pressable>
-          <Phone />
-        </Pressable>
       </View>
       <ScrollView
         ref={scrollViewRef}
         style={styles.feed}
         keyboardShouldPersistTaps="always"
       >
-        {allMes.map((message, i) => {
-          return <OneMessage message={message} key={i} user={user} />;
-        })}
+        {allMes.map((message, i) => (
+          <OneMessageMemo
+            message={message}
+            key={i}
+            user={user}
+            user2avatar={room.avatarUrl}
+            isLastMessage={isLastMessage(i)}
+          />
+        ))}
       </ScrollView>
       <View style={styles.inputs}>
         <TextInput
@@ -184,12 +217,9 @@ function Conversation() {
             style={{
               height: height * 0.04,
               display: "flex",
-              // alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => {
-              pickDocument();
-            }}
+            onPress={pickDocument}
           >
             <Attach />
           </Pressable>
@@ -203,7 +233,7 @@ const styles = StyleSheet.create({
   chatHeader: {
     position: "sticky",
     top: 0,
-    backgroundColor: "#ffff",
+    backgroundColor: "white",
     display: "flex",
     height: height * 0.1,
     alignItems: "center",
@@ -222,7 +252,7 @@ const styles = StyleSheet.create({
     width: "100%",
     overflow: "scroll",
     height: height * 0.87,
-    backgroundColor: "#faf5f5",
+    backgroundColor: "#f2f6f9",
   },
   inputs: {
     display: "flex",

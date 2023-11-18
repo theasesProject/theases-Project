@@ -5,21 +5,23 @@ function getDatesInRange(startDate, endDate) {
   let currentDate = new Date(startDate);
 
   while (currentDate <= new Date(endDate)) {
-    dates.push(currentDate.toISOString().split("T")[0]); // Store dates in ISO format (YYYY-MM-DD)
+    dates.push(currentDate.toISOString().split("T")[0]);
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
   return dates;
 }
+
 module.exports = {
   CreateBooking: async function (req, res) {
-    const { CarId, UserId, startDate, endDate, amount } = req.body;
+    const { CarId, UserId, startDate, endDate, amount, time } = req.body;
 
     const conflictingRental = await db.Service.findOne({
       where: {
         CarId: CarId,
         startDate: { $lt: endDate },
         endDate: { $gt: startDate },
+        ...(time ? { time: time } : {}),
       },
     });
 
@@ -50,9 +52,9 @@ module.exports = {
       startDate,
       endDate,
       amount,
+      time: time || null,
     });
 
-    // Insert records for unavailable dates
     for (const date of datesInRange) {
       await db.Availability.create({
         CarId,
@@ -264,6 +266,52 @@ module.exports = {
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  deletedServiceForagency: async function (req, res) {
+    try {
+      const deletedService = await db.Service.destroy({
+        where: {
+          CarId: req.params.CarId,
+          id: req.params.id,
+        },
+      });
+      return res.json(deletedService);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  deletedServiceForUser: async function (req, res) {
+    try {
+      const deletedService = await db.Service.destroy({
+        where: {
+          UserId: req.params.UserId,
+          id: req.params.id,
+        },
+      });
+      return res.json(deletedService);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  MarkDatesAsUnavailable: async function (req, res) {
+    try {
+      const { CarId, startDate, endDate } = req.body;
+      const datesInRange = getDatesInRange(startDate, endDate);
+
+      for (const date of datesInRange) {
+        await db.Availability.create({
+          CarId,
+          date,
+          isAvailable: false,
+        });
+      }
+
+      return res.send("Dates marked as unavailable.");
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to mark dates as unavailable.");
     }
   },
 };

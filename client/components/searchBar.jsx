@@ -42,7 +42,6 @@ function SearchBar({ onSearch }) {
       <TextInput
         onSubmitEditing={(text) => handleSearch(text)}
         style={styles.input}
-        value={searchedCar}
         placeholder="Search cars or locations…"
       ></TextInput>
 

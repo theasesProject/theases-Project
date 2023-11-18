@@ -17,8 +17,8 @@ function AdvancedSearch() {
   const dispatch = useDispatch();
 
   const [sliderValue, setSliderValue] = useState(0);
-  const [sliderValue2, setSliderValue2] = useState(80000);
-  const [priceSearched, setPriceSearched] = useState(80000);
+  const [sliderValue2, setSliderValue2] = useState(2000);
+  const [priceSearched, setPriceSearched] = useState(2000);
   const [typeVehicule, setTypeVehicule] = useState("");
   const [chara, setChar] = useState("");
   const [deposits, setDeposit] = useState("");
@@ -29,6 +29,7 @@ function AdvancedSearch() {
   const [isPressed4, setIsPressed4] = useState(false);
   const [isPressed5, setIsPressed5] = useState(false);
   const [isPressed6, setIsPressed6] = useState(false);
+
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isStartDatePickerVisible, setStartDatePickerVisible] = useState(false);
@@ -95,6 +96,30 @@ function AdvancedSearch() {
     setTypeVehicule(value);
     setIsPressed(!isPressed);
   };
+  const handleTypeVehcule1 = (value) => {
+    setTypeVehicule(value);
+    setIsPressed1(!isPressed1);
+  };
+  const handleTypeVehcule2 = (value) => {
+    setTypeVehicule(value);
+    setIsPressed2(!isPressed2);
+  };
+  const handleTypeVehcule3 = (value) => {
+    setTypeVehicule(value);
+    setIsPressed3(!isPressed3);
+  };
+  const handleChar = (value) => {
+    setChar(value);
+    setIsPressed4(!isPressed4);
+  };
+  const handleChar1 = (value) => {
+    setChar(value);
+    setIsPressed5(!isPressed5);
+  };
+  const handleChar2 = (value) => {
+    setChar(value);
+    setIsPressed6(!isPressed6);
+  };
 
   const handleSliderChange = (value) => {
     setPriceSearched(value);
@@ -107,21 +132,24 @@ function AdvancedSearch() {
   const prices = () => {
     let minPrice = allCars[0]?.price;
     let maxPrice = allCars[0]?.price;
+
     for (const car of allCars) {
       const price = car.price;
       if (price < minPrice) {
-        setSliderValue(price);
+        minPrice = price;
       }
       if (price > maxPrice) {
-        setSliderValue2(price);
+        maxPrice = price;
       }
     }
-  };
 
+    setSliderValue(minPrice);
+    setSliderValue2(maxPrice);
+  };
   const renderButton = (text, onPress, gradientColors, isPressedState) => (
     <TouchableOpacity onPress={onPress}>
       <LinearGradient
-        colors={isPressedState ? gradientColors : ["#6C77BF", "#4485C5"]}
+        colors={isPressedState ? ["#4485C5", "white"] : gradientColors}
         locations={[0, 1]}
         style={styles.button}
       >
@@ -154,7 +182,7 @@ function AdvancedSearch() {
           `${priceSearched}$`,
           () => handleButtonPress(sliderValue),
           ["#6C77BF", "#4485C5"],
-          true
+          false
         )}
 
         <View style={styles.titleContainer}>
@@ -169,13 +197,13 @@ function AdvancedSearch() {
           )}
           {renderButton(
             "Sports",
-            () => handleTypeVehcule("Sports"),
+            () => handleTypeVehcule1("Sports"),
             ["#6C77BF", "#4485C5"],
             isPressed1
           )}
           {renderButton(
             "Luxury",
-            () => handleTypeVehcule("Luxury"),
+            () => handleTypeVehcule2("Luxury"),
             ["#6C77BF", "#4485C5"],
             isPressed2
           )}
@@ -183,7 +211,7 @@ function AdvancedSearch() {
         <View style={styles.typesContainer}>
           {renderButton(
             "Economical",
-            () => handleTypeVehcule("Economical"),
+            () => handleTypeVehcule3("Economical"),
             ["#6C77BF", "#4485C5"],
             isPressed3
           )}
@@ -195,19 +223,19 @@ function AdvancedSearch() {
         <View style={styles.typesContainer}>
           {renderButton(
             "Automatic",
-            () => handleTypeVehcule("Automatic"),
+            () => handleChar("Automatic"),
             ["#6C77BF", "#4485C5"],
             isPressed4
           )}
           {renderButton(
             "Semi",
-            () => handleTypeVehcule("Semi-Automatic"),
+            () => handleChar1("Semi-Automatic"),
             ["#6C77BF", "#4485C5"],
             isPressed5
           )}
           {renderButton(
             "Manual",
-            () => handleTypeVehcule("Manual"),
+            () => handleChar2("Manual"),
             ["#6C77BF", "#4485C5"],
             isPressed6
           )}
@@ -232,7 +260,8 @@ function AdvancedSearch() {
             `Start Date ${startDate || ""}`,
             showStartDatePicker,
             ["#6C77BF", "#4485C5"],
-            isPressed4
+
+            false
           )}
           <DateTimePickerModal
             isVisible={isStartDatePickerVisible}
@@ -245,7 +274,7 @@ function AdvancedSearch() {
             `End Date  ${endDate || ""}`,
             showEndDatePicker,
             ["#6C77BF", "#4485C5"],
-            isPressed4
+            false
           )}
           <DateTimePickerModal
             isVisible={isEndDatePickerVisible}
@@ -271,18 +300,20 @@ function AdvancedSearch() {
             </TouchableOpacity>
           </LinearGradient>
         </View>
-
-        <TouchableOpacity
+        <LinearGradient
           style={styles.showResult}
-          onPress={() => {
-            fetchData();
-            navigation.navigate("FiltredCar");
-          }}
+          colors={["#6C77BF", "#4485C5"]}
+          locations={[0, 1]}
         >
-          <LinearGradient colors={["#6C77BF", "#4485C5"]} locations={[0, 1]}>
+          <TouchableOpacity
+            onPress={() => {
+              fetchData();
+              navigation.navigate("FiltredCar");
+            }}
+          >
             <Text style={styles.showResults}>Show Results</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </LinearGradient>
       </ScrollView>
     </View>
   );
@@ -294,7 +325,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 30,
     backgroundColor: "white",
-    gap: 5,
+    gap: 2,
   },
   slider: {
     width: 350,
@@ -304,7 +335,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     alignItems: "center",
-    marginVertical: 12,
+    marginVertical: 10,
     width: 100,
   },
   titleContainer: {
@@ -333,41 +364,41 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    // marginTop: 10,
+    justifyContent: "flex-start",
+    textAlign: "center",
   },
-  // dropdownTitle: {
-  //   marginRight: 5,
-  // },
+
   dropdown: {
     width: 100,
     borderRadius: 5,
     padding: 10,
     height: 40,
-    backgroundColor: "#6C77BF",
+
+    backgroundColor: "#4980C5",
   },
   dropdownOptions: {
     backgroundColor: "lightgrey",
   },
   dateContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    gap: 5,
   },
   showResult: {
     borderRadius: 10,
-
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
-    backgroundColor: "#6C77BF",
+    marginTop: 20,
   },
   showResults: {
+    marginTop: "5%",
     textAlign: "center",
-
+    textAlign: "center",
     justifyContent: "center",
     color: "black",
     fontSize: 20,
-    height: 50,
+    height: 40,
     borderRadius: 14,
   },
   backImage: {

@@ -12,17 +12,22 @@ import {
 import {
   allServiceForAgency,
   UpdateServiceByAgency,
+  deletedServiceByAgency,
 } from "../store/bookingSlice";
-
+import GreyHeart from "../assets/Svg/car-svgrepo-com.svg";
+import agenda from "../assets/agenda.jpg";
+import car from "../assets/car2.png";
+import charIcon from "../assets/chat.png";
 const { width, height } = Dimensions.get("screen");
 import { selectUser, setUser } from "../store/userSlice";
+import { LinearGradient } from "expo-linear-gradient";
 import { useSelector, useDispatch } from "react-redux";
 import carImage from "../assets/Brands/BMW.png";
 import userImage from "../assets/user.jpg";
 import { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
-
+import price from "../assets/price.jpg";
 import io from "socket.io-client";
 import PushNotification from "react-native-push-notification";
 function AgencyService() {
@@ -30,8 +35,9 @@ function AgencyService() {
   const activeUser = useSelector(selectUser);
   const allService = useSelector((state) => state.booking.allServiceByAgency);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
-  const [modalVisible, setModalVisible] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
+
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
   useEffect(() => {
     dispatch(allServiceForAgency(activeUser.id));
@@ -63,7 +69,7 @@ function AgencyService() {
     dispatch(UpdateServiceByAgency(obj));
     const notificationData = {
       UserId: id,
-      notification: `Booking Accepted for the car:${message} `,
+      notification: `${message} `,
       type: "accept",
     };
 
@@ -73,14 +79,15 @@ function AgencyService() {
       receiverId: id,
       message: `Service request accepted: ${message}`,
     });
+    alert("you success to accept the booking ");
   };
 
-  const rejectService = (idservice, message, id) => {
+  const rejectService = (idservice, message, id, CarId) => {
     const obj = { id: idservice, acceptation: "rejected" };
     dispatch(UpdateServiceByAgency(obj));
     const notificationData = {
       UserId: id,
-      notification: `Booking Rejected for the car:${message}`,
+      notification: `${message}`,
       type: "reject",
     };
 
@@ -90,177 +97,276 @@ function AgencyService() {
       receiverId: id,
       message: `Service request rejected: ${message}`,
     });
+    dispatch(deletedServiceByAgency(CarId, idservice));
+  };
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+  const closeModal = () => {
+    setCancelModalVisible(false);
+    setSelectedService(null);
   };
 
   return (
-    <View style={styles.pageContainer}>
-      <ScrollView style={styles.scrollContainer}>
-        {allService ? (
-          allService
+    <View style={styles.page}>
+      {allService ? (
+        <ScrollView style={styles.container}>
+          {allService
             .slice()
             .reverse()
-            .map((service, i) => (
-              <View key={i} style={styles.cardContainer}>
-                <View style={styles.userContainer}>
-                  <Text style={styles.name}>{service.User.userName} </Text>
-                  <Text style={styles.text}>want to rent you car </Text>
-                  <Text style={styles.name}>{service.service.model} </Text>
+            .map((service) => {
+              return service.service.Service.acceptation === "pending" ? (
+                <View style={styles.card} key={service.service.id}>
+                  <View style={styles.cardContainer}>
+                    <Image style={styles.ImageCar} source={car}></Image>
+                    <View style={styles.carDetails}>
+                      <Text style={styles.CarName}>
+                        {service.User.userName}
+                      </Text>
+                      <View style={styles.dates}>
+                        <Image style={styles.agenda} source={agenda}></Image>
+                        <Text style={styles.date}>
+                          {formatDate(service.service?.Service.startDate)} -{" "}
+                          {formatDate(service.service?.Service.endDate)}
+                        </Text>
+                        <View style={styles.prices}>
+                          <Image style={styles.price} source={price}></Image>
+                          <Text style={styles.date}>
+                            {service.service?.Service.amount}$
+                          </Text>
+                        </View>
+                      </View>
+                      <View>
+                        <Text style={styles.status}>
+                          Time : {service.service?.Service.time}
+                        </Text>
+                      </View>
+                      <View style={styles.buttons}>
+                        <View style={styles.button}>
+                          <LinearGradient
+                            style={styles.payment}
+                            colors={["#88b4e2", "#6C77BF"]}
+                          >
+                            <TouchableOpacity
+                              onPress={() => {
+                                acceptService(
+                                  service?.service.Service.id,
+                                  service.User.id,
+                                  service.service.model
+                                );
+                              }}
+                            >
+                              <Text>Accept</Text>
+                            </TouchableOpacity>
+                          </LinearGradient>
+                          <TouchableOpacity
+                            onPress={() =>
+                              rejectService(
+                                service.service.Service.id,
+                                service.service.model,
+                                service.User.id,
+                                service.service.id
+                              )
+                            }
+                            style={styles.cancel}
+                          >
+                            <Text>Refuse</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.payment}>
+                            <Image
+                              style={styles.chat}
+                              source={charIcon}
+                            ></Image>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
                 </View>
-                <View style={styles.carContainer}>
-                  <Text style={styles.text}>From </Text>
-                  <Text style={styles.time}>
-                    {moment(service.service?.Service.startDate).format(
-                      "YYYY-MM-DD"
-                    )}
-                  </Text>
-                  <Text style={styles.text}>To</Text>
-                  <Text style={styles.time}>
-                    {moment(service.service?.Service.endDate).format(
-                      "YYYY-MM-DD"
-                    )}
-                  </Text>
-                </View>
-                <View>
-                  {/* <Text>{service.service?.Service.amount}</Text> */}
-                </View>
-
-                <View style={styles.actionContainer}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      rejectService(
-                        service.service.Service.id,
-
-                        service.service.model,
-                        service.User.id
-                      );
-                    }}
-                    style={styles.rejectButton}
-                  >
-                    <Text>Reject</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      acceptService(
-                        service?.service.Service.id,
-                        service.User.id,
-                        service.service.model
-                      );
-                    }}
-                    style={styles.acceptButton}
-                  >
-                    <Text>Accept</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ))
-        ) : (
-          <Text>Nothing</Text>
-        )}
-      </ScrollView>
+              ) : null;
+            })}
+        </ScrollView>
+      ) : (
+        <View style={styles.message}>
+          <GreyHeart />
+          <View style={styles.messageContainer}>
+            <Text style={styles.emptyText1}>Empty Cars list</Text>
+            <Text style={styles.emptyText}>
+              I'm Sorry You don't Have any request,{" "}
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
-    backgroundColor: "lightgrey",
+  page: {
+    backgroundColor: "white",
+    width: width,
+    height: height,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  card: {
+    margin: "5%",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "white",
+    padding: 5,
+    width: width * 0.9,
+    height: height * 0.4,
+    borderRadius: 30,
+    elevation: 7,
+    shadowColor: "blue",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 5,
+    shadowRadius: 10,
+  },
+  container: {
+    flexDirection: "column",
+    marginBottom: "25%",
+  },
+  ImageCar: {
+    width: width * 0.9,
+    height: height * 0.2,
+    borderRadius: 15,
   },
   cardContainer: {
-    backgroundColor: "white",
-    height: 100,
     flexDirection: "column",
-    justifyContent: "space-between",
-    margin: 10,
+    justifyContent: "flex-start",
+    gap: 5,
+  },
+  carDetails: {
+    flexDirection: "column",
+    justifyContent: "flex-start",
     padding: 10,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: width * 0,
-      height: height * 0.1,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    gap: 3,
   },
-  userContainer: {
+  dates: {
     flexDirection: "row",
+    justifyContent: "flex-start",
+    gap: 20,
+    borderColor: "lightgrey",
+    alignItems: "flex-end",
+    borderBottomWidth: 1,
+  },
+  CarName: {
+    fontSize: 18,
+    padding: 1,
+    color: "black",
+    fontWeight: "bold",
+  },
+  date: {
+    color: "grey",
+  },
+  status: {
+    color: "grey",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  emptyText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "grey",
+  },
 
-    justifyContent: "space-between",
-  },
-  carContainer: {
-    flexDirection: "row",
+  message: {
+    flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
+  },
+
+  emptyText1: {
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+
+    color: "grey",
+  },
+  payment: {
+    height: height * 0.05,
+    width: width * 0.27,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  agenda: {
+    width: 22,
+    height: 22,
+    marginBottom: 2,
+  },
+  price: {
+    width: 22,
+    height: 22,
+  },
+  prices: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+
+    gap: 10,
+  },
+  chat: {
+    width: 40,
+    height: 40,
+  },
+  cancel: {
+    height: height * 0.05,
+    width: width * 0.27,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "lightgrey",
+    padding: 5,
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: width * 0.86,
+    height: height * 0.06,
+    borderRadius: 5,
+    gap: 15,
+    alignItems: "flex-end",
+  },
+  button: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 18,
+    marginBottom: 15,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  modalButtons: {
+    flexDirection: "row",
     justifyContent: "space-around",
   },
-  acceptButton: {
-    backgroundColor: "#98E4FF",
-    width: 55,
-    height: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "black",
-    borderRadius: 5,
-
-    marginLeft: 5,
-  },
-  rejectButton: {
-    backgroundColor: "#BEADFA",
-    width: 55,
-    height: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "black",
-    borderRadius: 5,
-    marginLeft: 5,
-  },
-  scrollContainer: {},
-  carImage: {
-    width: 50,
-    height: 50,
-  },
-  userImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
-  actionContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  time: {
-    color: "#0174BE",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  name: {
-    color: "#435585",
-    fontWeight: "bold",
+  modalButton: {
     fontSize: 16,
+    padding: 10,
+    borderRadius: 5,
+    textAlign: "center",
   },
-  text: { color: "grey" },
-  modalCloseButton: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-    margin: 20,
-    borderRadius: 10,
-    padding: 20,
+  yesButton: {
+    color: "white",
+    backgroundColor: "grey",
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    elevation: 5,
-  },
-
-  modalText: {
-    fontSize: 14,
-    marginBottom: 10,
-    color: "grey",
+  noButton: {
+    color: "white",
+    backgroundColor: "blue",
   },
 });
 

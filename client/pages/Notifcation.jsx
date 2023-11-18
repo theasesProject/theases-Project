@@ -18,7 +18,7 @@ import {
   deletedNotification,
 } from "../store/notificationSlice";
 const { width, height } = Dimensions.get("screen");
-import ring from "../assets/12.png";
+import ring from "../assets/r.jpg";
 import { selectUser, setUser } from "../store/userSlice";
 const NotificationPage = () => {
   const activeUser = useSelector(selectUser);
@@ -43,17 +43,37 @@ const NotificationPage = () => {
           .map((notification, i) => (
             <View>
               <View style={styles.cardContainer} key={i}>
-                <TouchableOpacity style={styles.image}>
-                  <Image style={styles.ring} source={ring}></Image>
-                </TouchableOpacity>
-                <View style={styles.container}>
-                  <Text style={styles.text} key={i}>
-                    {notification.notification}
-                  </Text>
+                <View style={styles.allText}>
+                  <TouchableOpacity style={styles.image}>
+                    <Image style={styles.ring} source={ring}></Image>
+                  </TouchableOpacity>
+                  <View style={styles.bookingText}>
+                    {notification.type === "reject" ? (
+                      <View>
+                        <Text style={styles.booking} key={i}>
+                          Booking Rejected
+                        </Text>
+                        <Text style={styles.text}>
+                          We're sorry, but your {notification.notification}
+                        </Text>
+                        <Text style={styles.text}>has been rejected.</Text>
+                      </View>
+                    ) : (
+                      <View>
+                        <Text style={styles.booking} key={i}>
+                          Booking Successfully
+                        </Text>
+                        <Text style={styles.text}>
+                          Congradulation.Your {notification.notification}
+                        </Text>
+                        <Text style={styles.text}>booking successfully.</Text>
+                      </View>
+                    )}
 
-                  <Text style={styles.time}>
-                    {formatNotificationTime(notification.createdAt)}
-                  </Text>
+                    <Text style={styles.time}>
+                      {formatNotificationTime(notification.createdAt)}
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
@@ -69,35 +89,47 @@ const formatNotificationTime = (createdAt) => {
 const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
-    backgroundColor: "lightgrey",
+    backgroundColor: "white",
     padding: 7,
+
+    height: 70,
   },
   cardContainer: {
     backgroundColor: "white",
-    height: 80,
+    height: height * 0.15,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     marginTop: "5%",
-    paddingTop: 4,
-    padding: 5,
+    // paddingTop: 4,
+    marginLeft: "4%",
+    paddingLeft: 15,
+    marginBottom: "2%",
     gap: 7,
+    elevation: 12,
+    width: width * 0.9,
+    shadowColor: "#808080",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 2,
   },
   scrollContainer: {
-    gap: 10,
+    gap: 7,
   },
 
   ring: {
-    width: 50,
-    height: 50,
-    borderRadius: 20,
+    width: 30,
+    height: 30,
   },
-  container: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    gap: 10,
-  },
+  // container: {
+  //   flexDirection: "column",
+  //   justifyContent: "space-between",
+  //   gap: 10,
+  // },
   text: {
     alignItems: "flex-start",
     // fontWeight: "bold",
@@ -107,6 +139,30 @@ const styles = StyleSheet.create({
   time: {
     color: "darkgrey",
     fontSize: 12,
+  },
+  image: {
+    backgroundColor: "green",
+    justifyContent: "center",
+    width: 70,
+    height: 70,
+    alignItems: "center",
+    borderRadius: 37,
+  },
+  booking: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  bookingText: {
+    flexDirection: "column",
+    gap: 5,
+    width: 250,
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  allText: {
+    flexDirection: "row",
+    gap: 8,
+    padding: 5,
   },
 });
 

@@ -99,8 +99,10 @@ export const allServiceForUser = createAsyncThunk(
 );
 export const deletedServiceByAgency = createAsyncThunk(
   "booking/deletedServiceByAgency",
-  async (CarId, id) => {
+  async (body) => {
     try {
+      const CarId = body.CarId;
+      const id = body.id;
       const response = await axios.delete(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/deletedServiceByAgency/${CarId}/${id}`
       );

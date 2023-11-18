@@ -97,7 +97,7 @@ function AgencyService() {
       receiverId: id,
       message: `Service request rejected: ${message}`,
     });
-    dispatch(deletedServiceByAgency(CarId, idservice));
+    dispatch(deletedServiceByAgency({ CarId: CarId, id: idservice }));
   };
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };

@@ -8,10 +8,11 @@ const {
   searchCarById,
   deletedAgencyCar,
   getAllCarsByAgencyId,
+  updateCar,
 } = require("../controller/CarController");
 const express = require("express");
 const carRouter = express.Router();
-
+carRouter.put("/cars/: id", updateCar);
 carRouter.get("/allCars", getAllCars);
 carRouter.post("/byBrand", filterCarByBrand);
 carRouter.post("/newCar", CreateCar);

@@ -121,16 +121,13 @@ module.exports = {
 
   deletedAgencyCar: async function (req, res) {
     try {
-      // console.log("from controller", req.body);
-      console.log("id:", req.params.id);
-      console.log("agencyId:", req.params.AgencyId);
       const deletedCar = await db.Car.destroy({
         where: {
           id: req.params.id,
           AgencyId: req.params.AgencyId,
         },
       });
-      console.log("ee", "deletedCar");
+
       res.json(deletedCar);
     } catch (error) {
       throw error;
@@ -139,7 +136,6 @@ module.exports = {
 
   getAllCarsByAgencyId: async function (req, res) {
     try {
-      console.log("requesttttttttttttt bodyyyyyyyyyyyyyyyyy", req.body);
       const allCars = [];
       const allCarsByAgency = await db.Car.findAll({
         where: { AgencyId: req.params.AgencyId },
@@ -158,6 +154,26 @@ module.exports = {
         allCars.push(carInfo);
       }
       res.status(200).send(allCars);
+    } catch (error) {
+      throw error;
+    }
+  },
+  updateCar: async function (req, res) {
+    const carId = req.params.id;
+
+    try {
+      const updatedCar = await db.Car.update(
+        {
+          price: req.body.price,
+          priceWeekly: req.body.priceWeekly,
+          priceMonthly: req.body.priceMonthly,
+        },
+        {
+          where: { id: carId },
+        }
+      );
+
+      res.status(200).send(updatedCar);
     } catch (error) {
       throw error;
     }

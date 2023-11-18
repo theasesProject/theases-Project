@@ -23,9 +23,11 @@ import io from "socket.io-client";
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
+
 function Booking() {
   const navigation = useNavigation();
   const [roleModalVisible, setRoleModalVisible] = useState(false);
+  const [period, setPeriod] = useState("day");
   const [agreed, setAgreed] = useState(false);
   const unavailableDate = useSelector((state) => state.booking.unavailableDate);
   const oneCar = useSelector((state) => state.car.OneCar);
@@ -38,6 +40,25 @@ function Booking() {
   const error = useSelector((state) => state.booking.error);
   const [total, setTotal] = useState(0);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+  const isTransportationAvailable = oneCar.Agency.transportation;
+  console.log(isTransportationAvailable, "isTransportationAvailable");
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  const timeSlots = [
+    "09:00",
+    "10:00",
+    "11:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+  ];
+
+  const handleTimeSelect = (time) => {
+    setSelectedTime(time);
+  };
+
   const createBooking = () => {
     if (selectedStartDate && selectedEndDate) {
       if (error) {
@@ -51,6 +72,7 @@ function Booking() {
             CarId: oneCar.id,
             amount: total,
             acceptation: "pending",
+            time: selectedTime,
           })
         );
       }
@@ -120,11 +142,14 @@ function Booking() {
       const durationInDays = endDate.diff(startDate, "days") + 1;
 
       let pricePerDay = oneCar.price;
+      setPeriod("day");
       if (durationInDays > 7) {
         pricePerDay = oneCar.priceWeekly;
+        setPeriod("weekly");
       }
       if (durationInDays > 29) {
         pricePerDay = oneCar.priceMonthly;
+        setPeriod("Monthly");
       }
 
       const total = durationInDays * pricePerDay;
@@ -185,12 +210,13 @@ function Booking() {
 
   useEffect(() => {
     dispatch(GetUnavailableDatesForCar(oneCar.id));
+
     calculTotalPrice();
   }, [dispatch, selectedStartDate, selectedEndDate]);
 
   return (
     <View style={styles.page}>
-      <View>
+      <View style={styles.calender}>
         <CalendarPicker
           allowRangeSelection={true}
           onDateChange={(date) => handleDateSelect(date)}
@@ -214,17 +240,270 @@ function Booking() {
         />
       </View>
       <View>
-        <View style={styles.total1}>
-          <Text style={styles.total}>{total}$</Text>
+        <View>
+          {isTransportationAvailable ? (
+            <Text style={styles.pickTime}>Pick Time</Text>
+          ) : (
+            <Text style={styles.pickTime}>
+              Pick Time(Transportation Not available)
+            </Text>
+          )}
         </View>
-        <TouchableOpacity style={{ paddingLeft: 12 }} onPress={showRoleModal}>
-          <LinearGradient
-            colors={["#6C77BF", "#4485C5"]}
-            style={styles.buttonContainer}
-          >
-            <Text style={styles.buttonText}>Book Now</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+        <View style={styles.pickButton}>
+          {isTransportationAvailable ? (
+            <TouchableOpacity
+              onPress={() => {
+                handleTimeSelect(timeSlots[0]);
+              }}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>09:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              disabled={!isTransportationAvailable}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#DDE6ED", "#DDE6ED"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>09:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+          {isTransportationAvailable ? (
+            <TouchableOpacity
+              onPress={() => {
+                handleTimeSelect(timeSlots[1]);
+              }}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>10:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              disabled={!isTransportationAvailable}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#DDE6ED", "#DDE6ED"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>10:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+          {isTransportationAvailable ? (
+            <TouchableOpacity
+              onPress={() => {
+                handleTimeSelect(timeSlots[2]);
+              }}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>11:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              disabled={!isTransportationAvailable}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#DDE6ED", "#DDE6ED"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>11:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.pickButton}>
+          {isTransportationAvailable ? (
+            <TouchableOpacity
+              onPress={() => {
+                handleTimeSelect(timeSlots[3]);
+              }}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                onPress={() => {
+                  handleTimeSelect(timeSlots[4]);
+                }}
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>14:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              disabled={!isTransportationAvailable}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#DDE6ED", "#DDE6ED"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>14:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+
+          {isTransportationAvailable ? (
+            <TouchableOpacity
+              onPress={() => {
+                handleTimeSelect(timeSlots[4]);
+              }}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>15:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              disabled={!isTransportationAvailable}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#DDE6ED", "#DDE6ED"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>15:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+          {isTransportationAvailable ? (
+            <TouchableOpacity
+              onPress={() => {
+                handleTimeSelect(timeSlots[5]);
+              }}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>16:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              disabled={!isTransportationAvailable}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#DDE6ED", "#DDE6ED"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>16:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.pickButton}>
+          {isTransportationAvailable ? (
+            <TouchableOpacity
+              onPress={() => {
+                handleTimeSelect(timeSlots[6]);
+              }}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>17:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              disabled={!isTransportationAvailable}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#DDE6ED", "#DDE6ED"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>17:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+
+          {isTransportationAvailable ? (
+            <TouchableOpacity
+              onPress={() => {
+                handleTimeSelect(timeSlots[7]);
+              }}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#88b4e2", "#6C77BF"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>18:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              disabled={!isTransportationAvailable}
+              style={{ paddingLeft: 12 }}
+            >
+              <LinearGradient
+                colors={["#DDE6ED", "#DDE6ED"]}
+                style={styles.buttonContainer1}
+              >
+                <Text style={styles.buttonText}>18:00 PM</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.all}>
+          <View style={styles.price}>
+            <View style={styles.dates}>
+              <Text style={styles.date}>
+                {moment(selectedStartDate).format("YYYY-MM-DD").toString()}
+              </Text>
+
+              <Text style={styles.date}>
+                {moment(selectedEndDate).format("YYYY-MM-DD").toString()}
+              </Text>
+            </View>
+
+            <View style={styles.total1}>
+              <Text style={styles.total}>
+                {total}$/{period}
+              </Text>
+            </View>
+          </View>
+
+          <TouchableOpacity onPress={showRoleModal} style={{ paddingLeft: 12 }}>
+            <LinearGradient
+              colors={["#6C77BF", "#4485C5"]}
+              style={styles.buttonContainer}
+            >
+              <Text style={styles.buttonText}>Book Now</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </View>
       <Modal
         animationType="slide"
@@ -290,30 +569,46 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   page: {
+    padding: 4,
+    height: 100,
     backgroundColor: "white",
-    padding: 20,
+    height: "100%",
   },
   bookNow: {
     backgroundColor: "yellow",
     height: 50,
     width: 100,
   },
+  pickButton: {
+    flexDirection: "row",
+    justifyContent: "flex-Start",
+    alignItems: "center",
+  },
+
   total: {
-    padding: 10,
+    // padding: 10,
     color: "blue",
     fontWeight: "bold",
     fontSize: 16,
   },
+  calender: {
+    backgroundColor: "white",
+    padding: 5,
+    marginBottom: "2%",
+  },
   buttonContainer: {
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     alignItems: "center",
+    justifyContent: "center",
     marginVertical: 15,
-    width: width * 0.8,
+    width: width * 0.43,
+    height: 47,
   },
   total1: {
     alignItems: "center",
-    padding: 10,
+
+    width: width * 0.45,
   },
 
   buttonText: {
@@ -325,16 +620,22 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#6C77BF",
     borderRadius: 5,
-    padding: 10,
+    padding: 5,
     alignItems: "center",
-    marginVertical: 15,
+    marginVertical: 5,
     width: width * 0.8,
+    height: 40,
   },
 
   buttonText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#fff",
     textAlign: "center",
+  },
+  pickTime: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "black",
   },
 
   modalView: {
@@ -350,6 +651,38 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
     color: "grey",
+  },
+  buttonContainer1: {
+    borderRadius: 10,
+    padding: 7,
+    alignItems: "flex-Start",
+    justifyContent: "center",
+    marginVertical: 15,
+    height: 45,
+
+    width: width * 0.28,
+  },
+  price: {
+    flexDirection: "column",
+
+    gap: 0,
+    width: "45%",
+    paddingVertical: 10,
+  },
+  date: {
+    color: "grey",
+  },
+  dates: {
+    flexDirection: "row",
+
+    gap: 7,
+  },
+  all: {
+    height: height * 0.1,
+    justifyContent: "space-between",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
   },
 });
 

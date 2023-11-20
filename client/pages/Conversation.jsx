@@ -14,23 +14,24 @@ import {
   Alert,
 } from "react-native";
 
+
 const { height, width } = Dimensions.get("screen");
 
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import { useSelector } from "react-redux";
-import io from "socket.io-client";
 import axios from "axios";
 import OneMessage from "../components/OneMessage";
 import Send from "../assets/Svg/send-alt-1-svgrepo-com.svg";
 import Attach from "../assets/Svg/attachFile.svg";
 import * as DocumentPicker from "expo-document-picker";
+import socket from "../socket-io.front.server"
 import Phone from "../assets/Svg/call.svg";
 import * as FileSystem from "expo-file-system";
 import base64 from "base-64";
 var Buffer = require("buffer/").Buffer;
 
-const socket = io.connect(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:3002`);
+// const socket = io.connect(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:3002`);
 
 function Conversation() {
   const [outputDirectory, setOutputDirectory] = useState(null);
@@ -40,6 +41,8 @@ function Conversation() {
   const [allMes, setAllMes] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const scrollViewRef = useRef();
+  const OneMessageMemo = React.memo(OneMessage);
+  const [currentPage, setCurrentPage] = useState(1);
   const [receivedDocuments, setReceivedDocuments] = useState([]);
   const fetch = async () => {
     try {
@@ -95,24 +98,48 @@ function Conversation() {
     }
   };
 
-  const sendMessage = async (message) => {
-    if (message !== "") {
+  const isLastMessage = (index) => {
+    if (index < allMes.length - 1) {
+      const currentSenderId = allMes[index].senderId;
+      const nextSenderId = allMes[index + 1].senderId;
+      return currentSenderId !== nextSenderId;
+    }
+    return true; // Last message in the array is always considered the last
+  };
+  const [isSending, setIsSending] = useState(false);
+
+  const sendMessage = async (message, type = undefined) => {
+    if (!isSending && message !== "") {
       try {
-        const response = await axios.post(
+        setIsSending(true);
+        await socket.emit("send-message", {
+          senderId: user.id,
+          roomId: room.id,
+          message,
+          type,
+        });
+        await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/addMessage`,
           {
             senderId: user.id,
             roomId: room.id,
-            message: currentMessage,
+            message: message,
+            type: type,
           }
-        );
-
-        await socket.emit("send-message", response.data);
-        setAllMes((prevMessages) => [...prevMessages, response.data]);
+          );
+          setAllMes((allMes) => [
+            ...allMes,
+            { senderId: user.id, message, type },
+          ]);
+          setCurrentMessage("");
         scrollViewRef.current?.scrollToEnd({ animated: true });
-        setCurrentMessage("");
       } catch (error) {
         console.error("Error sending message:", error);
+      } finally {
+        // Reset the sending flag after the cooldown period (e.g., 2 seconds)
+        setTimeout(() => {
+          setIsSending(false);
+        }, 1000); // Set your desired cooldown time in milliseconds
       }
     }
   };
@@ -120,7 +147,8 @@ function Conversation() {
   useEffect(() => {
     socket.emit("join-room", room.id + "");
     socket.on("receive-message", (data) => {
-      setAllMes((prevMessages) => [...prevMessages, data]);
+      // allMes.push(data);
+      setAllMes((allMes) => [...allMes, data]);
     });
   }, [socket]);
 
@@ -221,33 +249,20 @@ function Conversation() {
             {room.name.charAt(0).toUpperCase() + room.name.slice(1)}
           </Text>
         </View>
-        <Pressable>
-          <Phone />
-        </Pressable>
       </View>
       <ScrollView
         ref={scrollViewRef}
         style={styles.feed}
         keyboardShouldPersistTaps="always"
       >
-        {allMes.map((message, i) => {
-          return <OneMessage message={message} key={i} user={user} />;
-        })}
-        {receivedDocuments.map((document, index) => (
-          <View key={index}>
-            <Text>{document.name}</Text>
-            {/* Add more details or actions as needed */}
-            <Pressable
-              onPress={() => {
-                // Implement any action when the received document is pressed
-                // For example, open the document
-                openDocument();
-             
-              }}
-            >
-              <Text>Open Document</Text>
-            </Pressable>
-          </View>
+        {allMes.map((message, i) => (
+          <OneMessageMemo
+            message={message}
+            key={i}
+            user={user}
+            user2avatar={room.avatarUrl}
+            isLastMessage={isLastMessage(i)}
+          />
         ))}
       </ScrollView>
       <View style={styles.inputs}>
@@ -292,9 +307,7 @@ function Conversation() {
               display: "flex",
               justifyContent: "center",
             }}
-            onPress={() => {
-              pickDocument();
-            }}
+            onPress={pickDocument}
           >
             <Attach />
           </Pressable>
@@ -308,7 +321,7 @@ const styles = StyleSheet.create({
   chatHeader: {
     position: "sticky",
     top: 0,
-    backgroundColor: "#ffff",
+    backgroundColor: "white",
     display: "flex",
     height: height * 0.1,
     alignItems: "center",
@@ -327,7 +340,7 @@ const styles = StyleSheet.create({
     width: "100%",
     overflow: "scroll",
     height: height * 0.87,
-    backgroundColor: "#faf5f5",
+    backgroundColor: "#f2f6f9",
   },
   inputs: {
     display: "flex",

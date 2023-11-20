@@ -12,6 +12,23 @@ const initialState = {
   bookMarks: [],
   succes: null,
   RentDetails: {},
+  NewCar: {
+    model: "",
+    brand: "",
+    price: "",
+    priceWeekly: "",
+    priceMonthly: "",
+    status: "available",
+    horsePower: "",
+    typeOfFuel: "",
+    description: "",
+    warrantyInsurance: false,
+    acceptation: "pending",
+    typevehicle: "",
+    characteristics: "",
+    img: [],
+    AgencyId: "",
+  },
 };
 export const getOnecarById = createAsyncThunk(
   "car/getOnecarById",
@@ -95,7 +112,6 @@ export const createCar = createAsyncThunk("car/createCar", async (params) => {
     );
 
     const requestId = response.data.id;
-
     await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media
@@ -193,6 +209,12 @@ const carSlice = createSlice({
     carDetail: (state, action) => {
       state.OneCar = action.payload;
     },
+    setNewCar : (state, action) => {
+      state.NewCar = action.payload;
+    },
+    emptyNewCar : (state, action) => {
+      state.NewCar = {}
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
@@ -333,5 +355,5 @@ const carSlice = createSlice({
     });
   },
 });
-export const { filterCars, saveDetails, carDetail } = carSlice.actions;
+export const { filterCars, saveDetails, carDetail , setNewCar , emptyNewCar} = carSlice.actions;
 export default carSlice.reducer;

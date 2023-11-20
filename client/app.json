@@ -15,14 +15,28 @@
       "backgroundColor": "#ffffff"
     },
     "permissions": {
-      "location": {
-        "always": "LOCATION",
-        "whenInUse": "LOCATION"
+      "camera": {
+        "settings": {
+          "ios": {
+            "require": true
+          }
+        }
+      },
+      "microphone": {
+        "settings": {
+          "ios": {
+            "require": true
+          }
+        }
       }
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app needs access to the camera to make video calls",
+        "NSMicrophoneUsageDescription": "This app needs access to the microphone to make video calls"
+      }
     },
     "android": {
       "package": "android.package",
@@ -49,6 +63,7 @@
           "video": true
         }
       ],
+      ["@config-plugins/react-native-webrtc"],
       "expo-document-picker"
     ],
     "extra": {

@@ -112,7 +112,6 @@ function Carou() {
             />
           ))}
         </View>
-
         <TouchableOpacity onPress={handleNextButton}>
           <Text style={styles.next}>
             {activeSlide === 2 ? "Login" : "Next"}

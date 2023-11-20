@@ -5,8 +5,7 @@ app.use(cors())
 require("dotenv").config()
 const http = require('http');
 const { Server} = require("socket.io")
-const server = http.createServer(app)
-const fs = require('fs-extra')
+
 const io = new Server({
     maxHttpBufferSize: 1e8 // 100 MB
   }, {
@@ -37,14 +36,7 @@ io.on('connection', (socket) => {
    socket.on("send-document", (data) => {
  console.log('in back')
 
- // Convert the Base64 string back to a buffer
-//  const buffer = Buffer.from(data.data, 'base64');
 
-//  // Write the buffer to a file
-//  fs.writeFile(`${__dirname}/${data.name}`, buffer, (err) => {
-//    if (err) throw err;
-//    console.log('The file has been saved!');
-//  });
 
  socket.to(room).emit("receive-document", data);
 });

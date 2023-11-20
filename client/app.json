@@ -45,19 +45,26 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["WRITE_EXTERNAL_STORAGE"]
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "CAMERA",
+        "RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
-        "expo-document-picker",
+        "@config-plugins/react-native-webrtc",
         {
-          "iCloudContainerEnvironment": "Production"
+          "audio": true,
+          "video": true
         }
       ],
-      ["@config-plugins/react-native-webrtc"]
+      ["@config-plugins/react-native-webrtc"],
+      "expo-document-picker"
     ],
     "extra": {
       "eas": {

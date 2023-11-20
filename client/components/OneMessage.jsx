@@ -145,4 +145,4 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
   );
 }
 
-export default OneMessage;
+export default OneMessage

@@ -1,28 +1,24 @@
 const express = require('express');
-const app = express();
-const cors = require('cors');
+const app= express();
+const cors= require('cors');
+app.use(cors())
+require("dotenv").config()
 const http = require('http');
-const { Server } = require("socket.io");
-
-app.use(cors());
-require("dotenv").config();
-
-const server = http.createServer(app);
-const io = new Server(server, {
+const { Server} = require("socket.io")
+const server = http.createServer(app)
+const fs = require('fs-extra')
+const io = new Server({
+    maxHttpBufferSize: 1e8 // 100 MB
+  }, {
     cors: {
         origin: `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`,
         methods: ["GET", "POST", "PUT"],
     }
-});
+})
 
-const PORT = process.env.PORT || 3002;
-
-let httpServer = server.listen(PORT, () => {
-    console.log(`Server is running on port ${3002}`);
-});
-
-io.listen(httpServer);
-
+// http.listen(PORT, () => console.log(`listening on ${PORT}`))
+let a=app.listen(3002, () => console.log(`listening on port 3002`));
+io.listen(a)
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
     let room;

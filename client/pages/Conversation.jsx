@@ -10,9 +10,15 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Keyboard,
+  Linking,
+  Alert,
 } from "react-native";
-import * as FileSystem from "expo-file-system";
-const { width, height } = Dimensions.get("window");
+
+
+const { height, width } = Dimensions.get("screen");
+
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import OneMessage from "../components/OneMessage";
@@ -20,8 +26,16 @@ import Send from "../assets/Svg/send-alt-1-svgrepo-com.svg";
 import Attach from "../assets/Svg/attachFile.svg";
 import * as DocumentPicker from "expo-document-picker";
 import socket from "../socket-io.front.server"
+import Phone from "../assets/Svg/call.svg";
+import * as FileSystem from "expo-file-system";
+import base64 from "base-64";
+var Buffer = require("buffer/").Buffer;
+
+// const socket = io.connect(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:3002`);
 
 function Conversation() {
+  const [outputDirectory, setOutputDirectory] = useState(null);
+
   const room = useSelector((state) => state.chatRoom.room);
   const user = useSelector((state) => state.user.data);
   const [allMes, setAllMes] = useState([]);
@@ -29,40 +43,55 @@ function Conversation() {
   const scrollViewRef = useRef();
   const OneMessageMemo = React.memo(OneMessage);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [receivedDocuments, setReceivedDocuments] = useState([]);
   const fetch = async () => {
-    await axios
-      .get(
+    try {
+      const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getMessages/${room.id}`
-      )
-      .then((res) => {
-        setAllMes(res.data);
-        console.log("messages returned");
-        scrollViewRef.current?.scrollToEnd({ animated: true });
-      })
-      .catch((err) => console.log("error getting messages"));
+      );
+      setAllMes(response.data);
+      console.log("messages returned");
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    } catch (error) {
+      console.log("error getting messages", error);
+    }
   };
 
   const handleInput = (content) => {
     setCurrentMessage(content);
   };
 
+  const uriToBuffer = async (uri) => {
+    try {
+      const fileData = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const buffer = base64.decode(fileData);
+      console.log("uritobuffersucces");
+      return buffer;
+    } catch (error) {
+      console.error("Error converting URI to buffer:", error);
+      throw error;
+    }
+  };
+
   const pickDocument = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync();
-      if (!result.canceled) {
-        const file = result.assets[0];
 
-        // Read the file as binary data
-        const binaryData = await FileSystem.readAsStringAsync(file.uri, {
-          encoding: FileSystem.EncodingType.Base64,
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["image/*", "application/pdf","video/*"],
+      });
+      console.log("here");
+      if (!result.canceled && result.assets[0].uri) {
+        console.log(result.assets[0].uri);
+        const buffer = await uriToBuffer(result.assets[0].uri);
+
+        await socket.emit("send-document", {
+          name: result.assets[0].name,
+          type: result.assets[0].type,
+          data: buffer,
         });
-
-        // Encode the binary data using btoa
-        const base64Data = btoa(binaryData);
-
-        // Send the Base64 string as part of the message
-        sendMessage(base64Data, file.type);
+        console.log("sent to the server");
       }
     } catch (error) {
       console.error(error);
@@ -122,6 +151,66 @@ function Conversation() {
       setAllMes((allMes) => [...allMes, data]);
     });
   }, [socket]);
+
+  useEffect(() => {
+    const handleReceiveDocument = async (data) => {
+      try {
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const dir = `${FileSystem.documentDirectory}received_documents/`;
+        const filePath = `${dir}${data.name}`;
+        console.log("dir: ", dir);
+    
+        const resultBase64 = Buffer.from(data.data, "binary").toString("base64");
+        console.log("between ", resultBase64, "between");
+    
+        await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
+        await FileSystem.writeAsStringAsync(filePath, resultBase64, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+    
+        const updatedDocuments = [
+          ...receivedDocuments,
+          { ...data, localUri: filePath },
+        ];
+    
+        setReceivedDocuments(updatedDocuments);
+       
+        console.log("The file has been saved!", `${dir}${data.name}`);
+        console.log("hereeeeeee", "here");
+    
+        if (updatedDocuments.length === 0) {
+          Alert.alert("No processed images to save.");
+          return;
+        }
+    
+        const assetPromises = updatedDocuments.map(async (imageUri) => {
+          console.log("imageUri: ", imageUri?.localUri, "imguri");
+          if (imageUri?.localUri) {
+            const asset = await MediaLibrary.createAssetAsync(imageUri.localUri);
+            return asset;
+          }
+          return null; // Handle undefined or null values
+        });
+        
+        const assets = await Promise.all(assetPromises.filter(Boolean)); 
+    
+        Alert.alert("Images saved to gallery.");
+      } catch (error) {
+        console.error("Error receiving document:", error);
+      }
+    };
+    
+    socket.on("receive-document", handleReceiveDocument);
+    
+    return () => {
+      socket.off("receive-document", handleReceiveDocument);
+    };
+    
+    
+  }, [socket]);
+  const openDocument =  () => {
+  Alert.alert('already saved !')
+  };
 
   useEffect(() => {
     fetch();
@@ -204,7 +293,6 @@ function Conversation() {
             style={{
               height: height * 0.04,
               display: "flex",
-              // alignItems: "center",
               justifyContent: "center",
             }}
             onPress={() => {
@@ -264,4 +352,5 @@ const styles = StyleSheet.create({
     height: height * 0.09,
   },
 });
+
 export default Conversation;

@@ -54,8 +54,8 @@ const acceptServiceNotification = async (receiver, message) => {
     {
       to: receiver.expoPushToken,
       sound: "default",
-      title: "Service Accepted",
-      body: `Service request accepted: ${message}`,
+      title: `Service Accepted: ${message}`,
+      body: "Service request accepted",
     },
   ];
 
@@ -63,7 +63,7 @@ const acceptServiceNotification = async (receiver, message) => {
     await expo.sendPushNotificationsAsync(messages);
     console.log("Notification sent successfully");
   } catch (error) {
-    console.error("Error sending notification: wewewe", error);
+    console.error("Error sending notification:", error);
   }
 };
 
@@ -72,8 +72,8 @@ const rejectServiceNotification = async (receiver, message) => {
     {
       to: receiver.expoPushToken,
       sound: "default",
-      title: "Service Rejected",
-      body: `Service request rejected: ${message}`,
+      title: `Service Rejected: ${message}`,
+      body: "Service request rejected",
     },
   ];
 
@@ -81,16 +81,17 @@ const rejectServiceNotification = async (receiver, message) => {
     await expo.sendPushNotificationsAsync(messages);
     console.log("Notification sent successfully");
   } catch (error) {
-    console.error("Error sending notification: yeyeyeye", error);
+    console.error("Error sending notification:", error);
   }
 };
+
 const requestBookingAgency = async (receiver, message) => {
   const messages = [
     {
       to: receiver.socketId,
       sound: "default",
-      title: "Service Accepted",
-      body: `Service request accepted: ${message}`,
+      title: `Booking Request: ${message}`,
+      body: "New booking request",
     },
   ];
 
@@ -98,10 +99,9 @@ const requestBookingAgency = async (receiver, message) => {
     await expo.sendPushNotificationsAsync(messages);
     console.log("Notification sent successfully");
   } catch (error) {
-    console.error("Error sending notification: yeyeyeye", error);
+    console.error("Error sending notification:", error);
   }
 };
-
 app.use(function (err, req, res, next) {
   console.log(err);
 

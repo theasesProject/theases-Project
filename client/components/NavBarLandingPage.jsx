@@ -2,12 +2,9 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Image,
   Pressable,
-  AppState,
   Dimensions,
-  Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { height, width } = Dimensions.get("screen");

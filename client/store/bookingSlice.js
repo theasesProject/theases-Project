@@ -8,6 +8,7 @@ const initialState = {
   unavailableDate: [],
   allServiceByAgency: [],
   avaibleCar: [],
+  allServiceUser: [],
 };
 export const CreateBooking = createAsyncThunk(
   "booking/CreateBooking",
@@ -39,6 +40,20 @@ export const GetUnavailableDatesForCar = createAsyncThunk(
     }
   }
 );
+// export const GetUnavailableTimesForCar = createAsyncThunk(
+//   "booking/GetUnavailableTimesForCar",
+//   async (id) => {
+//     try {
+//       const response = await axios.get(
+//         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/unavailableTime/${id}`
+//       );
+
+//       return response.data;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+// );
 export const UpdateServiceByAgency = createAsyncThunk(
   "booking/UpdateServiceByAgency",
   async (params) => {
@@ -68,11 +83,57 @@ export const allServiceForAgency = createAsyncThunk(
     }
   }
 );
+export const allServiceForUser = createAsyncThunk(
+  "booking/allServiceForUser",
+  async (id) => {
+    try {
+      const response = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/allserviceforUser/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const deletedServiceByAgency = createAsyncThunk(
+  "booking/deletedServiceByAgency",
+  async (body) => {
+    try {
+      const CarId = body.CarId;
+      const id = body.id;
+      const response = await axios.delete(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/deletedServiceByAgency/${CarId}/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const deletedServiceByUser = createAsyncThunk(
+  "booking/deletedServiceByUser",
+  async (body) => {
+    console.log(body, "service");
+    const UserId = body.UserId;
+    const id = body.id;
+    try {
+      const response = await axios.delete(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/deletedServiceByUser/${UserId}/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const getAllCarByDate = createAsyncThunk(
   "booking/getAllCarByDate",
   async (body) => {
     try {
-      console.log(body, "body");
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/avaibleCar`,
         body
@@ -84,7 +145,21 @@ export const getAllCarByDate = createAsyncThunk(
     }
   }
 );
-
+export const updateAgencyDate = createAsyncThunk(
+  "booking/updateAgencyDate",
+  async (body) => {
+    try {
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/agencyUpdateDate`,
+        body
+      );
+      console.log(response.data, "response");
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 const bookingSlice = createSlice({
   name: "booking",
   initialState,
@@ -148,6 +223,66 @@ const bookingSlice = createSlice({
       state.avaibleCar = action.payload;
     });
     builder.addCase(getAllCarByDate.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(allServiceForUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(allServiceForUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.allServiceUser = action.payload;
+    });
+    builder.addCase(allServiceForUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    // builder.addCase(GetUnavailableTimesForCar.pending, (state) => {
+    //   state.loading = true;
+    //   state.error = null;
+    // });
+    // builder.addCase(GetUnavailableTimesForCar.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.unavailableTime = action.payload;
+    // });
+    // builder.addCase(GetUnavailableTimesForCar.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.error.message;
+    // });
+    builder.addCase(deletedServiceByAgency.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deletedServiceByAgency.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = action.payload;
+    });
+    builder.addCase(deletedServiceByAgency.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(deletedServiceByUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deletedServiceByUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = "succes";
+    });
+    builder.addCase(deletedServiceByUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(updateAgencyDate.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(updateAgencyDate.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = "succes";
+    });
+    builder.addCase(updateAgencyDate.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

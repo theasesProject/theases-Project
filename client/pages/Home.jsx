@@ -89,7 +89,6 @@ function Home({ navigation }) {
       });
 
     return () => {
-      
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
@@ -131,28 +130,31 @@ function Home({ navigation }) {
   }, [loading]);
 
   useEffect(() => {
-    socket.emit("login", { userId: activeUser?.id, expoPushToken });
+    if (activeUser?.id) {
+      socket.emit("login", { userId: activeUser?.id });
+      console.log({ userId: activeUser?.id }, " { userId: activeUser?.id }");
+      socket.on("receive-notification", (notification) => {
+        schedulePushNotification(notification.title);
 
-    socket.on("receive-notification", (notification) => {
-      schedulePushNotification(notification);
-      console.log("notification here", notification, "notifcarion");
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          _id: notification.id,
-          text: notification.message,
-          createdAt: new Date(),
-          user: {
-            _id: notification.senderId,
-            name: "Service",
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            _id: notification.id,
+            text: notification.message,
+            createdAt: new Date(),
+            user: {
+              _id: notification.senderId,
+              name: "Services",
+            },
           },
-        },
-      ]);
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, [socket, expoPushToken]);
+        ]);
+      });
+    } else {
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [socket, expoPushToken, activeUser.id]);
 
   return (
     <View style={styles.homePage}>
@@ -169,16 +171,19 @@ function Home({ navigation }) {
         </View>
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
         {!loading ? (
-          allCars?.map((element, i) => (
-            <View style={styles.allcars} key={i}>
-              <CardCar
-                setNothing={setNothing}
-                key={i}
-                oneCar={element}
-                handlePress={handlePress}
-              />
-            </View>
-          ))
+          allCars
+            .slice()
+            .reverse()
+            ?.map((element, i) => (
+              <View style={styles.allcars} key={i}>
+                <CardCar
+                  setNothing={setNothing}
+                  key={i}
+                  oneCar={element}
+                  handlePress={handlePress}
+                />
+              </View>
+            ))
         ) : (
           <>
             <View style={{ alignItems: "center", paddingTop: 20 }}>
@@ -276,6 +281,14 @@ function Home({ navigation }) {
           backgroundColor: "lightgrey",
         }}
       />
+      <Text
+        on
+        onPress={() => {
+          navigation.navigate("Notification");
+        }}
+      >
+        Notifcation{" "}
+      </Text>
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>

@@ -32,7 +32,6 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
         return Math.abs(gestureState.dx) > 10;
       },
       onPanResponderMove: (_, gestureState) => {
-        console.log("heeeerreeeee", gestureState.dx);
         if (gestureState.dx > 50) {
           onClose();
           console.log("done");

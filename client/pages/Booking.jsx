@@ -119,7 +119,7 @@ function Booking() {
       alert("Congratulations! Your booking was successful.");
       const notificationData = {
         UserId: oneCar.AgencyId,
-        notification: `You have request  for the car:${oneCar.model} from the client ${activeUser.userName}`,
+        notification: `You have request  for the car:${oneCar.model}`,
         type: "request",
       };
 

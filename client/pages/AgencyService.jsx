@@ -63,7 +63,6 @@ function AgencyService() {
   }, [dispatch]);
 
   const acceptService = (idservice, id, message) => {
-    console.log(idservice, id, message, "message");
     const obj = { id: idservice, acceptation: "accepted" };
 
     dispatch(UpdateServiceByAgency(obj));

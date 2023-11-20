@@ -9,6 +9,7 @@ import {
   Dimensions,
   RefreshControl,
   Modal,
+  Alert,
 } from "react-native";
 import SwipeUpDown from "react-native-swipe-up-down";
 import NavBarAgency from "../components/NavBarAgency.jsx";
@@ -28,7 +29,7 @@ import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
 const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
-import { selectUser, setUser } from "../store/userSlice";
+import { selectUser, setUser, logUserOut } from "../store/userSlice";
 import io from "socket.io-client";
 
 import * as Device from "expo-device";
@@ -72,7 +73,7 @@ function Home({ navigation }) {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-
+  console.log(activeUser, "acitveUser");
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -130,9 +131,18 @@ function Home({ navigation }) {
   }, [loading]);
 
   useEffect(() => {
+    if (activeUser?.stateBlocked === true) {
+      alert(
+        "Sorry, your account is banned. Please contact  costumer support for assistance."
+      );
+      setUser(null);
+      dispatch(logUserOut());
+
+      navigation.navigate("Login");
+    }
     if (activeUser?.id) {
       socket.emit("login", { userId: activeUser?.id });
-      console.log({ userId: activeUser?.id }, " { userId: activeUser?.id }");
+
       socket.on("receive-notification", (notification) => {
         schedulePushNotification(notification.title);
 
@@ -154,7 +164,7 @@ function Home({ navigation }) {
         socket.disconnect();
       };
     }
-  }, [socket, expoPushToken, activeUser.id]);
+  }, [socket, expoPushToken, activeUser?.id, activeUser?.stateBlocked]);
 
   return (
     <View style={styles.homePage}>

@@ -74,7 +74,7 @@ function Home({ navigation }) {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  console.log("this is active user", activeUser);
+  console.log("this is active user selim", activeUser?.type);
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -97,6 +97,12 @@ function Home({ navigation }) {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+  const navigateToTransportationMap = () => {
+    navigation.navigate('TransportationMap', {
+      userId: 'your_user_id_here',
+      agencyId: 'your_agency_id_here',
+    });
+  };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
@@ -156,7 +162,7 @@ function Home({ navigation }) {
         socket.disconnect();
       };
     }
-  }, [socket, expoPushToken, activeUser.id]);
+  }, [socket, expoPushToken, activeUser?.id]);
 
   return (
     <View style={styles.homePage}>
@@ -291,6 +297,10 @@ function Home({ navigation }) {
       >
         Notifcation{" "}
       </Text>
+      <Text onPress={() => {
+ navigation.navigate("TransportationMap", { agencyId: activeUser?.type === 'agency' ? activeUser?.Agency.UserId : null, UserId: activeUser?.type === 'client' ? activeUser?.id : null, userType: activeUser?.type });
+ ;
+}}>map transportation </Text>
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>

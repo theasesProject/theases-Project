@@ -7,6 +7,30 @@ import { format } from "timeago.js";
 function OneMessage({message , user}) {
     const [showDate,setShowDate] = useState(false)
 
+    const renderMessageContent = () => {
+      if (message.type === 'text') {
+        return <Text style={{ color: 'white' }}>{message.content}</Text>;
+      } else if (message.type === 'document') {
+        return (
+          <View>
+            <Text style={{ color: 'white' }}>{message.content}</Text>
+            <Pressable onPress={() => handleDocumentPress(message)}>
+              <Text style={{ color: 'white' }}>Open Document</Text>
+            </Pressable>
+          </View>
+        );
+      } else if (message.type === 'image') {
+        return <Image source={{ uri: message.content }} style={{ width: 100, height: 100 }} />;
+      }
+  
+      return null;
+    };
+  
+    const handleDocumentPress = (document) => {
+      Alert.alert('Document Pressed', `You pressed the document: ${document.name}`);
+    }
+
+
   return (
     <View>
         <View
@@ -32,6 +56,7 @@ function OneMessage({message , user}) {
                     message.senderId !== user.id ? 5 : undefined,
                 }}
               >
+                 {renderMessageContent()}
                 <Text style={{ color: "white" }}>{message.message}</Text>
               </LinearGradient>
               </Pressable>
@@ -44,3 +69,11 @@ function OneMessage({message , user}) {
 }
 
 export default OneMessage
+
+
+
+
+        
+    
+
+

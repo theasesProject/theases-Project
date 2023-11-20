@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import Loc from "../assets/Svg/loc.svg";
 import Sat from "../assets/Svg/satellite-dish-solid.svg";
 import Carte from "../assets/Svg/map-solid.svg";
+import HouCar from "../assets/Svg/houcar.svg";
 // import { Audio } from 'expo-av';
 
 const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
@@ -459,8 +460,8 @@ const MapForUser = ({}) => {
         onLayout={() => {
           mapRef.current.setCamera({
             center: {
-              latitude: getLocation.latitude,
-              longitude: getLocation.longitude,
+              latitude: getLocation?.latitude,
+              longitude: getLocation?.longitude,
             },
             pitch: 45,
             zoom: mapRegion.latitudeDelta,
@@ -470,8 +471,8 @@ const MapForUser = ({}) => {
         {getLocation && getLocation?.latitude && getLocation?.longitude && (
           <Marker
             coordinate={{
-              latitude: getLocation.latitude,
-              longitude: getLocation.longitude,
+              latitude: getLocation?.latitude,
+              longitude: getLocation?.longitude,
             }}
             title="Your location"
           >
@@ -550,9 +551,9 @@ const MapForUser = ({}) => {
           {mapType === "satellite" ? <Carte /> : <Sat />}
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleNextAgency} style={styles.zoomButton}>
-          <Text>Next Agency</Text>
-        </TouchableOpacity>
+    <TouchableOpacity style={styles.zoomButton} onPress={handleNextAgency}>
+        <HouCar/>
+</TouchableOpacity>
         <TouchableOpacity onPress={handleZoomToUser} style={styles.locsvg}>
           <Loc />
         </TouchableOpacity>
@@ -599,7 +600,11 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 15,
     margin: 5,
+    // bottom: 300,
+    // height:800,
+    // width:'50%',
 
+// left:200,
     borderRadius: 5,
   },
   changeView: {

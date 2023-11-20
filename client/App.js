@@ -36,6 +36,7 @@ import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 import Dmap from "./pages/Dmap.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
+import TransportationMap from "./pages/TransportationMap.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -43,7 +44,7 @@ function App() {
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="Carou">
             <Stack.Screen
               name="Home"
               component={Home}
@@ -52,6 +53,11 @@ function App() {
             <Stack.Screen
               name="AllBookings"
               component={AllBookings}
+              options={{ headerShown: true }}
+            />
+              <Stack.Screen
+              name="TransportationMap"
+              component={TransportationMap}
               options={{ headerShown: true }}
             />
 

@@ -6,7 +6,10 @@ require("dotenv").config()
 const http = require('http');
 const { Server} = require("socket.io")
 const server = http.createServer(app)
-const io = new Server(server, {
+const fs = require('fs-extra')
+const io = new Server({
+    maxHttpBufferSize: 1e8 // 100 MB
+  }, {
     cors: {
         origin: `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`,
         methods: ["GET", "POST", "PUT"],
@@ -26,10 +29,26 @@ io.on('connection', (socket) => {
         room = id
         socket.join(id)
     })
-    socket.on("disconnect", () =>{
-        console.log("User disconnected");
-    })
+   
     socket.on("send-message", (data)=>{
+      
         socket.to(room).emit("receive-message",data)
+    })
+   socket.on("send-document", (data) => {
+ console.log('in back')
+
+ // Convert the Base64 string back to a buffer
+//  const buffer = Buffer.from(data.data, 'base64');
+
+//  // Write the buffer to a file
+//  fs.writeFile(`${__dirname}/${data.name}`, buffer, (err) => {
+//    if (err) throw err;
+//    console.log('The file has been saved!');
+//  });
+
+ socket.to(room).emit("receive-document", data);
+});
+     socket.on("disconnect", () =>{
+        console.log("User disconnected");
     })
 });

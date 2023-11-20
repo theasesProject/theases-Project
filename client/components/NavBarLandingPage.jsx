@@ -14,7 +14,13 @@ const { height, width } = Dimensions.get("screen");
 import localisation from "../assets/localisation1.png";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, logStatus, fetchUser } from "../store/userSlice";
+import {
+  selectUser,
+  logStatus,
+  fetchUser,
+  logoutUser,
+  logUserOut,
+} from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
 
@@ -23,6 +29,7 @@ function ProfileLandingPage({ style }) {
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
   const dispatch = useDispatch();
+
   const [userAddress, setUserAddress] = useState("</> click here");
 
   const getUserLocationAndNearestAddress = async () => {

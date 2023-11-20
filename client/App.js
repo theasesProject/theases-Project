@@ -35,6 +35,7 @@ import ResetPassword from "./pages/ResetPassword.jsx";
 import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
+// import AddReview from "./components/AddReview.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -43,6 +44,11 @@ function App() {
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
+            {/* <Stack.Screen
+              name="Review"
+              component={AddReview}
+              options={{ headerShown: false }}
+            /> */}
             <Stack.Screen
               name="Home"
               component={Home}

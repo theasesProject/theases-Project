@@ -156,7 +156,7 @@ function Home({ navigation }) {
         socket.disconnect();
       };
     }
-  }, [socket, expoPushToken, activeUser.id]);
+  }, [socket, expoPushToken, activeUser?.id]);
 
   return (
     <View style={styles.homePage}>

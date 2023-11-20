@@ -11,13 +11,16 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "../store/userSlice";
 
 const { width, height } = Dimensions.get("screen");
 const AddReview = ({ navigation }) => {
   const [rating, setRating] = useState(0);
   const [rated, setRated] = useState(false);
-  const [ratingDescription, setRatingDescription] = useState("");
   const [comment, setComment] = useState("");
+  const activeUser = useSelector(selectUser);
 
   const ratingCompleted = (rate) => {
     if (rate > 0) {
@@ -25,26 +28,29 @@ const AddReview = ({ navigation }) => {
     } else {
       setRated(false);
     }
-    if (rate === 1) {
-      setRatingDescription("Terrible");
-    } else if (rate === 2) {
-      setRatingDescription("Bad");
-    } else if (rate === 3) {
-      setRatingDescription("Okay");
-    } else if (rate === 4) {
-      setRatingDescription("Good");
-    } else if (rate === 5) {
-      setRatingDescription("Great");
-    }
     setRating(rate);
   };
 
-  const handleSubmit = () => {
-    console.log({
-      rating: rating,
-      ratingDescription: ratingDescription,
-      comment: comment,
-    });
+  const handleSubmit = async () => {
+    // ***************************************************
+    const receiverId = 1; //* this will be removed when i figuer out where to get it
+    // ***************************************************
+    try {
+      const body = {
+        rating: rating,
+        comment: comment,
+        senderType: activeUser?.type || "client",
+        UserId: activeUser?.id || 2,
+        CarId: 1, //* this has to come from somewhere
+      };
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/MakeReview/${receiverId}`,
+        body
+      );
+      console.log(response.data);
+    } catch (err) {
+      console.error(JSON.stringify(err));
+    }
   };
 
   return (
@@ -58,7 +64,7 @@ const AddReview = ({ navigation }) => {
       </View>
       <AirbnbRating
         count={5}
-        defaultRating={0}
+        defaultRating={"0"}
         onFinishRating={ratingCompleted}
         size={30}
         starContainerStyle={styles.starsContainer}

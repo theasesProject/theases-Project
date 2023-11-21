@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import {
   Image,
@@ -11,7 +10,6 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Keyboard,
-  Linking,
   Alert,
 } from "react-native";
 import * as MediaLibrary from "expo-media-library";
@@ -67,7 +65,6 @@ function Conversation() {
   const [currentMessage, setCurrentMessage] = useState("");
   const scrollViewRef = useRef();
   const OneMessageMemo = React.memo(OneMessage);
-  const [currentPage, setCurrentPage] = useState(1);
   const [receivedDocuments, setReceivedDocuments] = useState([]);
   const fetch = async () => {
     try {
@@ -91,8 +88,6 @@ function Conversation() {
       const result = await DocumentPicker.getDocumentAsync({
         type: ["image/*", "application/pdf", "video/*"],
       });
-
-    
 
       if (!result.canceled && result.assets[0].uri) {
         const cloudinaryResponse = await cloudinaryUpload(
@@ -141,12 +136,12 @@ sendMessage(cloudinaryResponse,result.assets[0].mimeType)
             message: message,
             type: type,
           }
-          );
-          setAllMes((allMes) => [
-            ...allMes,
-            { senderId: user.id, message, type },
-          ]);
-          setCurrentMessage("");
+        );
+        setAllMes((allMes) => [
+          ...allMes,
+          { senderId: user.id, message, type },
+        ]);
+        setCurrentMessage("");
         scrollViewRef.current?.scrollToEnd({ animated: true });
       } catch (error) {
         console.error("Error sending message:", error);
@@ -170,57 +165,59 @@ sendMessage(cloudinaryResponse,result.assets[0].mimeType)
     const handleReceiveDocument = async (data) => {
       try {
         console.log("Receive document", data);
-  // sendMessage(data.data,data.mimeType,data)
+        // sendMessage(data.data,data.mimeType,data)
         await ImagePicker.requestMediaLibraryPermissionsAsync();
         const dir = `${FileSystem.documentDirectory}received_documents/`;
         const filePath = `${dir}${data.name}`;
         console.log("dir: ", dir);
-  
+
         await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
-  
+
         // Use ImagePicker to download and save the image
         await FileSystem.downloadAsync(data.data, filePath);
-  
+
         const updatedDocuments = [
           ...receivedDocuments,
           { ...data, localUri: filePath },
         ];
-  
+
         setReceivedDocuments(updatedDocuments);
-  
+
         console.log("The file has been saved!", `${dir}${data.name}`);
         console.log("hereeeeeee", "here");
-  
+
         if (updatedDocuments.length === 0) {
           Alert.alert("No processed images to save.");
           return;
         }
-  
+
         const assetPromises = updatedDocuments.map(async (imageUri) => {
           console.log("imageUri: ", imageUri?.localUri, "imguri");
           if (imageUri?.localUri) {
-            const asset = await MediaLibrary.createAssetAsync(imageUri.localUri);
+            const asset = await MediaLibrary.createAssetAsync(
+              imageUri.localUri
+            );
             return asset;
           }
           return null; // Handle undefined or null values
         });
-  
+
         const assets = await Promise.all(assetPromises.filter(Boolean));
-  
+
         Alert.alert("Images saved to gallery.");
       } catch (error) {
         console.error("Error receiving document:", error);
       }
     };
-  
+
     socket.on("receive-document", handleReceiveDocument);
-  
+
     return () => {
       socket.off("receive-document", handleReceiveDocument);
     };
   }, [socket, receivedDocuments]);
-    const openDocument =  () => {
-  Alert.alert('already saved !')
+  const openDocument = () => {
+    Alert.alert("already saved !");
   };
 
   useEffect(() => {

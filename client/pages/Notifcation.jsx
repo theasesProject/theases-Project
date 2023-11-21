@@ -44,9 +44,14 @@ const NotificationPage = () => {
             <View>
               <View style={styles.cardContainer} key={i}>
                 <View style={styles.allText}>
-                  <TouchableOpacity style={styles.image}>
-                    <Image style={styles.ring} source={ring}></Image>
-                  </TouchableOpacity>
+                  <LinearGradient
+                    style={styles.image}
+                    colors={["#88b4e2", "#6C77BF"]}
+                  >
+                    <TouchableOpacity>
+                      <Image style={styles.ring} source={ring}></Image>
+                    </TouchableOpacity>
+                  </LinearGradient>
                   <View style={styles.bookingText}>
                     {notification.type === "reject" ? (
                       <View>
@@ -125,14 +130,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  // container: {
-  //   flexDirection: "column",
-  //   justifyContent: "space-between",
-  //   gap: 10,
-  // },
+
   text: {
     alignItems: "flex-start",
-    // fontWeight: "bold",
+
     fontSize: 16,
     color: "black",
   },
@@ -141,7 +142,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   image: {
-    backgroundColor: "green",
     justifyContent: "center",
     width: 70,
     height: 70,

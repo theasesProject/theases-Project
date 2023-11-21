@@ -47,7 +47,9 @@ function Messages() {
     }
   };
   const handleAddRoom = async () => {
+    console.log(user.data.id);
     await axios
+    
       .post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
         { UserId: parseInt(user.data.id), user2: parseInt(user2ID) }

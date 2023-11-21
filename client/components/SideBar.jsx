@@ -22,6 +22,13 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
       useNativeDriver: false,
     }).start();
   }, [isOpen, animatedValue]);
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: !isOpen ? -250 : 0,
+      duration: 2000,
+      useNativeDriver: false,
+    }).start();
+  }, [isOpen, animatedValue]);
 
   const panResponder = useRef(
     PanResponder.create({

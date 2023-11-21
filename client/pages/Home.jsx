@@ -96,6 +96,12 @@ function Home({ navigation }) {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+  const navigateToTransportationMap = () => {
+    navigation.navigate("TransportationMap", {
+      userId: "your_user_id_here",
+      agencyId: "your_agency_id_here",
+    });
+  };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
@@ -291,13 +297,18 @@ function Home({ navigation }) {
           backgroundColor: "lightgrey",
         }}
       />
+
       <Text
-        on
         onPress={() => {
-          navigation.navigate("Notification");
+          navigation.navigate("TransportationMap", {
+            agencyId:
+              activeUser?.type === "agency" ? activeUser?.Agency.UserId : null,
+            UserId: activeUser?.type === "client" ? activeUser?.id : null,
+            userType: activeUser?.type,
+          });
         }}
       >
-        Notifcation{" "}
+        map transportation{" "}
       </Text>
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}

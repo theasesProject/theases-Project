@@ -7,6 +7,7 @@ import Rtl from "views/Rtl.js";
 import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
+import LoginPage from "views/Login";
 
 var routes = [
   {
@@ -55,6 +56,14 @@ var routes = [
     rtlName: "قائمة الجدول",
     icon: "tim-icons icon-puzzle-10",
     component: <TableList />,
+    layout: "/admin",
+  },
+  {
+    path: "/login",
+    name: "login",
+    rtlName: "تسجيل دخول",
+    icon: "tim-icons icon-puzzle-10",
+    component: <LoginPage />,
     layout: "/admin",
   },
   // {

@@ -77,7 +77,7 @@ let chartExample1 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -93,7 +93,7 @@ let chartExample1 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -103,14 +103,14 @@ let chartExample1 = {
     // Create a labels array for the months
     const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
 
-    // Create a data array for the user counts
+    // Create a data array for the Hide/Show Charts
     const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: "User Count",
+          label: "Hide/Show Chart",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -137,7 +137,7 @@ let chartExample1 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -149,7 +149,7 @@ let chartExample1 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -188,7 +188,7 @@ let chartExample1 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -204,7 +204,7 @@ let chartExample1 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -214,14 +214,14 @@ let chartExample1 = {
     // Create a labels array for the months
     const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
 
-    // Create a data array for the user counts
+    // Create a data array for the Hide/Show Charts
     const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: "User Count",
+          label: "Hide/Show Chart",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -254,7 +254,7 @@ let chartExample2 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -270,7 +270,7 @@ let chartExample2 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -280,14 +280,14 @@ let chartExample2 = {
     // Create a labels array for the months
     const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
 
-    // Create a data array for the user counts
+    // Create a data array for the Hide/Show Charts
     const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: "User Count",
+          label: "Hide/Show Chart",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -320,7 +320,7 @@ let chartExample3 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -336,7 +336,7 @@ let chartExample3 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -346,14 +346,14 @@ let chartExample3 = {
     // Create a labels array for the months
     const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
 
-    // Create a data array for the user counts
+    // Create a data array for the Hide/Show Charts
     const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: "User Count",
+          label: "Hide/Show Chart",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -428,7 +428,7 @@ const chartExample4 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -444,7 +444,7 @@ const chartExample4 = {
         labels: [],
         datasets: [
           {
-            label: "User Count",
+            label: "Hide/Show Chart",
             data: [],
           },
         ],
@@ -454,14 +454,14 @@ const chartExample4 = {
     // Create a labels array for the months
     const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
 
-    // Create a data array for the user counts
+    // Create a data array for the Hide/Show Charts
     const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: "User Count",
+          label: "Hide/Show Chart",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",

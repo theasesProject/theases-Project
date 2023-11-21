@@ -43,23 +43,23 @@ function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
-    loadFonts();
+    // loadFonts();
   }, []);
   const loadFonts = async () => {
-    await Font.loadAsync({
-      'CustomFont': require('./fonts/MuseoModerno-VariableFont_wght.ttf'),
-    });
+    // await Font.loadAsync({
+    //   'CustomFont': require('./fonts/MuseoModerno-VariableFont_wght.ttf'),
+    // });
     setFontsLoaded(true);
   };
 
   if (!fontsLoaded) {
     return null;
   }
-  const globalStyles = StyleSheet.create({
-    global: {
-      fontFamily: 'CustomFont',
-    },
-  });
+  // const globalStyles = StyleSheet.create({
+  //   global: {
+  //     fontFamily: 'CustomFont',
+  //   },
+  // });
   return (
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
@@ -67,9 +67,10 @@ function App() {
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen
               name="Home"
+              component={Home}
               options={{ headerShown: false }}
             />
-            {(props) => <Home {...props} style={globalStyles.global} />}
+            {/* {(props) => <Home {...props} style={globalStyles.global} />} */}
             <Stack.Screen
               name="MapForUser"
               component={MapForUser}

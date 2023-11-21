@@ -14,20 +14,26 @@ function getDatesInRange(startDate, endDate) {
 module.exports = {
   getRentalHistory: async (req, res, next) => {
     try {
-      const data = await db.Service.findAll({
+      const services = await db.Service.findAll({
         where: {
           acceptation: "accepted"
-        }
-      })
+        },
+        include: [db.User,"Car"] // Include associated users in the query
+      });
+      // const result = services.map(service => ({
+      //   ...service.dataValues,
+      //   userName: service.User.userName // Access the associated user directly
+      // }));
       res.json({
-        "historyData": data,
-        "message": `history is found ${data.length} rentals`
-      })
+        "historyData": services,
+        // "userNames": result.map(e => e.userName),
+        "message": `history found , ${services.length} rentals`
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
-
-  },
+   },
+   
   getPendingHistory: async (req, res, next) => {
     try {
       const data = await db.Service.findAll({

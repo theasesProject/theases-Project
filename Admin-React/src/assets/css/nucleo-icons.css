@@ -28,7 +28,14 @@ Created using IcoMoon - icomoon.io
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.prev_next_btn{
+  width: 19%;
+}
+.prev_next_container{
+  display: flex;
+  align-items: center ;
+  justify-content: space-between ;
+}
 .font-icon-detail {
   text-align: center;
   padding: 45px 0 30px;

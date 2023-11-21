@@ -16,7 +16,8 @@ const initialState = {
     loading: false,
     approvedRental: [],
     PendingRental: [],
-    RejectedRental: []
+    RejectedRental: [],
+    foreignUser:{}
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -177,7 +178,16 @@ export const Sort = createAsyncThunk("user/Sort", async (dataType) => {
         console.error(er);
     }
 })
-
+export const getUserById=createAsyncThunk("user/getById",async (id)=>{
+    try {
+        const task=await axios.get(
+            `http://localhost:5000/api/users/getById/${id}`
+        )
+        return task.data
+    } catch (er) {
+        console.error(er);
+    }
+})
 export const adminSlicer = createSlice({
     name: "admin",
     initialState,
@@ -206,6 +216,18 @@ export const adminSlicer = createSlice({
     },
     extraReducers: (builder) => {
 
+        builder.addCase(getUserById.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(getUserById.fulfilled, (state, action) => {
+            state.loading = false;
+            state.foreignUser = action.payload;
+        });
+        builder.addCase(getUserById.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
         builder.addCase(getAllCars.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -321,14 +343,15 @@ export const adminSlicer = createSlice({
     }
 })
 
-export const { filterUsers, setAdmin, logout, setLoggedIn } = adminSlicer.actions;
 export const selectAdmin = (state) => state.Admin.admin;
 export const selectAllUsers = (state) => state.Admin.allUsers;
 export const selectApproved = (state) => state.Admin.approvedRental;
 export const selectPending = (state) => state.Admin.PendingRental;
 export const selectRejected = (state) => state.Admin.RejectedRental;
 export const selectAllCars  = (state) => state.Admin.allCars;
-export const { triggerRefresh } = adminSlicer.actions;
 export const selectReviews = (state) => state.Admin.reviews;
 export const selectLoggedIn = (state) => state.Admin.loggedIn;
+export const selectForeignUser = (state) => state.Admin.foreignUser;
+export const { filterUsers, setAdmin, logout, setLoggedIn } = adminSlicer.actions;
+export const { triggerRefresh } = adminSlicer.actions;
 export default adminSlicer.reducer;

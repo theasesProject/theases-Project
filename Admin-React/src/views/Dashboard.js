@@ -61,20 +61,56 @@ import { allCars } from "Redux/adminSlice";
 import { selectAllCars } from "Redux/adminSlice";
 import { selectPending } from "Redux/adminSlice";
 import { selectRejected } from "Redux/adminSlice";
+import { selectForeignUser } from "Redux/adminSlice";
+import { getUserById } from "Redux/adminSlice";
 
 function Dashboard() {
+  const foreignUser = useSelector(selectForeignUser)
   const rentalHistory = useSelector(selectApproved)?.historyData
   const pending = useSelector(selectPending)?.historyData
   const rejected = useSelector(selectRejected)?.historyData
-  const dispatch = useDispatch()
-  const [refresh, setRefresh] = useState(false);
   const loading = useSelector((state) => state.Admin.loading);
   const allUsers = useSelector(selectAllUsers)
   const allCars = useSelector(selectAllCars)
+  const [refresh, setRefresh] = useState(false);
   const [bigChartData, setbigChartData] = React.useState("data1");
+  // const [userData, setUserData] = useState({})
   const setBgChartData = (name) => {
     setbigChartData(name);
   };
+  const [startIndexCar, setStartIndexCar] = useState(0);
+  const dispatch = useDispatch()
+  const handleUpClickCar = () => {
+    if (startIndexCar > 0) {
+      setStartIndexCar(startIndexCar - 10);
+    }
+  };
+  const handleDownClickCar = () => {
+    if (startIndexCar + 10 < allUsers.length) {
+      setStartIndexCar(startIndexCar + 10);
+    }
+  }
+  const [startIndex, setStartIndex] = useState(0);
+
+  const handleUpClick = () => {
+    if (startIndex > 0) {
+      setStartIndex(startIndex - 10);
+    }
+  };
+
+  const handleDownClick = () => {
+    if (startIndex + 10 < allUsers.length) {
+      setStartIndex(startIndex + 10);
+    }
+  }
+  const getUserData = async (u) => {
+    try {
+      await dispatch(getUserById(u.UserId))
+      // setUserData(foreignUser)
+    } catch (error) {
+      console.error(error);
+    }
+  }
   useEffect(() => {
     dispatch(getAllUsers())
     dispatch(getAllCars())
@@ -86,7 +122,7 @@ function Dashboard() {
     console.log(rejected)
     console.log(allUsers)
     console.log(allCars)
-    loading ? setRefresh(!refresh) : null;
+    loading ? setRefresh(!refresh) : console.log(null);
 
   }, [dispatch, refresh])
   return (
@@ -98,7 +134,7 @@ function Dashboard() {
               <CardHeader>
                 <Row>
                   <Col className="text-left" sm="6">
-                    <h5 className="card-category">Total Shipments</h5>
+                    <h5 className="card-category">Rental History</h5>
                     <CardTitle tag="h2">Performance</CardTitle>
                   </Col>
                   <Col sm="6">
@@ -117,7 +153,7 @@ function Dashboard() {
                         onClick={() => setBgChartData("data1")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Accounts
+                          Accepted
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-single-02" />
@@ -134,7 +170,7 @@ function Dashboard() {
                         onClick={() => setBgChartData("data2")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Purchases
+                          Pending
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-gift-2" />
@@ -151,7 +187,7 @@ function Dashboard() {
                         onClick={() => setBgChartData("data3")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Sessions
+                          Rejected
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-tap-02" />
@@ -176,9 +212,9 @@ function Dashboard() {
           <Col lg="4">
             <Card className="card-chart">
               <CardHeader>
-                <h5 className="card-category">Total Shipments</h5>
+                <h5 className="card-category">Total Users Count</h5>
                 <CardTitle tag="h3">
-                  <i className="tim-icons icon-bell-55 text-info" /> 763,215
+                  <i className="tim-icons icon-bell-55 text-info" /> {allUsers.length}
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -195,16 +231,16 @@ function Dashboard() {
           <Col lg="4">
             <Card className="card-chart">
               <CardHeader>
-                <h5 className="card-category">Daily Sales</h5>
+                <h5 className="card-category">Total Income</h5>
                 <CardTitle tag="h3">
                   <i className="tim-icons icon-delivery-fast text-primary" />{" "}
-                  3,500€
+                  {[].length}
                 </CardTitle>
               </CardHeader>
               <CardBody>
                 <div className="chart-area">
                   <Bar
-                    data={chartExample3.data(allCars)}
+                    data={chartExample3.data([])}
                     options={chartExample3.options}
                   />
                 </div>
@@ -214,15 +250,15 @@ function Dashboard() {
           <Col lg="4">
             <Card className="card-chart">
               <CardHeader>
-                <h5 className="card-category">Completed Tasks</h5>
+                <h5 className="card-category">Cars count</h5>
                 <CardTitle tag="h3">
-                  <i className="tim-icons icon-send text-success" /> 12,100K
+                  <i className="tim-icons icon-send text-success" />{allCars.length}
                 </CardTitle>
               </CardHeader>
               <CardBody>
                 <div className="chart-area">
                   <Line
-                    data={chartExample4.data([])}
+                    data={chartExample4.data(allCars)}
                     options={chartExample4.options}
                   />
                 </div>
@@ -232,7 +268,7 @@ function Dashboard() {
         </Row>
         <Row>
           <Col lg="6" md="12">
-            <Card className="card-tasks">
+            {/* <Card className="card-tasks">
               <CardHeader>
                 <h6 className="title d-inline">Tasks(5)</h6>
                 <p className="card-category d-inline"> today</p>
@@ -496,68 +532,68 @@ function Dashboard() {
                   </Table>
                 </div>
               </CardBody>
+            </Card> */}
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Rental History</CardTitle>
+              </CardHeader>
+              <CardBody >
+                <Table className="tablesorter" responsive>
+                  <thead className="text-primary">
+                    <tr>
+                      <th>brand</th>
+                      <th>Returned by</th>
+                      <th>Rental Fee </th>
+                      <th className="text-center">Returned on</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rentalHistory?.slice(startIndexCar, rentalHistory.length > 10 ? startIndexCar + 10 : undefined)?.map((u, i) =>
+                    (
+                      <tr key={i}>
+                        {/* console.log(u) */}
+                        <td>{u.Users[0].userName}</td>
+                        <td>{u.Car.model}</td>
+                        <td>{u.amount} DT</td>
+                        <td className="text-center">{u.endDate.slice(0,10)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                <div className="prev_next_container"><Button className="prev_next_btn" onClick={handleUpClickCar}>Previous</Button>
+                  <Button className="prev_next_btn" onClick={handleDownClickCar}>Next</Button></div>
+              </CardBody>
             </Card>
+
           </Col>
           <Col lg="6" md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Simple Table</CardTitle>
+                <CardTitle tag="h4">User List</CardTitle>
               </CardHeader>
-              <CardBody>
+              <CardBody >
                 <Table className="tablesorter" responsive>
                   <thead className="text-primary">
                     <tr>
                       <th>Name</th>
-                      <th>Country</th>
-                      <th>City</th>
-                      <th className="text-center">Salary</th>
+                      <th>E-mail</th>
+                      <th>Phone-Number</th>
+                      <th className="text-center">state</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Dakota Rice</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                      <td className="text-center">$36,738</td>
-                    </tr>
-                    <tr>
-                      <td>Minerva Hooper</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                      <td className="text-center">$23,789</td>
-                    </tr>
-                    <tr>
-                      <td>Sage Rodriguez</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                      <td className="text-center">$56,142</td>
-                    </tr>
-                    <tr>
-                      <td>Philip Chaney</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                      <td className="text-center">$38,735</td>
-                    </tr>
-                    <tr>
-                      <td>Doris Greene</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                      <td className="text-center">$63,542</td>
-                    </tr>
-                    <tr>
-                      <td>Mason Porter</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                      <td className="text-center">$78,615</td>
-                    </tr>
-                    <tr>
-                      <td>Jon Porter</td>
-                      <td>Portugal</td>
-                      <td>Gloucester</td>
-                      <td className="text-center">$98,615</td>
-                    </tr>
+                    {allUsers.slice(startIndex, allUsers.length > 10 ? startIndex + 10 : undefined)?.map((u, i) => (
+                      <tr key={i}>
+                        <td>{u.userName}</td>
+                        <td>{u.email}</td>
+                        <td>{u.phoneNumber}</td>
+                        <td className="text-center">{u.stateBlocked ? "Blocked" : "Active"}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
+                <div className="prev_next_container"><Button className="prev_next_btn" onClick={handleUpClick}>Previous</Button>
+                  <Button className="prev_next_btn" onClick={handleDownClick}>Next</Button></div>
               </CardBody>
             </Card>
           </Col>

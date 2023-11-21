@@ -35,13 +35,13 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
       return (
         <Image
           style={{ width: 200, height: 200, borderRadius: 8 }}
-          source={{ uri: `data:${message.type};base64,${message.message}` }}
+          source={{ uri: message.message }}
         />
       );
     } else if (message.type && message.type.startsWith("video/")) {
       return (
         <Video
-          source={{ uri: `data:${message.type};base64,${message.message}` }}
+          source={{ uri:message.message}}
           style={{ width: 200, height: 200, borderRadius: 8 }}
           useNativeControls
           resizeMode="contain"

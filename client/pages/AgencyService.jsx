@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  Platform,
-  Modal,
 } from "react-native";
 import {
   allServiceForAgency,
@@ -19,13 +17,10 @@ import agenda from "../assets/agenda.jpg";
 import car from "../assets/car2.png";
 import charIcon from "../assets/chat.png";
 const { width, height } = Dimensions.get("screen");
-import { selectUser, setUser } from "../store/userSlice";
+import { selectUser } from "../store/userSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector, useDispatch } from "react-redux";
-import carImage from "../assets/Brands/BMW.png";
-import userImage from "../assets/user.jpg";
-import { useEffect, useRef, useState } from "react";
-import moment from "moment";
+import { useEffect, useState } from "react";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import price from "../assets/price.jpg";
 import io from "socket.io-client";
@@ -34,32 +29,38 @@ import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 import { useNavigation } from "@react-navigation/native";
 function AgencyService() {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allService = useSelector((state) => state.booking.allServiceByAgency);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const [selectedService, setSelectedService] = useState(null);
-  const [requestMakerId,setRequestMakerId] = useState(null);
-  const [avatarUrl , setAvatarUrl] = useState(null);
-  const [name,setName] = useState(null);
-
+  const [requestMakerId, setRequestMakerId] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [name, setName] = useState(null);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
-  const getRoomData = async (room)=>{
-    if(activeUser.id === room.UserId){
-      await axios.get(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`).then((response)=>{
-        setAvatarUrl(response.data.avatar)
-        setName(response.data.userName)
-      })
+  const getRoomData = async (room) => {
+    if (activeUser.id === room.UserId) {
+      await axios
+        .get(
+          `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
+        )
+        .then((response) => {
+          setAvatarUrl(response.data.avatar);
+          setName(response.data.userName);
+        });
+    } else {
+      await axios
+        .get(
+          `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`
+        )
+        .then((response) => {
+          setAvatarUrl(response.data.avatar);
+          setName(response.data.userName);
+        });
     }
-    else{
-      await axios.get(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`).then((response)=>{
-        setAvatarUrl(response.data.avatar)
-        setName(response.data.userName)
-      })
-    }
-  }
+  };
 
   useEffect(() => {
     dispatch(allServiceForAgency(activeUser.id));
@@ -84,29 +85,34 @@ function AgencyService() {
     };
   }, [dispatch]);
 
-  const handleChatting = async (id)=>{
+  const handleChatting = async (id) => {
     try {
-      const roomPossibility1= await axios.get(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,{user1:activeUser.id,user2:requestMakerId});
-      const roomPossibility2= await axios.get(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,{user1:requestMakerId,user2:activeUser})
-      if(!roomPossibility1 && !roomPossibility2 ){
-        const room = await axios
-      .post(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
-        { UserId: activeUser.id, user2: requestMakerId }
-      )
-        getRoomData(room.data)
-        dispatch(setRoom({...room.data,name,avatarUrl}))
-        navigation.navigate("conversation")
-      return
-      } else{
-        getRoomData(room.data)
-        dispatch(setRoom({...room.data,name,avatarUrl}))
-        navigation.navigate("conversation")
+      const roomPossibility1 = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
+        { user1: activeUser.id, user2: requestMakerId }
+      );
+      const roomPossibility2 = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
+        { user1: requestMakerId, user2: activeUser }
+      );
+      if (!roomPossibility1 && !roomPossibility2) {
+        const room = await axios.post(
+          `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
+          { UserId: activeUser.id, user2: requestMakerId }
+        );
+        getRoomData(room.data);
+        dispatch(setRoom({ ...room.data, name, avatarUrl }));
+        navigation.navigate("conversation");
+        return;
+      } else {
+        getRoomData(room.data);
+        dispatch(setRoom({ ...room.data, name, avatarUrl }));
+        navigation.navigate("conversation");
       }
     } catch (e) {
       console.error(e);
     }
-  }
+  };
 
   const acceptService = (idservice, id, message) => {
     const obj = { id: idservice, acceptation: "accepted" };
@@ -219,9 +225,12 @@ function AgencyService() {
                           >
                             <Text>Refuse</Text>
                           </TouchableOpacity>
-                          <TouchableOpacity style={styles.payment} onPress={()=>{
-                            handleChatting(service.service.Service.UserId)
-                          }}>
+                          <TouchableOpacity
+                            style={styles.payment}
+                            onPress={() => {
+                              handleChatting(service.service.Service.UserId);
+                            }}
+                          >
                             <Image
                               style={styles.chat}
                               source={charIcon}

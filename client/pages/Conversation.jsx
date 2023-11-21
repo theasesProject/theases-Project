@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import {
   Image,
@@ -13,7 +14,6 @@ import {
   Linking,
   Alert,
 } from "react-native";
-const { height, width } = Dimensions.get("screen");
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import { useSelector } from "react-redux";
@@ -22,13 +22,42 @@ import OneMessage from "../components/OneMessage";
 import Send from "../assets/Svg/send-alt-1-svgrepo-com.svg";
 import Attach from "../assets/Svg/attachFile.svg";
 import * as DocumentPicker from "expo-document-picker";
-import socket from "../socket-io.front.server"
-import Phone from "../assets/Svg/call.svg";
+import socket from "../socket-io.front.server";
 import * as FileSystem from "expo-file-system";
 import base64 from "base-64";
+
+const { height, width } = Dimensions.get("screen");
+
 var Buffer = require("buffer/").Buffer;
 
+const cloudinaryUpload = async (fileUri, fileType) => {
+  const cloudName = "torbaga";
+  const myUploadPreset = "zpsqdpwt";
 
+  try {
+    const formData = new FormData();
+    formData.append("file", {
+      uri: fileUri,
+      type: fileType,
+      name: "my_media", // You can customize the file name as needed
+    });
+
+    formData.append("upload_preset", myUploadPreset);
+
+    const response = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+      formData
+    );
+
+    if (response.status === 200) {
+      return response.data.secure_url;
+    } else {
+      console.error("Media upload failed");
+    }
+  } catch (error) {
+    console.error("Cloudinary upload error:", JSON.stringify(error));
+  }
+};
 function Conversation() {
   const [outputDirectory, setOutputDirectory] = useState(null);
 
@@ -57,38 +86,33 @@ function Conversation() {
     setCurrentMessage(content);
   };
 
-  const uriToBuffer = async (uri) => {
-    try {
-      const fileData = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      const buffer = base64.decode(fileData);
-      console.log("uritobuffersucces");
-      return buffer;
-    } catch (error) {
-      console.error("Error converting URI to buffer:", error);
-      throw error;
-    }
-  };
-
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: ["image/*", "application/pdf", "video/*"],
       });
 
-      if (!result.canceled && result.assets[0].uri) {
-        const buffer = await uriToBuffer(result.assets[0].uri);
+    
 
-        // Send the document using the sendMessage function
-        sendMessage(buffer, result.assets[0].type);
-        console.log("sent document to the server");
+      if (!result.canceled && result.assets[0].uri) {
+        const cloudinaryResponse = await cloudinaryUpload(
+          result.assets[0].uri,
+          result.assets[0].mimeType
+        );
+        console.log("cccccc",cloudinaryResponse);
+sendMessage(cloudinaryResponse,result.assets[0].mimeType)
+        await socket.emit("send-document", {
+          name: result.assets[0].name,
+          type: result.assets[0].type,
+          data: cloudinaryResponse,
+        });
+
+        console.log("sent to the server");
       }
     } catch (error) {
       console.error(error);
     }
   };
-
   const isLastMessage = (index) => {
     if (index < allMes.length - 1) {
       const currentSenderId = allMes[index].senderId;
@@ -142,7 +166,62 @@ function Conversation() {
       setAllMes((allMes) => [...allMes, data]);
     });
   }, [socket]);
-
+  useEffect(() => {
+    const handleReceiveDocument = async (data) => {
+      try {
+        console.log("Receive document", data);
+  // sendMessage(data.data,data.mimeType,data)
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const dir = `${FileSystem.documentDirectory}received_documents/`;
+        const filePath = `${dir}${data.name}`;
+        console.log("dir: ", dir);
+  
+        await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
+  
+        // Use ImagePicker to download and save the image
+        await FileSystem.downloadAsync(data.data, filePath);
+  
+        const updatedDocuments = [
+          ...receivedDocuments,
+          { ...data, localUri: filePath },
+        ];
+  
+        setReceivedDocuments(updatedDocuments);
+  
+        console.log("The file has been saved!", `${dir}${data.name}`);
+        console.log("hereeeeeee", "here");
+  
+        if (updatedDocuments.length === 0) {
+          Alert.alert("No processed images to save.");
+          return;
+        }
+  
+        const assetPromises = updatedDocuments.map(async (imageUri) => {
+          console.log("imageUri: ", imageUri?.localUri, "imguri");
+          if (imageUri?.localUri) {
+            const asset = await MediaLibrary.createAssetAsync(imageUri.localUri);
+            return asset;
+          }
+          return null; // Handle undefined or null values
+        });
+  
+        const assets = await Promise.all(assetPromises.filter(Boolean));
+  
+        Alert.alert("Images saved to gallery.");
+      } catch (error) {
+        console.error("Error receiving document:", error);
+      }
+    };
+  
+    socket.on("receive-document", handleReceiveDocument);
+  
+    return () => {
+      socket.off("receive-document", handleReceiveDocument);
+    };
+  }, [socket, receivedDocuments]);
+    const openDocument =  () => {
+  Alert.alert('already saved !')
+  };
 
   useEffect(() => {
     fetch();

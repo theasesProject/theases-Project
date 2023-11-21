@@ -41,7 +41,9 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <Provider store={store}>
-      <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
+      <StripeProvider
+        publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
+      >
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
             {/* <Stack.Screen

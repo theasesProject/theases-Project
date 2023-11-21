@@ -16,6 +16,7 @@ const Payment = () => {
         // this amount will be sent by props when we use this btn component
         { amount: 12345 }
       );
+
       await initPaymentSheet({
         merchantDisplayName: "Rent & Go",
         paymentIntentClientSecret: response.data.paymentIntent,
@@ -23,6 +24,7 @@ const Payment = () => {
           name: activeUser?.userName,
         },
       });
+
       await presentPaymentSheet();
     } catch (err) {
       console.error(err);
@@ -34,7 +36,6 @@ const Payment = () => {
       style={styles.payBtnContainer}
       activeOpacity={0.8}
       onPress={handleStripe}
-      // disabled={!formChecked}
     >
       <LinearGradient
         colors={["#6C77BF", "#4485C5"]}

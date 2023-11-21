@@ -13,10 +13,7 @@ import {
   Linking,
   Alert,
 } from "react-native";
-
-
 const { height, width } = Dimensions.get("screen");
-
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import { useSelector } from "react-redux";
@@ -31,7 +28,6 @@ import * as FileSystem from "expo-file-system";
 import base64 from "base-64";
 var Buffer = require("buffer/").Buffer;
 
-// const socket = io.connect(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:3002`);
 
 function Conversation() {
   const [outputDirectory, setOutputDirectory] = useState(null);
@@ -77,21 +73,16 @@ function Conversation() {
 
   const pickDocument = async () => {
     try {
-
       const result = await DocumentPicker.getDocumentAsync({
-        type: ["image/*", "application/pdf","video/*"],
+        type: ["image/*", "application/pdf", "video/*"],
       });
-      console.log("here");
+
       if (!result.canceled && result.assets[0].uri) {
-        console.log(result.assets[0].uri);
         const buffer = await uriToBuffer(result.assets[0].uri);
 
-        await socket.emit("send-document", {
-          name: result.assets[0].name,
-          type: result.assets[0].type,
-          data: buffer,
-        });
-        console.log("sent to the server");
+        // Send the document using the sendMessage function
+        sendMessage(buffer, result.assets[0].type);
+        console.log("sent document to the server");
       }
     } catch (error) {
       console.error(error);
@@ -152,65 +143,6 @@ function Conversation() {
     });
   }, [socket]);
 
-  useEffect(() => {
-    const handleReceiveDocument = async (data) => {
-      try {
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-        const dir = `${FileSystem.documentDirectory}received_documents/`;
-        const filePath = `${dir}${data.name}`;
-        console.log("dir: ", dir);
-    
-        const resultBase64 = Buffer.from(data.data, "binary").toString("base64");
-        console.log("between ", resultBase64, "between");
-    
-        await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
-        await FileSystem.writeAsStringAsync(filePath, resultBase64, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-    
-        const updatedDocuments = [
-          ...receivedDocuments,
-          { ...data, localUri: filePath },
-        ];
-    
-        setReceivedDocuments(updatedDocuments);
-       
-        console.log("The file has been saved!", `${dir}${data.name}`);
-        console.log("hereeeeeee", "here");
-    
-        if (updatedDocuments.length === 0) {
-          Alert.alert("No processed images to save.");
-          return;
-        }
-    
-        const assetPromises = updatedDocuments.map(async (imageUri) => {
-          console.log("imageUri: ", imageUri?.localUri, "imguri");
-          if (imageUri?.localUri) {
-            const asset = await MediaLibrary.createAssetAsync(imageUri.localUri);
-            return asset;
-          }
-          return null; // Handle undefined or null values
-        });
-        
-        const assets = await Promise.all(assetPromises.filter(Boolean)); 
-    
-        Alert.alert("Images saved to gallery.");
-      } catch (error) {
-        console.error("Error receiving document:", error);
-      }
-    };
-    
-    socket.on("receive-document", handleReceiveDocument);
-    
-    return () => {
-      socket.off("receive-document", handleReceiveDocument);
-    };
-    
-    
-  }, [socket]);
-  const openDocument =  () => {
-  Alert.alert('already saved !')
-  };
 
   useEffect(() => {
     fetch();

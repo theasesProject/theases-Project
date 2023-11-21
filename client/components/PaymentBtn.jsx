@@ -1,11 +1,12 @@
 import axios from "axios";
-import { Text, Linking, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, Linking, StyleSheet, TouchableOpacity,Dimensions } from "react-native";
 import { useStripe } from "@stripe/stripe-react-native";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import { LinearGradient } from "expo-linear-gradient";
+const { height, width } = Dimensions.get("window");
 
-const Payment = () => {
+const PaymentBtn = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const activeUser = useSelector(selectUser);
 
@@ -62,11 +63,11 @@ const Payment = () => {
 
 const styles = StyleSheet.create({
   payBtnContainer: {
-    width: "100%",
+    width: width*0.3,
   },
   payBtn: {
     borderRadius: 10,
-    height: 50,
+    height: height*0.055,
     width: "100%",
     color: "white",
     display: "flex",
@@ -75,8 +76,8 @@ const styles = StyleSheet.create({
   },
   payBtnContent: {
     color: "white",
-    fontSize: 18,
+    // fontSize: 18,
   },
 });
 
-export default Payment;
+export default PaymentBtn;

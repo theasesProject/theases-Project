@@ -63,7 +63,6 @@ function AgencyService() {
   }, [dispatch]);
 
   const acceptService = (idservice, id, message) => {
-    console.log(idservice, id, message, "message");
     const obj = { id: idservice, acceptation: "accepted" };
 
     dispatch(UpdateServiceByAgency(obj));
@@ -332,12 +331,13 @@ const styles = StyleSheet.create({
     width: width * 0.86,
     height: height * 0.06,
     borderRadius: 5,
-    gap: 15,
+    gap: 20,
     alignItems: "flex-end",
   },
   button: {
     flexDirection: "row",
     justifyContent: "center",
+    gap: 13,
   },
   modalContent: {
     backgroundColor: "white",

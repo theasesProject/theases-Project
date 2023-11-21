@@ -32,6 +32,13 @@ const Sidebar = ({ navigation, isOpen, onClose }) => {
       closeSidebar(); // Ensure the sidebar is closed when the component unmounts
     };
   }, [isOpen, animatedValue]);
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: !isOpen ? -250 : 0,
+      duration: 2000,
+      useNativeDriver: false,
+    }).start();
+  }, [isOpen, animatedValue]);
 
   const panResponder = useRef(
     PanResponder.create({

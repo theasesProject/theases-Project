@@ -10,12 +10,17 @@ import {
 } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import { useEffect, useState } from "react";
+import { LinearGradient } from "expo-linear-gradient";
 import car from "../assets/car2.png";
+import vitesse from "../assets/vitesse.png";
 import emptyStar from "../assets/eto.png";
 import star from "../assets/star1.png";
 import RatingStar from "../assets/Svg/RatingStar.svg";
 import BookMark from "../assets/Svg/bookMark.svg";
+import emptyHeart from "../assets/emtyheartRed.jpg";
+import heart from "../assets/heart.png";
 import TopCorner from "../assets/Svg/BookMarkDone.svg";
+import brand from "../assets/brand.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CreateBookMark,
@@ -24,46 +29,35 @@ import {
   carDetail,
 } from "../store/carFetch.js";
 import axios from "axios";
+import fuel from "../assets/fuel.png";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
 import { Booking } from "../pages/Booking.jsx";
 
 function CardCar({ oneCar, setNothing, handlePress }) {
-  const [starSelected, setStarSelected] = useState(false);
-  // const {process.env.EXPO_PUBLIC_SERVER_IP} = require("../env.js")
-  const [isHeartClicked, setHeartClicked] = useState(false);
-  // const [heartSelected, setHeartSelected] = useState(false);
-  const [done, setDone] = useState(null);
+  const [heartSelected, setHeartSelected] = useState(false);
+
   const activeUser = useSelector(selectUser) || {};
-  const starImage = starSelected ? star : emptyStar;
-  // const heartImage = heartSelected ? heartBleu : EmptyHeart;
+
+  const heartImage = heartSelected ? emptyHeart : heart;
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const handleStarPress = () => {
-    setStarSelected(!starSelected);
-  };
 
   const handleHeartPress = async () => {
-    // setHeartSelected(!heartSelected);
-    // if (!heartSelected) {
-    setHeartClicked(!isHeartClicked);
+    setHeartSelected(!heartSelected);
+    if (!heartSelected) {
+      setHeartSelected(!heartSelected);
 
-    dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
-    // } else if (heartSelected) {
-    // dispatch(removedBookMark(oneCar.id));
-    // }
+      dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
+    } else if (heartSelected) {
+      dispatch(removedBookMark(oneCar.id));
+    }
   };
   const checkBookMarked = async () => {
     try {
       const task = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/check/${activeUser.id}/${oneCar.id}`
       );
-      if (task.data) {
-        setNothing("");
-        setDone(true);
-      } else {
-        setDone(false);
-      }
     } catch (er) {
       console.error(er);
     }
@@ -75,62 +69,51 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   };
 
   useEffect(() => {
-    setDone(false);
     checkBookMarked();
   }, []);
 
   return (
     <View style={styles.card}>
-      <Pressable style={styles.Image}  onPress={handleRent}>
-        {oneCar.Media? (
-          console.log(oneCar.Media),
-          <Image
-            style={styles.carImage}
-            source={{
-              uri: oneCar?.Media[0]?.media,
-            }}
-          />
-        ) : (
-          <Image style={styles.carImage} source={car} /> 
-          )} 
-
-        {/* {Object.values(activeUser).length ? (
-          !done ? (
-            <BookMark onPress={handleHeartPress} />
-          ) : (
-            <TopCorner />
-          )
-        ) : null} */}
-      </Pressable>
-      <View style={styles.carDetails}>
-        <View style={styles.NameAvaib}>
-          <Text style={styles.carName}>{oneCar.model}</Text>
-          <Text style={styles.avaible}>{oneCar.status}</Text>
+      <View style={styles.imageCar}>
+        <View style={styles.favorities}>
+          <TouchableOpacity onPress={handleHeartPress} style={styles.favourite}>
+            <Image style={styles.favourite1} source={heartImage} />
+          </TouchableOpacity>
         </View>
-        <View style={styles.PriceStar}>
-          <View style={styles.booking}>
-            <Text style={styles.carPrice}>
-              ${oneCar.price}/{oneCar.period}
-            </Text>
-            <View style={styles.bookingCar}>
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch(carDetail(oneCar));
-                  navigation.navigate("Booking");
-                }}
-              >
-                <Text style={styles.bookingCar1}>Booking</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          {/* <View style={styles.reviews}>
-            <TouchableOpacity onPress={handleStarPress}>
-              <Image style={styles.heart} source={starImage} />
-            </TouchableOpacity>
-            <Text style={styles.avaible}>(150 review)</Text>
-          </View> */}
+        <View style={styles.imageCar1}>
+          <Image style={styles.imageCar2} src={oneCar.Media[0]?.media}></Image>
         </View>
       </View>
+
+      <TouchableOpacity onPress={handleRent} style={styles.information}>
+        <View style={styles.carInformation}>
+          <View style={styles.agencyName}>
+            <Text style={styles.name}>{oneCar?.Agency.name}</Text>
+          </View>
+          <View style={styles.carName}>
+            <Text style={styles.name1}>{oneCar?.model}</Text>
+          </View>
+        </View>
+        <View style={styles.price}>
+          <Text style={styles.price1}>${oneCar?.price}/day</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleRent} style={styles.details}>
+        <View style={styles.typeofFuel}>
+          <Image style={styles.vitesse} source={brand} />
+          <Text style={styles.VitesseName}>{oneCar?.brand}</Text>
+        </View>
+        <View style={styles.typeofFuel}>
+          <LinearGradient colors={["#6C77BF", "#4485C5"]}></LinearGradient>
+          <Image style={styles.vitesse} source={vitesse} />
+          <Text style={styles.VitesseName}>{oneCar?.characteristics}</Text>
+        </View>
+        <View style={styles.typeofFuel}>
+          <Image style={styles.vitesse} source={fuel} />
+          <Text style={styles.VitesseName}>{oneCar?.typeOfFuel}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -138,100 +121,158 @@ function CardCar({ oneCar, setNothing, handlePress }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    height: height * 0.31,
-    width:width*.9,
-    borderRadius: 8,
+    width: width * 0.9,
+    height: height * 0.4,
+    borderRadius: 15,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    padding: 10,
     alignItems: "center",
-    justifyContent: "center",
-    // paddingHorizontal: 20,
-    // paddingVertical: 110,
   },
-  barText: {
-    width: 360,
-    height: 35,
-    borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  imageCar: {
+    backgroundColor: "rgb(246, 246, 246)",
+    width: width * 0.8,
+    height: height * 0.2,
+    borderRadius: 15,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
-
-  carImage: {
-    // width:width*.85,
-    width: '100%', // Take the full width of the Image div
-    // borderRadius:8,
-    borderTopLeftRadius:8,
-    borderTopRightRadius:8,
-    height: height*.21,
+  imageCar1: {
+    width: width * 0.8,
+    height: height * 0.13,
+    borderRadius: 15,
+    padding: 5,
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
-  heart: {
-    width: 30,
-    height: 28,
-  },
-  Image: {
-    // width: width * 0.85,
-    width: '100%', // Take the full width of the Image div
-    display: "flex",
-    paddingBottom:1,
-    flexDirection: "row",
-    justifyContent: "center", // Center the carImage horizontally
-    alignItems: "center", // Center the carImage vertically
-    gap: 10,
+  imageCar2: {
+    width: width * 0.65,
     height: height * 0.18,
+    borderRadius: 15,
+    padding: 5,
+
+    justifyContent: "center",
   },
-  
-  NameAvaib: {
+  information: {
+    backgroundColor: "white",
+    width: width * 0.8,
+    height: height * 0.1,
+    borderRadius: 15,
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 180,
-  },
-  PriceStar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  reviews: {
-    flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
-    gap: 10,
+    padding: 5,
   },
-  carDetails:{
-paddingTop:10
+  details: {
+    width: width * 0.8,
+    height: height * 0.08,
+    borderRadius: 15,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+
+    gap: 5,
+    borderTopColor: "lightgrey",
+    borderTopWidth: 1,
+  },
+  favorities: {
+    width: width * 0.8,
+    height: height * 0.05,
+    borderRadius: 15,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    padding: 2,
+    position: "absolute",
+  },
+  logo: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "pink",
+    width: width * 0.15,
+    height: height * 0.05,
+    borderRadius: 15,
+  },
+  favourite: {
+    justifyContent: "center",
+    alignItems: "center",
+
+    width: width * 0.15,
+    height: height * 0.05,
+    borderRadius: 15,
+  },
+  favourite1: {
+    width: width * 0.08,
+    height: height * 0.032,
+  },
+  carInformation: {
+    width: width * 0.5,
+    height: height * 0.08,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  price: {
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "flex-end",
+
+    width: width * 0.3,
+    height: height * 0.08,
+  },
+  agencyName: {
+    width: width * 0.5,
+    height: height * 0.04,
   },
   carName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
+    width: width * 0.5,
+    height: height * 0.04,
   },
-  avaible: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "green",
+  brand: {
+    backgroundColor: "white",
+    width: width * 0.255,
+    height: height * 0.07,
   },
-  carPrice: {
-    fontSize: 17,
-    paddingLeft: width * 0.5,
-    fontWeight: "bold",
-    color: "#6C77BF",
-    fontSize: 14,
-    color: "rgb(130, 124, 140)",
-  },
-  carPrice: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "rgb(172, 133, 234)",
-  },
-  bookingCar: {
-    borderWidth: 2,
-    width: 120,
-    height: 30,
+  typeofFuel: {
+    flexDirection: "row",
+
+    width: width * 0.255,
+    height: height * 0.07,
     justifyContent: "center",
     alignItems: "center",
-    borderColor: "lightgrey",
-    borderRadius: 5,
-    backgroundColor: "lightblue",
+    padding: 5,
   },
-  bookingCar1: {
+  typeOfVehecile: {
+    backgroundColor: "white",
+    width: width * 0.255,
+    height: height * 0.07,
+  },
+  name: {
+    color: "#9EB8D9",
+    fontSize: 16,
+  },
+  name1: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  price1: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#9EB8D9",
+  },
+  vitesse: {
+    width: width * 0.06,
+    height: height * 0.03,
+    borderRadius: 10,
+  },
+  VitesseName: {
+    color: "grey",
+    fontSize: 16,
+  },
+  Vitesse1: {
+    width: width * 0.081,
+    height: height * 0.04,
+    borderRadius: 10,
   },
 });
 

@@ -24,7 +24,7 @@ import Attach from "../assets/Svg/attachFile.svg";
 import * as DocumentPicker from "expo-document-picker";
 import socket from "../socket-io.front.server";
 import * as FileSystem from "expo-file-system";
-import base64 from "base-64";
+
 
 const { height, width } = Dimensions.get("screen");
 
@@ -99,7 +99,7 @@ function Conversation() {
           result.assets[0].uri,
           result.assets[0].mimeType
         );
-        console.log("cccccc",cloudinaryResponse);
+      
 sendMessage(cloudinaryResponse,result.assets[0].mimeType)
         await socket.emit("send-document", {
           name: result.assets[0].name,

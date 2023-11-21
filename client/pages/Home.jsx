@@ -9,6 +9,7 @@ import {
   Dimensions,
   RefreshControl,
   Modal,
+  Alert,
 } from "react-native";
 import SwipeUpDown from "react-native-swipe-up-down";
 import NavBarAgency from "../components/NavBarAgency.jsx";
@@ -28,7 +29,7 @@ import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
 const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
-import { selectUser, setUser } from "../store/userSlice";
+import { selectUser, setUser, logUserOut } from "../store/userSlice";
 import io from "socket.io-client";
 
 import * as Device from "expo-device";
@@ -72,7 +73,7 @@ function Home({ navigation }) {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-
+  console.log(activeUser, "acitveUser");
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -96,9 +97,9 @@ function Home({ navigation }) {
     };
   }, []);
   const navigateToTransportationMap = () => {
-    navigation.navigate('TransportationMap', {
-      userId: 'your_user_id_here',
-      agencyId: 'your_agency_id_here',
+    navigation.navigate("TransportationMap", {
+      userId: "your_user_id_here",
+      agencyId: "your_agency_id_here",
     });
   };
   const onRefresh = React.useCallback(() => {
@@ -136,9 +137,18 @@ function Home({ navigation }) {
   }, [loading]);
 
   useEffect(() => {
+    if (activeUser?.stateBlocked === true) {
+      alert(
+        "Sorry, your account is banned. Please contact  costumer support for assistance."
+      );
+      setUser(null);
+      dispatch(logUserOut());
+
+      navigation.navigate("Login");
+    }
     if (activeUser?.id) {
       socket.emit("login", { userId: activeUser?.id });
-      console.log({ userId: activeUser?.id }, " { userId: activeUser?.id }");
+
       socket.on("receive-notification", (notification) => {
         schedulePushNotification(notification.title);
 
@@ -160,7 +170,7 @@ function Home({ navigation }) {
         socket.disconnect();
       };
     }
-  }, [socket, expoPushToken, activeUser?.id]);
+  }, [socket, expoPushToken, activeUser?.id, activeUser?.stateBlocked]);
 
   return (
     <View style={styles.homePage}>
@@ -287,18 +297,19 @@ function Home({ navigation }) {
           backgroundColor: "lightgrey",
         }}
       />
+
       <Text
-        on
         onPress={() => {
-          navigation.navigate("Notification");
+          navigation.navigate("TransportationMap", {
+            agencyId:
+              activeUser?.type === "agency" ? activeUser?.Agency.UserId : null,
+            UserId: activeUser?.type === "client" ? activeUser?.id : null,
+            userType: activeUser?.type,
+          });
         }}
       >
-        Notifcation{" "}
+        map transportation{" "}
       </Text>
-      <Text onPress={() => {
- navigation.navigate("TransportationMap", { agencyId: activeUser?.type === 'agency' ? activeUser?.Agency.UserId : null, UserId: activeUser?.type === 'client' ? activeUser?.id : null, userType: activeUser?.type });
- ;
-}}>map transportation </Text>
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>

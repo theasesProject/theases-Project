@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Pressable,
   Dimensions,
+  Alert,
 } from "react-native";
 import Logo from "../assets/tempLogo.png";
 import google from "../assets/googleIcon.png";
@@ -18,7 +19,7 @@ import Close from "../assets/Svg/eyeClose.svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { fetchUser, selectUser } from "../store/userSlice";
+import { fetchUser, selectUser, logUserOut } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignIn } from "expo-google-app-auth";
@@ -147,6 +148,17 @@ function Login({ navigation }) {
           password: form.password,
         }
       );
+      console.log(response.data.stateBlocked, "stateBlocked");
+      if (response.data.stateBlocked === true) {
+        dispatch(logUserOut());
+        console.log(
+          "Sorry, your account is banned. Please contact support for assistance."
+        );
+        Alert.alert(
+          "Sorry, your account is banned. Please contact support for assistance."
+        );
+        return;
+      }
 
       setError(null);
       storeData("token", response.data);

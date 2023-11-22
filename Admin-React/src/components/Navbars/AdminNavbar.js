@@ -38,11 +38,18 @@ import {
   NavbarToggler,
   ModalHeader,
 } from "reactstrap";
+import { selectLoggedIn } from "Redux/adminSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "Redux/adminSlice";
+import { useNavigate } from "react-router-dom";
 
 function AdminNavbar(props) {
+  const dispatch=useDispatch()
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
+  const logged = useSelector(selectLoggedIn)
+  const navigate=useNavigate()
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
     // Specify how to clean up after this effect:
@@ -73,7 +80,13 @@ function AdminNavbar(props) {
   };
   return (
     <>
-      <Navbar className={classNames("navbar-absolute", color)} expand="lg">
+      <Navbar
+        style={{
+          pointerEvents: !logged ? 'none' : 'auto',
+          backdropFilter: !logged ? 'blur(10px)' : 'none',
+          filter: !logged ? 'blur(5px)' : "none"
+        }}
+        className={classNames("navbar-absolute", color)} expand="lg">
         <Container fluid>
           <div className="navbar-wrapper">
             <div
@@ -158,14 +171,18 @@ function AdminNavbar(props) {
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Profile</DropdownItem>
+                    <DropdownItem className="nav-item" onClick={()=>{
+                      navigate("/admin/user-profile")
+                    }}>Profile</DropdownItem>
                   </NavLink>
                   <NavLink tag="li">
                     <DropdownItem className="nav-item">Settings</DropdownItem>
                   </NavLink>
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Log out</DropdownItem>
+                    <DropdownItem className="nav-item" onClick={()=>{
+                      dispatch(logout());
+                    }}>Log out</DropdownItem>
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>

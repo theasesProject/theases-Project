@@ -1,22 +1,5 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 
@@ -30,16 +13,36 @@ import routes from "routes.js";
 
 import logo from "assets/img/MainLogo.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectLoggedIn } from "Redux/adminSlice";
+import { setLoggedIn } from "Redux/adminSlice";
 
 var ps;
 
 function Admin(props) {
+  const logged = useSelector(selectLoggedIn);
+  const loading = useSelector((state) => state.Admin.loading);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
   );
+  const checkLog = async () => {
+    const token = localStorage.getItem("Token");
+    if (token) {
+      console.log("jihed token accepted", token);
+      dispatch(setLoggedIn(true))
+      console.log(await logged);
+    } else {
+      console.log("jihed token none", token);
+      dispatch(setLoggedIn(false))
+      console.log(await logged);
+    }
+  }
   React.useEffect(() => {
+    !loading && checkLog()
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -51,7 +54,6 @@ function Admin(props) {
         ps = new PerfectScrollbar(tables[i]);
       }
     }
-    // Specify how to clean up after this effect:
     return function cleanup() {
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
@@ -59,7 +61,7 @@ function Admin(props) {
         document.documentElement.classList.remove("perfect-scrollbar-on");
       }
     };
-  });
+  }, [logged]);
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       let tables = document.querySelectorAll(".table-responsive");
@@ -73,6 +75,16 @@ function Admin(props) {
       mainPanelRef.current.scrollTop = 0;
     }
   }, [location]);
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!loading && !logged) {
+        navigate("/admin/login");
+      }
+    }, 1000); // 2000 milliseconds = 2 seconds
+   
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => clearTimeout(timer);
+   }, [loading, logged, navigate]);   
   // this function opens and closes the sidebar on small devices
   const toggleSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
@@ -119,10 +131,8 @@ function Admin(props) {
               />
               <Routes>
                 {getRoutes(routes)}
-                <Route
-                  path="/"
-                  element={<Navigate to="/admin/dashboard" replace />}
-                />
+                <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+                {!logged && <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />}
               </Routes>
               {
                 // we don't want the Footer to be rendered on map page
@@ -135,6 +145,7 @@ function Admin(props) {
       )}
     </BackgroundColorContext.Consumer>
   );
+
 }
 
 export default Admin;

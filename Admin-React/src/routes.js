@@ -62,7 +62,7 @@ var routes = [
     path: "/login",
     name: "login",
     rtlName: "تسجيل دخول",
-    icon: "tim-icons icon-puzzle-10",
+    icon: "tim-icons icon-app",
     component: <LoginPage />,
     layout: "/admin",
   },

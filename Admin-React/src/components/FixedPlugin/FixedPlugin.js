@@ -21,14 +21,22 @@ import React from "react";
 import { Button, Dropdown, DropdownToggle, Badge } from "reactstrap";
 import { ThemeContext, themes } from "contexts/ThemeContext";
 import { backgroundColors } from "contexts/BackgroundColorContext";
+import { useSelector } from "react-redux";
+import { selectLoggedIn } from "Redux/adminSlice";
 
 function FixedPlugin(props) {
+  const logged = useSelector(selectLoggedIn)
+
   const [dropDownIsOpen, setdropDownIsOpen] = React.useState(false);
   const handleClick = () => {
     setdropDownIsOpen(!dropDownIsOpen);
   };
   return (
-    <div className="fixed-plugin">
+    <div className="fixed-plugin" style={{
+      pointerEvents: !logged ? 'none' : 'auto',
+      backdropFilter: !logged ? 'blur(10px)' : 'none',
+      filter: !logged ? 'blur(5px)' : "none"
+    }}>
       <Dropdown isOpen={dropDownIsOpen} toggle={handleClick}>
         <DropdownToggle tag="div">
           <i className="fa fa-cog fa-2x" />

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Login } from 'Redux/adminSlice';
 import { Card, CardHeader, CardBody, Row, Col, Input, Label, FormGroup, Form, Button, Badge } from "reactstrap";
 import Select from 'react-select';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import img00 from "../assets/img/back00.jpg"
 export default function LoginPage() {
@@ -13,11 +14,12 @@ export default function LoginPage() {
   // const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [formChecked, setFormChecked] = useState(false);
+  const [formVisible, setFormVisible] = useState(true);
   const dispatch = useDispatch()
-  // const router = useRouter();
+  const navigation = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState({
-    identifier: "",
+    email: "",
     password: "",
   });
   const formValidation = () => {
@@ -28,19 +30,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleChangeIdentifier = (content) => {
-    setForm({
-      ...form,
-      identifier: content.trim(),
-    });
-  };
 
-  const handleChangePassword = (content) => {
-    setForm({
-      ...form,
-      password: content,
-    });
-  };
 
   const identifierValidation = (identifier) => {
     // Regular expression for email
@@ -57,102 +47,91 @@ export default function LoginPage() {
   };
   const handleLogin = async () => {
     try {
-      let checkedIdentifier = null;
-      let endPoint = null;
-      if (identifierValidation(form.identifier) === "email") {
-        checkedIdentifier = "email";
-        endPoint = "emailLogin";
-      } else if (identifierValidation(form.identifier) === "phoneNumber") {
-        checkedIdentifier = "phoneNumber";
-        endPoint = "phoneLogin";
-      } else {
-        return setError("please provide an email or a phone number");
-      }
-      console.log(endPoint);
-      console.log(endPoint, { checkedIdentifier: checkedIdentifier, password: form.password, identifier: form.identifier });
-      dispatch(Login({ endPoint, checkedIdentifier: checkedIdentifier, password: form.password, identifier: form.identifier }));
+      dispatch(Login({ email:form.email,  password: form.password}))
       setError(null);
-      // router.push('/DashBoard');
+      navigation('/admin/dashboard');
       // dispatch(fetchUser(response.data));
     } catch (err) {
       console.log(err);
-      // if (err.response.status == "404") {
-      //   setError("user does not exist");
-      // } else if (err.response.status == "401") {
-      //   setError("incorrect password");
-      // } else {
+      if (err.response.status == "404") {
+        setError("user does not exist");
+      } else if (err.response.status == "401") {
+        setError("incorrect password");
+      } else {
       console.error(err.message);
-      // }
-    }
-  };
-
-  const openForm = () => {
-    setIsOpen(true);
-  };
-
-  const closeForm = () => {
-    setIsOpen(false);
-  };
-
-  const checkInput = (input) => {
-    if (input.value.length > 0) {
-      input.className = 'active';
-    } else {
-      input.className = '';
+      }
     }
   };
   useEffect(() => {
-    formValidation()
-  }, []);
+    const wrapper = document.querySelector('.wrapper_log_cust');
+    wrapper.classList.add('form-success');
 
+    return () => {
+      wrapper.classList.remove('form-success');
+    };
+  }, []);
   return (
-    <>
-      <div className="content" >
-        <Row >
-          <Col className='ctr_02' md="12">
-            <img src={img00} alt='no img available' style={{
+    // <>
+    <div className="content" >
+      <Row >
+        <Col style={{
+          // backgroundColor:"red",
+          display: "flex", justifyContent: "center", alignItems: "center"
+        }} md="12">
+          {/* <img src={img00} alt='no img available' style={{
               position: 'absolute', width: '100%', height: '100%',
               backgroundRepeat: "no-repeat",
               objectFit: "cover"
-            }} />
-            <Card className='ctr_03' style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.3 )',
-              width: "45%",
-              height: "85vh",
-              position: 'relative'
-            }}>
+            }} /> */}
+          <Card className='ctr_03' style={{
+            // display:"flex",
+            // alignItems:"center",
+            // justifyItems:"center",
+            // backgroundColor: 'rgba(0, 0, 0, 0.3 )',
+            // width: "100%",
+            // height: "85vh",
+            // position: 'relative'
+          }}>
 
-              <CardHeader className='header_login_cr'>
-              </CardHeader>
-              <CardBody className="all-icons">
-                <Form style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: "100%"
-                  // width: '100%'
-                }}>
-                  <h1 >
-                    Fill the Credentials Below
-                  </h1>
-                  {/* <Badge> */}
-                  {/* </Badge> */}
-                  <FormGroup className='input_cr_01'>
-                    <Label className='input_title_log' for="email">Your Email Address</Label>
-                    <Input className='input_input_log' type="email" name="email" id="email" placeholder="Enter your registered email here" />
-                  </FormGroup>
-                  <FormGroup className='input_cr_01'>
-                    <Label className='input_title_log' for="password">Your Secure Password</Label>
-                    <Input className='input_input_log' type="password" name="password" id="password" placeholder="Enter your secure password here" />
-                  </FormGroup>
-                  <Button color="primary">Login</Button>
-                </Form>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </div >
-    </>
+            <CardHeader className='header_login_cr'>
+              dd
+            </CardHeader>
+            <CardBody className="all-icons" >
+              <div className="wrapper_log_cust">
+                <div className="container_log_cust">
+                  <h1>Welcome back Admin</h1>
+
+                  <form style={{
+
+                  }} className={formVisible ? '' : 'fade-out'}>
+                    <input type="text" placeholder="Email" onChange={(e) => {
+                      setForm({ ...form, email: e.target.value })
+                    }} />
+                    <input type="password" placeholder="Password" onChange={(e) => {
+                      setForm({ ...form, password: e.target.value })
+                    }} />
+                    <button type="submit" id="login-button" onClick={handleLogin}>Login</button>
+                  </form>
+                </div>
+
+                <ul className="bg-bubbles">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </div >
+    // </>
   );
 }

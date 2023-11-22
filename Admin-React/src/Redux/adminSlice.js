@@ -7,6 +7,7 @@ const initialState = {
     adminToken: "",
     reviews: [],
     allUsers: [],
+    staticAllUsers: [],
     allCars: [],
     requests: [],
     oneUser: {},
@@ -17,7 +18,7 @@ const initialState = {
     approvedRental: [],
     PendingRental: [],
     RejectedRental: [],
-    foreignUser:{}
+    foreignUser: {}
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -149,15 +150,15 @@ export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
         console.error(err);
     }
 });
-export const Login = createAsyncThunk("user/Login", async ({ endPoint, checkedIdentifier, password, identifier }) => {
+export const Login = createAsyncThunk("user/Login", async ({ email, password }) => {
     try {
-        const data = { [checkedIdentifier]: identifier, password };
-        console.log(data);
+        const data = { email, password }
         const response = await axios.post(
-            `http://localhost:5000/api/admin/${endPoint}`,
+            `http://localhost:5000/api/admin/emailLogin`,
             data
         )
         localStorage.setItem("Token", response.data)
+        setAdmin(response.data)
         return response.data;
     } catch (err) {
         console.error(err);
@@ -178,9 +179,9 @@ export const Sort = createAsyncThunk("user/Sort", async (dataType) => {
         console.error(er);
     }
 })
-export const getUserById=createAsyncThunk("user/getById",async (id)=>{
+export const getUserById = createAsyncThunk("user/getById", async (id) => {
     try {
-        const task=await axios.get(
+        const task = await axios.get(
             `http://localhost:5000/api/users/getById/${id}`
         )
         return task.data
@@ -205,17 +206,30 @@ export const adminSlicer = createSlice({
         logout: (state) => {
             state.admin = "";
             state.loggedIn = false;
-            localStorage.removeItem('adminToken')
+            localStorage.removeItem("Token")
         },
         setLoggedIn: (state, action) => {
-            const { token, loggedIn } = action.payload;
-            localStorage.setItem('adminToken', JSON.stringify(token));
-            state.adminToken = token;
-            state.loggedIn = loggedIn;
+            // const { token, loggedIn } = action.payload;
+            // localStorage.setItem('adminToken', JSON.stringify(token));
+            // state.adminToken = token;
+            state.loggedIn = action.payload;
         }
     },
     extraReducers: (builder) => {
 
+        builder.addCase(Login.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(Login.fulfilled, (state, action) => {
+            state.loading = false;
+            state.loggedIn = true;
+        });
+        builder.addCase(Login.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+            state.loggedIn = false;
+        });
         builder.addCase(getUserById.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -295,6 +309,7 @@ export const adminSlicer = createSlice({
         builder.addCase(getAllUsers.fulfilled, (state, action) => {
             state.loading = false;
             state.allUsers = action.payload;
+            state.staticAllUsers = action.payload;
         });
         builder.addCase(getAllUsers.rejected, (state, action) => {
             state.loading = false;
@@ -345,10 +360,11 @@ export const adminSlicer = createSlice({
 
 export const selectAdmin = (state) => state.Admin.admin;
 export const selectAllUsers = (state) => state.Admin.allUsers;
+export const selectStaticAllUsers = (state) => state.Admin.staticAllUsers;
 export const selectApproved = (state) => state.Admin.approvedRental;
 export const selectPending = (state) => state.Admin.PendingRental;
 export const selectRejected = (state) => state.Admin.RejectedRental;
-export const selectAllCars  = (state) => state.Admin.allCars;
+export const selectAllCars = (state) => state.Admin.allCars;
 export const selectReviews = (state) => state.Admin.reviews;
 export const selectLoggedIn = (state) => state.Admin.loggedIn;
 export const selectForeignUser = (state) => state.Admin.foreignUser;

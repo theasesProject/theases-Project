@@ -1,4 +1,3 @@
-import { Appearance, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CarDetails from "./pages/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
@@ -22,9 +21,6 @@ import Conversation from "./pages/Conversation.jsx";
 import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import Report from "./pages/Report.jsx";
-// import Remobg from "./pages/removeBackground.jsx";
-import * as Font from 'expo-font';
-
 import Booking from "./pages/Booking.jsx";
 import AgencyService from "./pages/AgencyService.jsx";
 import MyCars from "./pages/MyCars.jsx";
@@ -34,32 +30,9 @@ import { StripeProvider } from "@stripe/stripe-react-native";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
-import { loadAsync } from "expo-font"
-import { useState } from "react";
-import { useEffect } from "react";
 const Stack = createStackNavigator();
 
 function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  useEffect(() => {
-    // loadFonts();
-  }, []);
-  const loadFonts = async () => {
-    // await Font.loadAsync({
-    //   'CustomFont': require('./fonts/MuseoModerno-VariableFont_wght.ttf'),
-    // });
-    setFontsLoaded(true);
-  };
-
-  if (!fontsLoaded) {
-    return null;
-  }
-  // const globalStyles = StyleSheet.create({
-  //   global: {
-  //     fontFamily: 'CustomFont',
-  //   },
-  // });
   return (
     <Provider store={store}>
       <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>

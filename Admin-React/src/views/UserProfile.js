@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -45,7 +28,7 @@ function UserProfile() {
               <CardBody>
                 <Form>
                   <Row>
-                    <Col className="pr-md-1" md="5">
+                    {/* <Col className="pr-md-1" md="5">
                       <FormGroup>
                         <label>Company (disabled)</label>
                         <Input
@@ -55,7 +38,7 @@ function UserProfile() {
                           type="text"
                         />
                       </FormGroup>
-                    </Col>
+                    </Col> */}
                     <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label>Username</label>
@@ -71,7 +54,7 @@ function UserProfile() {
                         <label htmlFor="exampleInputEmail1">
                           Email address
                         </label>
-                        <Input placeholder="mike@email.com" type="email" />
+                        <Input placeholder="type Your new Email" type="email" />
                       </FormGroup>
                     </Col>
                   </Row>

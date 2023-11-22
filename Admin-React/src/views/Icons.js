@@ -4,14 +4,13 @@ import { selectAllUsers } from "Redux/adminSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
-import SelectSearch from 'react-select-search';
 import Select from 'react-select';
-import swal from 'sweetalert';
 import Swal from 'sweetalert2'
 import { updateStateBlock } from "Redux/adminSlice";
 import "../assets/css/nucleo-icons.css"
 import { Sort } from "Redux/adminSlice";
 import { filterUsers } from "Redux/adminSlice";
+import { selectStaticAllUsers } from "Redux/adminSlice";
 function Icons() {
   const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'All Users' });
   const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Sort Your List...", label: "Sort Your List" });
@@ -46,9 +45,8 @@ function Icons() {
   const handleInputChange = (inputValue, { action }, filteredOptions) => {
     if (action === 'input-change' && inputValue.length >= 2) {
       setMenuIsOpen(true);
-      const filtered = allUsers.filter((e) => {
-        console.log(inputValue);
-        return e.userName.includes(inputValue)
+      const filtered = staticAllUsers.filter((e) => {
+        return ((e.userName).toLowerCase()).includes(inputValue.toLowerCase())
       })
       filtered[0] ? dispatch(filterUsers(filtered)) : console.log(filtered);
     }
@@ -63,8 +61,7 @@ function Icons() {
   const searchCustomStyles = {
     menu: (provied, state) => ({
       ...provied,
-      background: "#1E1E2F",
-      // width: "15%"
+      background: "#1E1E2F"
     }),
     control: (provided, state) => ({
       ...provided,
@@ -82,7 +79,6 @@ function Icons() {
     option: (provided, state) => ({
       ...provided,
       background: state.isFocused ? 'white' : state.isSelected ? 'white' : '#1E1E2F',
-      // width: "15%",
       color: state.isFocused ? '#1E1E2F' : state.isSelected ? 'black' : '#fff',
       width: "25rem",
     }),
@@ -90,12 +86,22 @@ function Icons() {
       ...provided,
       color: 'white', // Change this to your desired selected value color
     }),
+    input: (provided) => ({
+      ...provided,
+      color: 'white', // change this to the color you want
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      "::-webkit-scrollbar": {
+        width: "0px",
+        height: "0px",
+      },
+    }),
   }
   const customStyles = {
     menu: (provied, state) => ({
       ...provied,
-      background: "#1E1E2F",
-      // width: "15%"
+      background: "#1E1E2F"
     }),
     control: (provided, state) => ({
       ...provided,
@@ -113,7 +119,6 @@ function Icons() {
     option: (provided, state) => ({
       ...provided,
       background: state.isFocused ? 'white' : state.isSelected ? 'white' : '#1E1E2F',
-      // width: "15%",
       color: state.isFocused ? '#1E1E2F' : state.isSelected ? 'black' : '#fff',
       width: "17rem",
     }),
@@ -150,10 +155,25 @@ function Icons() {
     }
     // setRefresh(!refresh)
   }
+  const filterChange=async(state)=>{
+    if (state==="Banned Only") {
+      const filtered = staticAllUsers.filter((e) => {
+        return e.stateBlocked==="true"
+      })
+      filtered[0] && dispatch(filterUsers(filtered));
+
+    }else if (state==="Active Only") {
+      const filtered = staticAllUsers.filter((e) => {
+        return e.stateBlocked==="fqlse"
+      })
+      filtered[0] && dispatch(filterUsers(filtered));
+    }
+  }
   const loading = useSelector((state) => state.Admin.loading);
   const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch()
   const allUsers = useSelector(selectAllUsers)
+  const staticAllUsers = useSelector(selectStaticAllUsers)
   const searchOptions = allUsers?.map(user => ({
     label: user.userName,
     value: user.id
@@ -163,8 +183,8 @@ function Icons() {
     console.log(allUsers);
     if (loading) {
       setRefresh(!refresh);
-     }
-     
+    }
+
   }, [dispatch, refresh])
   return (
     <>
@@ -195,12 +215,6 @@ function Icons() {
                   onBlur={handleBlur}
                   menuIsOpen={menuIsOpen}
                 />
-                {/* <div>
-                  <h5 className="title">List of Users</h5>
-                  <p className="category">
-                    Manage your users from this tab.
-                  </p>
-                </div> */}
                 <div style={{
                   display: "flex",
                   flexDirection: "row"
@@ -210,15 +224,11 @@ function Icons() {
                     display: "flex",
                     flexDirection: "row",
                     gap: "1rem",
-                    // alignContent:"center",
-                    // textAlign:"center",
                     alignItems: "center"
                   }}>
                     Sort By:
                     <Select
                       isSearchable={true}
-                      // width="50%"
-                      // placeholder={"filter your list..."}
                       value={selectedSortOption}
                       onChange={handleSortChange}
                       options={sortOptions}
@@ -230,17 +240,18 @@ function Icons() {
                     display: "flex",
                     flexDirection: "row",
                     gap: "1rem",
-                    // alignContent:"center",
-                    // textAlign:"center",
                     alignItems: "center"
                   }}>
                     Filter By:
                     <Select
                       isSearchable={true}
-                      // width="50%"
-                      // placeholder={"filter your list..."}
                       value={selectedOption}
-                      onChange={handleChange}
+                      onChange={(selectedOption) => {
+                        // console.log(selectedOption.label);
+                        selectedOption.label==="Banned Only"||selectedOption.label==="Active Only"?
+                        filterChange(selectedOption.label):
+                        handleChange(selectedOption);
+                      }}
                       options={options}
                       styles={customStyles}
                     />
@@ -277,8 +288,7 @@ function Icons() {
                                  <br>
                                  <b>type: </b>${user.type}
                                  <br>
-                                 <b>id number: </b>${user.idCard}
-                                                                 `,
+                                 <b>id number: </b>${user.idCard}`,
                                   imageUrl: `${user.avatar}`,
                                   imageWidth: 200,
                                   imageHeight: 200,
@@ -300,13 +310,11 @@ function Icons() {
                                   cancelButtonText: `
                                  <i class="fa fa-close"></i>
                                 `,
-                                  // cancelButtonAriaLabel: "Thumbs down"
                                 }).then((result) => {
                                   if (result.isConfirmed) {
                                     Swal.fire({
                                       title: "Are you sure?",
                                       html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
-                                      // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                       icon: "warning",
                                       showCancelButton: true,
                                       confirmButtonText: "Yes, ban it!",
@@ -645,7 +653,7 @@ function Icons() {
                           )}
                         </Row></>
                     ) : null
-                }              
+                }
               </CardBody>
             </Card>
           </Col>

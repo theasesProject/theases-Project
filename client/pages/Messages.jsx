@@ -48,7 +48,6 @@ function Messages() {
     }
   };
   const handleAddRoom = async () => {
-    console.log(user.data.id);
     await axios
 
       .post(

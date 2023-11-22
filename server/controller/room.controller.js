@@ -38,3 +38,18 @@ module.exports.getAllUser2 = async (req, res)=>{
         throw err
     }
 }
+
+module.exports.getOneRoom = async (req, res)=>{
+    try{
+        const {user1 , user2} = req.body
+        const room = await db.RoomChat.findOne({
+            where:{
+                UserId:user1,
+                user2:user2
+            }
+        })
+        res.json(room)
+    } catch(err){
+        throw err
+    }
+}

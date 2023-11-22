@@ -23,6 +23,7 @@ import { selectUser, setUser } from "../store/userSlice";
 import io from "socket.io-client";
 import car from "../assets/car2.png";
 import charIcon from "../assets/chat.png";
+import PaymentBtn from "../components/PaymentBtn";
 const AllBookings = () => {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
@@ -105,28 +106,28 @@ const AllBookings = () => {
                   <View style={styles.buttons}>
                     {(booking?.acceptation === "accepted" ||
                       booking?.acceptation === "pending") && (
+                        <View style={styles.button}>
                       <TouchableOpacity
                         style={styles.cancel}
                         onPress={() => handleCancelBooking(booking)}
                       >
                         <Text>Cancel</Text>
                       </TouchableOpacity>
+                   </View>
                     )}
                     {booking?.acceptation === "accepted" && (
-                      <View style={styles.button}>
-                        <LinearGradient
-                          style={styles.payment}
-                          colors={["#88b4e2", "#6C77BF"]}
-                        >
-                          <TouchableOpacity>
-                            <Text>Payment</Text>
-                          </TouchableOpacity>
-                        </LinearGradient>
+                      <View style={styles.paychat}>
+                     
 
-                        <TouchableOpacity style={styles.payment}>
+                        {/* <View style={styles.payment}> */}
+                          <PaymentBtn amount={booking.amount}  />
+                        {/* </View> */}
+                        {/* <View style={styles.chatt}> */}
+                        <TouchableOpacity >
                           <Image style={styles.chat} source={charIcon}></Image>
                         </TouchableOpacity>
-                      </View>
+                        {/* </View> */}
+                       </View>
                     )}
                   </View>
                 </View>
@@ -187,6 +188,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 5,
     shadowRadius: 10,
   },
+  paychat:{
+  flex:1,
+    flexDirection:"row",
+  gap:width*0.07,
+    //  backgroundColor:"red",
+     paddingRight:width*0.01
+  },
   container: {
     flexDirection: "column",
     marginBottom: "25%",
@@ -195,6 +203,11 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     height: height * 0.2,
     borderRadius: 15,
+  },
+  chatt:{
+    flex:1,
+backgroundColor:"black",
+alignItems:"center",
   },
   cardContainer: {
     flexDirection: "column",
@@ -231,10 +244,11 @@ const styles = StyleSheet.create({
   },
 
   payment: {
+    flex:1,
     height: height * 0.05,
-    width: width * 0.27,
-    justifyContent: "center",
-    alignItems: "center",
+    width: width * 0.3,
+    // justifyContent: "space-between",
+    // alignItems: "center",
     borderRadius: 10,
   },
   agenda: {
@@ -264,10 +278,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "lightgrey",
     padding: 5,
+   
   },
   buttons: {
     flexDirection: "row",
-    justifyContent: "center",
+    // justifyContent: "space-between",
     width: width * 0.86,
     height: height * 0.06,
     borderRadius: 5,
@@ -275,8 +290,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   button: {
-    flexDirection: "row",
-    justifyContent: "center",
+    // flex: 1,
+    // justifyContent: "center",
+    // alignContent: "center",
+    // backgroundColor:"green"
   },
   modalContent: {
     backgroundColor: "white",

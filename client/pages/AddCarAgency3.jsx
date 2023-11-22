@@ -73,6 +73,8 @@ function AddCarAgency3() {
           ...updatedSelectedDocuments.filter((image) => image !== null),
         ],
       });
+    }else {
+      console.log("error");
     }
   };
   const handleDelete = (uri) => {

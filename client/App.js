@@ -6,7 +6,7 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Carou from "./pages/Carou.jsx";
 import store from "./store/store";
-import { lazy , Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
@@ -14,7 +14,7 @@ import EditProfile from "./pages/EditProfile.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import AddAgencyCar from "./pages/AddAgencyCar.jsx";
 import Messages from "./pages/Messages.jsx";
-const LazyComponent = lazy(() => import ("./pages/Messages.jsx"))
+const LazyComponent = lazy(() => import("./pages/Messages.jsx"));
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/FiltredCar.jsx";
 import SignUp from "./pages/signUp.jsx";
@@ -46,7 +46,9 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <Provider store={store}>
-      <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
+      <StripeProvider
+        publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
+      >
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen
@@ -59,13 +61,13 @@ function App() {
               component={AllBookings}
               options={{ headerShown: true }}
             />
-              <Stack.Screen
+            <Stack.Screen
               name="TransportationMap"
               component={TransportationMap}
               options={{ headerShown: true }}
             />
 
-             <Stack.Screen
+            <Stack.Screen
               name="Dmap"
               component={Dmap}
               options={{ headerShown: true }}
@@ -103,7 +105,7 @@ function App() {
             <Stack.Screen
               name="MyCars"
               component={MyCars}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="favorites"
@@ -214,15 +216,15 @@ function App() {
               component={MapAgencyProfile}
               options={{ headerShown: false }}
             />
-            <Stack.Screen 
+            <Stack.Screen
               name="AddCarAgency2"
               component={AddAgencyCar2}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
-            <Stack.Screen 
+            <Stack.Screen
               name="AddCarAgency3"
               component={AddCarAgency3}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
           </Stack.Navigator>
         </NavigationContainer>

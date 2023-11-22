@@ -86,19 +86,20 @@ function AgencyService() {
   }, [dispatch]);
 
   const handleChatting = async (id) => {
+    // setRequestMakerId(id)
     try {
-      const roomPossibility1 = await axios.get(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: activeUser.id, user2: requestMakerId }
+      const roomPossibility1 = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/postneRoom`,
+        { user1: activeUser.id, user2: id }
       );
-      const roomPossibility2 = await axios.get(
+      const roomPossibility2 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: requestMakerId, user2: activeUser }
+        { user1: id, user2: activeUser }
       );
       if (!roomPossibility1 && !roomPossibility2) {
         const room = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
-          { UserId: activeUser.id, user2: requestMakerId }
+          { UserId: activeUser.id, user2: id }
         );
         getRoomData(room.data);
         dispatch(setRoom({ ...room.data, name, avatarUrl }));
@@ -167,7 +168,7 @@ function AgencyService() {
             .slice()
             .reverse()
             .map((service) => {
-              // console.log(service);
+              // console.log(service.service.Service.UserId,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
               return service.service.Service.acceptation === "pending" ? (
                 <View style={styles.card} key={service.service.id}>
                   <View style={styles.cardContainer}>

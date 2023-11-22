@@ -9,17 +9,17 @@ import {
   ScrollView,
 } from "react-native";
 import Search from "../assets/Svg/search-svgrepo-com.svg";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { Dimensions } from "react-native";
 import OneRoom from "../components/OneRoom";
-const {  height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 function Messages() {
   const [user2ID, setUser2ID] = useState("");
   const [rooms, setRooms] = useState([]);
   const user = useSelector((state) => state.user);
-  const [refresh,setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
 
   const fetch = async () => {
     await axios
@@ -87,9 +87,7 @@ function Messages() {
             return <OneRoom room={room} key={i} />;
           })
         ) : (
-          <View>
-            
-          </View>
+          <View></View>
         )}
       </ScrollView>
     </View>

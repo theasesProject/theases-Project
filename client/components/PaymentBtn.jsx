@@ -6,7 +6,7 @@ import { selectUser } from "../store/userSlice";
 import { LinearGradient } from "expo-linear-gradient";
 const { height, width } = Dimensions.get("window");
 
-const PaymentBtn = () => {
+const PaymentBtn = ({amount}) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const activeUser = useSelector(selectUser);
 
@@ -15,7 +15,7 @@ const PaymentBtn = () => {
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/payment/intentsStripe`,
         // this amount will be sent by props when we use this btn component
-        { amount: 12345 }
+        { amount: amount*100 }
       );
       await initPaymentSheet({
         merchantDisplayName: "Rent & Go",

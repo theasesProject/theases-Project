@@ -8,24 +8,38 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import car from "../assets/car2.png";
+import { carDetail } from "../store/carFetch";
+import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("screen");
 
 const CarDetails = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
   const carData = useSelector((state) => state.car.RentDetails);
   useEffect(() => {
     // {"elllllllllllllllllllllllllll",console.log(carData)}
-    
   }, []);
   return (
     <View style={styles.CarDetails}>
       <View style={styles.imageContainer}>
-        <Image style={styles.carImage}  source={{
-              uri: carData?.Media[0]?.media,
-            }} />
+        <Image
+          style={styles.carImage}
+          source={{
+            uri: carData?.Media[0]?.media,
+          }}
+        />
       </View>
       <View style={styles.description}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(carDetail(carData));
+            navigation.navigate("Booking");
+          }}
+        >
+          <Text>booking</Text>
+        </TouchableOpacity>
         <Text style={styles.carModel}>{carData.model}</Text>
         <Text>{carData.description}</Text>
         <Text

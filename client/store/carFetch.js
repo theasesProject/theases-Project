@@ -104,6 +104,7 @@ export const fetchFilteredCars = createAsyncThunk(
   }
 );
 export const createCar = createAsyncThunk("car/createCar", async (params) => {
+  console.log(params.media,"iiiiiii");
   if (!params) return;
   try {
     const response = await axios.post(
@@ -112,6 +113,7 @@ export const createCar = createAsyncThunk("car/createCar", async (params) => {
     );
 
     const requestId = response.data.id;
+    console.log('response data',response.data);
     await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media
@@ -213,7 +215,7 @@ const carSlice = createSlice({
       state.NewCar = action.payload;
     },
     emptyNewCar : (state, action) => {
-      state.NewCar = {}
+      state.NewCar = initialState.NewCar
     }
   },
   extraReducers: (builder) => {

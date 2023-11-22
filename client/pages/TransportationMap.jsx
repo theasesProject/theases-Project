@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import io from "socket.io-client";
@@ -12,6 +12,8 @@ const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
 
 const TransportationMap = () => {
+  const mapRef = useRef(null);
+  const [pitch, setPitch] = useState(70); 
   const [userLocation, setUserLocation] = useState(null);
   const [agencyLocation, setAgencyLocation] = useState(null);
   const route = useRoute();
@@ -325,28 +327,44 @@ const TransportationMap = () => {
   return (
     <>
       <MapView
-        style={{ flex: 1 }}
-        customMapStyle={customMapStyle}
-
-        initialRegion={{
-          latitude: userLocation?.latitude || 13.86,
-          longitude: userLocation?.longitude || 11.69,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        showsUserLocation={true}
-       
-      >
+       style={{ flex: 1 }}
+       loadingEnabled={true}
+       onLayout={() => {
+        if (mapRef.current) {
+          mapRef.current.setCamera({
+            center: {
+              latitude: userLocation?.latitude,
+              longitude: userLocation?.longitude,
+            },
+            pitch: pitch,
+            zoom: mapRegion.latitudeDelta,
+          });
+        }
+       }}
+       customMapStyle={customMapStyle}
+       showsCompass={true}
+       rotateEnabled={true}
+       userInterfaceStyle="light"
+       initialRegion={{
+         latitude: userLocation?.latitude || 13.86,
+         longitude: userLocation?.longitude || 11.69,
+         latitudeDelta: 0.22,
+         longitudeDelta: 0.21,
+       }}
+       pitchEnabled={true}
+       pitch={pitch} // use the pitch state variable
+       showsUserLocation={true}
+     >
         {userLocation && (
           <Marker
             coordinate={{
               latitude: userLocation.latitude,
-              longitude: userLocation.longitude ,
+              longitude: userLocation.longitude,
             }}
             title="User Location"
             description="Current location"
           >
-                 <SvgXml xml={Person} width="30" height="30" />
+            <SvgXml xml={Person} width="30" height="30" />
           </Marker>
         )}
         {agencyLocation && (
@@ -358,7 +376,7 @@ const TransportationMap = () => {
             title="Agency Location"
             description="Current location"
           >
-                     <SvgXml xml={carIconSvg} width="30" height="30" />
+            <SvgXml xml={carIconSvg} width="30" height="30" />
           </Marker>
         )}
         {userLocation && agencyLocation && (

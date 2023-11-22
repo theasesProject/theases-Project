@@ -25,7 +25,7 @@ const ForgotPassword = ({ navigation }) => {
   const handleSubmit = async () => {
     try {
       if (identifierValidation(identifier) !== "email") {
-        return setError("please provide an email");
+        return setError("please provide a valid email address");
       }
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOneByEmail/${identifier}`
@@ -108,7 +108,7 @@ const ForgotPassword = ({ navigation }) => {
             <TextInput
               autoCapitalize="none"
               onChangeText={(content) => setIdentifier(content.trim())}
-              placeholder="email or phone number"
+              placeholder="insert your email address"
               style={styles.identifierInput}
             />
           </View>
@@ -136,7 +136,7 @@ const ForgotPassword = ({ navigation }) => {
         <View style={styles.identifierErrorContainer}>
           <Text style={styles.error}>
             {error === "user does not exist" ||
-            error === "please provide an email or a phone number"
+            error === "please provide a valid email address"
               ? error
               : null}
           </Text>

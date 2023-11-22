@@ -5,6 +5,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
+  ScrollView,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
@@ -12,12 +14,13 @@ import { useSelector } from "react-redux";
 import { selectUser, setUser } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import BackArrow from "../assets/Svg/left-long-solid.svg";
 import { useDispatch } from "react-redux";
 import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
+const { width, height } = Dimensions.get("screen");
 
 const EditProfile = ({ navigation }) => {
   const activeUser = useSelector(selectUser);
@@ -140,152 +143,171 @@ const EditProfile = ({ navigation }) => {
 
   return (
     <View style={styles.editProfilePage}>
-      <TouchableOpacity
-        style={styles.profilePictureContainer}
-        onPress={selectImage}
-      >
-        <Image
-          source={{
-            uri: img,
-          }}
-          style={styles.profilePicture}
+      <View style={styles.navBar}>
+        <BackArrow
+          style={styles.backArrow}
+          onPress={() => navigation.navigate("Home")}
         />
-      </TouchableOpacity>
-      <TextInput
-        style={styles.input}
-        placeholder={activeUser?.userName}
-        onChangeText={(content) => handleChangeUserName(content)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder={activeUser?.email}
-        onChangeText={(content) => handleChangeEmail(content)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder={activeUser?.phoneNumber}
-        onChangeText={(content) => handleChangePhoneNumber(content)}
-      />
-      <View style={styles.line} />
-      <View style={styles.inputContainer}>
-        <TextInput
-          autoCapitalize="none"
-          onChangeText={(content) => setCurrentPassword(content)}
-          value={currentPassword}
-          placeholder="insert your current password"
-          style={
-            error
-              ? { ...styles.input, borderColor: "red", borderWidth: 1 }
-              : styles.input
-          }
-          secureTextEntry={isSecure}
-        />
-        {!eyeState ? (
-          <Open
-            style={styles.eye}
-            onPress={() => {
-              setEyeState(!eyeState), setIsSecure(!isSecure);
-            }}
-          />
-        ) : (
-          <Close
-            style={styles.eye}
-            onPress={() => {
-              setEyeState(!eyeState), setIsSecure(!isSecure);
-            }}
-          />
-        )}
       </View>
-      <View style={styles.errorsContainer}>
-        <View style={styles.passwordErrorContainer}>
-          <Text style={styles.error}>{error ? error : null}</Text>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.profilePictureContainer}>
+          <TouchableOpacity
+            style={styles.profilePictureTouchable}
+            onPress={selectImage}
+          >
+            <Image
+              source={{
+                uri: img,
+              }}
+              style={styles.profilePicture}
+            />
+          </TouchableOpacity>
         </View>
-        <Pressable
-          activeOpacity={0.8}
-          onPressIn={() => setColor("darkblue")}
-          onPressOut={() => setColor("#6C77BF")}
-          onPress={() => navigation.navigate("forgotPassword")}
-        >
-          <Text style={{ color: color, ...styles.forgotPassword }}>
-            Forgot Password?
+        <TextInput
+          style={styles.input}
+          placeholder={activeUser?.userName}
+          onChangeText={(content) => handleChangeUserName(content)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder={activeUser?.email}
+          onChangeText={(content) => handleChangeEmail(content)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder={activeUser?.phoneNumber}
+          onChangeText={(content) => handleChangePhoneNumber(content)}
+        />
+        <View style={styles.line} />
+        <View style={styles.inputContainer}>
+          <TextInput
+            autoCapitalize="none"
+            onChangeText={(content) => setCurrentPassword(content)}
+            value={currentPassword}
+            placeholder="insert your current password"
+            style={
+              error
+                ? { ...styles.input, borderColor: "red", borderWidth: 1 }
+                : styles.input
+            }
+            secureTextEntry={isSecure}
+          />
+          {!eyeState ? (
+            <Open
+              style={styles.eye}
+              onPress={() => {
+                setEyeState(!eyeState), setIsSecure(!isSecure);
+              }}
+            />
+          ) : (
+            <Close
+              style={styles.eye}
+              onPress={() => {
+                setEyeState(!eyeState), setIsSecure(!isSecure);
+              }}
+            />
+          )}
+        </View>
+        <View style={styles.errorsContainer}>
+          <View style={styles.passwordErrorContainer}>
+            <Text style={styles.error}>{error ? error : null}</Text>
+          </View>
+          <Pressable
+            activeOpacity={0.8}
+            onPressIn={() => setColor("darkblue")}
+            onPressOut={() => setColor("#6C77BF")}
+            onPress={() => navigation.navigate("forgotPassword")}
+          >
+            <View style={styles.forgetPasswordContainer}>
+              <Text style={{ color: color, ...styles.forgotPassword }}>
+                Forgot Password?
+              </Text>
+            </View>
+          </Pressable>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            autoCapitalize="none"
+            onChangeText={(content) => handleChangePassword(content)}
+            placeholder="insert new password"
+            value={form.password}
+            style={
+              matchingError
+                ? { ...styles.input, borderColor: "red", borderWidth: 1 }
+                : styles.input
+            }
+            secureTextEntry={isSecure2}
+          />
+          {!eyeState2 ? (
+            <Open
+              style={styles.eye}
+              onPress={() => {
+                setEyeState2(!eyeState2), setIsSecure2(!isSecure2);
+              }}
+            />
+          ) : (
+            <Close
+              style={styles.eye}
+              onPress={() => {
+                setEyeState2(!eyeState2), setIsSecure2(!isSecure2);
+              }}
+            />
+          )}
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            autoCapitalize="none"
+            onChangeText={(content) => setConfirmPassword(content)}
+            value={confirmPassword}
+            placeholder="confirm your new password"
+            style={
+              matchingError
+                ? { ...styles.input, borderColor: "red", borderWidth: 1 }
+                : styles.input
+            }
+            secureTextEntry={isSecure3}
+          />
+          {!eyeState3 ? (
+            <Open
+              style={styles.eye}
+              onPress={() => {
+                setEyeState3(!eyeState3), setIsSecure3(!isSecure3);
+              }}
+            />
+          ) : (
+            <Close
+              style={styles.eye}
+              onPress={() => {
+                setEyeState3(!eyeState3), setIsSecure3(!isSecure3);
+              }}
+            />
+          )}
+        </View>
+        <View style={styles.passwordErrorContainer}>
+          <Text style={styles.error}>
+            {matchingError ? matchingError : null}
           </Text>
-        </Pressable>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          autoCapitalize="none"
-          onChangeText={(content) => handleChangePassword(content)}
-          placeholder="insert new password"
-          value={form.password}
-          style={
-            matchingError
-              ? { ...styles.input, borderColor: "red", borderWidth: 1 }
-              : styles.input
-          }
-          secureTextEntry={isSecure2}
-        />
-        {!eyeState2 ? (
-          <Open
-            style={styles.eye}
-            onPress={() => {
-              setEyeState2(!eyeState2), setIsSecure2(!isSecure2);
-            }}
-          />
-        ) : (
-          <Close
-            style={styles.eye}
-            onPress={() => {
-              setEyeState2(!eyeState2), setIsSecure2(!isSecure2);
-            }}
-          />
-        )}
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          autoCapitalize="none"
-          onChangeText={(content) => setConfirmPassword(content)}
-          value={confirmPassword}
-          placeholder="confirm your new password"
-          style={
-            matchingError
-              ? { ...styles.input, borderColor: "red", borderWidth: 1 }
-              : styles.input
-          }
-          secureTextEntry={isSecure3}
-        />
-        {!eyeState3 ? (
-          <Open
-            style={styles.eye}
-            onPress={() => {
-              setEyeState3(!eyeState3), setIsSecure3(!isSecure3);
-            }}
-          />
-        ) : (
-          <Close
-            style={styles.eye}
-            onPress={() => {
-              setEyeState3(!eyeState3), setIsSecure3(!isSecure3);
-            }}
-          />
-        )}
-      </View>
-      <View style={styles.passwordErrorContainer}>
-        <Text style={styles.error}>{matchingError ? matchingError : null}</Text>
-      </View>
-      <View style={styles.line} />
-      <TouchableOpacity
-        activeOpacity={0.8}
-        disabled={!formChecked}
-        onPress={handleSave}
-      >
-        <LinearGradient
-          colors={formChecked ? ["#6C77BF", "#4485C5"] : ["#88b4e2", "#88b4e2"]}
-          locations={[0, 1]}
-          style={styles.saveBtn}
+        </View>
+        <View style={styles.line} />
+        <TouchableOpacity
+          activeOpacity={0.8}
+          disabled={!formChecked}
+          onPress={handleSave}
         >
-          <Text style={styles.saveChangesBtnContent}>save changes</Text>
-        </LinearGradient>
-      </TouchableOpacity>
+          <LinearGradient
+            colors={
+              formChecked ? ["#6C77BF", "#4485C5"] : ["#88b4e2", "#88b4e2"]
+            }
+            locations={[0, 1]}
+            style={styles.saveBtn}
+          >
+            <Text style={styles.saveChangesBtnContent}>save changes</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
@@ -297,16 +319,39 @@ EditProfile.navigationOptions = {
 const styles = StyleSheet.create({
   editProfilePage: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 30,
     flexDirection: "column",
-    justifyContent: "center",
-    gap: 10,
+  },
+  navBar: {
+    width: width,
+    paddingHorizontal: width * 0.05,
+    paddingVertical: height * 0.02,
+    height: height * 0.05,
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: width,
+    zIndex: 1,
+    backgroundColor: "#F2F2F2",
+  },
+  backArrow: {
+    width: width * 0.05,
+    height: height * 0.02,
+  },
+  scrollView: {
+    paddingHorizontal: width * 0.05,
   },
   profilePictureContainer: {
     width: "100%",
     alignItems: "center",
-    paddingVertical: 20,
+    marginVertical: height * 0.05,
+  },
+  profilePictureTouchable: {
+    width: "25%",
+    borderRadius: 50,
+    alignItems: "center",
   },
   profilePicture: {
     width: 100,
@@ -319,23 +364,25 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     borderRadius: 10,
-    height: 50,
+    height: height * 0.065,
     paddingHorizontal: 10,
     fontSize: 16,
+    marginBottom: height * 0.015,
   },
   eye: {
     position: "absolute",
-    top: 15,
+    top: height * 0.02,
     right: "3%",
     width: "10%",
-    height: 20,
+    height: height * 0.02,
     zIndex: 1,
-    padding: 10,
+    padding: ((height + width) / 2) * 0.01,
   },
   errorsContainer: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: height * 0.02,
   },
   passwordErrorContainer: {
     textAlign: "left",
@@ -343,13 +390,15 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
   },
+  forgetPasswordContainer: {},
   forgotPassword: {
     textAlign: "right",
+    justifyContent: "center",
   },
   line: {
     height: 1,
     backgroundColor: "#e5e6e8",
-    marginVertical: 20,
+    marginVertical: height * 0.01,
   },
   saveBtn: {
     borderRadius: 10,
@@ -360,6 +409,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 10,
+    marginVertical: height * 0.03,
   },
   saveChangesBtnContent: {
     color: "white",

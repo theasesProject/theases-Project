@@ -9,7 +9,6 @@ const router = express.Router();
 
 router.get("/findAll", fetchAll);
 router.get("/getOne/:id", getOneId);
-router.put("/UpdateAgencyData", UpdateAgency);
+router.put("/UpdateAgency/:id", UpdateAgency);
 router.post("/addAgency/:reqId", CreateAgency);
-router.put("/UpdateAgencyData", UpdateAgency);
 module.exports = router;

@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Logo from "../assets/tempLogo.png";
@@ -51,17 +52,19 @@ const ResetPassword = ({ navigation }) => {
   };
 
   const handleInputs = () => {
-    if (handlePasswordStrength() && handleComfirmPassword()) {
-      setInputsChecked(true);
-      return true;
+    if (!!newPassword && !!confirmNewPassword) {
+      return setInputsChecked(true);
     }
-    setInputsChecked(false);
-    return false;
+    return setInputsChecked(false);
   };
 
   const handlePasswordUpdate = async () => {
     try {
-      if (!handleInputs()) {
+      if (!handleComfirmPassword()) {
+        return;
+      }
+      setConfirmPasswordError(null);
+      if (!handlePasswordStrength()) {
         return;
       }
       // Retrieve the value
@@ -70,9 +73,8 @@ const ResetPassword = ({ navigation }) => {
       if (storedValue !== null) {
         // Delete the value
         await AsyncStorage.removeItem("id");
-        console.log("id retrieved and deleted:", JSON.parse(storedValue));
       } else {
-        console.log("id not found in AsyncStorage.");
+        Alert.alert("Something went wrong");
         return;
       }
       axios.put(
@@ -85,18 +87,8 @@ const ResetPassword = ({ navigation }) => {
     }
   };
 
-  // useEffect(() => {
-  //   handlePasswordStrength();
-  // }, [newPassword]);
-
-  // useEffect(() => {
-  //   handleComfirmPassword();
-  // }, [confirmNewPassword]);
-
   useEffect(() => {
-    if (newPassword) {
-      handleInputs();
-    }
+    handleInputs();
   }, [newPassword, confirmNewPassword]);
 
   return (

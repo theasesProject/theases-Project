@@ -40,7 +40,9 @@ import AddAgencyCar2 from "./pages/AddAgencyCar2.jsx";
 import AddCarAgency3 from "./pages/AddCarAgency3.jsx";
 import Dmap from "./pages/Dmap.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
+// import AddReview from "./components/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
+import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -51,6 +53,11 @@ function App() {
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
+            {/* <Stack.Screen
+              name="Review"
+              component={AddReview}
+              options={{ headerShown: false }}
+            /> */}
             <Stack.Screen
               name="Home"
               component={Home}
@@ -184,6 +191,11 @@ function App() {
             <Stack.Screen
               name="editProfile"
               component={EditProfile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditAgencyProfile"
+              component={EditAgencyProfile}
               options={{ headerShown: false }}
             />
             <Stack.Screen

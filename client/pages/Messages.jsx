@@ -27,6 +27,7 @@ function Messages() {
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getAllRoomsUserId/${user.data.id}`
       )
       .then(async (response) => {
+        //ya gdim
         setRooms(response.data);
         await axios
           .get(
@@ -48,6 +49,7 @@ function Messages() {
   };
   const handleAddRoom = async () => {
     await axios
+
       .post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
         { UserId: parseInt(user.data.id), user2: parseInt(user2ID) }

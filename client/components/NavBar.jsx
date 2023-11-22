@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Dimensions,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SignUp from ".././assets/Svg/signUpNav.svg";
 import Hm from ".././assets/Svg/house-solid.svg";
@@ -30,7 +24,11 @@ function NavBar({ style }) {
       >
         <View style={styles.hm}>
           <Hm fill={isActive("Home")} />
-          <Text style={{ color: isActive("Home") }}>Home</Text>
+          <Text
+            style={{ color: isActive("Home"), fontFamily: "FiraMonoMedium" }}
+          >
+            Home
+          </Text>
         </View>
       </Pressable>
 
@@ -40,7 +38,14 @@ function NavBar({ style }) {
       >
         <View style={styles.hm}>
           <Ms fill={isActive("Messages")} />
-          <Text style={{ color: isActive("Messages") }}>Messeges</Text>
+          <Text
+            style={{
+              color: isActive("Messages"),
+              fontFamily: "FiraMonoMedium",
+            }}
+          >
+            Messeges
+          </Text>
         </View>
       </Pressable>
 
@@ -48,17 +53,22 @@ function NavBar({ style }) {
         style={styles.quarter}
         onPress={() => {
           loggedIn
-            ? navigation.navigate("favorites")
+            ? navigation.navigate("Favorites")
             : navigation.navigate("SignUp");
         }}
       >
         <View style={styles.hm}>
           {!loggedIn ? (
-            <SignUp fill={isActive("favorites")} />
+            <SignUp fill={isActive("Favorites")} />
           ) : (
-            <Fa fill={isActive("favorites")} />
+            <Fa fill={isActive("Favorites")} />
           )}
-          <Text style={{ color: isActive("favorites") }}>
+          <Text
+            style={{
+              color: isActive("Favorites"),
+              fontFamily: "FiraMonoMedium",
+            }}
+          >
             {loggedIn ? "Favorites" : "SignUp"}
           </Text>
         </View>
@@ -75,7 +85,12 @@ function NavBar({ style }) {
       >
         <View style={styles.hm}>
           <Pr fill={isActive("Userprofile")} />
-          <Text style={{ color: isActive("Userprofile") }}>
+          <Text
+            style={{
+              color: isActive("Userprofile"),
+              fontFamily: "FiraMonoMedium",
+            }}
+          >
             {loggedIn ? "Profile" : "Login"}
           </Text>
         </View>

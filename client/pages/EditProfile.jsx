@@ -18,7 +18,8 @@ import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 const EditProfile = ({ navigation }) => {
   const activeUser = useSelector(selectUser);
   const [color, setColor] = useState("#6C77BF");
@@ -322,6 +323,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingHorizontal: 10,
     fontSize: 16,
+    fontFamily: "FiraMonoMedium",
   },
   eye: {
     position: "absolute",
@@ -342,9 +344,11 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+    fontFamily: "FiraMonoMedium",
   },
   forgotPassword: {
     textAlign: "right",
+    fontFamily: "FiraMonoMedium",
   },
   line: {
     height: 1,
@@ -364,6 +368,7 @@ const styles = StyleSheet.create({
   saveChangesBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMonoMedium",
   },
 });
 

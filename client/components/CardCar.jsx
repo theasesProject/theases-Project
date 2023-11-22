@@ -10,6 +10,7 @@ import {
 } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import { useEffect, useState } from "react";
+import * as Font from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import car from "../assets/car2.png";
 import vitesse from "../assets/vitesse.png";
@@ -33,7 +34,8 @@ import fuel from "../assets/fuel.png";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
 import { Booking } from "../pages/Booking.jsx";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 function CardCar({ oneCar, setNothing, handlePress }) {
   const [heartSelected, setHeartSelected] = useState(false);
 
@@ -66,12 +68,22 @@ function CardCar({ oneCar, setNothing, handlePress }) {
     dispatch(carDetail(oneCar));
     dispatch(saveDetails(oneCar));
     handlePress();
+    navigation.navigate("details");
   };
 
   useEffect(() => {
     checkBookMarked();
   }, []);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        FiraMonoBold,
+        FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.card}>
       <View style={styles.imageCar}>
@@ -250,15 +262,18 @@ const styles = StyleSheet.create({
   name: {
     color: "#9EB8D9",
     fontSize: 16,
+    fontFamily: "FiraMonoMedium",
   },
   name1: {
     fontSize: 16,
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "FiraMonoBold",
   },
   price1: {
     fontSize: 16,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     color: "#9EB8D9",
+    fontFamily: "FiraMonoBold",
   },
   vitesse: {
     width: width * 0.06,
@@ -267,7 +282,8 @@ const styles = StyleSheet.create({
   },
   VitesseName: {
     color: "grey",
-    fontSize: 16,
+    fontSize: 13,
+    fontFamily: "FiraMonoMedium",
   },
   Vitesse1: {
     width: width * 0.081,

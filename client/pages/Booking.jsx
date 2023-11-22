@@ -23,7 +23,9 @@ import io from "socket.io-client";
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
-
+import Toast from "react-native-toast-message";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 function Booking() {
   const navigation = useNavigation();
   const [roleModalVisible, setRoleModalVisible] = useState(false);
@@ -588,7 +590,7 @@ const styles = StyleSheet.create({
   total: {
     // padding: 10,
     color: "blue",
-    fontWeight: "bold",
+    fontFamily: "FiraMonoBold",
     fontSize: 16,
   },
   calender: {
@@ -615,6 +617,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     textAlign: "center",
+    fontFamily: "FiraMonoMedium",
   },
 
   button: {
@@ -631,10 +634,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
     textAlign: "center",
+    fontFamily: "FiraMonoMedium",
   },
   pickTime: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 17,
+    fontFamily: "FiraMonoBold",
     color: "black",
   },
 
@@ -651,6 +655,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
     color: "grey",
+    fontFamily: "FiraMonoMedium",
   },
   buttonContainer1: {
     borderRadius: 10,
@@ -670,7 +675,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   date: {
+    fontSize: 12,
     color: "grey",
+    fontFamily: "FiraMonoMedium",
   },
   dates: {
     flexDirection: "row",

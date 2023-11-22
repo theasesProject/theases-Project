@@ -19,7 +19,7 @@ const { height, width } = Dimensions.get("screen");
 function SearchBar({ onSearch }) {
   const [searchedCar, setSearchedCar] = useState("");
   const navigation = useNavigation();
-  console.log(searchedCar, "searchCar");
+
   const handleSearch = (text) => {
     setSearchedCar(text);
 
@@ -41,11 +41,12 @@ function SearchBar({ onSearch }) {
     <View style={styles.inputAndButton}>
       <TextInput
         onSubmitEditing={(text) => handleSearch(text)}
-        style={styles.input}
+        style={[styles.input, { fontFamily: "FiraMonoMedium" }]}
         placeholder="Search cars or locations…"
+        placeholderTextColor="gray"
       ></TextInput>
 
-      <Pressable onPress={() => navigation.navigate("AdvancedSearch")}>
+      <Pressable onPress={() => navigation.navigate("Search")}>
         <LinearGradient
           style={styles.filterImage}
           colors={["#6C77BF", "#4485C5"]}

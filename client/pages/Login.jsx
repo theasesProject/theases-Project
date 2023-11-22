@@ -22,10 +22,9 @@ import axios from "axios";
 import { fetchUser, selectUser, logUserOut } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import * as Google from "expo-auth-session/providers/google";
-// import * as WebBrowser from "expo-web-browser";
-// WebBrowser.maybeCompleteAuthSession();
-// import { registerIndieID, unregisterIndieDevice } from "native-notify";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+
 const { width, height } = Dimensions.get("screen");
 
 function Login({ navigation }) {
@@ -233,7 +232,13 @@ function Login({ navigation }) {
           onPressOut={() => setColor2("#6C77BF")}
           onPress={() => navigation.navigate("forgotPassword")}
         >
-          <Text style={{ color: color2, ...styles.forgotPassword }}>
+          <Text
+            style={{
+              color: color2,
+              ...styles.forgotPassword,
+              fontFamily: "FiraMonoMedium",
+            }}
+          >
             Forgot Password?
           </Text>
         </Pressable>
@@ -254,7 +259,7 @@ function Login({ navigation }) {
       </TouchableOpacity>
       <View style={styles.bottomSection}>
         <View style={styles.createAcc}>
-          <Text>First time here?</Text>
+          <Text style={{ fontFamily: "FiraMonoMedium" }}>First time here?</Text>
           <Pressable
             activeOpacity={0.8}
             onPressIn={() => {
@@ -263,12 +268,14 @@ function Login({ navigation }) {
             }}
             onPressOut={() => setColor("#6C77BF")}
           >
-            <Text style={{ color: color }}>Sign up</Text>
+            <Text style={{ color: color, fontFamily: "FiraMonoMedium" }}>
+              Sign up
+            </Text>
           </Pressable>
         </View>
         <View style={styles.loginWith}>
           <View style={styles.line}></View>
-          <Text>Or sign in with</Text>
+          <Text style={{ fontFamily: "FiraMonoMedium" }}>Or sign in with</Text>
           <View style={styles.line}></View>
         </View>
         <View style={styles.quickLoginContainer}>
@@ -280,7 +287,7 @@ function Login({ navigation }) {
               <View style={styles.icons}>
                 <Image source={google} alt="google" style={styles.icons} />
               </View>
-              <Text>google</Text>
+              <Text style={{ fontFamily: "FiraMonoMedium" }}>google</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
@@ -288,7 +295,7 @@ function Login({ navigation }) {
               <View style={styles.icons}>
                 <Image source={facebook} alt="facebook" style={styles.icons} />
               </View>
-              <Text>facebook</Text>
+              <Text style={{ fontFamily: "FiraMonoMedium" }}>facebook</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -328,13 +335,15 @@ const styles = StyleSheet.create({
   },
   welcome: {
     fontSize: 24,
-    fontWeight: "bold",
+
     textAlign: "center",
+    fontFamily: "FiraMonoBold",
   },
   paragraph: {
     color: "rgba(1,1,1,0.5)",
     textAlign: "center",
     width: 220,
+    fontFamily: "FiraMonoMedium",
   },
   loginForm: {
     width: "100%",
@@ -367,6 +376,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft: 40,
     zIndex: 0,
+    fontFamily: "FiraMonoMedium",
   },
   passwordInput: {
     backgroundColor: "#eef1f8",
@@ -374,6 +384,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft: 40,
     zIndex: 0,
+    fontFamily: "FiraMonoMedium",
   },
   forgotPasswordContainer: {
     width: "100%",
@@ -391,9 +402,11 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+    fontFamily: "FiraMonoMedium",
   },
   forgotPassword: {
     textAlign: "right",
+    fontFamily: "FiraMonoMedium",
   },
   loginBtnContainer: {
     width: "100%",
@@ -410,6 +423,7 @@ const styles = StyleSheet.create({
   loginBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMonoMedium",
   },
   bottomSection: {
     width: "100%",

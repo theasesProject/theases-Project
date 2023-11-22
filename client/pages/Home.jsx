@@ -283,7 +283,7 @@ function Home({ navigation }) {
         </View>
       </View>
 
-      <SwipeUpDown
+      {/* <SwipeUpDown
         itemFull={<CarDetails />}
         ref={swipeUpDownRef}
         extraMarginTop={140}
@@ -296,7 +296,7 @@ function Home({ navigation }) {
           borderTopEndRadius: 50,
           backgroundColor: "lightgrey",
         }}
-      />
+      /> */}
 
       <Text
         onPress={() => {

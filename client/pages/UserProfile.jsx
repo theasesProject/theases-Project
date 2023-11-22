@@ -7,6 +7,8 @@ import {
   Pressable,
   Dimensions,
 } from "react-native";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 const { height, width } = Dimensions.get("screen");
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
@@ -61,7 +63,7 @@ function Userprofile({ navigation }) {
               onPress={() => navigation.navigate("AllBookings")}
             >
               <Image style={styles.icon} source={bkg} />
-              <Text>My bookings</Text>
+              <Text style={{ fontFamily: "FiraMonoMedium" }}>My bookings</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -70,7 +72,7 @@ function Userprofile({ navigation }) {
             >
               <CarIcon style={styles.icon}></CarIcon>
 
-              <Text>My Cars</Text>
+              <Text style={{ fontFamily: "FiraMonoMedium" }}>My Cars</Text>
             </TouchableOpacity>
           )}
 
@@ -79,7 +81,7 @@ function Userprofile({ navigation }) {
             onPress={() => console.log("settings")}
           >
             <Image source={stg} style={styles.icon} />
-            <Text>Settings</Text>
+            <Text style={{ fontFamily: "FiraMonoMedium" }}>Settings</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.profileOption}
@@ -93,9 +95,13 @@ function Userprofile({ navigation }) {
           >
             <Image source={change} style={styles.icon} />
             {activeUser?.type === "client" ? (
-              <Text>Become an Agency</Text>
+              <Text style={{ fontFamily: "FiraMonoMedium" }}>
+                Become an Agency
+              </Text>
             ) : (
-              <Text>Add Cars For Rent</Text>
+              <Text style={{ fontFamily: "FiraMonoMedium" }}>
+                Add Cars For Rent
+              </Text>
             )}
           </TouchableOpacity>
         </View>
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "FiraMonoBold",
   },
   editProfileContainer: {
     justifyContent: "center",
@@ -156,6 +162,7 @@ const styles = StyleSheet.create({
   editProfile: {
     fontSize: 12,
     color: "#6C77BF",
+    fontFamily: "FiraMonoMedium",
   },
   bottomSection: {
     height: "75%",
@@ -202,6 +209,7 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: "white",
+    fontFamily: "FiraMonoMedium",
   },
   //
   bottomSection: {

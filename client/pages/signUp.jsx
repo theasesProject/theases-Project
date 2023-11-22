@@ -26,6 +26,8 @@ import FaceBookPng from "../assets/facebookIcon.png";
 import { SignUpClick } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
@@ -154,8 +156,8 @@ const SignUp = ({ navigation, props }) => {
         } else {
           setConfirmedError("");
         }
-      }else if(placeholder==="id card"){
-        if (inputForm.idCard.length!==8 ) {
+      } else if (placeholder === "id card") {
+        if (inputForm.idCard.length !== 8) {
           setIdCardError("Your id should be 8 numbers long");
           return;
         } else {
@@ -383,7 +385,7 @@ const SignUp = ({ navigation, props }) => {
               }}
             />
           </View>
-            {idCardError? (
+          {idCardError ? (
             <Text style={{ color: "red" }}>{idCardError}</Text>
           ) : null}
           <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
@@ -393,7 +395,9 @@ const SignUp = ({ navigation, props }) => {
               locations={[0, 1]}
               style={styles.buttonContainer2}
             >
-              <Text>Date of Birth</Text>
+              <Text style={{ fontFamily: "FiraMonoMedium" }}>
+                Date of Birth
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
           {show && (
@@ -437,9 +441,12 @@ const SignUp = ({ navigation, props }) => {
           }}
           onPressOut={() => setColor("#6C77BF")}
         >
-          <Text>
+          <Text style={{ fontFamily: "FiraMonoMedium" }}>
             Already have an account?
-            <Text style={{ color: color }}> Log in</Text>
+            <Text style={{ color: color, fontFamily: "FiraMonoMedium" }}>
+              {" "}
+              Log in
+            </Text>
           </Text>
         </Pressable>
         <View
@@ -501,6 +508,7 @@ const styles = StyleSheet.create({
   googleText: {
     fontSize: 15,
     fontWeight: "400",
+    fontFamily: "FiraMonoMedium",
   },
   extraSign: {
     display: "flex",
@@ -569,18 +577,20 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: "#000",
     marginVertical: 10,
-    fontWeight: "bold",
+
+    fontFamily: "FiraMonoBold",
   },
   subheader: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#888",
     textAlign: "center",
     marginHorizontal: 20,
     marginBottom: 30,
+    fontFamily: "FiraMonoMedium",
   },
   input: {
     paddingLeft: 40,
-
+    fontFamily: "FiraMonoMedium",
     zIndex: -1,
     height: 50,
     width: width * 0.8,
@@ -610,6 +620,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     textAlign: "center",
+    fontFamily: "FiraMonoMedium",
   },
 });
 

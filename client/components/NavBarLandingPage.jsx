@@ -173,12 +173,14 @@ const styles = StyleSheet.create({
   yourLocation: {
     fontSize: 12,
     color: "rgb(130, 124, 140)",
+    fontFamily: "FiraMonoMedium",
   },
   UserAdress: {
     fontSize: 14,
     color: "black",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     width: 180,
+    fontFamily: "FiraMonoBold",
   },
 });
 

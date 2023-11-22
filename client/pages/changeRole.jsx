@@ -12,7 +12,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import * as Location from "expo-location";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import CheckBox from "react-native-check-box";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateAgency } from "../store/agencySlice";
@@ -265,6 +266,7 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     padding: 10,
+    fontFamily: "FiraMonoMedium",
   },
   locationInput: {
     borderWidth: 1,
@@ -281,7 +283,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderRadius: 5,
     paddingRight: 140,
-    fontSize: 14,
+    fontSize: 12,
+    fontFamily: "FiraMonoMedium",
   },
   locationText: {
     paddingVertical: height * 0.0155,
@@ -320,7 +323,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   dropdownTitle: {
-    fontSize: 14,
+    fontSize: 11,
+    fontFamily: "FiraMonoMedium",
   },
   dropdown: {
     backgroundColor: "white",
@@ -344,9 +348,11 @@ const styles = StyleSheet.create({
   addImgText: {
     color: "white",
     fontSize: 16,
+    fontFamily: "FiraMonoMedium",
   },
   errorText: {
     color: "red",
+    fontFamily: "FiraMonoMedium",
   },
   imgsContainer: {
     borderWidth: 1,
@@ -393,6 +399,7 @@ const styles = StyleSheet.create({
   submitBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMonoMedium",
   },
 });
 

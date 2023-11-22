@@ -41,17 +41,19 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  UpdateAgency: async (req, res, next) => {
+  UpdateAgency: async (req, res) => {
     try {
-      const agency = req.body.id;
-      const task = await Agency.Update(req.body.data, {
+      const { id } = req.params;
+      await Agency.update(req.body, {
         where: {
-          id: agency,
+          id: id,
         },
       });
-      res.json(task);
-    } catch (error) {
-      next(error);
+      const agency = await Agency.findByPk(id);
+      res.status(201).send(agency);
+    } catch (err) {
+      throw err;
+      // res.status(500).json(err);
     }
   },
   getOneId: async (req, res, next) => {

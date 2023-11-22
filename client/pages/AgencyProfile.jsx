@@ -9,7 +9,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
 import Logo from "../assets/tempLogo.png";
 import NavBarAgency from "../components/NavBarAgency";
@@ -22,6 +22,7 @@ import FalseIcon from "../assets/Svg/false.svg";
 import axios from "axios";
 import ReviewCard from "../components/ReviewCard";
 import moment from "moment";
+import { getallCarByAgency } from "../store/carFetch";
 const { width, height } = Dimensions.get("screen");
 
 const AgencyProfile = ({ navigation }) => {
@@ -30,10 +31,11 @@ const AgencyProfile = ({ navigation }) => {
   const [reviewsView, setReviewsView] = useState("view more");
   // ****************************************************************
   const activeUser = useSelector(selectUser);
-  console.log("activeUser's avatar: ", activeUser.Agency.transportation);
+  const myCars = useSelector((state) => state.car.agencyCar);
   // ****************************************************************
   const [isSliderOpen, setSliderOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const dispatch = useDispatch();
 
   const handleSliderToggle = () => {
     console.log("slider toggled");
@@ -56,6 +58,7 @@ const AgencyProfile = ({ navigation }) => {
   const handleReviewsView = (newView) => setReviewsView(newView);
 
   useEffect(() => {
+    dispatch(getallCarByAgency(activeUser?.Agency.UserId));
     fetchReviews();
   }, []);
 
@@ -91,7 +94,7 @@ const AgencyProfile = ({ navigation }) => {
           <View style={styles.agencyLogoContainer}>
             <Image
               style={styles.agencyLogo}
-              source={{ uri: activeUser.avatar }}
+              source={{ uri: activeUser?.avatar }}
             />
           </View>
           <View style={styles.appLogoContainer}>
@@ -102,11 +105,11 @@ const AgencyProfile = ({ navigation }) => {
       <ScrollView style={styles.dinamicPart} scrollEnabled={!isSliderOpen}>
         <View style={styles.agencyInfo}>
           <View style={styles.detailsSections}>
-            <Text style={styles.agencyName}>{activeUser.Agency.name}</Text>
+            <Text style={styles.agencyName}>{activeUser?.Agency.name}</Text>
             <Text style={styles.infoKeys}>
               Num:{" "}
               <Text style={styles.infoValues}>
-                {activeUser.Agency.companyNumber}
+                {activeUser?.Agency.companyNumber}
               </Text>
             </Text>
             <Text style={styles.infoKeys}>
@@ -121,7 +124,7 @@ const AgencyProfile = ({ navigation }) => {
               <Text style={styles.infoKeys}>
                 Delivery:{" "}
                 <View style={styles.infoValues}>
-                  {activeUser.Agency.transportation ? (
+                  {activeUser?.Agency.transportation ? (
                     <TrueIcon style={styles.trueIcon} />
                   ) : (
                     <FalseIcon style={styles.falseIcon} />
@@ -131,12 +134,12 @@ const AgencyProfile = ({ navigation }) => {
             </View>
 
             <Text style={styles.infoKeys}>
-              Cars owned: <Text style={styles.infoValues}>26</Text>
+              Cars owned: <Text style={styles.infoValues}>{myCars.length}</Text>
             </Text>
             <Text style={styles.infoKeys}>
               Down Payment:{" "}
               <Text style={styles.infoValues}>
-                {activeUser.Agency.deposit}%
+                {activeUser?.Agency.deposit}%
               </Text>
             </Text>
           </View>

@@ -35,7 +35,7 @@ const Sidebar = ({ navigation, isOpen, onClose }) => {
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: !isOpen ? -250 : 0,
-      duration: 2000,
+      duration: 400,
       useNativeDriver: false,
     }).start();
   }, [isOpen, animatedValue]);
@@ -83,11 +83,13 @@ const Sidebar = ({ navigation, isOpen, onClose }) => {
         <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("editProfile")}>
-        <Text style={styles.text}>Edit profile</Text>
+        <Text style={styles.text}>Edit personal info</Text>
         <View style={styles.line} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => console.log("settings")}>
-        <Text style={styles.text}>Settings</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("EditAgencyProfile")}
+      >
+        <Text style={styles.text}>Edit agency profile</Text>
         <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={handleLogout}>

@@ -42,6 +42,7 @@ import Dmap from "./pages/Dmap.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
 // import AddReview from "./components/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
+import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -190,6 +191,11 @@ function App() {
             <Stack.Screen
               name="editProfile"
               component={EditProfile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditAgencyProfile"
+              component={EditAgencyProfile}
               options={{ headerShown: false }}
             />
             <Stack.Screen

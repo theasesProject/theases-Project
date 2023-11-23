@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-
+import * as Font from "expo-font";
 const { width, height } = Dimensions.get("screen");
 
 function Login({ navigation }) {
@@ -163,7 +163,16 @@ function Login({ navigation }) {
   useEffect(() => {
     formValidation();
   }, [form, error]);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.loginPage}>
       <View style={styles.headers}>

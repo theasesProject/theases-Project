@@ -17,7 +17,9 @@ import Open from "../assets/Svg/eyeOpen.svg";
 import Close from "../assets/Svg/eyeClose.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("screen");
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const ResetPassword = ({ navigation }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -39,7 +41,16 @@ const ResetPassword = ({ navigation }) => {
     setConfirmPasswordError(null);
     return true;
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handlePasswordStrength = () => {
     var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
     if (newPassword.length < 8 && !regex.test(newPassword)) {
@@ -239,6 +250,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+    fontFamily: "FiraMono-Medium",
   },
   confirmBtnContainer: {
     width: "100%",
@@ -255,6 +267,7 @@ const styles = StyleSheet.create({
   confirmBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMono-Medium",
   },
 });
 

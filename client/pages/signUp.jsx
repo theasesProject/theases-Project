@@ -28,6 +28,7 @@ import { useSelector, useDispatch } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
@@ -52,7 +53,16 @@ const SignUp = ({ navigation, props }) => {
         });
     }
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const [confirm, setConfirm] = useState("");
   const [inputForm, setInputForm] = useState({
     userName: "",
@@ -312,7 +322,9 @@ const SignUp = ({ navigation, props }) => {
             )}
           </View>
           {passwordError ? (
-            <Text style={{ color: "red" }}>{passwordError}</Text>
+            <Text style={{ color: "red", fontFamily: "FiraMono-Medium" }}>
+              {passwordError}
+            </Text>
           ) : null}
 
           <View style={styles.inputHolder}>
@@ -357,7 +369,9 @@ const SignUp = ({ navigation, props }) => {
             )}
           </View>
           {confirmedError ? (
-            <Text style={{ color: "red" }}>{confirmedError}</Text>
+            <Text style={{ color: "red", fontFamily: "FiraMono-Medium" }}>
+              {confirmedError}
+            </Text>
           ) : null}
           <View style={styles.inputHolder}>
             <IdCard style={styles.icon2} />
@@ -395,7 +409,7 @@ const SignUp = ({ navigation, props }) => {
               locations={[0, 1]}
               style={styles.buttonContainer2}
             >
-              <Text style={{ fontFamily: "FiraMonoMedium" }}>
+              <Text style={{ fontFamily: "FiraMono-Medium" }}>
                 Date of Birth
               </Text>
             </LinearGradient>
@@ -441,9 +455,9 @@ const SignUp = ({ navigation, props }) => {
           }}
           onPressOut={() => setColor("#6C77BF")}
         >
-          <Text style={{ fontFamily: "FiraMonoMedium" }}>
+          <Text style={{ fontFamily: "FiraMono-Medium" }}>
             Already have an account?
-            <Text style={{ color: color, fontFamily: "FiraMonoMedium" }}>
+            <Text style={{ color: color, fontFamily: "FiraMono-Medium" }}>
               {" "}
               Log in
             </Text>
@@ -508,7 +522,7 @@ const styles = StyleSheet.create({
   googleText: {
     fontSize: 15,
     fontWeight: "400",
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
   extraSign: {
     display: "flex",
@@ -578,7 +592,7 @@ const styles = StyleSheet.create({
     color: "#000",
     marginVertical: 10,
 
-    fontFamily: "FiraMonoBold",
+    fontFamily: "FiraMono-Bold",
   },
   subheader: {
     fontSize: 14,
@@ -586,11 +600,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 20,
     marginBottom: 30,
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
   input: {
     paddingLeft: 40,
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
     zIndex: -1,
     height: 50,
     width: width * 0.8,
@@ -620,7 +634,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     textAlign: "center",
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
 });
 

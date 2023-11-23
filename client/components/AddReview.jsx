@@ -10,8 +10,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { width, height } = Dimensions.get("screen");
 const AddReview = ({ navigation }) => {
   const [rating, setRating] = useState(0);
@@ -46,7 +48,16 @@ const AddReview = ({ navigation }) => {
       comment: comment,
     });
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.reviewPage}>
       <View style={styles.topSection}>
@@ -115,7 +126,7 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     textAlign: "right",
   },
   agencyName: {
@@ -154,6 +165,7 @@ const styles = StyleSheet.create({
   submitBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMono-Medium",
   },
 });
 

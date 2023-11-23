@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Pressable, Text, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Video } from "expo-av";
@@ -8,8 +8,11 @@ import Animated, {
   useSharedValue,
   withSpring,
   useAnimatedStyle,
-  withTiming
+  withTiming,
 } from "react-native-reanimated";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { height, width } = Dimensions.get("window");
 
 function OneMessage({ message, user, user2avatar, isLastMessage }) {
@@ -24,12 +27,22 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
   useEffect(() => {
     if (showDate) {
       startAnimation();
-    }  else {
+    } else {
       // Reset the animation state when showDate is false
       translateY.value = -10;
     }
   }, [showDate]);
 
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   const renderContent = () => {
     if (message.type && message.type.startsWith("image/")) {
       return (
@@ -49,7 +62,17 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
       );
     } else {
       // Default case: text message
-      return <Text style={{ color: isCurrentUser ? "white": "black" , fontSize:18 }}>{message.message}</Text>;
+      return (
+        <Text
+          style={{
+            color: isCurrentUser ? "white" : "black",
+            fontSize: 18,
+            fontFamily: "FiraMono-Medium",
+          }}
+        >
+          {message.message}
+        </Text>
+      );
     }
   };
 
@@ -58,7 +81,6 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
       transform: [{ translateY: translateY.value }],
     };
   });
-
 
   return (
     <View>
@@ -145,4 +167,4 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
   );
 }
 
-export default OneMessage
+export default OneMessage;

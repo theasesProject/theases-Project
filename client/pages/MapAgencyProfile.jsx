@@ -12,7 +12,9 @@ import MapViewDirections from "react-native-maps-directions";
 import axios from "axios";
 import ResultSearch from "../components/ResultsSearch";
 import { Svg, Circle } from "react-native-svg";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 const directions_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
@@ -27,7 +29,16 @@ const MapAgencyProfile = ({ navigation }) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handleMapPress = (e) => {
     const selectedLatitude = e.nativeEvent.coordinate.latitude;
     const selectedLongitude = e.nativeEvent.coordinate.longitude;

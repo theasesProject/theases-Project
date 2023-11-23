@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SignUp from ".././assets/Svg/signUpNav.svg";
@@ -7,13 +7,25 @@ import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
 import { useSelector } from "react-redux";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { height } = Dimensions.get("screen");
 function NavBar({ style }) {
   const loggedIn = useSelector((state) => state.user.loggedIn);
 
   const navigation = useNavigation();
   const route = useRoute();
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const isActive = (routeName) =>
     route.name === routeName ? "#6C77BF" : "grey";
   return (
@@ -25,7 +37,7 @@ function NavBar({ style }) {
         <View style={styles.hm}>
           <Hm fill={isActive("Home")} />
           <Text
-            style={{ color: isActive("Home"), fontFamily: "FiraMonoMedium" }}
+            style={{ color: isActive("Home"), fontFamily: "FiraMono-Medium" }}
           >
             Home
           </Text>
@@ -41,7 +53,7 @@ function NavBar({ style }) {
           <Text
             style={{
               color: isActive("Messages"),
-              fontFamily: "FiraMonoMedium",
+              fontFamily: "FiraMono-Medium",
             }}
           >
             Messeges
@@ -66,7 +78,7 @@ function NavBar({ style }) {
           <Text
             style={{
               color: isActive("Favorites"),
-              fontFamily: "FiraMonoMedium",
+              fontFamily: "FiraMono-Medium",
             }}
           >
             {loggedIn ? "Favorites" : "SignUp"}
@@ -88,7 +100,7 @@ function NavBar({ style }) {
           <Text
             style={{
               color: isActive("Userprofile"),
-              fontFamily: "FiraMonoMedium",
+              fontFamily: "FiraMono-Medium",
             }}
           >
             {loggedIn ? "Profile" : "Login"}

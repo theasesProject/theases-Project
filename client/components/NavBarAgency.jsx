@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -20,7 +20,9 @@ import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
 import Plus from ".././assets/Svg/plus-solid.svg";
 import Car from ".././assets/Svg/car-side-solid.svg";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import { useSelector } from "react-redux";
 const { height, width } = Dimensions.get("screen");
 function NavBarAgency({ style }) {
@@ -31,6 +33,17 @@ function NavBarAgency({ style }) {
 
   const isActive = (routeName) =>
     route.name === routeName ? "#6C77BF" : "grey";
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={[styles.navBar, style]}>
       <Pressable
@@ -39,7 +52,11 @@ function NavBarAgency({ style }) {
       >
         <View style={styles.hm}>
           <Hm fill={isActive("Home")} />
-          <Text style={{ color: isActive("Home") }}>Home</Text>
+          <Text
+            style={{ color: isActive("Home"), fontFamily: "FiraMono-Medium" }}
+          >
+            Home
+          </Text>
         </View>
       </Pressable>
 
@@ -49,7 +66,14 @@ function NavBarAgency({ style }) {
       >
         <View style={styles.hm}>
           <Ms fill={isActive("Messages")} />
-          <Text style={{ color: isActive("Messages") }}>Messeges</Text>
+          <Text
+            style={{
+              color: isActive("Messages"),
+              fontFamily: "FiraMono-Medium",
+            }}
+          >
+            Messeges
+          </Text>
         </View>
       </Pressable>
       <Pressable
@@ -58,7 +82,14 @@ function NavBarAgency({ style }) {
       >
         <View style={styles.hm}>
           <Plus fill={isActive("AddAgencyCar")} />
-          <Text style={{ color: isActive("AddAgencyCar") }}>Add a Car</Text>
+          <Text
+            style={{
+              color: isActive("AddAgencyCar"),
+              fontFamily: "FiraMono-Medium",
+            }}
+          >
+            Add a Car
+          </Text>
         </View>
       </Pressable>
       <Pressable
@@ -72,7 +103,11 @@ function NavBarAgency({ style }) {
         <View style={styles.hm}>
           <Car fill={isActive("MyCars")} />
 
-          <Text style={{ color: isActive("MyCars") }}>My Cars</Text>
+          <Text
+            style={{ color: isActive("MyCars"), fontFamily: "FiraMono-Medium" }}
+          >
+            My Cars
+          </Text>
         </View>
       </Pressable>
       <Pressable
@@ -83,7 +118,14 @@ function NavBarAgency({ style }) {
       >
         <View style={styles.hm}>
           <Pr fill={isActive("AgencyService")} />
-          <Text style={{ color: isActive("AgencyService") }}>Requests</Text>
+          <Text
+            style={{
+              color: isActive("AgencyService"),
+              fontFamily: "FiraMono-Medium",
+            }}
+          >
+            Requests
+          </Text>
         </View>
       </Pressable>
     </View>

@@ -20,6 +20,7 @@ const { height, width } = Dimensions.get("screen");
 import { useNavigation } from "@react-navigation/native";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const CarDetails = () => {
   const navigation = useNavigation();
   const [isButtonEnabled, setButtonEnabled] = useState(false);
@@ -41,6 +42,16 @@ const CarDetails = () => {
       console.log("Another Button is disabled");
     }
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={styles.CarDetails}>
       <View style={styles.page}>
@@ -67,19 +78,19 @@ const CarDetails = () => {
             <Text style={styles.carName}>Car Name</Text>
             <View style={styles.carNameDetails}>
               <View style={styles.textDetails}>
-                <Text style={{ fontFamily: "FiraMonoMedium" }}>Car Name </Text>
-                <Text style={{ fontFamily: "FiraMonoMedium" }}>Rental</Text>
+                <Text style={{ fontFamily: "FiraMono-Medium" }}>Car Name </Text>
+                <Text style={{ fontFamily: "FiraMono-Medium" }}>Rental</Text>
               </View>
               <View style={styles.textDetails}>
                 <Text>:</Text>
                 <Text>:</Text>
               </View>
               <View style={styles.textDetails}>
-                <Text style={{ fontFamily: "FiraMonoMedium" }}>
+                <Text style={{ fontFamily: "FiraMono-Medium" }}>
                   {" "}
                   {carData.model}
                 </Text>
-                <Text style={{ fontFamily: "FiraMonoMedium" }}>
+                <Text style={{ fontFamily: "FiraMono-Medium" }}>
                   {" "}
                   ${carData.price}/day
                 </Text>
@@ -313,7 +324,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     borderBottomColor: "grey",
     borderBottomWidth: 2,
-    fontFamily: "FiraMonoBold",
+    fontFamily: "FiraMono-Bold",
   },
   reviewsDetails: {
     flexDirection: "row",
@@ -328,7 +339,7 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     fontSize: 10,
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
   star: {
     width: width * 0.03,
@@ -369,7 +380,7 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 22,
-    fontFamily: "FiraMonoBold",
+    fontFamily: "FiraMono-Bold",
   },
   textDetails: {
     flexDirection: "column",
@@ -384,12 +395,12 @@ const styles = StyleSheet.create({
   },
   storyTitle: {
     fontSize: 16,
-    fontFamily: "FiraMonoBold",
+    fontFamily: "FiraMono-Bold",
   },
   descreption: {
     fontSize: 12,
     color: "grey",
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
   userImage: {
     width: width * 0.15,
@@ -426,7 +437,7 @@ const styles = StyleSheet.create({
   descreption1: {
     fontSize: 14,
     color: "grey",
-    fontFamily: "FiraMonoBold",
+    fontFamily: "FiraMono-Bold",
   },
   phone: {
     width: width * 0.038,
@@ -455,13 +466,13 @@ const styles = StyleSheet.create({
   },
   bookText: {
     fontSize: 16,
-    fontFamily: "FiraMonoBold",
+    fontFamily: "FiraMono-Bold",
     color: "white",
   },
   agencyName: {
     fontSize: 12,
     color: "grey",
-    fontFamily: "FiraMonoBold",
+    fontFamily: "FiraMono-Bold",
     marginLeft: "4%",
   },
   // scrollContainer: {

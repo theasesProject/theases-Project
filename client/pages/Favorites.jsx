@@ -18,6 +18,9 @@ import star from "../assets/star.jpg";
 import deleteImge from "../assets/xBtn.png";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import NavBar from "../components/NavBar.jsx";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function Favorites() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
@@ -30,7 +33,16 @@ function Favorites() {
   const handleDelete = (id) => {
     removedBookMark(id);
   };
-  console.log(bookMarks, "zeineb");
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={styles.favoritesPage}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -122,6 +134,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     color: "grey",
+    fontFamily: "FiraMono-Medium",
   },
   message: {
     flexDirection: "column",
@@ -139,7 +152,7 @@ const styles = StyleSheet.create({
   },
   favouriteText: {
     color: "black",
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     fontSize: 18,
   },
   carCard: {
@@ -177,12 +190,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "black",
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     fontSize: 16,
   },
   agencyName: {
     color: "lightgrey",
     fontSize: 14,
+    fontFamily: "FiraMono-Medium",
   },
   delete: {
     justifyContent: "flex-end",

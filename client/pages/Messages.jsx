@@ -9,17 +9,19 @@ import {
   ScrollView,
 } from "react-native";
 import Search from "../assets/Svg/search-svgrepo-com.svg";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { Dimensions } from "react-native";
 import OneRoom from "../components/OneRoom";
-const {  height } = Dimensions.get("window");
-
+const { height } = Dimensions.get("window");
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function Messages() {
   const [user2ID, setUser2ID] = useState("");
   const [rooms, setRooms] = useState([]);
   const user = useSelector((state) => state.user);
-  const [refresh,setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
 
   const fetch = async () => {
     await axios
@@ -49,7 +51,7 @@ function Messages() {
   const handleAddRoom = async () => {
     console.log(user.data.id);
     await axios
-    
+
       .post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
         { UserId: parseInt(user.data.id), user2: parseInt(user2ID) }
@@ -64,6 +66,17 @@ function Messages() {
     fetch();
     console.log(rooms);
   }, [refresh]);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={styles.messages}>
       <Text style={styles.title}> Messages </Text>
@@ -89,9 +102,7 @@ function Messages() {
             return <OneRoom room={room} key={i} />;
           })
         ) : (
-          <View>
-            
-          </View>
+          <View></View>
         )}
       </ScrollView>
     </View>

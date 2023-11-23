@@ -12,6 +12,9 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import price from "../assets/price.jpg";
 import { LinearGradient } from "expo-linear-gradient";
 import agenda from "../assets/agenda.jpg";
@@ -73,7 +76,16 @@ const AllBookings = () => {
     setCancelModalVisible(false);
     setSelectedBooking(null);
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.page}>
       <ScrollView style={styles.container}>
@@ -119,7 +131,9 @@ const AllBookings = () => {
                           colors={["#88b4e2", "#6C77BF"]}
                         >
                           <TouchableOpacity>
-                            <Text>Payment</Text>
+                            <Text style={{ fontFamily: "FiraMono-Medium" }}>
+                              Payment
+                            </Text>
                           </TouchableOpacity>
                         </LinearGradient>
 
@@ -223,11 +237,12 @@ const styles = StyleSheet.create({
   },
   date: {
     color: "grey",
+    fontFamily: "FiraMono-Medium",
   },
   status: {
     color: "grey",
     fontSize: 14,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
   },
 
   payment: {
@@ -302,10 +317,12 @@ const styles = StyleSheet.create({
   yesButton: {
     color: "white",
     backgroundColor: "grey",
+    fontFamily: "FiraMono-Bold",
   },
   noButton: {
     color: "white",
     backgroundColor: "blue",
+    fontFamily: "FiraMono-Bold",
   },
 });
 

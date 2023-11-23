@@ -20,6 +20,7 @@ import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const EditProfile = ({ navigation }) => {
   const activeUser = useSelector(selectUser);
   const [color, setColor] = useState("#6C77BF");
@@ -138,6 +139,17 @@ const EditProfile = ({ navigation }) => {
   useEffect(() => {
     formValidation();
   }, [form]);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
 
   return (
     <View style={styles.editProfilePage}>
@@ -323,7 +335,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingHorizontal: 10,
     fontSize: 16,
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
   eye: {
     position: "absolute",
@@ -344,11 +356,11 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
   forgotPassword: {
     textAlign: "right",
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
   line: {
     height: 1,
@@ -368,7 +380,7 @@ const styles = StyleSheet.create({
   saveChangesBtnContent: {
     color: "white",
     fontSize: 18,
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
 });
 

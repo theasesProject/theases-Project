@@ -9,10 +9,22 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 
 const Sidebar = ({ isOpen, onClose, navigation }) => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const animatedValue = useRef(new Animated.Value(-300)).current;
 
   useEffect(() => {
@@ -121,6 +133,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+    fontFamily: "FiraMono-Medium",
   },
   line: {
     borderBottomWidth: 1,

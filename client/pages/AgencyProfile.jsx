@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,9 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import { useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
 import bg from "../assets/tempLogo.png";
@@ -27,6 +30,16 @@ function AgencyProfile({ navigation }) {
   const handleSliderToggle = () => {
     setSliderOpen(!isSliderOpen);
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View>
       <View style={styles.trial}>
@@ -181,7 +194,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
   },
-  temap: { fontSize: 25, color: "lightblue" },
+  temap: { fontSize: 25, color: "lightblue", fontFamily: "FiraMono-Medium" },
   foot: {
     justifyContent: "flex-end",
     alignItems: "center",

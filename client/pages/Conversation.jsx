@@ -14,7 +14,6 @@ import {
   Alert,
 } from "react-native";
 
-
 const { height, width } = Dimensions.get("screen");
 
 import * as MediaLibrary from "expo-media-library";
@@ -25,10 +24,13 @@ import OneMessage from "../components/OneMessage";
 import Send from "../assets/Svg/send-alt-1-svgrepo-com.svg";
 import Attach from "../assets/Svg/attachFile.svg";
 import * as DocumentPicker from "expo-document-picker";
-import socket from "../socket-io.front.server"
+import socket from "../socket-io.front.server";
 import Phone from "../assets/Svg/call.svg";
 import * as FileSystem from "expo-file-system";
 import base64 from "base-64";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 var Buffer = require("buffer/").Buffer;
 
 // const socket = io.connect(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:3002`);
@@ -77,9 +79,8 @@ function Conversation() {
 
   const pickDocument = async () => {
     try {
-
       const result = await DocumentPicker.getDocumentAsync({
-        type: ["image/*", "application/pdf","video/*"],
+        type: ["image/*", "application/pdf", "video/*"],
       });
       console.log("here");
       if (!result.canceled && result.assets[0].uri) {
@@ -126,12 +127,12 @@ function Conversation() {
             message: message,
             type: type,
           }
-          );
-          setAllMes((allMes) => [
-            ...allMes,
-            { senderId: user.id, message, type },
-          ]);
-          setCurrentMessage("");
+        );
+        setAllMes((allMes) => [
+          ...allMes,
+          { senderId: user.id, message, type },
+        ]);
+        setCurrentMessage("");
         scrollViewRef.current?.scrollToEnd({ animated: true });
       } catch (error) {
         console.error("Error sending message:", error);
@@ -153,63 +154,75 @@ function Conversation() {
   }, [socket]);
 
   useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
+
+  useEffect(() => {
     const handleReceiveDocument = async (data) => {
       try {
         await ImagePicker.requestMediaLibraryPermissionsAsync();
         const dir = `${FileSystem.documentDirectory}received_documents/`;
         const filePath = `${dir}${data.name}`;
         console.log("dir: ", dir);
-    
-        const resultBase64 = Buffer.from(data.data, "binary").toString("base64");
+
+        const resultBase64 = Buffer.from(data.data, "binary").toString(
+          "base64"
+        );
         console.log("between ", resultBase64, "between");
-    
+
         await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
         await FileSystem.writeAsStringAsync(filePath, resultBase64, {
           encoding: FileSystem.EncodingType.Base64,
         });
-    
+
         const updatedDocuments = [
           ...receivedDocuments,
           { ...data, localUri: filePath },
         ];
-    
+
         setReceivedDocuments(updatedDocuments);
-       
+
         console.log("The file has been saved!", `${dir}${data.name}`);
-        console.log("hereeeeeee", "here");
-    
+
         if (updatedDocuments.length === 0) {
           Alert.alert("No processed images to save.");
           return;
         }
-    
+
         const assetPromises = updatedDocuments.map(async (imageUri) => {
           console.log("imageUri: ", imageUri?.localUri, "imguri");
           if (imageUri?.localUri) {
-            const asset = await MediaLibrary.createAssetAsync(imageUri.localUri);
+            const asset = await MediaLibrary.createAssetAsync(
+              imageUri.localUri
+            );
             return asset;
           }
           return null; // Handle undefined or null values
         });
-        
-        const assets = await Promise.all(assetPromises.filter(Boolean)); 
-    
+
+        const assets = await Promise.all(assetPromises.filter(Boolean));
+
         Alert.alert("Images saved to gallery.");
       } catch (error) {
         console.error("Error receiving document:", error);
       }
     };
-    
+
     socket.on("receive-document", handleReceiveDocument);
-    
+
     return () => {
       socket.off("receive-document", handleReceiveDocument);
     };
-    
-    
   }, [socket]);
-  const openDocument =  () => {
-  Alert.alert('already saved !')
+  const openDocument = () => {
+    Alert.alert("already saved !");
   };
 
   useEffect(() => {
@@ -244,7 +257,11 @@ function Conversation() {
         >
           <Image source={{ uri: room.avatarUrl }} style={styles.imageChat} />
           <Text
-            style={{ fontWeight: 700, fontSize: 20, fontFamily: "notoserif" }}
+            style={{
+              fontWeight: 700,
+              fontSize: 20,
+              fontFamily: "FiraMono-Medium",
+            }}
           >
             {room.name.charAt(0).toUpperCase() + room.name.slice(1)}
           </Text>

@@ -14,7 +14,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser, logStatus, fetchUser } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function ProfileLandingPage({ style }) {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
@@ -61,6 +63,17 @@ function ProfileLandingPage({ style }) {
     retrieveToken();
 
     getUserLocationAndNearestAddress();
+  }, []);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
   }, []);
   return (
     <View style={[styles.navBar, style]}>
@@ -173,14 +186,14 @@ const styles = StyleSheet.create({
   yourLocation: {
     fontSize: 12,
     color: "rgb(130, 124, 140)",
-    fontFamily: "FiraMonoMedium",
+    fontFamily: "FiraMono-Medium",
   },
   UserAdress: {
     fontSize: 14,
     color: "black",
     // fontWeight: "bold",
     width: 180,
-    fontFamily: "FiraMonoBold",
+    fontFamily: "FiraMono-Bold",
   },
 });
 

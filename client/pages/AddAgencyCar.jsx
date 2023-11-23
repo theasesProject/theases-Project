@@ -20,7 +20,9 @@ import Arrowleft from "../assets/Svg/arrowleft.svg";
 import Arrowright from "../assets/Svg/arrowright.svg";
 import Thinker from "../assets/Svg/thinking1.svg";
 import Thinker2 from "../assets/Svg/thinker2.svg";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function AddAgencyCar() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -101,7 +103,16 @@ function AddAgencyCar() {
       width: width * 0.95,
     },
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
@@ -181,11 +192,13 @@ function AddAgencyCar() {
             justifyContent: "center",
           }}
           onPress={() => {
-            navigation.navigate("Home")
+            navigation.navigate("Home");
           }}
         >
           <Arrowleft />
-          <Text style={{ color: "blue" }}>Back</Text>
+          <Text style={{ color: "blue", fontFamily: "FiraMono-Medium" }}>
+            Back
+          </Text>
         </Pressable>
         <Pressable
           style={{
@@ -201,7 +214,9 @@ function AddAgencyCar() {
             handleNext();
           }}
         >
-          <Text style={{ color: "blue" }}>Next</Text>
+          <Text style={{ color: "blue", fontFamily: "FiraMono-Medium" }}>
+            Next
+          </Text>
           <Arrowright />
         </Pressable>
       </View>

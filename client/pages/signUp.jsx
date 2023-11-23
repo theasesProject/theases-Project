@@ -26,6 +26,9 @@ import FaceBookPng from "../assets/facebookIcon.png";
 import { SignUpClick } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const SignUp = ({ navigation, props }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
@@ -50,7 +53,16 @@ const SignUp = ({ navigation, props }) => {
         });
     }
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const [confirm, setConfirm] = useState("");
   const [inputForm, setInputForm] = useState({
     userName: "",
@@ -154,8 +166,8 @@ const SignUp = ({ navigation, props }) => {
         } else {
           setConfirmedError("");
         }
-      }else if(placeholder==="id card"){
-        if (inputForm.idCard.length!==8 ) {
+      } else if (placeholder === "id card") {
+        if (inputForm.idCard.length !== 8) {
           setIdCardError("Your id should be 8 numbers long");
           return;
         } else {
@@ -310,7 +322,9 @@ const SignUp = ({ navigation, props }) => {
             )}
           </View>
           {passwordError ? (
-            <Text style={{ color: "red" }}>{passwordError}</Text>
+            <Text style={{ color: "red", fontFamily: "FiraMono-Medium" }}>
+              {passwordError}
+            </Text>
           ) : null}
 
           <View style={styles.inputHolder}>
@@ -355,7 +369,9 @@ const SignUp = ({ navigation, props }) => {
             )}
           </View>
           {confirmedError ? (
-            <Text style={{ color: "red" }}>{confirmedError}</Text>
+            <Text style={{ color: "red", fontFamily: "FiraMono-Medium" }}>
+              {confirmedError}
+            </Text>
           ) : null}
           <View style={styles.inputHolder}>
             <IdCard style={styles.icon2} />
@@ -383,7 +399,7 @@ const SignUp = ({ navigation, props }) => {
               }}
             />
           </View>
-            {idCardError? (
+          {idCardError ? (
             <Text style={{ color: "red" }}>{idCardError}</Text>
           ) : null}
           <TouchableOpacity style={styles.inputHolder} onPress={showDatepicker}>
@@ -393,7 +409,9 @@ const SignUp = ({ navigation, props }) => {
               locations={[0, 1]}
               style={styles.buttonContainer2}
             >
-              <Text>Date of Birth</Text>
+              <Text style={{ fontFamily: "FiraMono-Medium" }}>
+                Date of Birth
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
           {show && (
@@ -437,9 +455,12 @@ const SignUp = ({ navigation, props }) => {
           }}
           onPressOut={() => setColor("#6C77BF")}
         >
-          <Text>
+          <Text style={{ fontFamily: "FiraMono-Medium" }}>
             Already have an account?
-            <Text style={{ color: color }}> Log in</Text>
+            <Text style={{ color: color, fontFamily: "FiraMono-Medium" }}>
+              {" "}
+              Log in
+            </Text>
           </Text>
         </Pressable>
         <View
@@ -501,6 +522,7 @@ const styles = StyleSheet.create({
   googleText: {
     fontSize: 15,
     fontWeight: "400",
+    fontFamily: "FiraMono-Medium",
   },
   extraSign: {
     display: "flex",
@@ -569,18 +591,20 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: "#000",
     marginVertical: 10,
-    fontWeight: "bold",
+
+    fontFamily: "FiraMono-Bold",
   },
   subheader: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#888",
     textAlign: "center",
     marginHorizontal: 20,
     marginBottom: 30,
+    fontFamily: "FiraMono-Medium",
   },
   input: {
     paddingLeft: 40,
-
+    fontFamily: "FiraMono-Medium",
     zIndex: -1,
     height: 50,
     width: width * 0.8,
@@ -610,6 +634,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     textAlign: "center",
+    fontFamily: "FiraMono-Medium",
   },
 });
 

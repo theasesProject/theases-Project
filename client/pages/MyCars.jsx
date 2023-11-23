@@ -34,6 +34,9 @@ import deleteImge from "../assets/delete.jpg";
 import { Swipeable } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CalendarPicker from "react-native-calendar-picker";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function MyCars() {
   const navigation = useNavigation();
   const [selectedCar, setSelectedCar] = useState(null);
@@ -53,7 +56,16 @@ function MyCars() {
     priceWeekly: selectedCar?.priceWeekly,
     priceMonthly: selectedCar?.priceMonthly,
   });
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handleDeleteCar = (carId) => {
     console.log(carId);
     dispatch(
@@ -409,7 +421,7 @@ const styles = StyleSheet.create({
   },
   favouriteText: {
     color: "black",
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     fontSize: 18,
   },
   carCard: {

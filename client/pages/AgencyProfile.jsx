@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
 import Logo from "../assets/tempLogo.png";
 import NavBarAgency from "../components/NavBarAgency";
@@ -41,27 +41,6 @@ const AgencyProfile = ({ navigation }) => {
     console.log("slider toggled");
     setSliderOpen(!isSliderOpen);
   };
-
-  const fetchReviews = async () => {
-    try {
-      const response = await axios.get(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/getAllByAgencyId/${activeUser.id}`
-      );
-      console.log("reviews: ", response.data);
-      setAllReviews(response.data);
-      setSomeReviews(response.data.slice(0, 1));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleReviewsView = (newView) => setReviewsView(newView);
-
-  useEffect(() => {
-    dispatch(getallCarByAgency(activeUser?.Agency.UserId));
-    fetchReviews();
-  }, []);
-
   return (
     <View style={styles.agencyProfile}>
       <View style={styles.topSection}>
@@ -305,14 +284,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: height * 0.02,
   },
-  reviewsView: {
-    color: "lightgrey",
-  },
-  noReviews: {
-    color: "lightgrey",
-  },
-  chartContainer: {
-    width: width,
+  temap: { fontSize: 25, color: "lightblue" },
+  foot: {
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   agencyReviews: {},
 });

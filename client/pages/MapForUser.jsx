@@ -15,7 +15,9 @@ import Sat from "../assets/Svg/satellite-dish-solid.svg";
 import Carte from "../assets/Svg/map-solid.svg";
 import HouCar from "../assets/Svg/houcar.svg";
 // import { Audio } from 'expo-av';
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const google_api = "AIzaSyA6k67mLz5qFbAOpq2zx1GBX9gXqNBeS-Y";
 
 const MapForUser = ({}) => {
@@ -39,7 +41,16 @@ const MapForUser = ({}) => {
   const [currentAgencyIndex, setCurrentAgencyIndex] = useState(0);
 
   const mapRef = useRef(null);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const agen = `<?xml version="1.0" encoding="utf-8"?>
   <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
   <svg fill="#DC143C"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -551,9 +562,9 @@ const MapForUser = ({}) => {
           {mapType === "satellite" ? <Carte /> : <Sat />}
         </TouchableOpacity>
 
-    <TouchableOpacity style={styles.zoomButton} onPress={handleNextAgency}>
-        <HouCar/>
-</TouchableOpacity>
+        <TouchableOpacity style={styles.zoomButton} onPress={handleNextAgency}>
+          <HouCar />
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleZoomToUser} style={styles.locsvg}>
           <Loc />
         </TouchableOpacity>
@@ -604,7 +615,7 @@ const styles = StyleSheet.create({
     // height:800,
     // width:'50%',
 
-// left:200,
+    // left:200,
     borderRadius: 5,
   },
   changeView: {

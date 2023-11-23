@@ -53,11 +53,6 @@ function App() {
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
-            {/* <Stack.Screen
-              name="Review"
-              component={AddReview}
-              options={{ headerShown: false }}
-            /> */}
             <Stack.Screen
               name="Home"
               component={Home}
@@ -115,7 +110,7 @@ function App() {
               options={{ headerShown: true }}
             />
             <Stack.Screen
-              name="favorites"
+              name="Favorites"
               component={Favorites}
               options={{ headerShown: true }}
             />
@@ -194,12 +189,7 @@ function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="EditAgencyProfile"
-              component={EditAgencyProfile}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AdvancedSearch"
+              name="Search"
               component={AdvancedSearch}
               options={{ headerShown: true }}
             />

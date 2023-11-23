@@ -10,6 +10,9 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import { createCar, emptyNewCar, setNewCar } from "../store/carFetch";
@@ -131,7 +134,16 @@ function AddCarAgency3() {
       }, 5000);
     }
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
@@ -230,11 +242,13 @@ function AddCarAgency3() {
             justifyContent: "center",
           }}
           onPress={() => {
-            navigation.navigate("AddCarAgency2")
+            navigation.navigate("AddCarAgency2");
           }}
         >
           <Arrowleft />
-          <Text style={{ color: "blue" }}>Back</Text>
+          <Text style={{ color: "blue", fontFamily: "FiraMono-Medium" }}>
+            Back
+          </Text>
         </Pressable>
         <Pressable
           style={{
@@ -250,7 +264,9 @@ function AddCarAgency3() {
             handleCreateCar();
           }}
         >
-          <Text style={{ color: "blue" }}>Add</Text>
+          <Text style={{ color: "blue", fontFamily: "FiraMono-Medium" }}>
+            Add
+          </Text>
           <Arrowright />
         </Pressable>
       </View>
@@ -295,6 +311,7 @@ const pickerSelectStyles = {
     paddingRight: 30,
     justifyContent: "center",
     height: 40,
+    fontFamily: "FiraMono-Medium",
   },
 };
 
@@ -328,11 +345,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     padding: 20,
+    fontFamily: "FiraMono-Medium",
   },
   introdcution1: {
     // textAlign: "center",
     fontSize: 22,
     padding: 20,
+    fontFamily: "FiraMono-Medium",
   },
   input: {
     width: "100%",
@@ -368,6 +387,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     borderRadius: 8,
     color: "white",
+    fontFamily: "FiraMono-Medium",
   },
   input2: {
     fontSize: 18,

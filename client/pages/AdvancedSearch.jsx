@@ -9,7 +9,9 @@ import back from "../assets/back.png";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAllCarByDate } from "../store/bookingSlice";
 import SelectDropdown from "react-native-select-dropdown";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import { ScrollView } from "react-native-gesture-handler";
 function AdvancedSearch() {
   const navigation = useNavigation();
@@ -69,7 +71,16 @@ function AdvancedSearch() {
       })
     );
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const depositOptions = [
     "0%",
     "10%",
@@ -296,7 +307,7 @@ function AdvancedSearch() {
                 navigation.navigate("MapForUser");
               }}
             >
-              <Text>Search by Map</Text>
+              <Text style={styles.text}>Search by Map</Text>
             </TouchableOpacity>
           </LinearGradient>
         </View>
@@ -344,8 +355,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   titleText: {
-    fontWeight: "bold",
     fontSize: 16,
+    fontFamily: "FiraMono-Bold",
   },
   typesContainer: {
     flexDirection: "row",

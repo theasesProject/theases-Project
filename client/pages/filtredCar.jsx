@@ -13,11 +13,23 @@ import back from "../assets/back.png";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 import star from "../assets/star.jpg";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function FiltredCar() {
   const navigation = useNavigation();
 
   const avaibleCar = useSelector((state) => state.booking.avaibleCar);
-  console.log(avaibleCar, "avaible");
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
 
   return (
     <View style={styles.homePage}>
@@ -89,6 +101,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     color: "grey",
+    fontFamily: "FiraMono-Medium",
   },
 
   message: {
@@ -101,7 +114,7 @@ const styles = StyleSheet.create({
   emptyText1: {
     textAlign: "center",
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
 
     color: "grey",
   },
@@ -146,15 +159,17 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "black",
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     fontSize: 16,
   },
   agencyName: {
     color: "lightgrey",
     fontSize: 14,
+    fontFamily: "FiraMono-Medium",
   },
   price: {
     color: "blue",
+    fontFamily: "FiraMono-Medium",
   },
   delete: {
     justifyContent: "flex-end",

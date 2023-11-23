@@ -21,7 +21,6 @@ import Close from "../assets/Svg/eyeClose.svg";
 import cloudinaryUpload from "../HelperFunctions/Cloudinary";
 import * as ImagePicker from "expo-image-picker";
 const { width, height } = Dimensions.get("screen");
-
 const EditProfile = ({ navigation }) => {
   const activeUser = useSelector(selectUser);
   const [color, setColor] = useState("#6C77BF");
@@ -140,6 +139,17 @@ const EditProfile = ({ navigation }) => {
   useEffect(() => {
     formValidation();
   }, [form]);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
 
   return (
     <View style={styles.editProfilePage}>
@@ -367,7 +377,6 @@ const styles = StyleSheet.create({
     height: height * 0.065,
     paddingHorizontal: 10,
     fontSize: 16,
-    marginBottom: height * 0.015,
   },
   eye: {
     position: "absolute",
@@ -389,11 +398,11 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+    fontFamily: "FiraMono-Medium",
   },
   forgetPasswordContainer: {},
   forgotPassword: {
     textAlign: "right",
-    justifyContent: "center",
   },
   line: {
     height: 1,
@@ -414,6 +423,7 @@ const styles = StyleSheet.create({
   saveChangesBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMono-Medium",
   },
 });
 

@@ -6,6 +6,9 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import moment from "moment";
 const { width, height } = Dimensions.get("screen");
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const Stats = () => {
   const [realLineData, setRealLineData] = useState({
     labels: ["...", "...", "...", "...", "...", "..."],
@@ -153,45 +156,16 @@ const Stats = () => {
       },
     ],
   };
-  const pieData = [
-    // dummy data for the pie chart
-    {
-      name: "volkswagen",
-      rentCount: 215000,
-      color: "#C2D9FF",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
-    },
-    {
-      name: "renault",
-      rentCount: 28000,
-      color: "#8E8FFA",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
-    },
-    {
-      name: "BMW",
-      rentCount: 5200,
-      color: "#7752FE",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
-    },
-    {
-      name: "Mercedes",
-      rentCount: 85300,
-      color: "#190482",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
-    },
-    {
-      name: "dacia",
-      rentCount: 119200,
-      color: "rgb(0, 0, 255)",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 15,
-    },
-  ];
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.container}>
       <View>

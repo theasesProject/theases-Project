@@ -41,16 +41,16 @@ const MapForUser = ({}) => {
   const [currentAgencyIndex, setCurrentAgencyIndex] = useState(0);
 
   const mapRef = useRef(null);
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   const agen = `<?xml version="1.0" encoding="utf-8"?>
   <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
   <svg fill="#DC143C"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 

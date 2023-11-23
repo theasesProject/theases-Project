@@ -10,6 +10,7 @@ import { useStripe } from "@stripe/stripe-react-native";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect } from "react";
 const { height, width } = Dimensions.get("window");
 
 const PaymentBtn = ({amount}) => {
@@ -66,21 +67,23 @@ const PaymentBtn = ({amount}) => {
 
 const styles = StyleSheet.create({
   payBtnContainer: {
-    width: width * 0.3,
+    width: width*0.3,
   },
   payBtn: {
     borderRadius: 10,
-    height: height * 0.055,
+    height: height*0.055,
     width: "100%",
     color: "white",
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   payBtnContent: {
     color: "white",
-    fontSize: 18,
+    // fontSize: 18,
   },
+  
 });
 
-export default Payment;
+export default PaymentBtn;

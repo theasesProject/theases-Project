@@ -2,27 +2,33 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Image,
   Pressable,
-  AppState,
   Dimensions,
-  Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { height, width } = Dimensions.get("screen");
 import localisation from "../assets/localisation1.png";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, logStatus, fetchUser } from "../store/userSlice";
+import {
+  selectUser,
+  logStatus,
+  fetchUser,
+  logoutUser,
+  logUserOut,
+} from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function ProfileLandingPage({ style }) {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
   const loggedIn = useSelector(logStatus);
   const dispatch = useDispatch();
+
   const [userAddress, setUserAddress] = useState("</> click here");
 
   const getUserLocationAndNearestAddress = async () => {
@@ -64,6 +70,17 @@ function ProfileLandingPage({ style }) {
     retrieveToken();
 
     getUserLocationAndNearestAddress();
+  }, []);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
   }, []);
   return (
     <View style={[styles.navBar, style]}>
@@ -176,12 +193,14 @@ const styles = StyleSheet.create({
   yourLocation: {
     fontSize: 12,
     color: "rgb(130, 124, 140)",
+    fontFamily: "FiraMono-Medium",
   },
   UserAdress: {
     fontSize: 14,
     color: "black",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     width: 180,
+    fontFamily: "FiraMono-Bold",
   },
 });
 

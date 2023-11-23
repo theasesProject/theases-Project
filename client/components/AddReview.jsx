@@ -10,14 +10,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { width, height } = Dimensions.get("screen");
 const AddReview = ({ navigation }) => {
   const [rating, setRating] = useState(0);
   const [rated, setRated] = useState(false);
-  const [ratingDescription, setRatingDescription] = useState("");
   const [comment, setComment] = useState("");
+  const activeUser = useSelector(selectUser);
 
   const ratingCompleted = (rate) => {
     if (rate > 0) {
@@ -25,28 +27,40 @@ const AddReview = ({ navigation }) => {
     } else {
       setRated(false);
     }
-    if (rate === 1) {
-      setRatingDescription("Terrible");
-    } else if (rate === 2) {
-      setRatingDescription("Bad");
-    } else if (rate === 3) {
-      setRatingDescription("Okay");
-    } else if (rate === 4) {
-      setRatingDescription("Good");
-    } else if (rate === 5) {
-      setRatingDescription("Great");
-    }
     setRating(rate);
   };
 
-  const handleSubmit = () => {
-    console.log({
-      rating: rating,
-      ratingDescription: ratingDescription,
-      comment: comment,
-    });
+  const handleSubmit = async () => {
+    // ***************************************************
+    const receiverId = 1; //* this will be removed when i figuer out where to get it
+    // ***************************************************
+    try {
+      const body = {
+        rating: rating,
+        comment: comment,
+        senderType: activeUser?.type || "client",
+        UserId: activeUser?.id || 2,
+        CarId: 1, //* this has to come from somewhere
+      };
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/MakeReview/${receiverId}`,
+        body
+      );
+      console.log(response.data);
+    } catch (err) {
+      console.error(JSON.stringify(err));
+    }
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.reviewPage}>
       <View style={styles.topSection}>
@@ -58,7 +72,7 @@ const AddReview = ({ navigation }) => {
       </View>
       <AirbnbRating
         count={5}
-        defaultRating={0}
+        defaultRating={"0"}
         onFinishRating={ratingCompleted}
         size={30}
         starContainerStyle={styles.starsContainer}
@@ -115,7 +129,7 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     textAlign: "right",
   },
   agencyName: {
@@ -154,6 +168,7 @@ const styles = StyleSheet.create({
   submitBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMono-Medium",
   },
 });
 

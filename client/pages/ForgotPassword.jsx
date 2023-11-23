@@ -13,6 +13,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { width, height } = Dimensions.get("screen");
 
 const ForgotPassword = ({ navigation }) => {
@@ -21,11 +24,20 @@ const ForgotPassword = ({ navigation }) => {
   const [fullCode, setFullCode] = useState([]);
   const [received, setReceived] = useState(null);
   const [error, setError] = useState(null);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handleSubmit = async () => {
     try {
       if (identifierValidation(identifier) !== "email") {
-        return setError("please provide an email");
+        return setError("please provide a valid email address");
       }
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOneByEmail/${identifier}`
@@ -108,7 +120,7 @@ const ForgotPassword = ({ navigation }) => {
             <TextInput
               autoCapitalize="none"
               onChangeText={(content) => setIdentifier(content.trim())}
-              placeholder="email or phone number"
+              placeholder="insert your email address"
               style={styles.identifierInput}
             />
           </View>
@@ -136,7 +148,7 @@ const ForgotPassword = ({ navigation }) => {
         <View style={styles.identifierErrorContainer}>
           <Text style={styles.error}>
             {error === "user does not exist" ||
-            error === "please provide an email or a phone number"
+            error === "please provide a valid email address"
               ? error
               : null}
           </Text>
@@ -226,6 +238,7 @@ const styles = StyleSheet.create({
   },
   identifierErrorContainer: {
     textAlign: "left",
+    fontFamily: "FiraMono-Medium",
   },
   error: {
     color: "red",

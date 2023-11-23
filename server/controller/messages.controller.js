@@ -1,14 +1,30 @@
-const {db } = require("../models/index");
-const Message = db.Message
+// In your server-side controller (message.controller.js):
 
-module.exports.add = async (req,res)=>{
-    try{
-        const added = await Message.create(req.body)
-        res.json(added)
-    } catch(e){
-        throw err
-    }
-}
+const { db } = require('../models/index');
+const Message = db.Message;
+
+module.exports.add = async (req, res) => {
+  try {
+    const { message, type, senderId, roomId } = req.body;
+
+    // If the message is a Base64-encoded file, decode it
+    const isBase64 = type && message && message.startsWith('data:');
+    const fileData = isBase64 ? Buffer.from(message.split(';base64,')[1], 'base64') : null;
+
+    const added = await Message.create({
+      message: isBase64 ? 'file' : message,
+      type,
+      senderId,
+      roomId,
+      fileData: fileData || null,
+    });
+
+    res.json(added);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 module.exports.getMessages = async (req,res)=>{
     try{

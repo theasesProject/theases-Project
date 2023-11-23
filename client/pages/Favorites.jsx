@@ -18,6 +18,9 @@ import star from "../assets/star.jpg";
 import deleteImge from "../assets/xBtn.png";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import NavBar from "../components/NavBar.jsx";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function Favorites() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
@@ -30,42 +33,56 @@ function Favorites() {
   const handleDelete = (id) => {
     removedBookMark(id);
   };
-  console.log(bookMarks, "zeineb");
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={styles.favoritesPage}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {bookMarks?.length > 0 ? (
-          bookMarks.map((bookmark, i) => (
-            <View key={i} style={styles.carCard}>
-              <View style={styles.items}>
-                <View style={styles.deleted2}>
-                  <TouchableOpacity onPress={handleDelete(bookmark.car.id)}>
-                    <Image style={styles.delete} source={deleteImge} />
-                  </TouchableOpacity>
-                </View>
-                <Image
-                  style={styles.car}
-                  source={{
-                    uri: bookmark.carImage?.media,
-                  }}
-                />
-                <View style={styles.detail}>
-                  <Text style={styles.title}>{bookmark.car?.model}</Text>
-                  <View style={styles.stars}>
-                    <Image style={styles.star} source={star} />
-                    <Image style={styles.star} source={star} />
-                    <Image style={styles.star} source={star} />
-                    <Image style={styles.star} source={star} />
-                    <Image style={styles.star} source={star} />
+          bookMarks
+            .slice()
+            .reverse()
+            .map((bookmark, i) => (
+              <View key={i} style={styles.carCard}>
+                <View style={styles.items}>
+                  <View style={styles.deleted2}>
+                    <TouchableOpacity onPress={handleDelete(bookmark.car.id)}>
+                      <Image style={styles.delete} source={deleteImge} />
+                    </TouchableOpacity>
                   </View>
-                  <Text style={styles.agencyName}>{bookmark.agency?.name}</Text>
-                  <Text style={styles.price}>
-                    ${bookmark.car?.price}/{bookmark.car?.period}
-                  </Text>
+                  <Image
+                    style={styles.car}
+                    source={{
+                      uri: bookmark.carImage?.media,
+                    }}
+                  />
+                  <View style={styles.detail}>
+                    <Text style={styles.title}>{bookmark.car?.model}</Text>
+                    <View style={styles.stars}>
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                      <Image style={styles.star} source={star} />
+                    </View>
+                    <Text style={styles.agencyName}>
+                      {bookmark.agency?.name}
+                    </Text>
+                    <Text style={styles.price}>
+                      ${bookmark.car?.price}/{bookmark.car?.period}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          ))
+            ))
         ) : (
           <View style={styles.message}>
             <GreyHeart />
@@ -117,6 +134,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     color: "grey",
+    fontFamily: "FiraMono-Medium",
   },
   message: {
     flexDirection: "column",
@@ -134,7 +152,7 @@ const styles = StyleSheet.create({
   },
   favouriteText: {
     color: "black",
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     fontSize: 18,
   },
   carCard: {
@@ -172,12 +190,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "black",
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     fontSize: 16,
   },
   agencyName: {
     color: "lightgrey",
     fontSize: 14,
+    fontFamily: "FiraMono-Medium",
   },
   delete: {
     justifyContent: "flex-end",

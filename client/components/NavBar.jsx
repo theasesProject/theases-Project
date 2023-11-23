@@ -1,44 +1,46 @@
-import React from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  Text,
-  Button,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Pressable,
-  Dimensions,
-} from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import Svg, { Path } from "react-native-svg";
 import SignUp from ".././assets/Svg/signUpNav.svg";
 import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
 import { useSelector } from "react-redux";
-const { height, width } = Dimensions.get("screen");
-function NavBar({ style, showNav }) {
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
+const { height } = Dimensions.get("screen");
+function NavBar({ style }) {
   const loggedIn = useSelector((state) => state.user.loggedIn);
 
   const navigation = useNavigation();
   const route = useRoute();
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const isActive = (routeName) =>
     route.name === routeName ? "#6C77BF" : "grey";
   return (
-    <View
-      style={[styles.navBar, style, (display = showNav ? "block" : "none")]}
-    >
+    <View style={[styles.navBar, style]}>
       <Pressable
         style={styles.quarter}
         onPress={() => navigation.navigate("Home")}
       >
         <View style={styles.hm}>
           <Hm fill={isActive("Home")} />
-          <Text style={{ color: isActive("Home") }}>Home</Text>
+          <Text
+            style={{ color: isActive("Home"), fontFamily: "FiraMono-Medium" }}
+          >
+            Home
+          </Text>
         </View>
       </Pressable>
 
@@ -48,7 +50,14 @@ function NavBar({ style, showNav }) {
       >
         <View style={styles.hm}>
           <Ms fill={isActive("Messages")} />
-          <Text style={{ color: isActive("Messages") }}>Messeges</Text>
+          <Text
+            style={{
+              color: isActive("Messages"),
+              fontFamily: "FiraMono-Medium",
+            }}
+          >
+            Messeges
+          </Text>
         </View>
       </Pressable>
 
@@ -66,7 +75,12 @@ function NavBar({ style, showNav }) {
           ) : (
             <Fa fill={isActive("Favorites")} />
           )}
-          <Text style={{ color: isActive("Favorites") }}>
+          <Text
+            style={{
+              color: isActive("Favorites"),
+              fontFamily: "FiraMono-Medium",
+            }}
+          >
             {loggedIn ? "Favorites" : "SignUp"}
           </Text>
         </View>
@@ -83,7 +97,12 @@ function NavBar({ style, showNav }) {
       >
         <View style={styles.hm}>
           <Pr fill={isActive("Userprofile")} />
-          <Text style={{ color: isActive("Userprofile") }}>
+          <Text
+            style={{
+              color: isActive("Userprofile"),
+              fontFamily: "FiraMono-Medium",
+            }}
+          >
             {loggedIn ? "Profile" : "Login"}
           </Text>
         </View>
@@ -91,10 +110,6 @@ function NavBar({ style, showNav }) {
     </View>
   );
 }
-
-// ... rest of your code
-// ... rest of your code
-
 const styles = StyleSheet.create({
   navBar: {
     borderTopColor: "lightgrey",

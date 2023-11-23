@@ -13,13 +13,24 @@ import Carousel from "react-native-reanimated-carousel";
 import frim from "../assets/Fst-removebg-preview.png";
 import scim from "../assets/secondpage-removebg-preview.png";
 import thim from "../assets/ddd.png";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function Carou() {
   const [activeSlide, setActiveSlide] = React.useState(0);
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
   const navigation = useNavigation();
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const data = [
     {
       id: "1",
@@ -112,7 +123,6 @@ function Carou() {
             />
           ))}
         </View>
-
         <TouchableOpacity onPress={handleNextButton}>
           <Text style={styles.next}>
             {activeSlide === 2 ? "Login" : "Next"}
@@ -138,7 +148,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
   },
   stext: {
     fontSize: 16,
@@ -148,6 +158,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "left",
     color: "blue",
+    fontFamily: "FiraMono-Medium",
   },
   footer: {
     flexDirection: "row",
@@ -175,6 +186,7 @@ const styles = StyleSheet.create({
   next: {
     textAlign: "right",
     fontSize: 18,
+    fontFamily: "FiraMono-Medium",
   },
 });
 

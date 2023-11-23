@@ -9,6 +9,7 @@ import {
   Dimensions,
   RefreshControl,
   Modal,
+  Alert,
 } from "react-native";
 import SwipeUpDown from "react-native-swipe-up-down";
 import NavBarAgency from "../components/NavBarAgency.jsx";
@@ -23,12 +24,14 @@ import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
 const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
-import { selectUser, setUser } from "../store/userSlice";
+import { selectUser, setUser, logUserOut } from "../store/userSlice";
 import io from "socket.io-client";
 
 import * as Device from "expo-device";
@@ -49,6 +52,7 @@ async function schedulePushNotification(notification) {
     trigger: { seconds: 1 },
   });
 }
+
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
   const dispatch = useDispatch();
@@ -74,7 +78,7 @@ function Home({ navigation }) {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-
+  console.log(activeUser, "acitveUser");
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -97,6 +101,12 @@ function Home({ navigation }) {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+  const navigateToTransportationMap = () => {
+    navigation.navigate("TransportationMap", {
+      userId: "your_user_id_here",
+      agencyId: "your_agency_id_here",
+    });
+  };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(getAllCars()).then(() => setRefreshing(false));
@@ -132,28 +142,40 @@ function Home({ navigation }) {
   }, [loading]);
 
   useEffect(() => {
-    socket.emit("login", { userId: activeUser?.id, expoPushToken });
-    console.log(activeUser);
-    socket.on("receive-notification", (notification) => {
-      schedulePushNotification(notification);
-      console.log("notification here", notification, "notifcarion");
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          _id: notification.id,
-          text: notification.message,
-          createdAt: new Date(),
-          user: {
-            _id: notification.senderId,
-            name: "Service",
+    if (activeUser?.stateBlocked === true) {
+      alert(
+        "Sorry, your account is banned. Please contact  costumer support for assistance."
+      );
+      setUser(null);
+      dispatch(logUserOut());
+
+      navigation.navigate("Login");
+    }
+    if (activeUser?.id) {
+      socket.emit("login", { userId: activeUser?.id });
+
+      socket.on("receive-notification", (notification) => {
+        schedulePushNotification(notification.title);
+
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            _id: notification.id,
+            text: notification.message,
+            createdAt: new Date(),
+            user: {
+              _id: notification.senderId,
+              name: "Services",
+            },
           },
-        },
-      ]);
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, [socket, expoPushToken]);
+        ]);
+      });
+    } else {
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [socket, expoPushToken, activeUser?.id, activeUser?.stateBlocked]);
 
   return (
     <View style={styles.homePage}>
@@ -170,16 +192,19 @@ function Home({ navigation }) {
         </View>
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
         {!loading ? (
-          allCars?.map((element, i) => (
-            <View style={styles.allcars} key={i}>
-              <CardCar
-                setNothing={setNothing}
-                key={i}
-                oneCar={element}
-                handlePress={handlePress}
-              />
-            </View>
-          ))
+          allCars
+            .slice()
+            .reverse()
+            ?.map((element, i) => (
+              <View style={styles.allcars} key={i}>
+                <CardCar
+                  setNothing={setNothing}
+                  key={i}
+                  oneCar={element}
+                  handlePress={handlePress}
+                />
+              </View>
+            ))
         ) : (
           <>
             <View style={{ alignItems: "center", paddingTop: 20 }}>
@@ -262,7 +287,8 @@ function Home({ navigation }) {
           </Text>
         </View>
       </View>
-      <SwipeUpDown
+
+      {/* <SwipeUpDown
         itemFull={<CarDetails />}
         ref={swipeUpDownRef}
         extraMarginTop={140}
@@ -275,14 +301,22 @@ function Home({ navigation }) {
           borderTopEndRadius: 50,
           backgroundColor: "lightgrey",
         }}
-      />
-      {showNav ? (
-        activeUser?.type === "agency" ? (
-          <NavBarAgency/>
-        ) : (
-          <NavBar/>
-        )
-      ) : null}
+      /> */}
+
+      <Text
+        onPress={() => {
+          navigation.navigate("TransportationMap", {
+            agencyId:
+              activeUser?.type === "agency" ? activeUser?.Agency.UserId : null,
+            UserId: activeUser?.type === "client" ? activeUser?.id : null,
+            userType: activeUser?.type,
+          });
+        }}
+      >
+        map transportation{" "}
+      </Text>
+
+      {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>
   );
 }

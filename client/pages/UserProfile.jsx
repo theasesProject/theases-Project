@@ -7,6 +7,9 @@ import {
   Pressable,
   Dimensions,
 } from "react-native";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { height, width } = Dimensions.get("screen");
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
@@ -31,7 +34,16 @@ function Userprofile({ navigation }) {
     dispatch(logUserOut());
     navigation.navigate("Home");
   };
-  console.log("active User Profileeeeeeeeee", activeUser);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={styles.userProfilePage}>
       <View style={styles.topSection}>
@@ -58,10 +70,10 @@ function Userprofile({ navigation }) {
           {activeUser?.type === "client" ? (
             <TouchableOpacity
               style={styles.profileOption}
-              onPress={() => navigation.navigate("Bookings")}
+              onPress={() => navigation.navigate("AllBookings")}
             >
               <Image style={styles.icon} source={bkg} />
-              <Text>My bookings</Text>
+              <Text style={{ fontFamily: "FiraMono-Medium" }}>My bookings</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -70,7 +82,7 @@ function Userprofile({ navigation }) {
             >
               <CarIcon style={styles.icon}></CarIcon>
 
-              <Text>My Cars</Text>
+              <Text style={{ fontFamily: "FiraMono-Medium" }}>My Cars</Text>
             </TouchableOpacity>
           )}
 
@@ -79,7 +91,7 @@ function Userprofile({ navigation }) {
             onPress={() => console.log("settings")}
           >
             <Image source={stg} style={styles.icon} />
-            <Text>Settings</Text>
+            <Text style={{ fontFamily: "FiraMono-Medium" }}>Settings</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.profileOption}
@@ -93,9 +105,13 @@ function Userprofile({ navigation }) {
           >
             <Image source={change} style={styles.icon} />
             {activeUser?.type === "client" ? (
-              <Text>Become an Agency</Text>
+              <Text style={{ fontFamily: "FiraMono-Medium" }}>
+                Become an Agency
+              </Text>
             ) : (
-              <Text>Add Cars For Rent</Text>
+              <Text style={{ fontFamily: "FiraMono-Medium" }}>
+                Add Cars For Rent
+              </Text>
             )}
           </TouchableOpacity>
         </View>
@@ -148,7 +164,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
   },
   editProfileContainer: {
     justifyContent: "center",
@@ -156,6 +172,7 @@ const styles = StyleSheet.create({
   editProfile: {
     fontSize: 12,
     color: "#6C77BF",
+    fontFamily: "FiraMono-Medium",
   },
   bottomSection: {
     height: "75%",
@@ -179,7 +196,7 @@ const styles = StyleSheet.create({
     left: 20,
     width: "100%",
     borderTopColor: "black",
-    borderTopWidth: .5,
+    borderTopWidth: 0.5,
     paddingTop: 20,
   },
   navBar: {
@@ -202,6 +219,7 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: "white",
+    fontFamily: "FiraMono-Medium",
   },
   //
   bottomSection: {

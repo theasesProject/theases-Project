@@ -35,6 +35,8 @@ db.BookMark = require("./bookMarks.Model")(DataTypes, connection);
 db.Request = require("./request.Model")(DataTypes, connection);
 db.RentelRequest = require("./rentelRequest.Model")(DataTypes, connection);
 db.Availability = require("./available")(DataTypes, connection);
+db.Notifcation = require("./notification.Model")(DataTypes, connection);
+
 db.User.hasOne(db.Agency);
 db.Agency.belongsTo(db.User);
 
@@ -56,6 +58,9 @@ db.Car.belongsTo(db.Agency);
 db.Car.hasMany(db.Media);
 db.Media.belongsTo(db.Car);
 
+db.User.hasMany(db.Notifcation);
+db.Notifcation.belongsTo(db.User);
+
 db.User.hasMany(db.Car);
 db.Car.belongsTo(db.User);
 
@@ -64,6 +69,9 @@ db.Review.belongsTo(db.User);
 
 db.Agency.hasMany(db.Review);
 db.Review.belongsTo(db.Agency);
+
+db.Car.hasMany(db.Review);
+db.Review.belongsTo(db.Car);
 
 // db.Car.hasMany(db.Service);
 // db.Service.belongsTo(db.Car);

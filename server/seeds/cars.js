@@ -18,7 +18,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "3 Series",
@@ -35,7 +35,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "Model S",
@@ -53,7 +53,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "3 Series",
@@ -71,7 +71,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "Model X",
@@ -88,7 +88,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "5 Series",
@@ -106,7 +106,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "Model Y",
@@ -123,7 +123,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "7 Series",
@@ -141,7 +141,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "7 Series",
@@ -159,7 +159,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "7 Series",
@@ -177,7 +177,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "Model S",
@@ -194,7 +194,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "3 Series",
@@ -212,7 +212,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "Model S",
@@ -229,7 +229,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "3 Series",
@@ -247,7 +247,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "Model X",
@@ -264,7 +264,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "5 Series",
@@ -282,7 +282,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "Model Y",
@@ -299,7 +299,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Luxury",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "7 Series",
@@ -317,7 +317,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "7 Series",
@@ -335,7 +335,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
   {
     model: "7 Series",
@@ -353,7 +353,7 @@ const cars = [
     acceptation: "pending",
     typevehicle: "Economical",
     characteristics: "Automatic",
-    AgencyId: 1,
+    agencyId: 1,
   },
 ];
 

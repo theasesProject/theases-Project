@@ -12,6 +12,23 @@ const initialState = {
   bookMarks: [],
   succes: null,
   RentDetails: {},
+  NewCar: {
+    model: "",
+    brand: "",
+    price: "",
+    priceWeekly: "",
+    priceMonthly: "",
+    status: "available",
+    horsePower: "",
+    typeOfFuel: "",
+    description: "",
+    warrantyInsurance: false,
+    acceptation: "pending",
+    typevehicle: "",
+    characteristics: "",
+    img: [],
+    AgencyId: "",
+  },
 };
 export const getOnecarById = createAsyncThunk(
   "car/getOnecarById",
@@ -49,7 +66,6 @@ export const deletedAgencyCar = createAsyncThunk(
   async (body) => {
     const { id, AgencyId } = body;
     try {
-      console.log(body, "body");
       const response = await axios.delete(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/deletedCar/${id}/${AgencyId}`
       );
@@ -65,7 +81,7 @@ export const getAllCars = createAsyncThunk("car/getAllCars", async () => {
     const response = await axios.get(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/allCars`
     );
-    console.log(response.data, "response");
+
     return response.data;
   } catch (error) {
     console.log(JSON.stringify(error));
@@ -76,12 +92,11 @@ export const fetchFilteredCars = createAsyncThunk(
   "car/fetchFilteredCars",
   async (filterCriteria) => {
     try {
-      console.log(filterCriteria, "first");
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/filtredCar`,
         filterCriteria
       );
-      console.log(response.data, "final");
+
       return response.data;
     } catch (error) {
       console.error(error);
@@ -89,22 +104,20 @@ export const fetchFilteredCars = createAsyncThunk(
   }
 );
 export const createCar = createAsyncThunk("car/createCar", async (params) => {
+  console.log(params.media,"iiiiiii");
   if (!params) return;
   try {
-    console.log(params,'here')
     const response = await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/newCar`,
       params.body
-    ); 
-    console.log('response',response.data);
+    );
+
     const requestId = response.data.id;
-   
-  
+    console.log('response data',response.data);
     await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media
     );
-    // console.log(body, "body");
     return response.data;
   } catch (error) {
     console.log(error);
@@ -129,7 +142,6 @@ export const createImgeForCar = createAsyncThunk(
 export const getAllBoolMarks = createAsyncThunk(
   "car/getAllBoolMarks",
   async (id) => {
-    console.log("bookmarks", id);
     try {
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/getAll/${id}`
@@ -145,14 +157,11 @@ export const CreateBookMark = createAsyncThunk(
   "car/CreateBookMark",
   async (body) => {
     try {
-      console.log(body, "body before");
-
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/add`,
         body
       );
 
-      console.log(body, "body");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -174,7 +183,20 @@ export const removedBookMark = createAsyncThunk(
     }
   }
 );
+export const updateCar = createAsyncThunk("car/updateCar", async (body) => {
+  try {
+    const id = body.id;
 
+    const response = await axios.put(
+      `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/cars/${id}`,
+      body
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+});
 const carSlice = createSlice({
   name: "car",
   initialState,
@@ -188,6 +210,12 @@ const carSlice = createSlice({
     carDetail: (state, action) => {
       state.OneCar = action.payload;
     },
+    setNewCar : (state, action) => {
+      state.NewCar = action.payload;
+    },
+    emptyNewCar : (state, action) => {
+      state.NewCar = initialState.NewCar
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
@@ -210,7 +238,7 @@ const carSlice = createSlice({
     });
     builder.addCase(fetchFilteredCars.fulfilled, (state, action) => {
       state.loading = false;
-      state.carFiltred = action.payload; // Set filtered cars in the state
+      state.carFiltred = action.payload;
     });
     builder.addCase(fetchFilteredCars.rejected, (state, action) => {
       state.loading = false;
@@ -222,7 +250,7 @@ const carSlice = createSlice({
     });
     builder.addCase(getOnecarById.fulfilled, (state, action) => {
       state.loading = false;
-      state.OneCar = action.payload; // Set filtered cars in the state
+      state.OneCar = action.payload;
     });
     builder.addCase(getOnecarById.rejected, (state, action) => {
       state.loading = false;
@@ -236,7 +264,6 @@ const carSlice = createSlice({
 
     builder.addCase(createCar.fulfilled, (state, action) => {
       state.loading = false;
-      // Set filtered cars in the state
     });
 
     builder.addCase(createCar.rejected, (state, action) => {
@@ -250,7 +277,6 @@ const carSlice = createSlice({
     });
     builder.addCase(createImgeForCar.fulfilled, (state, action) => {
       state.loading = false;
-      // Set filtered cars in the state
     });
     builder.addCase(createImgeForCar.rejected, (state, action) => {
       state.loading = false;
@@ -316,7 +342,19 @@ const carSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+    builder.addCase(updateCar.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(updateCar.fulfilled, (state, action) => {
+      state.loading = false;
+      state.succes = action.payload;
+    });
+    builder.addCase(updateCar.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
-export const { filterCars, saveDetails, carDetail } = carSlice.actions;
+export const { filterCars, saveDetails, carDetail , setNewCar , emptyNewCar} = carSlice.actions;
 export default carSlice.reducer;

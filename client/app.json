@@ -16,14 +16,28 @@
       "backgroundColor": "#ffffff"
     },
     "permissions": {
-      "location": {
-        "always": "LOCATION",
-        "whenInUse": "LOCATION"
+      "camera": {
+        "settings": {
+          "ios": {
+            "require": true
+          }
+        }
+      },
+      "microphone": {
+        "settings": {
+          "ios": {
+            "require": true
+          }
+        }
       }
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app needs access to the camera to make video calls",
+        "NSMicrophoneUsageDescription": "This app needs access to the microphone to make video calls"
+      }
     },
     "android": {
       "package": "android.package",
@@ -32,18 +46,26 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["WRITE_EXTERNAL_STORAGE"]
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "CAMERA",
+        "RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
-        "expo-document-picker",
+        "@config-plugins/react-native-webrtc",
         {
-          "iCloudContainerEnvironment": "Production"
+          "audio": true,
+          "video": true
         }
-      ]
+      ],
+      ["@config-plugins/react-native-webrtc"],
+      "expo-document-picker"
     ],
     "extra": {
       "eas": {

@@ -1,5 +1,3 @@
-// Root => /api/users
-
 const express = require("express");
 const router = express.Router();
 const {
@@ -32,7 +30,7 @@ router.get("/getInfoByMail/:email", getUserInfoByEmail);
 router.post("/SignUpUser", SignUpUser);
 router.get("/getOneByEmail/:email", getUserByEmail);
 router.get("/getOneByPhone/:phoneNumber", getUserByPhoneNumber);
-// router.get("/getAll", getAllUsers);
+
 router.get("/getOne/:id", getUserById);
 router.put("/update/:id", updateUser);
 router.delete("/delete/:id", deleteUser);

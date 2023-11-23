@@ -6,19 +6,48 @@ import {
   TouchableOpacity,
   Animated,
   PanResponder,
+  Dimensions,
 } from "react-native";
+const { height, width } = Dimensions.get("screen");
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 
-const Sidebar = ({ isOpen, onClose, navigation }) => {
+const Sidebar = ({ navigation, isOpen, onClose }) => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const animatedValue = useRef(new Animated.Value(-300)).current;
 
   useEffect(() => {
+    const closeSidebar = () => {
+      Animated.timing(animatedValue, {
+        toValue: isOpen ? 0 : -250,
+        duration: 400,
+        useNativeDriver: false,
+      }).start();
+    };
+
+    closeSidebar(); // Initially close/open the sidebar based on the isOpen value
+
+    return () => {
+      closeSidebar(); // Ensure the sidebar is closed when the component unmounts
+    };
+  }, [isOpen, animatedValue]);
+  useEffect(() => {
     Animated.timing(animatedValue, {
-      toValue: isOpen ? 0 : -250,
-      duration: 300,
+      toValue: !isOpen ? -250 : 0,
+      duration: 400,
       useNativeDriver: false,
     }).start();
   }, [isOpen, animatedValue]);
@@ -27,20 +56,15 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        // Set a threshold to start recognizing horizontal gestures
-
         return Math.abs(gestureState.dx) > 10;
       },
       onPanResponderMove: (_, gestureState) => {
-        console.log("heeeerreeeee", gestureState.dx);
         if (gestureState.dx > 50) {
           onClose();
           console.log("done");
         }
       },
-      onPanResponderRelease: () => {
-        // Additional logic on release if needed
-      },
+      onPanResponderRelease: () => {},
     })
   ).current;
 
@@ -71,19 +95,13 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
         <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("editProfile")}>
-        <Text style={styles.text}>Edit profile</Text>
+        <Text style={styles.text}>Edit personal info</Text>
         <View style={styles.line} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("MyCars")}>
-        <Text style={styles.text}>Reviews</Text>
-        <View style={styles.line} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("MyCars")}>
-        <Text style={styles.text}>Reports</Text>
-        <View style={styles.line} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("MyCars")}>
-        <Text style={styles.text}>Settings</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("EditAgencyProfile")}
+      >
+        <Text style={styles.text}>Edit agency profile</Text>
         <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={handleLogout}>
@@ -97,24 +115,25 @@ const Sidebar = ({ isOpen, onClose, navigation }) => {
 const styles = StyleSheet.create({
   sidebar: {
     position: "absolute",
-    top: 0,
-    height: "82.5%",
-    width: "60%",
-    borderRadius: 10,
-    backgroundColor: "white",
+    top: height * 0.05,
+    right: 0,
+    height: height * 0.95,
+    width: width * 0.725,
+    backgroundColor: "#F2F2F2",
     shadowColor: "#000",
     shadowOffset: { width: 5, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 2,
     paddingTop: 30,
-    paddingHorizontal: 20,
-    zIndex: 1,
+    paddingHorizontal: width * 0.05,
     gap: 20,
     alignContent: "center",
+    zIndex: 1,
   },
   text: {
     fontSize: 20,
+    fontFamily: "FiraMono-Medium",
   },
   line: {
     borderBottomWidth: 1,

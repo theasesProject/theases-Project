@@ -41,6 +41,7 @@ function AgencyService() {
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
   const getRoomData = async (room) => {
+    console.log(room,'ghjkghgh');
     if (activeUser.id === room.UserId) {
       await axios
         .get(
@@ -48,6 +49,7 @@ function AgencyService() {
         )
         .then((response) => {
           setAvatarUrl(response.data.avatar);
+          console.log('res',response.data);
           setName(response.data.userName);
         });
     } else {
@@ -57,6 +59,7 @@ function AgencyService() {
         )
         .then((response) => {
           setAvatarUrl(response.data.avatar);
+          console.log('res2',response.data);
           setName(response.data.userName);
         });
     }
@@ -88,26 +91,31 @@ function AgencyService() {
   const handleChatting = async (id) => {
     // setRequestMakerId(id)
     try {
+
       const roomPossibility1 = await axios.post(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/postneRoom`,
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
         { user1: activeUser.id, user2: id }
       );
       const roomPossibility2 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: id, user2: activeUser }
+        { user1: id*1, user2: (activeUser.id)*1 }
       );
       if (!roomPossibility1 && !roomPossibility2) {
         const room = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
           { UserId: activeUser.id, user2: id }
         );
+          // console.log("here");
         getRoomData(room.data);
         dispatch(setRoom({ ...room.data, name, avatarUrl }));
         navigation.navigate("conversation");
         return;
       } else {
-        getRoomData(room.data);
-        dispatch(setRoom({ ...room.data, name, avatarUrl }));
+        const room = roomPossibility1.data|| roomPossibility2.data;
+        
+        getRoomData(room);
+        console.log('ssssss',avatarUrl,'dfghjk',name);
+        dispatch(setRoom({ ...room, name, avatarUrl }));
         navigation.navigate("conversation");
       }
     } catch (e) {

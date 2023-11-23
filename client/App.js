@@ -107,7 +107,7 @@ function App() {
             <Stack.Screen
               name="MyCars"
               component={MyCars}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Favorites"

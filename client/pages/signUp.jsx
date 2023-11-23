@@ -10,7 +10,7 @@ import {
   Pressable,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React,{useEffect} from "react";
 import UserNormal from "../assets/Svg/user-normal.svg";
 import Email from "../assets/Svg/email.svg";
 import Phone from "../assets/Svg/phone.svg";

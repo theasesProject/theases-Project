@@ -8,7 +8,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import car from "../assets/car2.png";
 import star from "../assets/star1.png";
 import heart from "../assets/heart.png";
@@ -163,6 +163,14 @@ const CarDetails = () => {
             }} />
       </View>
       <View style={styles.description}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(carDetail(carData));
+            navigation.navigate("Booking");
+          }}
+        >
+          <Text>booking</Text>
+        </TouchableOpacity>
         <Text style={styles.carModel}>{carData.model}</Text>
         <Text>{carData.description}</Text>
         <Text

@@ -23,7 +23,7 @@ import io from "socket.io-client";
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";

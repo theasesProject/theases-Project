@@ -10,8 +10,10 @@ import { useStripe } from "@stripe/stripe-react-native";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import { LinearGradient } from "expo-linear-gradient";
-const { width, height } = Dimensions.get("screen");
-const Payment = () => {
+import { useEffect } from "react";
+const { height, width } = Dimensions.get("window");
+
+const PaymentBtn = ({amount}) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const activeUser = useSelector(selectUser);
   useEffect(() => {
@@ -29,7 +31,7 @@ const Payment = () => {
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/payment/intentsStripe`,
         // this amount will be sent by props when we use this btn component
-        { amount: 12345 }
+        { amount: amount*100 }
       );
 
       await initPaymentSheet({
@@ -65,21 +67,23 @@ const Payment = () => {
 
 const styles = StyleSheet.create({
   payBtnContainer: {
-    width: width * 0.3,
+    width: width*0.3,
   },
   payBtn: {
     borderRadius: 10,
-    height: height * 0.055,
+    height: height*0.055,
     width: "100%",
     color: "white",
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   payBtnContent: {
     color: "white",
-    fontSize: 18,
+    // fontSize: 18,
   },
+  
 });
 
-export default Payment;
+export default PaymentBtn;

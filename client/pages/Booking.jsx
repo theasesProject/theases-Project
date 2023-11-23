@@ -34,6 +34,7 @@ function Booking() {
   const [agreed, setAgreed] = useState(false);
   const unavailableDate = useSelector((state) => state.booking.unavailableDate);
   const oneCar = useSelector((state) => state.car.OneCar);
+  const [canReview, setCanReview] = useState(false);
 
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -176,6 +177,11 @@ function Booking() {
       setMarkedDates({});
     } else if (moment(date).isAfter(selectedStartDate, "day")) {
       setSelectedEndDate(date);
+
+      const daysUntilEnd = endDate.diff(moment(), "days");
+
+      setCanReview(daysUntilEnd <= 7);
+
       setMarkedDates({
         ...markedDates,
       });

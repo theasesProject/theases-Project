@@ -23,6 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import price from "../assets/price.jpg";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import io from "socket.io-client";
 import PushNotification from "react-native-push-notification";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";

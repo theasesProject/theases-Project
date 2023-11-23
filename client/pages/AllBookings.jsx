@@ -27,6 +27,8 @@ import io from "socket.io-client";
 import car from "../assets/car2.png";
 import charIcon from "../assets/chat.png";
 import PaymentBtn from "../components/PaymentBtn";
+import PushNotification from "react-native-push-notification";
+
 const AllBookings = () => {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
@@ -72,7 +74,23 @@ const AllBookings = () => {
       `Booking with ID ${selectedBooking.id} canceled successfully.`
     );
   };
+  const scheduleNotification = (endDate) => {
+    const daysUntilEnd = Math.ceil(
+      (new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24)
+    );
 
+    if (daysUntilEnd > 0 && daysUntilEnd <= 7) {
+      PushNotification.localNotification({
+        channelId: "default",
+        title: "Make review  ",
+        message: `Your booking for ${selectedBooking.Car.model} ends in ${daysUntilEnd} days.`,
+        vibrate: true,
+        vibration: 300,
+        playSound: true,
+        soundName: "default",
+      });
+    }
+  };
   const closeModal = () => {
     setCancelModalVisible(false);
     setSelectedBooking(null);
@@ -93,68 +111,76 @@ const AllBookings = () => {
         {userBookings
           .slice()
           .reverse()
-          .map((booking) => (
-            <View style={styles.card} key={booking.id}>
-              <View style={styles.cardContainer}>
-                <Image style={styles.ImageCar} source={car}></Image>
-                <View style={styles.carDetails}>
-                  <Text style={styles.CarName}>{booking?.Car?.model}</Text>
-                  <View style={styles.dates}>
-                    <Image style={styles.agenda} source={agenda}></Image>
-                    <Text style={styles.date}>
-                      {formatDate(booking?.startDate)} -{" "}
-                      {formatDate(booking?.endDate)}
-                    </Text>
-                    <View style={styles.prices}>
-                      <Image style={styles.price} source={price}></Image>
-                      <Text style={styles.date}>{booking?.amount}$</Text>
+          .map((booking) => {
+            const { endDate, Car } = booking;
+            const carModel = Car?.model || "";
+            scheduleNotification(endDate, carModel);
+            return (
+              <View style={styles.card} key={booking.id}>
+                <View style={styles.cardContainer}>
+                  <Image style={styles.ImageCar} source={car}></Image>
+                  <View style={styles.carDetails}>
+                    <Text style={styles.CarName}>{booking?.Car?.model}</Text>
+                    <View style={styles.dates}>
+                      <Image style={styles.agenda} source={agenda}></Image>
+                      <Text style={styles.date}>
+                        {formatDate(booking?.startDate)} -{" "}
+                        {formatDate(booking?.endDate)}
+                      </Text>
+                      <View style={styles.prices}>
+                        <Image style={styles.price} source={price}></Image>
+                        <Text style={styles.date}>{booking?.amount}$</Text>
+                      </View>
                     </View>
-                  </View>
-                  <View>
-                    <Text style={styles.status}>
-                      Status: {booking?.acceptation}
-                    </Text>
-                  </View>
-                  <View style={styles.buttons}>
-                    {(booking?.acceptation === "accepted" ||
-                      booking?.acceptation === "pending") && (
-                      <View style={styles.button}>
-                        <TouchableOpacity
-                          style={styles.cancel}
-                          onPress={() => handleCancelBooking(booking)}
-                        >
-                          <Text>Cancel</Text>
-                        </TouchableOpacity>
-                      </View>
-                    )}
-                    {booking?.acceptation === "accepted" && (
-                      <View style={styles.button}>
-                        <LinearGradient
-                          style={styles.payment}
-                          colors={["#88b4e2", "#6C77BF"]}
-                        >
-                          <TouchableOpacity>
-                            <Text style={{ fontFamily: "FiraMono-Medium" }}>
-                              Payment
-                            </Text>
+                    <View>
+                      <Text style={styles.status}>
+                        Status: {booking?.acceptation}
+                      </Text>
+                    </View>
+                    <View style={styles.buttons}>
+                      {(booking?.acceptation === "accepted" ||
+                        booking?.acceptation === "pending") && (
+                        <View style={styles.button}>
+                          <TouchableOpacity
+                            style={styles.cancel}
+                            onPress={() => handleCancelBooking(booking)}
+                          >
+                            <Text>Cancel</Text>
                           </TouchableOpacity>
-                        </LinearGradient>
+                        </View>
+                      )}
+                      {booking?.acceptation === "accepted" && (
+                        <View style={styles.button}>
+                          <LinearGradient
+                            style={styles.payment}
+                            colors={["#88b4e2", "#6C77BF"]}
+                          >
+                            <TouchableOpacity>
+                              <Text style={{ fontFamily: "FiraMono-Medium" }}>
+                                Payment
+                              </Text>
+                            </TouchableOpacity>
+                          </LinearGradient>
 
-                        {/* <View style={styles.payment}> */}
-                        <PaymentBtn amount={booking.amount} />
-                        {/* </View> */}
-                        {/* <View style={styles.chatt}> */}
-                        <TouchableOpacity>
-                          <Image style={styles.chat} source={charIcon}></Image>
-                        </TouchableOpacity>
-                        {/* </View> */}
-                      </View>
-                    )}
+                          {/* <View style={styles.payment}> */}
+                          <PaymentBtn amount={booking.amount} />
+                          {/* </View> */}
+                          {/* <View style={styles.chatt}> */}
+                          <TouchableOpacity>
+                            <Image
+                              style={styles.chat}
+                              source={charIcon}
+                            ></Image>
+                          </TouchableOpacity>
+                          {/* </View> */}
+                        </View>
+                      )}
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          ))}
+            );
+          })}
 
         <Modal
           isVisible={cancelModalVisible}

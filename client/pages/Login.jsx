@@ -74,7 +74,25 @@ function Login({ navigation }) {
       console.error("Error removing data:", error);
     }
   };
+  const handleGoogleSignIn = async () => {
+    try {
+      const { type, accessToken, user } = await GoogleSignIn.logInAsync({
+        androidClientId:
+          "1067545398456-jfc4hsmfrm3mhnjh6n35rqavijuroucs.apps.googleusercontent.com", // Replace with your Android client ID
+        scopes: ["profile", "email"],
+      });
 
+      if (type === "success") {
+        // Successfully signed in with Google
+        // Use the accessToken or user data as needed
+        console.log("Google Sign-In success:", user);
+      } else {
+        console.log("Google Sign-In failed:", type);
+      }
+    } catch (error) {
+      console.error("Error during Google Sign-In:", error);
+    }
+  };
   const formValidation = () => {
     if (!form.identifier || !form.password) {
       setFormChecked(false);
@@ -290,7 +308,7 @@ function Login({ navigation }) {
         <View style={styles.quickLoginContainer}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => console.log("google sign")}
+            onPress={() => handleGoogleSignIn()}
           >
             <View style={styles.quickLogin}>
               <View style={styles.icons}>

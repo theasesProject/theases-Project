@@ -60,9 +60,7 @@ function AddCarAgency3() {
       const updatedSelectedDocuments = await Promise.all(
         selectedAssets.map(async (file) => {
           try {
-            // const removedBgImage = removeBackground(file.uri);
-            // console.log(removedBgImage, "bbb");
-            // return removedBgImage;
+          
             const cloudinaryResponse = await cloudinaryUpload(file.uri);
             return cloudinaryResponse;
           } catch (err) {

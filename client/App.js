@@ -40,13 +40,17 @@ import AddAgencyCar2 from "./pages/AddAgencyCar2.jsx";
 import AddCarAgency3 from "./pages/AddCarAgency3.jsx";
 import Dmap from "./pages/Dmap.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
+// import AddReview from "./components/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
+import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 const Stack = createStackNavigator();
 
 function App() {
   return (
     <Provider store={store}>
-      <StripeProvider publishableKey={process.env.EXPO_STRIPE_PUBLISHBLE_KEY}>
+      <StripeProvider
+        publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
+      >
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen

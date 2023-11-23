@@ -29,6 +29,7 @@ function Messages() {
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getAllRoomsUserId/${user.data.id}`
       )
       .then(async (response) => {
+        //ya gdim
         setRooms(response.data);
         await axios
           .get(
@@ -49,7 +50,6 @@ function Messages() {
     }
   };
   const handleAddRoom = async () => {
-    console.log(user.data.id);
     await axios
 
       .post(

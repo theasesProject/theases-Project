@@ -328,7 +328,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 50,
     paddingHorizontal: 10,
-
     alignItems: "center",
     justifyContent: "space-between",
   },

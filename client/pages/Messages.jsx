@@ -14,7 +14,9 @@ import axios from "axios";
 import { Dimensions } from "react-native";
 import OneRoom from "../components/OneRoom";
 const { height } = Dimensions.get("window");
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function Messages() {
   const [user2ID, setUser2ID] = useState("");
   const [rooms, setRooms] = useState([]);
@@ -64,6 +66,17 @@ function Messages() {
     fetch();
     console.log(rooms);
   }, [refresh]);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={styles.messages}>
       <Text style={styles.title}> Messages </Text>

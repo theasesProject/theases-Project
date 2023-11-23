@@ -9,7 +9,20 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function UserProfilecard() {
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={styles.card}>
       <View>
@@ -32,14 +45,17 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     fontSize: 16,
+    fontFamily: "FiraMono-Medium",
   },
   numetoile: {
     fontSize: 14,
+    fontFamily: "FiraMono-Medium",
   },
   cartext: {
     marginTop: 5,
     marginLeft: 5,
     fontSize: 16,
+    fontFamily: "FiraMono-Medium",
   },
   etoil: {
     width: 25,
@@ -103,6 +119,7 @@ const styles = StyleSheet.create({
   },
   userNametext: {
     fontSize: 20,
+    fontFamily: "FiraMono-Medium",
   },
   editProfile: {
     marginTop: 80,

@@ -11,15 +11,27 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import filter from "../assets/filter.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Filter from "../assets/Svg/filter.svg";
 import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("screen");
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function SearchBar({ onSearch }) {
   const [searchedCar, setSearchedCar] = useState("");
   const navigation = useNavigation();
-  console.log(searchedCar, "searchCar");
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   const handleSearch = (text) => {
     setSearchedCar(text);
 
@@ -33,7 +45,7 @@ function SearchBar({ onSearch }) {
       );
       onSearch(response.data);
     } catch (error) {
-      console.error("Error222:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -41,11 +53,12 @@ function SearchBar({ onSearch }) {
     <View style={styles.inputAndButton}>
       <TextInput
         onSubmitEditing={(text) => handleSearch(text)}
-        style={styles.input}
+        style={[styles.input, { fontFamily: "FiraMono-Medium" }]}
         placeholder="Search cars or locations…"
+        placeholderTextColor="gray"
       ></TextInput>
 
-      <Pressable onPress={() => navigation.navigate("AdvancedSearch")}>
+      <Pressable onPress={() => navigation.navigate("Search")}>
         <LinearGradient
           style={styles.filterImage}
           colors={["#6C77BF", "#4485C5"]}

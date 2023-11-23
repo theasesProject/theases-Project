@@ -47,6 +47,7 @@
     "expo-media-library": "^15.6.0",
     "expo-notifications": "~0.20.1",
     "expo-permissions": "~14.2.1",
+    "expo-sms": "~11.4.0",
     "expo-status-bar": "~1.6.0",
     "expo-video": "^1.0.2",
     "expo-web-browser": "^12.5.0",

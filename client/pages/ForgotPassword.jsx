@@ -13,6 +13,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { width, height } = Dimensions.get("screen");
 
 const ForgotPassword = ({ navigation }) => {
@@ -21,7 +24,16 @@ const ForgotPassword = ({ navigation }) => {
   const [fullCode, setFullCode] = useState([]);
   const [received, setReceived] = useState(null);
   const [error, setError] = useState(null);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handleSubmit = async () => {
     try {
       if (identifierValidation(identifier) !== "email") {
@@ -226,6 +238,7 @@ const styles = StyleSheet.create({
   },
   identifierErrorContainer: {
     textAlign: "left",
+    fontFamily: "FiraMono-Medium",
   },
   error: {
     color: "red",

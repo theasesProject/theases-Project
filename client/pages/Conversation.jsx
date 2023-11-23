@@ -21,11 +21,13 @@ import Send from "../assets/Svg/send-alt-1-svgrepo-com.svg";
 import Attach from "../assets/Svg/attachFile.svg";
 import * as DocumentPicker from "expo-document-picker";
 import socket from "../socket-io.front.server";
+import Phone from "../assets/Svg/call.svg";
 import * as FileSystem from "expo-file-system";
-
-
-const { height, width } = Dimensions.get("screen");
-
+import base64 from "base-64";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
+const { width, height } = Dimensions.get("screen");
 var Buffer = require("buffer/").Buffer;
 
 const cloudinaryUpload = async (fileUri, fileType) => {
@@ -94,8 +96,8 @@ function Conversation() {
           result.assets[0].uri,
           result.assets[0].mimeType
         );
-      
-sendMessage(cloudinaryResponse,result.assets[0].mimeType)
+
+        sendMessage(cloudinaryResponse, result.assets[0].mimeType);
         await socket.emit("send-document", {
           name: result.assets[0].name,
           type: result.assets[0].type,
@@ -162,6 +164,17 @@ sendMessage(cloudinaryResponse,result.assets[0].mimeType)
     });
   }, [socket]);
   useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
+
+  useEffect(() => {
     const handleReceiveDocument = async (data) => {
       try {
         console.log("Receive document", data);
@@ -184,7 +197,6 @@ sendMessage(cloudinaryResponse,result.assets[0].mimeType)
         setReceivedDocuments(updatedDocuments);
 
         console.log("The file has been saved!", `${dir}${data.name}`);
-        console.log("hereeeeeee", "here");
 
         if (updatedDocuments.length === 0) {
           Alert.alert("No processed images to save.");
@@ -252,7 +264,11 @@ sendMessage(cloudinaryResponse,result.assets[0].mimeType)
         >
           <Image source={{ uri: room.avatarUrl }} style={styles.imageChat} />
           <Text
-            style={{ fontWeight: 700, fontSize: 20, fontFamily: "notoserif" }}
+            style={{
+              fontWeight: 700,
+              fontSize: 20,
+              fontFamily: "FiraMono-Medium",
+            }}
           >
             {room.name.charAt(0).toUpperCase() + room.name.slice(1)}
           </Text>

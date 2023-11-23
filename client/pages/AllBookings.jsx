@@ -12,6 +12,9 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import price from "../assets/price.jpg";
 import { LinearGradient } from "expo-linear-gradient";
 import agenda from "../assets/agenda.jpg";
@@ -74,7 +77,16 @@ const AllBookings = () => {
     setCancelModalVisible(false);
     setSelectedBooking(null);
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.page}>
       <ScrollView style={styles.container}>
@@ -106,28 +118,37 @@ const AllBookings = () => {
                   <View style={styles.buttons}>
                     {(booking?.acceptation === "accepted" ||
                       booking?.acceptation === "pending") && (
-                        <View style={styles.button}>
-                      <TouchableOpacity
-                        style={styles.cancel}
-                        onPress={() => handleCancelBooking(booking)}
-                      >
-                        <Text>Cancel</Text>
-                      </TouchableOpacity>
-                   </View>
+                      <View style={styles.button}>
+                        <TouchableOpacity
+                          style={styles.cancel}
+                          onPress={() => handleCancelBooking(booking)}
+                        >
+                          <Text>Cancel</Text>
+                        </TouchableOpacity>
+                      </View>
                     )}
                     {booking?.acceptation === "accepted" && (
-                      <View style={styles.paychat}>
-                     
+                      <View style={styles.button}>
+                        <LinearGradient
+                          style={styles.payment}
+                          colors={["#88b4e2", "#6C77BF"]}
+                        >
+                          <TouchableOpacity>
+                            <Text style={{ fontFamily: "FiraMono-Medium" }}>
+                              Payment
+                            </Text>
+                          </TouchableOpacity>
+                        </LinearGradient>
 
                         {/* <View style={styles.payment}> */}
-                          <PaymentBtn amount={booking.amount}  />
+                        <PaymentBtn amount={booking.amount} />
                         {/* </View> */}
                         {/* <View style={styles.chatt}> */}
-                        <TouchableOpacity >
+                        <TouchableOpacity>
                           <Image style={styles.chat} source={charIcon}></Image>
                         </TouchableOpacity>
                         {/* </View> */}
-                       </View>
+                      </View>
                     )}
                   </View>
                 </View>
@@ -188,12 +209,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 5,
     shadowRadius: 10,
   },
-  paychat:{
-  flex:1,
-    flexDirection:"row",
-  gap:width*0.07,
+  paychat: {
+    flex: 1,
+    flexDirection: "row",
+    gap: width * 0.07,
     //  backgroundColor:"red",
-     paddingRight:width*0.01
+    paddingRight: width * 0.01,
   },
   container: {
     flexDirection: "column",
@@ -204,10 +225,10 @@ const styles = StyleSheet.create({
     height: height * 0.2,
     borderRadius: 15,
   },
-  chatt:{
-    flex:1,
-backgroundColor:"black",
-alignItems:"center",
+  chatt: {
+    flex: 1,
+    backgroundColor: "black",
+    alignItems: "center",
   },
   cardContainer: {
     flexDirection: "column",
@@ -236,15 +257,16 @@ alignItems:"center",
   },
   date: {
     color: "grey",
+    fontFamily: "FiraMono-Medium",
   },
   status: {
     color: "grey",
     fontSize: 14,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
   },
 
   payment: {
-    flex:1,
+    flex: 1,
     height: height * 0.05,
     width: width * 0.3,
     // justifyContent: "space-between",
@@ -278,7 +300,6 @@ alignItems:"center",
     borderRadius: 10,
     backgroundColor: "lightgrey",
     padding: 5,
-   
   },
   buttons: {
     flexDirection: "row",
@@ -319,10 +340,12 @@ alignItems:"center",
   yesButton: {
     color: "white",
     backgroundColor: "grey",
+    fontFamily: "FiraMono-Bold",
   },
   noButton: {
     color: "white",
     backgroundColor: "blue",
+    fontFamily: "FiraMono-Bold",
   },
 });
 

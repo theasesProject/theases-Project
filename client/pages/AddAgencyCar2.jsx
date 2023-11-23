@@ -10,14 +10,17 @@ import {
   TextInput,
   View,
 } from "react-native";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import CheckBox from "react-native-check-box";
 import { useDispatch, useSelector } from "react-redux";
 import { setNewCar } from "../store/carFetch";
-const {width, height} = Dimensions.get("screen")
+const { width, height } = Dimensions.get("screen");
 import Arrowleft from "../assets/Svg/arrowleft.svg";
 import Arrowright from "../assets/Svg/arrowright.svg";
-import Image2 from "../assets/moneyImage.png"
-import Dollar from "../assets/dollar.png"
+import Image2 from "../assets/moneyImage.png";
+import Dollar from "../assets/dollar.png";
 
 function AddAgencyCar2() {
   const [form, setForm] = useState(useSelector((state) => state.car.NewCar));
@@ -26,7 +29,16 @@ function AddAgencyCar2() {
   const [priceError, setPriceError] = useState("");
   const [priceErrorWeekly, setPriceWeeklyError] = useState("");
   const [priceErrorMonthly, setPriceMonthlyError] = useState("");
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handlePrice = (price) => {
     setForm({ ...form, price });
   };
@@ -53,15 +65,21 @@ function AddAgencyCar2() {
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
-        <Image source={Image2} style={{
+        <Image
+          source={Image2}
+          style={{
             width: width * 0.9,
             height: height * 0.4,
-          }}/>
+          }}
+        />
         <View style={styles.textSvgContainer}>
           <Text style={styles.introdcution1}>
             What is the price for the car
           </Text>
-          <Image source={Dollar} style={{width:width * 0.08,height:height*0.04}}/>
+          <Image
+            source={Dollar}
+            style={{ width: width * 0.08, height: height * 0.04 }}
+          />
         </View>
         <TextInput
           value={form.price}
@@ -127,7 +145,7 @@ function AddAgencyCar2() {
             justifyContent: "center",
           }}
           onPress={() => {
-            navigation.navigate("AddAgencyCar")
+            navigation.navigate("AddAgencyCar");
           }}
         >
           <Arrowleft />
@@ -156,152 +174,157 @@ function AddAgencyCar2() {
 }
 
 const styles = StyleSheet.create({
-    editProfilePage: {
-      flex: 1,
-      paddingHorizontal: 20,
-      paddingVertical: 30,
-      flexDirection: "column",
-      backgroundColor: "white",
-      gap: 16,
-    },
-    container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    image: {
-      width: 200,
-      height: 200,
-      marginBottom: 20,
-    },
-    introdcution: {
-      textAlign: "center",
-      fontSize: 18,
-      padding: 20,
-    },
-    introdcution1: {
-      textAlign: "center",
-      fontSize: 22,
-      padding: 20,
-    },
-    input: {
-      width: "100%",
-  
-      borderRadius: 10,
-      height: 40,
-      paddingHorizontal: 10,
-      fontSize: 16,
-      borderColor: "lightgrey",
-      borderWidth: 2,
-      marginTop: 5,
-    },
-    picture: {
-      flexDirection: "row",
-  
-      alignItems: "center",
-  
-      borderColor: "yellow",
-      borderRadius: 5,
-      marginBottom: "5%",
-    },
-    profilePictureContainer: {
-      width: "100%",
-    },
-    profilePicture: {
-      width: 80,
-      height: 40,
-  
-      borderWidth: 2,
-      borderColor: "rgb(219, 217, 224)",
-      backgroundColor: "white",
-    },
-    input1: {
-      padding: 5,
-      fontSize: 25,
-      backgroundColor: "lightgrey",
-      textAlign: "center",
-      borderRadius: 8,
-      color: "white",
-    },
-    input2: {
-      fontSize: 18,
-      justifyContent: "flex-start",
-      color: "black",
-      borderColor: "lightgrey",
-      width: "100%",
-      height: 40,
-      borderRadius: 8,
-      textAlign: "center",
-      padding: 4,
-      borderWidth: 2,
-    },
-    input3: {
-      width: "100%",
-      backgroundColor: "white",
-      borderRadius: 10,
-      height: 40,
-  
-      borderColor: "lightgrey",
-      marginBottom: "5%",
-      justifyContent: "center",
-      alignItems: "center",
-      borderWidth: 2,
-      padding: 10,
-    },
-    errorText: {
-      color: "red",
-      fontSize: 14,
-      marginTop: 5,
-    },
-    addImgTextContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-    },
-    imgsContainer: {
-      flexWrap: "wrap",
-      flexDirection: "row",
-      gap: 10,
-      backgroundColor: "white",
-  
-      height: 100,
-    },
-    imgContainer: {
-      position: "relative",
-      backgroundColor: "#DBDBDB",
-      width: 100,
-      height: 70,
-    },
-    xBtn: {
-      position: "absolute",
-      zIndex: 0,
-      width: 25,
-      height: 25,
-      right: 0,
-    },
-    img: {
-      zIndex: -1,
-      width: "100%",
-      height: "100%",
-    },
-    modalContainer: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-    modalText: {
-      backgroundColor: "white",
-      padding: 20,
-      borderRadius: 10,
-      color: "green",
-    },
-    textSvgContainer: {
-      display: "flex",
-      justifyContent: "space-between",
-      flexDirection: "row",
-      alignItems: "center",
-      marginTop: height * 0.01,
-    },
-  });
+  editProfilePage: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    flexDirection: "column",
+    backgroundColor: "white",
+    gap: 16,
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+  },
+  introdcution: {
+    textAlign: "center",
+    fontSize: 18,
+    padding: 20,
+    fontFamily: "FiraMono-Medium",
+  },
+  introdcution1: {
+    textAlign: "center",
+    fontSize: 22,
+    padding: 20,
+    fontFamily: "FiraMono-Medium",
+  },
+  input: {
+    width: "100%",
+
+    borderRadius: 10,
+    height: 40,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    borderColor: "lightgrey",
+    borderWidth: 2,
+    marginTop: 5,
+  },
+  picture: {
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    borderColor: "yellow",
+    borderRadius: 5,
+    marginBottom: "5%",
+  },
+  profilePictureContainer: {
+    width: "100%",
+  },
+  profilePicture: {
+    width: 80,
+    height: 40,
+
+    borderWidth: 2,
+    borderColor: "rgb(219, 217, 224)",
+    backgroundColor: "white",
+  },
+  input1: {
+    padding: 5,
+    fontSize: 25,
+    backgroundColor: "lightgrey",
+    textAlign: "center",
+    borderRadius: 8,
+    color: "white",
+    fontFamily: "FiraMono-Medium",
+  },
+  input2: {
+    fontSize: 18,
+    justifyContent: "flex-start",
+    color: "black",
+    borderColor: "lightgrey",
+    width: "100%",
+    height: 40,
+    borderRadius: 8,
+    textAlign: "center",
+    padding: 4,
+    borderWidth: 2,
+  },
+  input3: {
+    width: "100%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    height: 40,
+
+    borderColor: "lightgrey",
+    marginBottom: "5%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    padding: 10,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 5,
+    fontFamily: "FiraMono-Medium",
+  },
+  addImgTextContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  imgsContainer: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    gap: 10,
+    backgroundColor: "white",
+
+    height: 100,
+  },
+  imgContainer: {
+    position: "relative",
+    backgroundColor: "#DBDBDB",
+    width: 100,
+    height: 70,
+  },
+  xBtn: {
+    position: "absolute",
+    zIndex: 0,
+    width: 25,
+    height: 25,
+    right: 0,
+  },
+  img: {
+    zIndex: -1,
+    width: "100%",
+    height: "100%",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalText: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    color: "green",
+    fontFamily: "FiraMono-Medium",
+  },
+  textSvgContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: height * 0.01,
+  },
+});
 
 export default AddAgencyCar2;

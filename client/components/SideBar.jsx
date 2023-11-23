@@ -11,10 +11,22 @@ import {
 const { height, width } = Dimensions.get("screen");
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/userSlice";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 
 const Sidebar = ({ navigation, isOpen, onClose }) => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const animatedValue = useRef(new Animated.Value(-300)).current;
 
   useEffect(() => {
@@ -120,9 +132,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   text: {
-    fontSize: 18,
-    color: "#0e207f",
-    paddingHorizontal: width * 0.04,
+    fontSize: 20,
+    fontFamily: "FiraMono-Medium",
   },
   line: {
     borderBottomWidth: 1,

@@ -1,5 +1,11 @@
 import axios from "axios";
-import { Text, Linking, StyleSheet, TouchableOpacity,Dimensions } from "react-native";
+import {
+  Text,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { useStripe } from "@stripe/stripe-react-native";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/userSlice";
@@ -9,7 +15,16 @@ const { height, width } = Dimensions.get("window");
 const PaymentBtn = ({amount}) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const activeUser = useSelector(selectUser);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handleStripe = async () => {
     try {
       const response = await axios.post(
@@ -51,11 +66,11 @@ const PaymentBtn = ({amount}) => {
 
 const styles = StyleSheet.create({
   payBtnContainer: {
-    width: width*0.3,
+    width: width * 0.3,
   },
   payBtn: {
     borderRadius: 10,
-    height: height*0.055,
+    height: height * 0.055,
     width: "100%",
     color: "white",
     display: "flex",
@@ -64,8 +79,8 @@ const styles = StyleSheet.create({
   },
   payBtnContent: {
     color: "white",
-    // fontSize: 18,
+    fontSize: 18,
   },
 });
 
-export default PaymentBtn;
+export default Payment;

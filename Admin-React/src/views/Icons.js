@@ -248,8 +248,8 @@ function Icons() {
                       value={selectedOption}
                       onChange={(selectedOption) => {
                         // console.log(selectedOption.label);
-                        selectedOption.label==="Banned Only"||selectedOption.label==="Active Only"?
-                        filterChange(selectedOption.label):
+                        // selectedOption.label==="Banned Only"||selectedOption.label==="Active Only"?
+                        // filterChange(selectedOption.label):
                         handleChange(selectedOption);
                       }}
                       options={options}
@@ -652,7 +652,203 @@ function Icons() {
 
                           )}
                         </Row></>
-                    ) : null
+                    ) : selectedOption.label === "Banned Only" ? (
+                      <>
+                        <div style={{
+                          fontSize: "1rem"
+                        }}>
+                          All Banned :
+                        </div>
+                        <Row>
+                          {allUsers.map((user, i) =>
+                            user.stateBlocked ? (
+                              < Col
+                                key={i}
+                                className="font-icon-list col-xs-6 col-xs-6"
+                                lg="2"
+                                md="3"
+                                sm="4"
+                                onClick={() => {
+                                  console.log(user);
+                                  Swal.fire({
+                                    title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                    html: `
+                                   <b>UserName: </b>${user.userName}
+                                   <br>
+                                   <b>email: </b>${user.email}
+                                   <br>
+                                   <b>phoneNumber: </b>${user.phoneNumber}
+                                   <br>
+                                   <b>type: </b>${user.type}
+                                   <br>
+                                   <b>id number: </b>${user.idCard}
+                                  `,
+                                    imageUrl: `${user.avatar}`,
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: "Custom image",
+                                    backdrop: `rgba(0,0,123,0.4)`,
+                                    showCloseButton: true,
+                                    showCancelButton: true,
+                                    focusConfirm: false,
+                                    confirmButtonText: `
+                                   <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                  `,
+                                    confirmButtonAriaLabel: "Thumbs up, great!",
+                                    customClass: {
+                                      text: "swal-secondary-text",
+                                      container: 'my-modal',
+                                      confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                    },
+                                    cancelButtonText: `
+                                   <i class="fa fa-close"></i>
+                                  `,
+                                    // cancelButtonAriaLabel: "Thumbs down"
+                                  }).then((result) => {
+                                    if (result.isConfirmed) {
+                                      Swal.fire({
+                                        title: "Are you sure?",
+                                        html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                        // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonText: "Yes, ban it!",
+                                        cancelButtonText: "No, cancel!"
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          handleBlock(user.id)
+                                          Swal.fire({
+                                            title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
+                                            text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
+                                            icon: "success"
+                                          });
+                                        } else if (
+                                          result.dismiss === Swal.DismissReason.cancel
+                                        ) {
+                                          Swal.fire({
+                                            title: "Cancelled",
+                                            text: "The user ban has been cancelled.",
+                                            icon: "error"
+                                          });
+                                        }
+                                      });
+                                    }
+                                  });
+                                }}
+                              >
+                                <div className="font-icon-detail">
+                                  <img src={user.avatar} style={{
+                                    height: "50%", width: "35%"
+                                  }} />
+                                  <p className="userNameCol">{user.userName}<br></br>(
+                                    {user.email})</p>
+                                </div>
+                              </Col>
+                             ) : null
+                          )}
+                        </Row>
+
+                      </>
+                    ): selectedOption.label === "Active Only" ? (
+                      <>
+                        <div style={{
+                          fontSize: "1rem"
+                        }}>
+                          All Active :
+                        </div>
+                        <Row>
+                          {allUsers.map((user, i) =>
+                            !user.stateBlocked ? (
+                              < Col
+                                key={i}
+                                className="font-icon-list col-xs-6 col-xs-6"
+                                lg="2"
+                                md="3"
+                                sm="4"
+                                onClick={() => {
+                                  console.log(user);
+                                  Swal.fire({
+                                    title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                    html: `
+                                   <b>UserName: </b>${user.userName}
+                                   <br>
+                                   <b>email: </b>${user.email}
+                                   <br>
+                                   <b>phoneNumber: </b>${user.phoneNumber}
+                                   <br>
+                                   <b>type: </b>${user.type}
+                                   <br>
+                                   <b>id number: </b>${user.idCard}
+                                  `,
+                                    imageUrl: `${user.avatar}`,
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: "Custom image",
+                                    backdrop: `rgba(0,0,123,0.4)`,
+                                    showCloseButton: true,
+                                    showCancelButton: true,
+                                    focusConfirm: false,
+                                    confirmButtonText: `
+                                   <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                  `,
+                                    confirmButtonAriaLabel: "Thumbs up, great!",
+                                    customClass: {
+                                      text: "swal-secondary-text",
+                                      container: 'my-modal',
+                                      confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                    },
+                                    cancelButtonText: `
+                                   <i class="fa fa-close"></i>
+                                  `,
+                                    // cancelButtonAriaLabel: "Thumbs down"
+                                  }).then((result) => {
+                                    if (result.isConfirmed) {
+                                      Swal.fire({
+                                        title: "Are you sure?",
+                                        html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                        // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonText: "Yes, ban it!",
+                                        cancelButtonText: "No, cancel!"
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          handleBlock(user.id)
+                                          Swal.fire({
+                                            title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
+                                            text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
+                                            icon: "success"
+                                          });
+                                        } else if (
+                                          result.dismiss === Swal.DismissReason.cancel
+                                        ) {
+                                          Swal.fire({
+                                            title: "Cancelled",
+                                            text: "The user ban has been cancelled.",
+                                            icon: "error"
+                                          });
+                                        }
+                                      });
+                                    }
+                                  });
+                                }}
+                              >
+                                <div className="font-icon-detail">
+                                  <img src={user.avatar} style={{
+                                    height: "50%", width: "35%"
+                                  }} />
+                                  <p className="userNameCol">{user.userName}<br></br>(
+                                    {user.email})</p>
+                                </div>
+                              </Col>
+                             ) : null
+                          )}
+                        </Row>
+
+                      </>
+                    ):null
                 }
               </CardBody>
             </Card>

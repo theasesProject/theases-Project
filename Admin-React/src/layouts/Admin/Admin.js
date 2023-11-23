@@ -16,15 +16,19 @@ import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoggedIn } from "Redux/adminSlice";
 import { setLoggedIn } from "Redux/adminSlice";
+import { selectAdmin } from "Redux/adminSlice";
+import { getData } from "Redux/adminSlice";
 
 var ps;
 
 function Admin(props) {
   const logged = useSelector(selectLoggedIn);
+  const Admin = useSelector(selectAdmin);
   const loading = useSelector((state) => state.Admin.loading);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const token = localStorage.getItem("Token");
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
@@ -80,12 +84,10 @@ function Admin(props) {
       if (!loading && !logged) {
         navigate("/admin/login");
       }
-    }, 1000); // 2000 milliseconds = 2 seconds
-   
+    }, 200); 
     // Cleanup function to clear the timeout if the component unmounts
     return () => clearTimeout(timer);
-   }, [loading, logged, navigate]);   
-  // this function opens and closes the sidebar on small devices
+  }, [loading, logged, navigate]);     // this function opens and closes the sidebar on small devices
   const toggleSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
     setsidebarOpened(!sidebarOpened);

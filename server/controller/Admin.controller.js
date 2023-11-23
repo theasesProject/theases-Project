@@ -73,11 +73,12 @@ module.exports = {
   // gets Admin token from the front to verify it and sends it back to front
   handleToken: async (req, res) => {
     try {
+      console.log("lllllllllllllllllllllllllll",req.body);
       const response = jwt.verify(req.body.token, process.env.JWT_SECRET_KEY);
-      delete response.password;
+      // delete response.password;
       res.status(200).json(response);
     } catch (err) {
-      res.status(500).send(err);
+      throw(err)
     }
   },
 

@@ -1,4 +1,7 @@
-import React from "react";
+import { getData } from "Redux/adminSlice";
+import { selectAdmin } from "Redux/adminSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 // reactstrap components
 import {
@@ -16,6 +19,14 @@ import {
 } from "reactstrap";
 
 function UserProfile() {
+  const dispatch=useDispatch()
+  const AdminData=useSelector(selectAdmin)
+  const token = localStorage.getItem("Token");
+  console.log("hey there you, this is my data:D",AdminData);
+  useEffect(()=>{
+  !Object.values(AdminData)[0]&&dispatch(getData(token))
+
+  },[])
   return (
     <>
       <div className="content">
@@ -28,18 +39,29 @@ function UserProfile() {
               <CardBody>
                 <Form>
                   <Row>
-                    {/* <Col className="pr-md-1" md="5">
+                    <Col className="pr-md-1" md="5">
                       <FormGroup>
-                        <label>Company (disabled)</label>
+                        <label> userName</label>
                         <Input
-                          defaultValue="Creative Code Inc."
-                          disabled
-                          placeholder="Company"
+                          defaultValue=""
+                          // disabled
+                          placeholder="Here is your userName"
                           type="text"
                         />
                       </FormGroup>
-                    </Col> */}
-                    <Col className="px-md-1" md="3">
+                    </Col>
+                    <Col className="pr-md-1" md="5">
+                      <FormGroup>
+                        <label> Password</label>
+                        <Input
+                          defaultValue=""
+                          // disabled
+                          placeholder="here you edit your password"
+                          type="text"
+                        />
+                      </FormGroup>
+                    </Col>
+                    {/* <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label>Username</label>
                         <Input
@@ -56,9 +78,9 @@ function UserProfile() {
                         </label>
                         <Input placeholder="type Your new Email" type="email" />
                       </FormGroup>
-                    </Col>
+                    </Col> */}
                   </Row>
-                  <Row>
+                  {/* <Row>
                     <Col className="pr-md-1" md="6">
                       <FormGroup>
                         <label>First Name</label>
@@ -79,8 +101,8 @@ function UserProfile() {
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
+                  </Row> */}
+                  {/* <Row>
                     <Col md="12">
                       <FormGroup>
                         <label>Address</label>
@@ -91,8 +113,8 @@ function UserProfile() {
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
+                  </Row> */}
+                  {/* <Row>
                     <Col className="pr-md-1" md="4">
                       <FormGroup>
                         <label>City</label>
@@ -119,15 +141,14 @@ function UserProfile() {
                         <Input placeholder="ZIP Code" type="number" />
                       </FormGroup>
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Row>
                     <Col md="8">
                       <FormGroup>
                         <label>About Me</label>
                         <Input
                           cols="80"
-                          defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                            that two seat Lambo."
+                          defaultValue=""
                           placeholder="Here can be your description"
                           rows="4"
                           type="textarea"
@@ -157,11 +178,11 @@ function UserProfile() {
                     <img
                       alt="..."
                       className="avatar"
-                      src={require("assets/img/emilyz.jpg")}
+                      src={AdminData.avatar}
                     />
-                    <h5 className="title">Mike Andrew</h5>
+                    <h5 className="title">{AdminData.Name}</h5>
                   </a>
-                  <p className="description">Ceo/Co-Founder</p>
+                  <p className="description">{AdminData.email}</p>
                 </div>
                 <div className="card-description">
                   Do not be scared of the truth because we need to restart the
@@ -170,7 +191,7 @@ function UserProfile() {
                 </div>
               </CardBody>
               <CardFooter>
-                <div className="button-container">
+                {/* <div className="button-container">
                   <Button className="btn-icon btn-round" color="facebook">
                     <i className="fab fa-facebook" />
                   </Button>
@@ -180,7 +201,7 @@ function UserProfile() {
                   <Button className="btn-icon btn-round" color="google">
                     <i className="fab fa-google-plus" />
                   </Button>
-                </div>
+                </div> */}
               </CardFooter>
             </Card>
           </Col>

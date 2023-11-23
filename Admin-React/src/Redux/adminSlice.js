@@ -4,8 +4,8 @@ import axios from "axios";
 
 const initialState = {
     admin: {},
-    adminToken: "",
-    reviews: [],
+    // adminToken: "",
+    // reviews: [],
     allUsers: [],
     staticAllUsers: [],
     allCars: [],
@@ -150,7 +150,20 @@ export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
         console.error(err);
     }
 });
-export const Login = createAsyncThunk("user/Login", async ({ email, password }) => {
+export const getData = createAsyncThunk("user/getADminData", async (token) => {
+    try {
+        // const token = JSON.stringify(localStorage.getItem("Token"))
+        const response = await axios.post(
+            `http://localhost:5000/api/admin/useToken`,
+            { token:token }
+        )
+        // setAdminData(response.data)
+        return response.data;
+    } catch (err) {
+        console.error(err);
+    }
+});
+export const Login = createAsyncThunk("user/Login", async ({ email, password },thunkAPI) => {
     try {
         const data = { email, password }
         const response = await axios.post(
@@ -158,7 +171,8 @@ export const Login = createAsyncThunk("user/Login", async ({ email, password }) 
             data
         )
         localStorage.setItem("Token", response.data)
-        setAdmin(response.data)
+        const token=localStorage.getItem("Token")
+        thunkAPI.dispatch(getData(token));
         return response.data;
     } catch (err) {
         console.error(err);
@@ -199,9 +213,9 @@ export const adminSlicer = createSlice({
         triggerRefresh: (state) => {
             state.refreshed = !state.refreshed;
         },
-        setAdmin: (state, action) => {
-            const { admin } = action.payload;
-            state.admin = admin
+        setAdminData: (state, action) => {
+            // const { admin } = action.payload;
+            state.admin = action.payload
         },
         logout: (state) => {
             state.admin = "";
@@ -209,14 +223,23 @@ export const adminSlicer = createSlice({
             localStorage.removeItem("Token")
         },
         setLoggedIn: (state, action) => {
-            // const { token, loggedIn } = action.payload;
-            // localStorage.setItem('adminToken', JSON.stringify(token));
-            // state.adminToken = token;
             state.loggedIn = action.payload;
         }
     },
     extraReducers: (builder) => {
 
+        builder.addCase(getData.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(getData.fulfilled, (state, action) => {
+            state.loading = false;
+            state.admin = action.payload;
+        });
+        builder.addCase(getData.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
         builder.addCase(Login.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -344,17 +367,17 @@ export const adminSlicer = createSlice({
             state.loading = true;
             state.error = null;
         });
-        builder.addCase(getAllRequests.fulfilled, (state, action) => {
-            state.loading = false;
-            state.requests = action.payload;
-        });
-        builder.addCase(getAllRequests.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.error.message;
-        });
-        builder.addCase(fetchReviews.fulfilled, (state, action) => {
-            state.reviews = action.payload
-        })
+        // builder.addCase(getAllRequests.fulfilled, (state, action) => {
+        //     state.loading = false;
+        //     state.requests = action.payload;
+        // });
+        // builder.addCase(getAllRequests.rejected, (state, action) => {
+        //     state.loading = false;
+        //     state.error = action.error.message;
+        // });
+        // builder.addCase(fetchReviews.fulfilled, (state, action) => {
+        //     state.reviews = action.payload
+        // })
     }
 })
 
@@ -368,6 +391,6 @@ export const selectAllCars = (state) => state.Admin.allCars;
 export const selectReviews = (state) => state.Admin.reviews;
 export const selectLoggedIn = (state) => state.Admin.loggedIn;
 export const selectForeignUser = (state) => state.Admin.foreignUser;
-export const { filterUsers, setAdmin, logout, setLoggedIn } = adminSlicer.actions;
+export const { filterUsers, setAdminData, logout, setLoggedIn } = adminSlicer.actions;
 export const { triggerRefresh } = adminSlicer.actions;
 export default adminSlicer.reducer;

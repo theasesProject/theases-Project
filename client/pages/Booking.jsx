@@ -43,7 +43,7 @@ function Booking() {
   const error = useSelector((state) => state.booking.error);
   const [total, setTotal] = useState(0);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
-  const isTransportationAvailable = oneCar.Agency.transportation;
+  const isTransportationAvailable = oneCar?.Agency.transportation;
   console.log(unavailableDate, oneCar.id, "unvaibledate");
   const [selectedTime, setSelectedTime] = useState(null);
 

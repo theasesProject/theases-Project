@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { setNewCar } from "../store/carFetch";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../store/userSlice";

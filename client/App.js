@@ -40,6 +40,7 @@ import AddAgencyCar2 from "./pages/AddAgencyCar2.jsx";
 import AddCarAgency3 from "./pages/AddCarAgency3.jsx";
 import Dmap from "./pages/Dmap.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
+import AddReview from "./pages/AddReview.jsx";
 // import AddReview from "./components/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
 import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
@@ -56,6 +57,11 @@ function App() {
             <Stack.Screen
               name="Home"
               component={Home}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AddReview"
+              component={AddReview}
               options={{ headerShown: false }}
             />
             <Stack.Screen

@@ -94,14 +94,14 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           </TouchableOpacity>
         </View>
         <View style={styles.imageCar1}>
-          <Image style={styles.imageCar2} src={oneCar.Media[0]?.media}></Image>
+          {/* <Image style={styles.imageCar2} src={oneCar?.Media[0]?.media}></Image> */}
         </View>
       </View>
 
       <TouchableOpacity onPress={handleRent} style={styles.information}>
         <View style={styles.carInformation}>
           <View style={styles.agencyName}>
-            <Text style={styles.name}>{oneCar?.Agency.name}</Text>
+            <Text style={styles.name}>{oneCar?.Agency?.name}</Text>
           </View>
           <View style={styles.carName}>
             <Text style={styles.name1}>{oneCar?.model}</Text>
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: 10,
     alignItems: "center",
+    marginBottom: "5%",
   },
   imageCar: {
     backgroundColor: "rgb(246, 246, 246)",

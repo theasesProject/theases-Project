@@ -178,10 +178,6 @@ function Booking() {
     } else if (moment(date).isAfter(selectedStartDate, "day")) {
       setSelectedEndDate(date);
 
-      const daysUntilEnd = endDate.diff(moment(), "days");
-
-      setCanReview(daysUntilEnd <= 7);
-
       setMarkedDates({
         ...markedDates,
       });

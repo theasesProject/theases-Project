@@ -34,4 +34,16 @@ module.exports = {
       throw err;
     }
   },
+  getAllRatingByCar: async (req, res) => {
+    try {
+      const response = await Review.findAll({
+        where: { CarId: req.params.CarId },
+
+        order: [["rating", "DESC"]],
+      });
+      res.status(200).send(response);
+    } catch (err) {
+      throw err;
+    }
+  },
 };

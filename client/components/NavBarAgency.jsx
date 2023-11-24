@@ -88,7 +88,7 @@ function NavBarAgency({ style }) {
               fontFamily: "FiraMono-Medium",
             }}
           >
-            Add a Car
+            Add Car
           </Text>
         </View>
       </Pressable>

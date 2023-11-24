@@ -121,6 +121,7 @@ function MyCars() {
       setSelectedStartDate(null);
     }
   };
+
   const markDatesRed = () => {
     const markedRedDates = {};
 
@@ -140,32 +141,32 @@ function MyCars() {
     dispatch(getallCarByAgency(activeUser?.Agency?.UserId));
     dispatch(GetUnavailableDatesForCar(selectedCar?.id));
   }, [dispatch, selectedCar?.id, selectedCar]);
-  const renderLeftActions = (progress, dragX, car) => {
-    const trans = dragX.interpolate({
-      inputRange: [-50, 0],
-      outputRange: [30, 0],
-      extrapolate: "clamp",
-    });
+  // const renderLeftActions = (progress, dragX, car) => {
+  //   const trans = dragX.interpolate({
+  //     inputRange: [-50, 0],
+  //     outputRange: [30, 0],
+  //     extrapolate: "clamp",
+  //   });
 
-    return (
-      <View style={styles.leftActions}>
-        <LinearGradient
-          colors={["#88b4e2", "#6C77BF"]}
-          style={[styles.actionButton, styles.updateButton]}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedCar(car);
-              setModalVisible(true);
-            }}
-            style={[styles.actionButton, styles.updateButton]}
-          >
-            <Text style={styles.buttonText}>Update</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
-    );
-  };
+  //   return (
+  //     <View style={styles.leftActions}>
+  //       <LinearGradient
+  //         colors={["#88b4e2", "#6C77BF"]}
+  //         style={[styles.actionButton, styles.updateButton]}
+  //       >
+  //         <TouchableOpacity
+  //           onPress={() => {
+  //             setSelectedCar(car);
+  //             setModalVisible(true);
+  //           }}
+  //           style={[styles.actionButton, styles.updateButton]}
+  //         >
+  //           <Text style={styles.buttonText}>Update</Text>
+  //         </TouchableOpacity>
+  //       </LinearGradient>
+  //     </View>
+    // );
+  // };
   const UpdateAvaibility = () => {
     dispatch(
       updateAgencyDate({
@@ -175,7 +176,7 @@ function MyCars() {
       })
     );
   };
-  const renderRightActions = (progress, dragX, carId) => {
+  const renderRightActions = (progress, dragX, carId,car) => {
     const trans = dragX.interpolate({
       inputRange: [0, 50],
       outputRange: [0, 30],
@@ -190,6 +191,20 @@ function MyCars() {
         >
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
+        <LinearGradient
+          colors={["#88b4e2", "#6C77BF"]}
+          style={[styles.actionButton, styles.updateButton]}
+        >
+           <TouchableOpacity
+             onPress={() => {
+               setSelectedCar(car);
+               setModalVisible(true);
+             }}
+             style={[styles.actionButton, styles.updateButton]}
+           >
+             <Text style={styles.buttonText}>Update</Text>
+           </TouchableOpacity>
+         </LinearGradient>
       </View>
     );
   };
@@ -205,11 +220,9 @@ function MyCars() {
             <Swipeable
               key={i}
               renderRightActions={(progress, dragX) =>
-                renderRightActions(progress, dragX, agencycar.car?.id)
+                renderRightActions(progress, dragX, agencycar.car?.id, agencycar?.car)
               }
-              renderLeftActions={(progress, dragX) =>
-                renderLeftActions(progress, dragX, agencycar?.car)
-              }
+             
             >
               <View key={i} style={styles.carCard}>
                 <View style={styles.items}>
@@ -227,7 +240,7 @@ function MyCars() {
                     <View style={styles.brtitle}>
                       <Text style={styles.title}>{agencycar?.car.model}</Text>
                     </View>
-                    <View
+                    <TouchableOpacity
                       onPress={() => {
                         setSelectedCar(agencycar?.car);
                         setModalVisible1(true);
@@ -235,19 +248,13 @@ function MyCars() {
                       style={styles.btn}
                     >
                       <Text style={styles.buttonText}>Avaibility</Text>
-                    </View>
+                    </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.sec}>
                   <View style={styles.pr}>
                     <Text style={styles.price}>{agencycar.car?.brand}</Text>
                   </View>
-
-                  {/* <View style={styles.sh}>
-                    <Text style={styles.price}>
-                      Weekly:DT {agencycar.car?.priceWeekly}
-                    </Text>
-                  </View> */}
 
                   <View style={styles.th}>
                     <Text style={styles.price}>
@@ -378,11 +385,12 @@ function MyCars() {
 
 const styles = StyleSheet.create({
   NavBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
+    // position: "absolute",
+    // bottom: 0,
+    // left: 0,
+    // right: 0,
     height: height * 0.07,
+    justifyContent:"flex-end"
   },
   pr: {
     flex: 1,
@@ -425,7 +433,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   container: {
-    height: height * 0.96,
+    height: height ,
     alignItems: "center",
   },
   text: {
@@ -532,6 +540,7 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.03,
     borderRadius: 10,
     backgroundColor: "#f0f0f0",
+    // padding:10
   },
 
   star: {

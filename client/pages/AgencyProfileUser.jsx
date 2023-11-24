@@ -21,7 +21,7 @@ import Dots from "../assets/Svg/three-dots-svgrepo-com.svg";
 import { getOne, OneAgency } from "../store/agencySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { OneUserbid, getOneById } from "../store/userSlice";
-import { getallCarByAgency } from "../store/carFetch";
+import { carDetail, getallCarByAgency } from "../store/carFetch";
 import CardCar from "../components/CardCar";
 import car from "../assets/car2.png";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";

@@ -59,38 +59,38 @@ const AllBookings = () => {
     };
 
     dispatch(createNotifcationForSpecifiqueUser(notificationData));
-    console.log(activeUser.id, selectedBooking.id, "selectedBooking.id");
+    console.log(activeUser?.id, selectedBooking?.id, "selectedBooking.id");
     dispatch(
-      deletedServiceByUser({ UserId: activeUser.id, id: selectedBooking.id })
+      deletedServiceByUser({ UserId: activeUser?.id, id: selectedBooking?.id })
     );
     socket.emit("request", {
       senderId: activeUser.id,
-      receiverId: selectedBooking.Car.AgencyId,
-      message: `Service cancel ${selectedBooking.Car.model}`,
+      receiverId: selectedBooking?.Car.AgencyId,
+      message: `Service cancel ${selectedBooking?.Car.model}`,
     });
 
     Alert.alert(
       "Booking Canceled",
-      `Booking with ID ${selectedBooking.id} canceled successfully.`
+      `Booking with ID ${selectedBooking?.id} canceled successfully.`
     );
   };
-  const scheduleNotification = (endDate) => {
-    const daysUntilEnd = Math.ceil(
-      (new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24)
-    );
+  // const scheduleNotification = (endDate) => {
+  //   const daysUntilEnd = Math.ceil(
+  //     (new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24)
+  //   );
 
-    if (daysUntilEnd > 0 && daysUntilEnd <= 7) {
-      PushNotification.localNotification({
-        channelId: "default",
-        title: "Make review  ",
-        message: `Your booking for ${selectedBooking.Car.model} ends in ${daysUntilEnd} days.`,
-        vibrate: true,
-        vibration: 300,
-        playSound: true,
-        soundName: "default",
-      });
-    }
-  };
+  //   if (daysUntilEnd > 0 && daysUntilEnd <= 7) {
+  //     PushNotification.localNotification({
+  //       channelId: "default",
+  //       title: "Make review  ",
+  //       message: `Your booking for ${selectedBooking?.Car.model} ends in ${daysUntilEnd} days.`,
+  //       vibrate: true,
+  //       vibration: 300,
+  //       playSound: true,
+  //       soundName: "default",
+  //     });
+  //   }
+  // };
   const closeModal = () => {
     setCancelModalVisible(false);
     setSelectedBooking(null);
@@ -114,7 +114,7 @@ const AllBookings = () => {
           .map((booking) => {
             const { endDate, Car } = booking;
             const carModel = Car?.model || "";
-            scheduleNotification(endDate, carModel);
+            // scheduleNotification(endDate, carModel);
             return (
               <View style={styles.card} key={booking.id}>
                 <View style={styles.cardContainer}>

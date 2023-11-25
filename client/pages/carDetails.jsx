@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useSelector } from "react-redux";
+
 import axios from "axios";
 import car from "../assets/car2.png";
 import AddReview from "./AddReview";

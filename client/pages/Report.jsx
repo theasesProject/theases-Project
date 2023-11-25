@@ -15,7 +15,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { List, getAgencyData, loading } from "../store/agencySlice";
 import { MakeReport, handleToken, selectUser } from "../store/userSlice";
 import AgencyReported from "../components/AgencyReported.jsx";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { height, width } = Dimensions.get("screen");
 
 const ReportAgency = () => {
@@ -60,7 +62,17 @@ const ReportAgency = () => {
   };
 
   useEffect(() => {
-    console.log("i a m lo gg ed in ", activeUser);
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
+
+  useEffect(() => {
     setsender();
     dispatch(getAgencyData())
       .then(console.log(AgencyList))
@@ -164,7 +176,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     marginBottom: 20,
   },
   container: {

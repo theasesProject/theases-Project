@@ -20,7 +20,9 @@ import {
 } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function ProfileLandingPage({ style }) {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
@@ -69,6 +71,17 @@ function ProfileLandingPage({ style }) {
 
     getUserLocationAndNearestAddress();
   }, []);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={[styles.navBar, style]}>
       <View style={styles.allAdress}>
@@ -96,7 +109,7 @@ function ProfileLandingPage({ style }) {
       <View>
         {loggedIn && activeUser?.type === "client" ? (
           <Pressable
-            onPress={() => navigation.navigate("Userprofile")}
+            onPress={() => navigation.navigate("UsersProfile")}
             style={styles.userAvatar}
           >
             <Image
@@ -180,12 +193,14 @@ const styles = StyleSheet.create({
   yourLocation: {
     fontSize: 12,
     color: "rgb(130, 124, 140)",
+    fontFamily: "FiraMono-Medium",
   },
   UserAdress: {
     fontSize: 14,
     color: "black",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     width: 180,
+    fontFamily: "FiraMono-Bold",
   },
 });
 

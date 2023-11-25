@@ -12,7 +12,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import * as Location from "expo-location";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import CheckBox from "react-native-check-box";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateAgency } from "../store/agencySlice";
@@ -50,7 +52,16 @@ function ChangeRole({ navigation }) {
     "50%",
     "100%",
   ];
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handleChangeName = (content) => {
     if (!content) {
       let copy = form;
@@ -265,6 +276,7 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     padding: 10,
+    fontFamily: "FiraMono-Medium",
   },
   locationInput: {
     borderWidth: 1,
@@ -281,7 +293,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderRadius: 5,
     paddingRight: 140,
-    fontSize: 14,
+    fontSize: 12,
+    fontFamily: "FiraMono-Medium",
   },
   locationText: {
     paddingVertical: height * 0.0155,
@@ -319,7 +332,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   dropdownTitle: {
-    fontSize: 14,
+    fontSize: 11,
+    fontFamily: "FiraMono-Medium",
   },
   dropdown: {
     backgroundColor: "white",
@@ -343,9 +357,11 @@ const styles = StyleSheet.create({
   addImgText: {
     color: "white",
     fontSize: 16,
+    fontFamily: "FiraMono-Medium",
   },
   errorText: {
     color: "red",
+    fontFamily: "FiraMono-Medium",
   },
   imgsContainer: {
     borderWidth: 1,
@@ -392,6 +408,7 @@ const styles = StyleSheet.create({
   submitBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMono-Medium",
   },
 });
 

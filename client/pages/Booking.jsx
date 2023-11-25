@@ -23,7 +23,10 @@ import io from "socket.io-client";
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
-
+// import Toast from "react-native-toast-message";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 function Booking() {
   const navigation = useNavigation();
   const [roleModalVisible, setRoleModalVisible] = useState(false);
@@ -31,6 +34,7 @@ function Booking() {
   const [agreed, setAgreed] = useState(false);
   const unavailableDate = useSelector((state) => state.booking.unavailableDate);
   const oneCar = useSelector((state) => state.car.OneCar);
+  const [canReview, setCanReview] = useState(false);
 
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -40,7 +44,7 @@ function Booking() {
   const error = useSelector((state) => state.booking.error);
   const [total, setTotal] = useState(0);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
-  const isTransportationAvailable = oneCar.Agency.transportation;
+  const isTransportationAvailable = oneCar?.Agency.transportation;
   console.log(unavailableDate, oneCar.id, "unvaibledate");
   const [selectedTime, setSelectedTime] = useState(null);
 
@@ -173,6 +177,7 @@ function Booking() {
       setMarkedDates({});
     } else if (moment(date).isAfter(selectedStartDate, "day")) {
       setSelectedEndDate(date);
+
       setMarkedDates({
         ...markedDates,
       });
@@ -213,7 +218,16 @@ function Booking() {
 
     calculTotalPrice();
   }, [dispatch, selectedStartDate, selectedEndDate]);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.page}>
       <View style={styles.calender}>
@@ -566,7 +580,7 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 16,
     padding: 10,
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
   },
   page: {
     padding: 4,
@@ -588,7 +602,7 @@ const styles = StyleSheet.create({
   total: {
     // padding: 10,
     color: "blue",
-    fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
     fontSize: 16,
   },
   calender: {
@@ -615,6 +629,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     textAlign: "center",
+    fontFamily: "FiraMono-Medium",
   },
 
   button: {
@@ -631,10 +646,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
     textAlign: "center",
+    fontFamily: "FiraMono-Medium",
   },
   pickTime: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 17,
+    fontFamily: "FiraMono-Bold",
     color: "black",
   },
 
@@ -651,6 +667,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
     color: "grey",
+    fontFamily: "FiraMono-Medium",
   },
   buttonContainer1: {
     borderRadius: 10,
@@ -670,7 +687,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   date: {
+    fontSize: 12,
     color: "grey",
+    fontFamily: "FiraMono-Medium",
   },
   dates: {
     flexDirection: "row",

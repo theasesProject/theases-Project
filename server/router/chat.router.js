@@ -8,6 +8,6 @@ router.get("/getAllRoomsUserId/:id", getAll)
 router.get("/getAllRoomsUser2/:id", getAllUser2)
 router.post("/addMessage",add)
 router.get("/getMessages/:id",getMessages)
-router.get("/getOneRoom",getOneRoom)
+router.post("/getOneRoom",getOneRoom)
 
 module.exports = router

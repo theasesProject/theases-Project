@@ -10,6 +10,7 @@ import {
 } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import { useEffect, useState } from "react";
+import * as Font from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import car from "../assets/car2.png";
 import vitesse from "../assets/vitesse.png";
@@ -33,7 +34,8 @@ import fuel from "../assets/fuel.png";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { selectUser } from "../store/userSlice";
 import { Booking } from "../pages/Booking.jsx";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 function CardCar({ oneCar, setNothing, handlePress }) {
   const [heartSelected, setHeartSelected] = useState(false);
 
@@ -66,10 +68,21 @@ function CardCar({ oneCar, setNothing, handlePress }) {
     dispatch(carDetail(oneCar));
     dispatch(saveDetails(oneCar));
     handlePress();
+    navigation.navigate("details");
   };
 
   useEffect(() => {
     checkBookMarked();
+  }, []);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
   }, []);
 
   return (
@@ -81,14 +94,18 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           </TouchableOpacity>
         </View>
         <View style={styles.imageCar1}>
-          <Image style={styles.imageCar2} src={oneCar.Media[0]?.media}></Image>
+          {/* <Image style={styles.imageCar2} src={oneCar?.Media[0]?.media}></Image> */}
         </View>
       </View>
 
-      <TouchableOpacity onPress={handleRent} style={styles.information}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={handleRent}
+        style={styles.information}
+      >
         <View style={styles.carInformation}>
           <View style={styles.agencyName}>
-            <Text style={styles.name}>{oneCar?.Agency.name}</Text>
+            <Text style={styles.name}>{oneCar?.Agency?.name}</Text>
           </View>
           <View style={styles.carName}>
             <Text style={styles.name1}>{oneCar?.model}</Text>
@@ -98,8 +115,12 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           <Text style={styles.price1}>${oneCar?.price}/day</Text>
         </View>
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleRent} style={styles.details}>
+      <View style={styles.line}></View>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={handleRent}
+        style={styles.details}
+      >
         <View style={styles.typeofFuel}>
           <Image style={styles.vitesse} source={brand} />
           <Text style={styles.VitesseName}>{oneCar?.brand}</Text>
@@ -128,10 +149,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: 10,
     alignItems: "center",
+    marginBottom: "5%",
   },
   imageCar: {
     backgroundColor: "rgb(246, 246, 246)",
-    width: width * 0.8,
+    width: width * 0.85,
     height: height * 0.2,
     borderRadius: 15,
     flexDirection: "column",
@@ -154,6 +176,14 @@ const styles = StyleSheet.create({
 
     justifyContent: "center",
   },
+  line: {
+    height: height * 0.001,
+    backgroundColor: "lightgray",
+
+    width: width * 0.85,
+    // borderWidth:1,
+    // bocolor:"lightgrey",
+  },
   information: {
     backgroundColor: "white",
     width: width * 0.8,
@@ -169,12 +199,12 @@ const styles = StyleSheet.create({
     height: height * 0.08,
     borderRadius: 15,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    // justifyContent: "flex-start",
+    // alignItems: "flex-start",
 
     gap: 5,
-    borderTopColor: "lightgrey",
-    borderTopWidth: 1,
+    // borderTopColor: "lightgrey",
+    // borderTopWidth: 1,
   },
   favorities: {
     width: width * 0.8,
@@ -236,7 +266,7 @@ const styles = StyleSheet.create({
   typeofFuel: {
     flexDirection: "row",
 
-    width: width * 0.255,
+    width: width * 0.27,
     height: height * 0.07,
     justifyContent: "center",
     alignItems: "center",
@@ -250,15 +280,18 @@ const styles = StyleSheet.create({
   name: {
     color: "#9EB8D9",
     fontSize: 16,
+    fontFamily: "FiraMono-Medium",
   },
   name1: {
     fontSize: 16,
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "FiraMono-Bold",
   },
   price1: {
     fontSize: 16,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     color: "#9EB8D9",
+    fontFamily: "FiraMono-Bold",
   },
   vitesse: {
     width: width * 0.06,
@@ -267,7 +300,8 @@ const styles = StyleSheet.create({
   },
   VitesseName: {
     color: "grey",
-    fontSize: 16,
+    fontSize: 13,
+    fontFamily: "FiraMono-Medium",
   },
   Vitesse1: {
     width: width * 0.081,

@@ -20,6 +20,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import back from "../assets/back.png";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAllCarByDate } from "../store/bookingSlice";
+<<<<<<< HEAD
+=======
+import SelectDropdown from "react-native-select-dropdown";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
+>>>>>>> 1de43494cff24a21573cd29a20ac12cbd6247699
 import { ScrollView } from "react-native-gesture-handler";
 import BackArrow from "../assets/Svg/left-long-solid.svg";
 import { selectUser } from "../store/userSlice";
@@ -84,7 +91,16 @@ function AdvancedSearch() {
     );
     navigation.navigate("FiltredCar");
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const depositOptions = [
     "0%",
     "10%",
@@ -281,7 +297,11 @@ function AdvancedSearch() {
                 navigation.navigate("MapForUser");
               }}
             >
+<<<<<<< HEAD
               <Text>Open Map</Text>
+=======
+              <Text style={styles.text}>Search by Map</Text>
+>>>>>>> 1de43494cff24a21573cd29a20ac12cbd6247699
             </TouchableOpacity>
           </LinearGradient>
         </View>
@@ -380,11 +400,16 @@ const styles = StyleSheet.create({
     width: width * 0.45,
   },
   titleText: {
+<<<<<<< HEAD
     marginTop: height * 0.01,
     fontWeight: "bold",
     fontSize: 18,
     color: "#6a78c1",
     textAlign: "center",
+=======
+    fontSize: 16,
+    fontFamily: "FiraMono-Bold",
+>>>>>>> 1de43494cff24a21573cd29a20ac12cbd6247699
   },
   typesContainer: {
     marginVertical: height * 0.01,

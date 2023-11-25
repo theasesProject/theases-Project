@@ -1,13 +1,15 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Button } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { useDispatch } from "react-redux";
 import { locAgn } from "../store/locationSlice";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 import { SvgXml } from "react-native-svg";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const MapComponent = ({ navigation }) => {
-  const [getLocation,setGetLocation] = useState(null);
+  const [getLocation, setGetLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState({
     latitude: 36.842278,
     longitude: 10.187765,
@@ -17,8 +19,8 @@ const MapComponent = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
         return;
       }
 
@@ -37,7 +39,7 @@ const MapComponent = ({ navigation }) => {
   }, []);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const dispatch = useDispatch();
-const agen=`<?xml version="1.0" encoding="utf-8"?>
+  const agen = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
 <svg fill="#DC143C"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
 	 viewBox="0 0 256 253" enable-background="new 0 0 256 253" xml:space="preserve">
@@ -61,17 +63,17 @@ const agen=`<?xml version="1.0" encoding="utf-8"?>
 	c0,6.477,6.755,31.47,31.727,31.47c21.689,0,31.202-19.615,31.202-31.47c0,11.052,7.41,31.447,31.464,31.447
 	c21.733,0,31.363-20.999,31.363-31.447c0,14.425,9.726,26.416,22.954,30.154V233H42V98.594C55.402,94.966,65.29,82.895,65.29,68.346
 	z M222.832,22H223V2H34v20L2,54h252L222.832,22z"/>
-</svg>`
-  const Person=`<svg xmlns="http://www.w3.org/2000/svg" fill=#A9A9A9 viewBox="0 0 320 512"><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z"/></svg>`
+</svg>`;
+  const Person = `<svg xmlns="http://www.w3.org/2000/svg" fill=#A9A9A9 viewBox="0 0 320 512"><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z"/></svg>`;
   const handleMapPress = (e) => {
     const selectedLatitude = e.nativeEvent.coordinate.latitude;
     const selectedLongitude = e.nativeEvent.coordinate.longitude;
-    
+
     setSelectedLocation({
       latitude: selectedLatitude,
       longitude: selectedLongitude,
     });
-    console.log('selected',selectedLocation);
+    console.log("selected", selectedLocation);
   };
 
   const handleLoc = () => {
@@ -81,6 +83,16 @@ const agen=`<?xml version="1.0" encoding="utf-8"?>
     } else {
     }
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   // const customMapStyle = [
   //   {
   //     "featureType": "road.arterial",
@@ -115,21 +127,24 @@ const agen=`<?xml version="1.0" encoding="utf-8"?>
   //     ]
   //   }
   // ];
-  
+
   return (
     <View style={styles.container}>
-      <MapView style={styles.map}  region={mapRegion} onPress={handleMapPress}>
+      <MapView style={styles.map} region={mapRegion} onPress={handleMapPress}>
         {selectedLocation && (
-          <Marker coordinate={selectedLocation}  title="Selected Location">
-               
-         <SvgXml xml={agen} width="30" height="30" /> 
-        
-         </Marker>
+          <Marker coordinate={selectedLocation} title="Selected Location">
+            <SvgXml xml={agen} width="30" height="30" />
+          </Marker>
         )}
-         {getLocation && (
-          <Marker   coordinate={{ latitude: getLocation.latitude, longitude: getLocation.longitude }}            title="Your location">
-         
-         <SvgXml xml={Person} width="30" height="30" />
+        {getLocation && (
+          <Marker
+            coordinate={{
+              latitude: getLocation.latitude,
+              longitude: getLocation.longitude,
+            }}
+            title="Your location"
+          >
+            <SvgXml xml={Person} width="30" height="30" />
           </Marker>
         )}
       </MapView>

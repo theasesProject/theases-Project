@@ -22,11 +22,9 @@ import axios from "axios";
 import { fetchUser, selectUser, logUserOut } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GoogleSignIn } from "expo-google-app-auth";
-// import * as Google from "expo-auth-session/providers/google";
-// import * as WebBrowser from "expo-web-browser";
-// WebBrowser.maybeCompleteAuthSession();
-// import { registerIndieID, unregisterIndieDevice } from "native-notify";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 const { width, height } = Dimensions.get("screen");
 
 function Login({ navigation }) {
@@ -79,7 +77,8 @@ function Login({ navigation }) {
   const handleGoogleSignIn = async () => {
     try {
       const { type, accessToken, user } = await GoogleSignIn.logInAsync({
-        androidClientId: "1067545398456-jfc4hsmfrm3mhnjh6n35rqavijuroucs.apps.googleusercontent.com", // Replace with your Android client ID
+        androidClientId:
+          "1067545398456-jfc4hsmfrm3mhnjh6n35rqavijuroucs.apps.googleusercontent.com", // Replace with your Android client ID
         scopes: ["profile", "email"],
       });
 
@@ -182,7 +181,16 @@ function Login({ navigation }) {
   useEffect(() => {
     formValidation();
   }, [form, error]);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   return (
     <View style={styles.loginPage}>
       <View style={styles.headers}>
@@ -251,7 +259,13 @@ function Login({ navigation }) {
           onPressOut={() => setColor2("#6C77BF")}
           onPress={() => navigation.navigate("forgotPassword")}
         >
-          <Text style={{ color: color2, ...styles.forgotPassword }}>
+          <Text
+            style={{
+              color: color2,
+              ...styles.forgotPassword,
+              fontFamily: "FiraMono-Medium",
+            }}
+          >
             Forgot Password?
           </Text>
         </Pressable>
@@ -272,7 +286,9 @@ function Login({ navigation }) {
       </TouchableOpacity>
       <View style={styles.bottomSection}>
         <View style={styles.createAcc}>
-          <Text>First time here?</Text>
+          <Text style={{ fontFamily: "FiraMono-Medium" }}>
+            First time here?
+          </Text>
           <Pressable
             activeOpacity={0.8}
             onPressIn={() => {
@@ -281,24 +297,26 @@ function Login({ navigation }) {
             }}
             onPressOut={() => setColor("#6C77BF")}
           >
-            <Text style={{ color: color }}>Sign up</Text>
+            <Text style={{ color: color, fontFamily: "FiraMono-Medium" }}>
+              Sign up
+            </Text>
           </Pressable>
         </View>
         <View style={styles.loginWith}>
           <View style={styles.line}></View>
-          <Text>Or sign in with</Text>
+          <Text style={{ fontFamily: "FiraMono-Medium" }}>Or sign in with</Text>
           <View style={styles.line}></View>
         </View>
         <View style={styles.quickLoginContainer}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() =>handleGoogleSignIn()}
+            onPress={() => handleGoogleSignIn()}
           >
             <View style={styles.quickLogin}>
               <View style={styles.icons}>
                 <Image source={google} alt="google" style={styles.icons} />
               </View>
-              <Text>google</Text>
+              <Text style={{ fontFamily: "FiraMono-Medium" }}>google</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
@@ -306,7 +324,7 @@ function Login({ navigation }) {
               <View style={styles.icons}>
                 <Image source={facebook} alt="facebook" style={styles.icons} />
               </View>
-              <Text>facebook</Text>
+              <Text style={{ fontFamily: "FiraMono-Medium" }}>facebook</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -346,13 +364,15 @@ const styles = StyleSheet.create({
   },
   welcome: {
     fontSize: 24,
-    fontWeight: "bold",
+
     textAlign: "center",
+    fontFamily: "FiraMono-Bold",
   },
   paragraph: {
     color: "rgba(1,1,1,0.5)",
     textAlign: "center",
     width: 220,
+    fontFamily: "FiraMono-Medium",
   },
   loginForm: {
     width: "100%",
@@ -385,6 +405,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft: 40,
     zIndex: 0,
+    fontFamily: "FiraMono-Medium",
   },
   passwordInput: {
     backgroundColor: "#eef1f8",
@@ -392,6 +413,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft: 40,
     zIndex: 0,
+    fontFamily: "FiraMono-Medium",
   },
   forgotPasswordContainer: {
     width: "100%",
@@ -409,9 +431,11 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+    fontFamily: "FiraMono-Medium",
   },
   forgotPassword: {
     textAlign: "right",
+    fontFamily: "FiraMono-Medium",
   },
   loginBtnContainer: {
     width: "100%",
@@ -428,6 +452,7 @@ const styles = StyleSheet.create({
   loginBtnContent: {
     color: "white",
     fontSize: 18,
+    fontFamily: "FiraMono-Medium",
   },
   bottomSection: {
     width: "100%",

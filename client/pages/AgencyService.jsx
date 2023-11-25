@@ -1,11 +1,3 @@
-/*
- * with all my respect this is a big 0
- * when we map to render multiple cards, we work on that card as a seprate component
- * css is too messy and it has too many propreties that are not being used
- * press this link for more info: 
- ? https://www.youtube.com/watch?v=u5W2NWItytc&list=PLrSOXFDHBtfE5tpw0bjMevWxMWXotiSdO
- */
-
 import {
   View,
   Text,
@@ -31,8 +23,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import price from "../assets/price.jpg";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import io from "socket.io-client";
 import PushNotification from "react-native-push-notification";
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 import { useNavigation } from "@react-navigation/native";
@@ -46,19 +42,29 @@ function AgencyService() {
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const [selectedService, setSelectedService] = useState(null);
   const [requestMakerId, setRequestMakerId] = useState(null);
-  const [avatarUrl, setAvatarUrl] = useState(null);
-  const [name, setName] = useState(null);
+  // const [avatarUrl, setAvatarUrl] = useState(null);
+  // const [name, setName] = useState(null);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
   const getRoomData = async (room) => {
+    console.log(room, "ghjkghgh");
     if (activeUser.id === room.UserId) {
       await axios
         .get(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
         )
         .then((response) => {
-          setAvatarUrl(response.data.avatar);
-          setName(response.data.userName);
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
+            navigation.navigate("conversation");
+          }, 200);
         });
     } else {
       await axios
@@ -66,8 +72,17 @@ function AgencyService() {
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`
         )
         .then((response) => {
-          setAvatarUrl(response.data.avatar);
-          setName(response.data.userName);
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
+            navigation.navigate("conversation");
+          }, 200);
         });
     }
   };
@@ -96,28 +111,32 @@ function AgencyService() {
   }, [dispatch]);
 
   const handleChatting = async (id) => {
+    // setRequestMakerId(id)
     try {
-      const roomPossibility1 = await axios.get(
+      const roomPossibility1 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: activeUser.id, user2: requestMakerId }
+        { user1: activeUser.id * 1, user2: id * 1 }
       );
-      const roomPossibility2 = await axios.get(
+      const roomPossibility2 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: requestMakerId, user2: activeUser }
+        { user1: id * 1, user2: activeUser.id * 1 }
       );
-      if (!roomPossibility1 && !roomPossibility2) {
+      console.log(roomPossibility1.data);
+      console.log(roomPossibility2.data);
+      if (!roomPossibility1.data && !roomPossibility2.data) {
+        console.log("heeeeeerrrreeee");
         const room = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
-          { UserId: activeUser.id, user2: requestMakerId }
+          { UserId: activeUser.id * 1, user2: id * 1 }
         );
-        getRoomData(room.data);
-        dispatch(setRoom({ ...room.data, name, avatarUrl }));
-        navigation.navigate("conversation");
+        // console.log("here");
+        getRoomData(room);
+
         return;
       } else {
-        getRoomData(room.data);
-        dispatch(setRoom({ ...room.data, name, avatarUrl }));
-        navigation.navigate("conversation");
+        const room = roomPossibility1.data || roomPossibility2.data;
+
+        getRoomData(room);
       }
     } catch (e) {
       console.error(e);
@@ -169,6 +188,16 @@ function AgencyService() {
     setSelectedService(null);
   };
 
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
+
+    loadFonts();
+  }, []);
   return (
     <View style={styles.page}>
       {allService ? (

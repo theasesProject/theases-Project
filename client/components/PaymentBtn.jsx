@@ -1,21 +1,37 @@
 import axios from "axios";
-import { Text, Linking, StyleSheet, TouchableOpacity,Dimensions } from "react-native";
+import {
+  Text,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { useStripe } from "@stripe/stripe-react-native";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect } from "react";
 const { height, width } = Dimensions.get("window");
 
-const PaymentBtn = () => {
+const PaymentBtn = ({amount}) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const activeUser = useSelector(selectUser);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "FiraMono-Bold": FiraMonoBold,
+        "FiraMono-Medium": FiraMonoMedium,
+      });
+    };
 
+    loadFonts();
+  }, []);
   const handleStripe = async () => {
     try {
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/payment/intentsStripe`,
         // this amount will be sent by props when we use this btn component
-        { amount: 12345 }
+        { amount: amount*100 }
       );
 
       await initPaymentSheet({
@@ -59,13 +75,15 @@ const styles = StyleSheet.create({
     width: "100%",
     color: "white",
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   payBtnContent: {
     color: "white",
     // fontSize: 18,
   },
+  
 });
 
 export default PaymentBtn;

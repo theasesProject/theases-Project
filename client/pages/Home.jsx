@@ -24,7 +24,9 @@ import SearchBar from "../components/searchBar.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../components/NavBar.jsx";
-
+import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
+import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as Font from "expo-font";
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
@@ -54,6 +56,7 @@ async function schedulePushNotification(notification) {
     trigger: { seconds: 1 },
   });
 }
+
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 function Home({ navigation }) {
   const dispatch = useDispatch();
@@ -129,7 +132,9 @@ function Home({ navigation }) {
       console.error("error coming from home", e);
     }
   };
-
+useEffect(()=>{
+  dispatch(getAllCars())
+},[])
   useEffect(() => {
     if (!loading && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
@@ -288,7 +293,7 @@ function Home({ navigation }) {
         </View>
       </View>
 
-      <SwipeUpDown
+      {/* <SwipeUpDown
         itemFull={<CarDetails />}
         ref={swipeUpDownRef}
         extraMarginTop={140}
@@ -301,7 +306,7 @@ function Home({ navigation }) {
           borderTopEndRadius: 50,
           backgroundColor: "lightgrey",
         }}
-      />
+      /> */}
 
       <Text
         onPress={() => {

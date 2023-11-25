@@ -40,9 +40,11 @@ import AddAgencyCar2 from "./pages/AddAgencyCar2.jsx";
 import AddCarAgency3 from "./pages/AddCarAgency3.jsx";
 import Dmap from "./pages/Dmap.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
+import AddReview from "./pages/AddReview.jsx";
 // import AddReview from "./components/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
 import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
+import Userprofile1 from "./pages/UserProfile1.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -53,14 +55,19 @@ function App() {
       >
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
-            {/* <Stack.Screen
-              name="Review"
-              component={AddReview}
-              options={{ headerShown: false }}
-            /> */}
             <Stack.Screen
               name="Home"
               component={Home}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AddReview"
+              component={AddReview}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="UsersProfile"
+              component={Userprofile1}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -112,10 +119,10 @@ function App() {
             <Stack.Screen
               name="MyCars"
               component={MyCars}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="favorites"
+              name="Favorites"
               component={Favorites}
               options={{ headerShown: true }}
             />
@@ -194,12 +201,7 @@ function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="EditAgencyProfile"
-              component={EditAgencyProfile}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AdvancedSearch"
+              name="Search"
               component={AdvancedSearch}
               options={{ headerShown: false }}
             />

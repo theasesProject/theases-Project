@@ -14,6 +14,7 @@ const {
   bringUsersData,
   checkPassword,
   sendResetPasswordConfirmationCode,
+  reniewToken,
 } = require("../controller/user.Controller");
 
 router.post("/emailLogin", emailLogin);
@@ -33,5 +34,6 @@ router.post(
   "/sendResetPasswordConfirmationCode",
   sendResetPasswordConfirmationCode
 );
+router.post("/reniewToken", reniewToken);
 
 module.exports = router;

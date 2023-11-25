@@ -6,8 +6,8 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Carou from "./pages/Carou.jsx";
 import store from "./store/store";
-import { lazy, Suspense } from "react";
-import { Provider } from "react-redux";
+import { lazy, Suspense, useEffect } from "react";
+import { Provider, useDispatch } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
@@ -92,7 +92,7 @@ function App() {
             <Stack.Screen
               name="AgencyService"
               component={AgencyService}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="ResetPassword"
@@ -201,7 +201,7 @@ function App() {
             <Stack.Screen
               name="AdvancedSearch"
               component={AdvancedSearch}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="FiltredCar"

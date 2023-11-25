@@ -28,6 +28,12 @@ const initialState = {
     characteristics: "",
     img: [],
     AgencyId: "",
+    loadingStatus: {},
+  },
+  selectedFilter: {
+    type: { value: "All" },
+    characteristics: { value: "All" },
+    downPayment: { value: "All" },
   },
 };
 export const getOnecarById = createAsyncThunk(
@@ -209,12 +215,16 @@ const carSlice = createSlice({
     carDetail: (state, action) => {
       state.OneCar = action.payload;
     },
-    setNewCar : (state, action) => {
+    setNewCar: (state, action) => {
       state.NewCar = action.payload;
     },
-    emptyNewCar : (state, action) => {
-      state.NewCar = {}
-    }
+    emptyNewCar: (state, action) => {
+      state.NewCar = {};
+    },
+    setSelected: (state, action) => {
+      console.log(action.payload, " ");
+      state.selectedFilter[action.payload.key] = action.payload.value;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
@@ -355,5 +365,13 @@ const carSlice = createSlice({
     });
   },
 });
-export const { filterCars, saveDetails, carDetail , setNewCar , emptyNewCar} = carSlice.actions;
+export const {
+  filterCars,
+  saveDetails,
+  carDetail,
+  setNewCar,
+  emptyNewCar,
+  setSelected,
+} = carSlice.actions;
+export const filterSelection = (state) => state.car.selectedFilter;
 export default carSlice.reducer;

@@ -24,7 +24,7 @@ function Favorites() {
   const bookMarks = useSelector((state) => state.car.bookMarks);
 
   useEffect(() => {
-    dispatch(getAllBoolMarks(activeUser.id));
+    dispatch(getAllBoolMarks(activeUser?.id));
   }, []);
   const renderRightActions = (progress, dragX, carId) => {
     const trans = dragX.interpolate({

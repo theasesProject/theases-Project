@@ -9,7 +9,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { logUserOut, selectUser } from "../store/userSlice";
 import Logo from "../assets/tempLogo.png";
 import NavBarAgency from "../components/NavBarAgency";

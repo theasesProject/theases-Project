@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   text: {
     alignItems: "flex-start",
     fontFamily: "FiraMono-Medium",
-    fontSize: 16,
+    fontSize: 13,
     color: "black",
   },
   time: {

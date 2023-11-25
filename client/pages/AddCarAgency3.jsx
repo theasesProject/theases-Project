@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -60,7 +60,6 @@ function AddCarAgency3() {
       const updatedSelectedDocuments = await Promise.all(
         selectedAssets.map(async (file) => {
           try {
-          
             const cloudinaryResponse = await cloudinaryUpload(file.uri);
             return cloudinaryResponse;
           } catch (err) {
@@ -76,7 +75,7 @@ function AddCarAgency3() {
           ...updatedSelectedDocuments.filter((image) => image !== null),
         ],
       });
-    }else {
+    } else {
       console.log("error");
     }
   };

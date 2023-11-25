@@ -94,14 +94,18 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           </TouchableOpacity>
         </View>
         <View style={styles.imageCar1}>
-          <Image style={styles.imageCar2} src={oneCar.Media[0]?.media}></Image>
+          {/* <Image style={styles.imageCar2} src={oneCar?.Media[0]?.media}></Image> */}
         </View>
       </View>
 
-      <TouchableOpacity activeOpacity={0.7} onPress={handleRent} style={styles.information}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={handleRent}
+        style={styles.information}
+      >
         <View style={styles.carInformation}>
           <View style={styles.agencyName}>
-            <Text style={styles.name}>{oneCar?.Agency.name}</Text>
+            <Text style={styles.name}>{oneCar?.Agency?.name}</Text>
           </View>
           <View style={styles.carName}>
             <Text style={styles.name1}>{oneCar?.model}</Text>
@@ -111,8 +115,12 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           <Text style={styles.price1}>${oneCar?.price}/day</Text>
         </View>
       </TouchableOpacity>
-<View style={styles.line}></View>
-      <TouchableOpacity activeOpacity={0.7} onPress={handleRent} style={styles.details}>
+      <View style={styles.line}></View>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={handleRent}
+        style={styles.details}
+      >
         <View style={styles.typeofFuel}>
           <Image style={styles.vitesse} source={brand} />
           <Text style={styles.VitesseName}>{oneCar?.brand}</Text>
@@ -141,7 +149,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: 10,
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: "5%",
   },
   imageCar: {
     backgroundColor: "rgb(246, 246, 246)",
@@ -168,9 +176,9 @@ const styles = StyleSheet.create({
 
     justifyContent: "center",
   },
-  line:{
+  line: {
     height: height * 0.001,
-    backgroundColor:"lightgray",
+    backgroundColor: "lightgray",
 
     width: width * 0.85,
     // borderWidth:1,

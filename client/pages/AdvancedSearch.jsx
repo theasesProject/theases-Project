@@ -20,13 +20,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import back from "../assets/back.png";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAllCarByDate } from "../store/bookingSlice";
-<<<<<<< HEAD
-=======
 import SelectDropdown from "react-native-select-dropdown";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
->>>>>>> 1de43494cff24a21573cd29a20ac12cbd6247699
 import { ScrollView } from "react-native-gesture-handler";
 import BackArrow from "../assets/Svg/left-long-solid.svg";
 import { selectUser } from "../store/userSlice";
@@ -49,58 +46,8 @@ function AdvancedSearch() {
   const [endDate, setEndDate] = useState(null);
   const [isStartDatePickerVisible, setStartDatePickerVisible] = useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
+  const [availableCars, setAvailableCars] = useState([]);
 
-  const showStartDatePicker = () => setStartDatePickerVisible(true);
-  const hideStartDatePicker = () => setStartDatePickerVisible(false);
-  const handleStartDateConfirm = (date) => {
-    setStartDate(moment(date).format("DD-MM-YYYY"));
-    hideStartDatePicker();
-  };
-
-  const showEndDatePicker = () => setEndDatePickerVisible(true);
-  const hideEndDatePicker = () => setEndDatePickerVisible(false);
-  const handleEndDateConfirm = (date) => {
-    setEndDate(moment(date).format("DD-MM-YYYY"));
-    hideEndDatePicker();
-  };
-
-  useEffect(() => {
-    prices();
-    if (startDate && endDate) {
-      fetchData();
-    }
-  }, [startDate, endDate, dispatch]);
-
-  const fetchData = async () => {
-    dispatch(
-      getAllCarByDate({
-        startDate: startDate,
-        endDate: endDate,
-        price: [sliderMinValue, priceSearched],
-        typevehicle:
-          actualFilter.type.value === "All" ? "" : actualFilter.type.value,
-        characteristics:
-          actualFilter.characteristics.value === "All"
-            ? ""
-            : actualFilter.characteristics.value,
-        deposit:
-          actualFilter.downPayment.value === "All"
-            ? ""
-            : actualFilter.downPayment.value,
-      })
-    );
-    navigation.navigate("FiltredCar");
-  };
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
   const depositOptions = [
     "0%",
     "10%",
@@ -126,8 +73,8 @@ function AdvancedSearch() {
       return;
     }
 
-    let minPrice = Number.MAX_VALUE; // Set initial minPrice to maximum possible value
-    let maxPrice = Number.MIN_VALUE; // Set initial maxPrice to minimum possible value
+    let minPrice = Number.MAX_VALUE;
+    let maxPrice = Number.MIN_VALUE;
 
     for (let car of allCars) {
       const price = car.price;
@@ -146,11 +93,57 @@ function AdvancedSearch() {
     }
   };
 
+  const showStartDatePicker = () => setStartDatePickerVisible(true);
+
+  const hideStartDatePicker = () => setStartDatePickerVisible(false);
+
+  const handleStartDateConfirm = (date) => {
+    setStartDate(moment(date).format("DD-MM-YYYY"));
+    hideStartDatePicker();
+  };
+
+  const showEndDatePicker = () => setEndDatePickerVisible(true);
+
+  const hideEndDatePicker = () => setEndDatePickerVisible(false);
+
+  const handleEndDateConfirm = (date) => {
+    setEndDate(moment(date).format("DD-MM-YYYY"));
+    hideEndDatePicker();
+  };
+
   const handleResetFilter = () => {
     dispatch(setSelected({ key: "type", value: "All" }));
     dispatch(setSelected({ key: "downPayment", value: "All" }));
     dispatch(setSelected({ key: "characteristics", value: "All" }));
   };
+
+  const handleFilter = async () => {
+    dispatch(
+      getAllCarByDate({
+        startDate: startDate,
+        endDate: endDate,
+        price: [sliderMinValue, priceSearched],
+        typevehicle:
+          actualFilter.type.value === "All" ? "" : actualFilter.type.value,
+        characteristics:
+          actualFilter.characteristics.value === "All"
+            ? ""
+            : actualFilter.characteristics.value,
+        deposit:
+          actualFilter.downPayment.value === "All"
+            ? ""
+            : actualFilter.downPayment.value,
+      })
+    );
+    navigation.navigate("FiltredCar");
+  };
+
+  useEffect(() => {
+    prices();
+    if (startDate && endDate) {
+      handleFilter();
+    }
+  }, [startDate, endDate, dispatch]);
 
   return (
     <View style={styles.container}>
@@ -293,15 +286,11 @@ function AdvancedSearch() {
           >
             <TouchableOpacity
               onPress={() => {
-                fetchData();
+                handleFilter();
                 navigation.navigate("MapForUser");
               }}
             >
-<<<<<<< HEAD
               <Text>Open Map</Text>
-=======
-              <Text style={styles.text}>Search by Map</Text>
->>>>>>> 1de43494cff24a21573cd29a20ac12cbd6247699
             </TouchableOpacity>
           </LinearGradient>
         </View>
@@ -321,7 +310,7 @@ function AdvancedSearch() {
             locations={[0, 1]}
             style={styles.showResult}
           >
-            <TouchableOpacity onPress={fetchData}>
+            <TouchableOpacity onPress={handleFilter}>
               <Text style={{ ...styles.showResults, color: "white" }}>
                 Apply
               </Text>
@@ -400,16 +389,11 @@ const styles = StyleSheet.create({
     width: width * 0.45,
   },
   titleText: {
-<<<<<<< HEAD
     marginTop: height * 0.01,
     fontWeight: "bold",
     fontSize: 18,
     color: "#6a78c1",
     textAlign: "center",
-=======
-    fontSize: 16,
-    fontFamily: "FiraMono-Bold",
->>>>>>> 1de43494cff24a21573cd29a20ac12cbd6247699
   },
   typesContainer: {
     marginVertical: height * 0.01,

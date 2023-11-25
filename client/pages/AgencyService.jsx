@@ -31,7 +31,6 @@ import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
-import { useNavigation } from "@react-navigation/native";
 import NavBarAgency from "../components/NavBarAgency";
 import NavBar from "../components/NavBar";
 function AgencyService() {

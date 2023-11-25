@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Video } from "expo-av";
 import { format } from "timeago.js";
 import { Dimensions } from "react-native";
+
 import Animated, {
   useSharedValue,
   withSpring,
@@ -60,7 +61,18 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
           resizeMode="contain"
         />
       );
-    } else {
+    } else if (message.type && message.type.endsWith("/pdf")){
+      return (
+       <View>
+<Text  style={{
+            color: isCurrentUser ? "white" : "black",
+            fontSize: 18,
+            fontFamily: "FiraMono-Medium",
+          }}>{"Document received"}</Text>
+       </View>
+      );
+    }
+    else {
       // Default case: text message
       return (
         <Text

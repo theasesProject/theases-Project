@@ -23,7 +23,6 @@ function NavBar({ style }) {
         "FiraMono-Medium": FiraMonoMedium,
       });
     };
-
     loadFonts();
   }, []);
   const isActive = (routeName) =>

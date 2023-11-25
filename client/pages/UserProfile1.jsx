@@ -48,7 +48,7 @@ const UsersProfile = ({ navigation }) => {
     navigation.navigate("Home");
   };
   useEffect(() => {
-    dispatch(allServiceForUser(activeUser.id));
+    dispatch(allServiceForUser(activeUser?.id));
     const loadFonts = async () => {
       await Font.loadAsync({
         "FiraMono-Bold": FiraMonoBold,
@@ -62,8 +62,8 @@ const UsersProfile = ({ navigation }) => {
     <View style={styles.AllPage}>
       <View style={styles.userContainer}>
         <View style={styles.UserDetails}>
-          <Image style={styles.UserImage} src={activeUser.avatar}></Image>
-          <Text style={styles.userName}>{activeUser.userName}</Text>
+          <Image style={styles.UserImage} src={activeUser?.avatar}></Image>
+          <Text style={styles.userName}>{activeUser?.userName}</Text>
           <View style={styles.statistique}>
             <View style={styles.statistiqueDetails}>
               <Text style={styles.statistiqueText}>{numberOfBooking}</Text>
@@ -71,7 +71,7 @@ const UsersProfile = ({ navigation }) => {
             </View>
             <View style={styles.statistiqueDetails}>
               <Text style={styles.statistiqueText}>
-                {activeUser.createdAt.split("T")[0]}
+                {activeUser?.createdAt.split("T")[0]}
               </Text>
               <Text style={styles.statistiqueText1}>Join At</Text>
             </View>

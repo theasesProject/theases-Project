@@ -98,7 +98,11 @@ function CardCar({ oneCar, setNothing, handlePress }) {
         </View>
       </View>
 
-      <TouchableOpacity onPress={handleRent} style={styles.information}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={handleRent}
+        style={styles.information}
+      >
         <View style={styles.carInformation}>
           <View style={styles.agencyName}>
             <Text style={styles.name}>{oneCar?.Agency?.name}</Text>
@@ -111,8 +115,12 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           <Text style={styles.price1}>${oneCar?.price}/day</Text>
         </View>
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleRent} style={styles.details}>
+      <View style={styles.line}></View>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={handleRent}
+        style={styles.details}
+      >
         <View style={styles.typeofFuel}>
           <Image style={styles.vitesse} source={brand} />
           <Text style={styles.VitesseName}>{oneCar?.brand}</Text>
@@ -145,7 +153,7 @@ const styles = StyleSheet.create({
   },
   imageCar: {
     backgroundColor: "rgb(246, 246, 246)",
-    width: width * 0.8,
+    width: width * 0.85,
     height: height * 0.2,
     borderRadius: 15,
     flexDirection: "column",
@@ -168,6 +176,14 @@ const styles = StyleSheet.create({
 
     justifyContent: "center",
   },
+  line: {
+    height: height * 0.001,
+    backgroundColor: "lightgray",
+
+    width: width * 0.85,
+    // borderWidth:1,
+    // bocolor:"lightgrey",
+  },
   information: {
     backgroundColor: "white",
     width: width * 0.8,
@@ -183,12 +199,12 @@ const styles = StyleSheet.create({
     height: height * 0.08,
     borderRadius: 15,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    // justifyContent: "flex-start",
+    // alignItems: "flex-start",
 
     gap: 5,
-    borderTopColor: "lightgrey",
-    borderTopWidth: 1,
+    // borderTopColor: "lightgrey",
+    // borderTopWidth: 1,
   },
   favorities: {
     width: width * 0.8,
@@ -250,7 +266,7 @@ const styles = StyleSheet.create({
   typeofFuel: {
     flexDirection: "row",
 
-    width: width * 0.255,
+    width: width * 0.27,
     height: height * 0.07,
     justifyContent: "center",
     alignItems: "center",

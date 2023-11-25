@@ -121,6 +121,7 @@ function MyCars() {
       setSelectedStartDate(null);
     }
   };
+
   const markDatesRed = () => {
     const markedRedDates = {};
 
@@ -137,35 +138,35 @@ function MyCars() {
   };
 
   useEffect(() => {
-    dispatch(getallCarByAgency(activeUser?.Agency.UserId));
+    dispatch(getallCarByAgency(activeUser?.Agency?.UserId));
     dispatch(GetUnavailableDatesForCar(selectedCar?.id));
   }, [dispatch, selectedCar?.id, selectedCar]);
-  const renderLeftActions = (progress, dragX, car) => {
-    const trans = dragX.interpolate({
-      inputRange: [-50, 0],
-      outputRange: [30, 0],
-      extrapolate: "clamp",
-    });
+  // const renderLeftActions = (progress, dragX, car) => {
+  //   const trans = dragX.interpolate({
+  //     inputRange: [-50, 0],
+  //     outputRange: [30, 0],
+  //     extrapolate: "clamp",
+  //   });
 
-    return (
-      <View style={styles.leftActions}>
-        <LinearGradient
-          colors={["#88b4e2", "#6C77BF"]}
-          style={[styles.actionButton, styles.updateButton]}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedCar(car);
-              setModalVisible(true);
-            }}
-            style={[styles.actionButton, styles.updateButton]}
-          >
-            <Text style={styles.buttonText}>Update</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
-    );
-  };
+  //   return (
+  //     <View style={styles.leftActions}>
+  //       <LinearGradient
+  //         colors={["#88b4e2", "#6C77BF"]}
+  //         style={[styles.actionButton, styles.updateButton]}
+  //       >
+  //         <TouchableOpacity
+  //           onPress={() => {
+  //             setSelectedCar(car);
+  //             setModalVisible(true);
+  //           }}
+  //           style={[styles.actionButton, styles.updateButton]}
+  //         >
+  //           <Text style={styles.buttonText}>Update</Text>
+  //         </TouchableOpacity>
+  //       </LinearGradient>
+  //     </View>
+    // );
+  // };
   const UpdateAvaibility = () => {
     dispatch(
       updateAgencyDate({
@@ -175,7 +176,7 @@ function MyCars() {
       })
     );
   };
-  const renderRightActions = (progress, dragX, carId) => {
+  const renderRightActions = (progress, dragX, carId,car) => {
     const trans = dragX.interpolate({
       inputRange: [0, 50],
       outputRange: [0, 30],
@@ -190,13 +191,27 @@ function MyCars() {
         >
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
+        <LinearGradient
+          colors={["#88b4e2", "#6C77BF"]}
+          style={[styles.actionButton, styles.updateButton]}
+        >
+           <TouchableOpacity
+             onPress={() => {
+               setSelectedCar(car);
+               setModalVisible(true);
+             }}
+             style={[styles.actionButton, styles.updateButton]}
+           >
+             <Text style={styles.buttonText}>Update</Text>
+           </TouchableOpacity>
+         </LinearGradient>
       </View>
     );
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={styles.scroll}>
         {agencyCars?.length > 0 ? (
           <Text style={styles.number}>You Have {agencyCars.length} cars</Text>
         ) : null}
@@ -205,11 +220,9 @@ function MyCars() {
             <Swipeable
               key={i}
               renderRightActions={(progress, dragX) =>
-                renderRightActions(progress, dragX, agencycar.car?.id)
+                renderRightActions(progress, dragX, agencycar.car?.id, agencycar?.car)
               }
-              renderLeftActions={(progress, dragX) =>
-                renderLeftActions(progress, dragX, agencycar?.car)
-              }
+             
             >
               <View key={i} style={styles.carCard}>
                 <View style={styles.items}>
@@ -219,31 +232,34 @@ function MyCars() {
                       uri: agencycar.carImage?.media,
                     }}
                   />
-                  <View style={styles.detail}>
-                    <Text style={styles.title}>{agencycar?.car.model}</Text>
-                    <View style={styles.stars}>
-                      <Image style={styles.star} source={star} />
-                      <Image style={styles.star} source={star} />
-                      <Image style={styles.star} source={star} />
-                      <Image style={styles.star} source={star} />
-                      <Image style={styles.star} source={star} />
-                    </View>
+                  <View style={styles.lineContainer}>
+                    <View style={styles.line}></View>
+                  </View>
 
-                    <Text style={styles.price}>${agencycar.car?.price}</Text>
+                  <View style={styles.details}>
+                    <View style={styles.brtitle}>
+                      <Text style={styles.title}>{agencycar?.car.model}</Text>
+                    </View>
                     <TouchableOpacity
                       onPress={() => {
                         setSelectedCar(agencycar?.car);
                         setModalVisible1(true);
                       }}
-                      style={{ paddingRight: 10 }}
+                      style={styles.btn}
                     >
-                      <LinearGradient
-                        colors={["#88b4e2", "#6C77BF"]}
-                        style={styles.buttonContainer1}
-                      >
-                        <Text style={styles.buttonText}>Avaibility</Text>
-                      </LinearGradient>
+                      <Text style={styles.buttonText}>Avaibility</Text>
                     </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.sec}>
+                  <View style={styles.pr}>
+                    <Text style={styles.price}>{agencycar.car?.brand}</Text>
+                  </View>
+
+                  <View style={styles.th}>
+                    <Text style={styles.price}>
+                      Daily:DT {agencycar.car?.price}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -369,19 +385,55 @@ function MyCars() {
 
 const styles = StyleSheet.create({
   NavBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
+    // position: "absolute",
+    // bottom: 0,
+    // left: 0,
+    // right: 0,
+    height: height * 0.07,
+    justifyContent:"flex-end"
+  },
+  pr: {
+    flex: 1,
+    marginLeft: 20,
+  },
+  brtitle: {
+    flex: 1,
+    backgroundColor: "#6C77BF",
+    width: width * 0.5,
+    height: height * 0.03,
+    // justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 3,
+  },
+  scroll: {
+    marginBottom: 60,
+  },
+  sec: {
+    flexDirection: "row",
+    // justifyContent:"center",
+    // alignItems:"center",
+  },
+  lineContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+  },
+  sh: {
+    flex: 1,
+    marginLeft: -35,
+  },
+  line: {
+    backgroundColor: "lightgrey",
+    height: height * 0.002,
+    width: width * 0.8,
+  },
+  details: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    gap: 10,
   },
   container: {
-    flex: 1,
-    height: height,
-
-    flexDirection: "column",
-
-    backgroundColor: "white",
-    justifyContent: "center",
+    height: height ,
     alignItems: "center",
   },
   text: {
@@ -395,9 +447,9 @@ const styles = StyleSheet.create({
   messageContainer: {
     paddingTop: 15,
   },
-  carImage: {
-    width: 100,
-    height: 100,
+  th: {
+    flex: 1,
+    marginLeft: 50,
   },
   emptyText: {
     textAlign: "center",
@@ -424,52 +476,28 @@ const styles = StyleSheet.create({
     fontFamily: "FiraMono-Bold",
     fontSize: 18,
   },
-  carCard: {
-    marginTop: "7%",
-    borderColor: "grey",
-    borderWidth: 1,
-    width: width * 0.9,
-    height: height * 0.2,
-    borderRadius: 10,
-    flexDirection: "row",
-  },
-  car: {
-    width: 200,
-    height: 150,
 
-    borderRadius: 7,
+  car: {
+    width: width * 0.9,
+    height: height * 0.25,
+    // borderRadius: 7,
   },
   star: {
     width: 15,
     height: 15,
   },
-  items: {
-    flexDirection: "row",
-  },
-  stars: {
-    flexDirection: "row",
-    gap: 3,
-  },
-  detail: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
 
-    width: 140,
-    gap: 7,
-    padding: 8,
-  },
   title: {
-    color: "black",
+    // flex:1,
+    color: "white",
     fontWeight: "bold",
     fontSize: 16,
   },
-  agencyName: {
-    color: "lightgrey",
-    fontSize: 14,
-  },
+
   price: {
     color: "blue",
+    fontSize: 18,
+    width: width,
   },
   delete: {
     justifyContent: "flex-end",
@@ -481,6 +509,15 @@ const styles = StyleSheet.create({
     height: 10,
     position: "absolute",
     alignItems: "flex-end",
+  },
+  btn: {
+    flex: 1,
+    backgroundColor: "#6C77BF",
+    // width:width *0.1,
+    height: height * 0.03,
+    // justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 3,
   },
   actionButton: {
     justifyContent: "center",
@@ -494,54 +531,40 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-  updateButton: {
-    backgroundColor: "blue",
-  },
-  deleteButton: {
-    backgroundColor: "grey",
-  },
+
   carCard: {
-    borderColor: "lightgrey",
+    borderColor: "#6C77BF",
     borderWidth: 1,
     width: "100%",
-    height: height * 0.17,
+    height: height * 0.36,
     marginBottom: height * 0.03,
     borderRadius: 10,
-    backgroundColor: "white",
+    backgroundColor: "#f0f0f0",
+    // padding:10
   },
-  car: {
-    width: 180,
-    height: 120,
-    borderRadius: 7,
-  },
+
   star: {
     width: 15,
     height: 15,
   },
   items: {
-    flexDirection: "row",
+    // flexDirection: "row",
   },
   stars: {
     flexDirection: "row",
     gap: 3,
   },
   detail: {
-    flexDirection: "column",
+    // flexDirection: "row",
+    // display:"flex",
     justifyContent: "center",
-    alignItems: "flex-start",
+    alignItems: "center",
     width: 140,
     gap: 7,
     padding: 8,
+    flex: 1,
   },
-  title: {
-    color: "black",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  agencyName: {
-    color: "lightgrey",
-    fontSize: 14,
-  },
+
   rightActions: {
     flex: 1,
     justifyContent: "center",

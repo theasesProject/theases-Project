@@ -16,10 +16,8 @@ import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
 import price from "../assets/price.jpg";
-import { LinearGradient } from "expo-linear-gradient";
 import agenda from "../assets/agenda.jpg";
 const { width, height } = Dimensions.get("screen");
-import croix from "../assets/croix.jpg";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import Modal from "react-native-modal";
 import { selectUser, setUser } from "../store/userSlice";
@@ -27,12 +25,17 @@ import io from "socket.io-client";
 import car from "../assets/car2.png";
 import charIcon from "../assets/chat.png";
 import PaymentBtn from "../components/PaymentBtn";
+import axios from "axios";
+import { setRoom } from "../store/chatSlice";
+import { useNavigation } from "@react-navigation/native";
 import PushNotification from "react-native-push-notification";
 
 const AllBookings = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const userBookings = useSelector((state) => state.booking.allServiceUser);
+  console.log("userrrrr", userBookings);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
@@ -95,6 +98,80 @@ const AllBookings = () => {
     setCancelModalVisible(false);
     setSelectedBooking(null);
   };
+
+  const getRoomData = async (room) => {
+    console.log(room, "ghjkghgh");
+    if (activeUser.id === room.UserId) {
+      await axios
+        .get(
+          `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
+        )
+        .then((response) => {
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
+            navigation.navigate("conversation");
+          }, 200);
+        });
+    } else {
+      await axios
+        .get(
+          `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`
+        )
+        .then((response) => {
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
+            navigation.navigate("conversation");
+          }, 200);
+        });
+    }
+  };
+
+  const handleChatting = async (id) => {
+    // setRequestMakerId(id)
+    try {
+      const roomPossibility1 = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
+        { user1: activeUser.id * 1, user2: id * 1 }
+      );
+      console.log("room1", roomPossibility1);
+      const roomPossibility2 = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
+        { user1: id * 1, user2: activeUser.id * 1 }
+      );
+      console.log("room2");
+      if (!roomPossibility1 && !roomPossibility2) {
+        const room = await axios.post(
+          `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
+          { UserId: activeUser.id * 1, user2: id * 1 }
+        );
+        // console.log("here");
+        getRoomData(room);
+
+        return;
+      } else {
+        const room = roomPossibility1.data || roomPossibility2.data;
+        console.log(room, "here");
+        getRoomData(room);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
@@ -253,8 +330,11 @@ const styles = StyleSheet.create({
   },
   chatt: {
     flex: 1,
-    backgroundColor: "black",
-    alignItems: "center",
+    // backgroundColor:"black",
+    // alignItems:"center",
+    justifyContent: "center",
+    marginLeft: 20,
+    // padding:50,
   },
   cardContainer: {
     flexDirection: "column",
@@ -304,6 +384,7 @@ const styles = StyleSheet.create({
     height: 22,
     marginBottom: 2,
   },
+
   price: {
     width: 22,
     height: 22,
@@ -337,6 +418,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   button: {
+    flexDirection: "row",
     // flex: 1,
     // justifyContent: "center",
     // alignContent: "center",

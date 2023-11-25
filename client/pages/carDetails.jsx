@@ -8,9 +8,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { useSelector } from "react-redux";
-
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import car from "../assets/car2.png";
 import AddReview from "./AddReview";
 import emptyStar from "../assets/emptyStar.png";
@@ -204,6 +202,139 @@ const CarDetails = () => {
           </LinearGradient>
         </View>
       </View>
+      {/* <View style={styles.imageContainer}>
+        <Image style={styles.carImage}  source={{
+              uri: carData?.Media[0]?.media,
+            }} />
+      </View>
+      <View style={styles.description}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(carDetail(carData));
+            navigation.navigate("Booking");
+          }}
+        >
+          <Text>booking</Text>
+        </TouchableOpacity>
+        <Text style={styles.carModel}>{carData.model}</Text>
+        <Text>{carData.description}</Text>
+        <Text
+          style={{
+            color: "#00ab44",
+            paddingTop: height * 0.01,
+            fontSize: 15,
+            fontWeight: "500",
+          }}
+        >
+          available
+        </Text>
+        <View style={styles.container_n2}>
+          <Text style={{ fontSize: 18.5, fontWeight: "600" }}>
+            Specification
+          </Text>
+          <ScrollView
+            style={styles.scrollContainer}
+            nestedScrollEnabled={true}
+            horizontal={true}
+          >
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                type Of Energy
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {console.log(carData)}
+                {carData?.typeOfFuel}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>price</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.price}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                period
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.period}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                Advance
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.deposit}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                type of car
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.typevehicle}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                Status
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.status}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                horsePower
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.horsePower}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                createdAt
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.createdAt}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                transportation
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.Agency?.transportation ? "true" : "false"}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                address
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.Agency?.address}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                company Number
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.Agency?.companyNumber}
+              </Text>
+            </View>
+            <View style={styles.descContainer}>
+              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
+                Company name
+              </Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {carData?.Agency?.name}
+              </Text>
+            </View>
+          </ScrollView>
+        </View>
+      </View> */}
     </View>
   );
 };

@@ -62,6 +62,7 @@ function Conversation() {
   const [outputDirectory, setOutputDirectory] = useState(null);
 
   const room = useSelector((state) => state.chatRoom.room);
+  console.log('hhhhh',room);
   const user = useSelector((state) => state.user.data);
   const [allMes, setAllMes] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");

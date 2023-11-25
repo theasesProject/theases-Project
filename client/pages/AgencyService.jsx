@@ -29,27 +29,39 @@ import PushNotification from "react-native-push-notification";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
+import axios from "axios";
+import { setRoom } from "../store/chatSlice";
 function AgencyService() {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allService = useSelector((state) => state.booking.allServiceByAgency);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const [selectedService, setSelectedService] = useState(null);
   const [requestMakerId, setRequestMakerId] = useState(null);
-  const [avatarUrl, setAvatarUrl] = useState(null);
-  const [name, setName] = useState(null);
+  // const [avatarUrl, setAvatarUrl] = useState(null);
+  // const [name, setName] = useState(null);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
   const getRoomData = async (room) => {
+    console.log(room, "ghjkghgh");
     if (activeUser.id === room.UserId) {
       await axios
         .get(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
         )
         .then((response) => {
-          setAvatarUrl(response.data.avatar);
-          setName(response.data.userName);
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
+            navigation.navigate("conversation");
+          }, 200);
         });
     } else {
       await axios
@@ -57,8 +69,17 @@ function AgencyService() {
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`
         )
         .then((response) => {
-          setAvatarUrl(response.data.avatar);
-          setName(response.data.userName);
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
+            navigation.navigate("conversation");
+          }, 200);
         });
     }
   };
@@ -87,28 +108,32 @@ function AgencyService() {
   }, [dispatch]);
 
   const handleChatting = async (id) => {
+    // setRequestMakerId(id)
     try {
-      const roomPossibility1 = await axios.get(
+      const roomPossibility1 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: activeUser.id, user2: requestMakerId }
+        { user1: activeUser.id * 1, user2: id * 1 }
       );
-      const roomPossibility2 = await axios.get(
+      const roomPossibility2 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: requestMakerId, user2: activeUser }
+        { user1: id * 1, user2: activeUser.id * 1 }
       );
-      if (!roomPossibility1 && !roomPossibility2) {
+      console.log(roomPossibility1.data);
+      console.log(roomPossibility2.data);
+      if (!roomPossibility1.data && !roomPossibility2.data) {
+        console.log("heeeeeerrrreeee");
         const room = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
-          { UserId: activeUser.id, user2: requestMakerId }
+          { UserId: activeUser.id * 1, user2: id * 1 }
         );
-        getRoomData(room.data);
-        dispatch(setRoom({ ...room.data, name, avatarUrl }));
-        navigation.navigate("conversation");
+        // console.log("here");
+        getRoomData(room);
+
         return;
       } else {
-        getRoomData(room.data);
-        dispatch(setRoom({ ...room.data, name, avatarUrl }));
-        navigation.navigate("conversation");
+        const room = roomPossibility1.data || roomPossibility2.data;
+
+        getRoomData(room);
       }
     } catch (e) {
       console.error(e);
@@ -178,7 +203,7 @@ function AgencyService() {
             .slice()
             .reverse()
             .map((service) => {
-              // console.log(service);
+              // console.log(service.service.Service.UserId,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
               return service.service.Service.acceptation === "pending" ? (
                 <View style={styles.card} key={service.service.id}>
                   <View style={styles.cardContainer}>

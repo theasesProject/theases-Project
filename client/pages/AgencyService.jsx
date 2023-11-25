@@ -32,7 +32,7 @@ import * as Font from "expo-font";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 function AgencyService() {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allService = useSelector((state) => state.booking.allServiceByAgency);

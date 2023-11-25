@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
@@ -18,10 +18,12 @@ import { selectLoggedIn } from "Redux/adminSlice";
 import { setLoggedIn } from "Redux/adminSlice";
 import { selectAdmin } from "Redux/adminSlice";
 import { getData } from "Redux/adminSlice";
+import { selectLoadingStatus } from "Redux/adminSlice";
 
 var ps;
 
 function Admin(props) {
+  const loadingStatus = useSelector(selectLoadingStatus);
   const logged = useSelector(selectLoggedIn);
   const Admin = useSelector(selectAdmin);
   const loading = useSelector((state) => state.Admin.loading);
@@ -34,19 +36,31 @@ function Admin(props) {
     document.documentElement.className.indexOf("nav-open") !== -1
   );
   const checkLog = async () => {
-    const token = localStorage.getItem("Token");
-    if (token) {
-      console.log("jihed token accepted", token);
-      dispatch(setLoggedIn(true))
-      console.log(await logged);
-    } else {
-      console.log("jihed token none", token);
-      dispatch(setLoggedIn(false))
-      console.log(await logged);
+    try {
+      const token = localStorage.getItem("Token");
+      if (token && !logged && Object.values(loadingStatus).every(status => status === false)) {
+        console.log("i fking set logged in true???");
+        dispatch(setLoggedIn(true))
+        navigate("/admin/dashboard")
+      } else if (!token && logged && Object.values(loadingStatus).every(status => status === false)) {
+        console.log("i fking deleted token");
+        localStorage.removeItem("Token");
+      } else if (!token && logged && Object.values(loadingStatus).every(status => status === false)) {
+        console.log("i fking set logged in false");
+        setLoggedIn(false)
+      }
+    } catch (error) {
+      console.log(await logged)
     }
   }
+  useEffect(() => {
+    checkLog()
+    if (location.pathname === "/admin/login" && logged && token && Object.values(loadingStatus).every(status => status === false)) {
+      console.log("noooooooooo");
+      navigate("/admin/dashboard")
+    }
+  }, [logged])
   React.useEffect(() => {
-    !loading && checkLog()
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -65,7 +79,7 @@ function Admin(props) {
         document.documentElement.classList.remove("perfect-scrollbar-on");
       }
     };
-  }, [logged]);
+  }, []);
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       let tables = document.querySelectorAll(".table-responsive");
@@ -80,14 +94,25 @@ function Admin(props) {
     }
   }, [location]);
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!loading && !logged) {
-        navigate("/admin/login");
-      }
-    }, 200); 
+    // const timer = setTimeout(() => {
+    if (location.pathname !== "/admin/login" && !token && Object.values(loadingStatus).every(status => status === false)) {
+      console.log("logged state???:", logged);
+      console.log("gotchaaaaaa");
+      navigate("/admin/login");
+    }
+
+    // }, 500);
+    // const timer2 = setTimeout(() => {
+
+    // }, 500);
     // Cleanup function to clear the timeout if the component unmounts
-    return () => clearTimeout(timer);
-  }, [loading, logged, navigate]);     // this function opens and closes the sidebar on small devices
+    // return () => clearTimeout(timer, timer2);
+  }, [logged, loadingStatus]);     // this function opens and closes the sidebar on small devices
+  // useEffect(() => {
+  //   if (location.pathname === "/admin/login") {
+  //     console.log("found u hiding in login b");
+  //   }
+  // }, [])
   const toggleSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
     setsidebarOpened(!sidebarOpened);

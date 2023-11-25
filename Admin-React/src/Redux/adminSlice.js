@@ -4,12 +4,12 @@ import axios from "axios";
 
 const initialState = {
     admin: {},
-    // adminToken: "",
-    // reviews: [],
+    reviews: [],
     allUsers: [],
     staticAllUsers: [],
     allCars: [],
     requests: [],
+    TempoRequest:{},
     oneUser: {},
     refreshed: false,
     loggedIn: false,
@@ -18,7 +18,8 @@ const initialState = {
     approvedRental: [],
     PendingRental: [],
     RejectedRental: [],
-    foreignUser: {}
+    foreignUser: {},
+    loadingStatus:{}
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -36,12 +37,13 @@ export const updateStateBlock = createAsyncThunk(
 );
 export const approveRequest = createAsyncThunk(
     "user/approveRequest",
-    async (request) => {
+    async (request,thunkAPI) => {
         try {
             const response = await axios.post(
                 `http://127.0.0.1:5000/api/agency/addAgency/${request.id}`,
                 { UserId: request.UserId }
             );
+            thunkAPI.dispatch(getAllRequests())
             return response.data;
         } catch (error) {
             console.log(error);
@@ -49,13 +51,13 @@ export const approveRequest = createAsyncThunk(
     }
 );
 export const declineRequest = createAsyncThunk(
-    "user/approveRequest",
-    async (id) => {
+    "user/declineRequest",
+    async (request,thunkAPI) => {
         try {
-            console.log(id);
             const response = await axios.delete(
-                `http://127.0.0.1:5000/api/request/decline/${id}`
+                `http://127.0.0.1:5000/api/request/decline/${request.id}`
             );
+            thunkAPI.dispatch(getAllRequests())
             return response.data;
         } catch (error) {
             console.log(error);
@@ -150,8 +152,9 @@ export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
         console.error(err);
     }
 });
-export const getData = createAsyncThunk("user/getADminData", async (token) => {
+export const getData = createAsyncThunk("user/getADminData", async () => {
     try {
+        const token=localStorage.getItem("Token")
         // const token = JSON.stringify(localStorage.getItem("Token"))
         const response = await axios.post(
             `http://localhost:5000/api/admin/useToken`,
@@ -171,8 +174,7 @@ export const Login = createAsyncThunk("user/Login", async ({ email, password },t
             data
         )
         localStorage.setItem("Token", response.data)
-        const token=localStorage.getItem("Token")
-        thunkAPI.dispatch(getData(token));
+        thunkAPI.dispatch(getData());
         return response.data;
     } catch (err) {
         console.error(err);
@@ -224,157 +226,172 @@ export const adminSlicer = createSlice({
         },
         setLoggedIn: (state, action) => {
             state.loggedIn = action.payload;
+        },
+        setReqForSwal:(state,action)=>{
+            state.TempoRequest=action.payload
         }
     },
     extraReducers: (builder) => {
 
         builder.addCase(getData.pending, (state) => {
-            state.loading = true;
+            state.loadingStatus.getData = true;
             state.error = null;
         });
         builder.addCase(getData.fulfilled, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getData  = false;
             state.admin = action.payload;
         });
         builder.addCase(getData.rejected, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getData  = false;
             state.error = action.error.message;
         });
         builder.addCase(Login.pending, (state) => {
-            state.loading = true;
+            state.loadingStatus.Login  = true;
             state.error = null;
         });
-        builder.addCase(Login.fulfilled, (state, action) => {
-            state.loading = false;
-            state.loggedIn = true;
-        });
-        builder.addCase(Login.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.error.message;
+        builder.addCase(Login.fulfilled, (state) => {
+            state.loadingStatus.Login  = false;
             state.loggedIn = false;
         });
+        builder.addCase(Login.rejected, (state, action) => {
+            state.loadingStatus.Login  = false;
+            state.error = action.error.message;
+            // state.loggedIn = false;
+        });
         builder.addCase(getUserById.pending, (state) => {
-            state.loading = true;
+            state.loadingStatus.getUserById = true;
             state.error = null;
         });
         builder.addCase(getUserById.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingStatus.getUserById = false;
             state.foreignUser = action.payload;
         });
         builder.addCase(getUserById.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingStatus.getUserById = false;
             state.error = action.error.message;
         });
         builder.addCase(getAllCars.pending, (state) => {
-            state.loading = true;
+           state.loadingStatus.getAllCars = true;
             state.error = null;
         });
         builder.addCase(getAllCars.fulfilled, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getAllCars = false;
             state.allCars = action.payload;
         });
         builder.addCase(getAllCars.rejected, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getAllCars = false;
             state.error = action.error.message;
         });
         builder.addCase(getApprovedServices.pending, (state) => {
-            state.loading = true;
+            state.loadingStatus.getApprovedServices = true;
             state.error = null;
         });
         builder.addCase(getApprovedServices.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingStatus.getApprovedServices = false;
             state.approvedRental = action.payload;
         });
         builder.addCase(getApprovedServices.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingStatus.getApprovedServices = false;
             state.error = action.error.message;
         });
         builder.addCase(getRejectedServices.pending, (state) => {
-            state.loading = true;
+           state.loadingStatus.getRejectedServices = true;
             state.error = null;
         });
         builder.addCase(getRejectedServices.fulfilled, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getRejectedServices = false;
             state.RejectedRental = action.payload;
         });
         builder.addCase(getRejectedServices.rejected, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getRejectedServices = false;
             state.error = action.error.message;
         });
         builder.addCase(getPendingServices.pending, (state) => {
-            state.loading = true;
+           state.loadingStatus.getPendingServices = true;
             state.error = null;
         });
         builder.addCase(getPendingServices.fulfilled, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getPendingServices = false;
             state.PendingRental = action.payload;
         });
         builder.addCase(getPendingServices.rejected, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getPendingServices = false;
             state.error = action.error.message;
         });
         builder.addCase(Sort.pending, (state) => {
-            state.loading = true;
+           state.loadingStatus.Sort = true;
             state.error = null;
         });
         builder.addCase(Sort.fulfilled, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.Sort = false;
             state.allUsers = action.payload;
         });
         builder.addCase(Sort.rejected, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.Sort = false;
             state.error = action.error.message;
         });
         builder.addCase(getAllUsers.pending, (state) => {
-            state.loading = true;
+           state.loadingStatus.getAllUsers = true;
             state.error = null;
         });
         builder.addCase(getAllUsers.fulfilled, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getAllUsers = false;
             state.allUsers = action.payload;
             state.staticAllUsers = action.payload;
         });
         builder.addCase(getAllUsers.rejected, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.getAllUsers = false;
             state.error = action.error.message;
         });
 
         builder.addCase(updateStateBlock.pending, (state) => {
-            state.loading = true;
+           state.loadingStatus.updateStateBlock = true;
             state.error = null;
         });
         builder.addCase(updateStateBlock.fulfilled, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.updateStateBlock = false;
             state.oneUser = action.payload;
         });
         builder.addCase(updateStateBlock.rejected, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.updateStateBlock = false;
             state.error = action.error.message;
         });
         builder.addCase(approveRequest.pending, (state) => {
-            state.loading = true;
+           state.loadingStatus.approveRequest = true;
             state.error = null;
         });
         builder.addCase(approveRequest.fulfilled, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.approveRequest = false;
             // state.oneUser = action.payload;
         });
         builder.addCase(approveRequest.rejected, (state, action) => {
-            state.loading = false;
+           state.loadingStatus.approveRequest = false;
+            state.error = action.error.message;
+        });
+        builder.addCase(declineRequest.pending, (state) => {
+           state.loadingStatus.declineRequest = true;
+            state.error = null;
+        });
+        builder.addCase(declineRequest.fulfilled, (state, action) => {
+           state.loadingStatus.declineRequest = false;
+            // state.oneUser = action.payload;
+        });
+        builder.addCase(declineRequest.rejected, (state, action) => {
+           state.loadingStatus.declineRequest = false;
             state.error = action.error.message;
         });
         builder.addCase(getAllRequests.pending, (state) => {
-            state.loading = true;
+           state.loadingStatus.getAllRequests = true;
             state.error = null;
         });
-        // builder.addCase(getAllRequests.fulfilled, (state, action) => {
-        //     state.loading = false;
-        //     state.requests = action.payload;
-        // });
-        // builder.addCase(getAllRequests.rejected, (state, action) => {
-        //     state.loading = false;
-        //     state.error = action.error.message;
-        // });
+        builder.addCase(getAllRequests.fulfilled, (state, action) => {
+           state.loadingStatus.getAllRequests = false;
+            state.requests = action.payload;
+        });
+        builder.addCase(getAllRequests.rejected, (state, action) => {
+           state.loadingStatus.getAllRequests = false;
+            state.error = action.error.message;
+        });
         // builder.addCase(fetchReviews.fulfilled, (state, action) => {
         //     state.reviews = action.payload
         // })
@@ -382,7 +399,9 @@ export const adminSlicer = createSlice({
 })
 
 export const selectAdmin = (state) => state.Admin.admin;
+export const selectLoading = (state) => state.Admin.loading;
 export const selectAllUsers = (state) => state.Admin.allUsers;
+export const selectAllRequests = (state) => state.Admin.requests;
 export const selectStaticAllUsers = (state) => state.Admin.staticAllUsers;
 export const selectApproved = (state) => state.Admin.approvedRental;
 export const selectPending = (state) => state.Admin.PendingRental;
@@ -390,7 +409,7 @@ export const selectRejected = (state) => state.Admin.RejectedRental;
 export const selectAllCars = (state) => state.Admin.allCars;
 export const selectReviews = (state) => state.Admin.reviews;
 export const selectLoggedIn = (state) => state.Admin.loggedIn;
+export const selectLoadingStatus = (state) => state.Admin.loadingStatus;
 export const selectForeignUser = (state) => state.Admin.foreignUser;
-export const { filterUsers, setAdminData, logout, setLoggedIn } = adminSlicer.actions;
-export const { triggerRefresh } = adminSlicer.actions;
+export const { filterUsers,triggerRefresh, setAdminData, logout, setLoggedIn,setReqForSwal } = adminSlicer.actions;
 export default adminSlicer.reducer;

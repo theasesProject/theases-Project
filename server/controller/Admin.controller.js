@@ -55,19 +55,23 @@ module.exports = {
   // checks if a Admin exists using email
   emailLogin: async (req, res) => {
     try {
+      console.log(req.body);
       const admin = await Admin.findOne({ where: { email: req.body.email } });
-      if (!admin.dataValues) {
+      if (!admin) {
         return res.status(404).json("Admin does not exist");
       }
-      if (
-        !(await bcrypt.compare(req.body.password, admin.dataValues.password))
+      // if (!admin.dataValues) {
+      //   return res.status(404).json("Admin does not exist");
+      // }
+      if (!(await bcrypt.compare(req.body.password, admin.dataValues.password))
       ) {
         return res.status(401).json("wrong password");
       }
+      console.log("respone for login",await bcrypt.compare(req.body.password, admin.dataValues.password))
       const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
       res.status(200).send(token);
     } catch (err) {
-      res.status(500).send(err);
+      throw (err)
     }
   },
   // gets Admin token from the front to verify it and sends it back to front

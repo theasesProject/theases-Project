@@ -7,12 +7,16 @@ import { Login } from 'Redux/adminSlice';
 import { Card, CardHeader, CardBody, Row, Col, Input, Label, FormGroup, Form, Button, Badge } from "reactstrap";
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import img00 from "../assets/img/back00.jpg"
 import { getData } from 'Redux/adminSlice';
+import { selectLoggedIn } from 'Redux/adminSlice';
+import { selectLoading } from 'Redux/adminSlice';
 export default function LoginPage() {
   // const [username, setUsername] = useState('');
   // const [password, setPassword] = useState('');
+  const logged=useSelector(selectLoggedIn)
+  const loading=useSelector(selectLoading)
   const [error, setError] = useState(null);
   const [formChecked, setFormChecked] = useState(false);
   const [formVisible, setFormVisible] = useState(true);
@@ -24,34 +28,41 @@ export default function LoginPage() {
     password: "",
   });
   const formValidation = () => {
-    if (!form.identifier || !form.password) {
-      setFormChecked(false);
-    } else {
+    if (form.email && form.password) {
       setFormChecked(true);
+      // console.log(form);
+    } else {
+      setFormChecked(false);
+      // console.log(form);
     }
   };
 
 
 
-  const identifierValidation = (identifier) => {
-    // Regular expression for email
-    const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
+  // const identifierValidation = (identifier) => {
+  //   // Regular expression for email
+  //   const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
 
-    // Regular expression for phone number (this example assumes a simple format)
-    const phonePattern = /^[\d\+\-]+$/;
+  //   // Regular expression for phone number (this example assumes a simple format)
+  //   const phonePattern = /^[\d\+\-]+$/;
 
-    if (emailPattern.test(identifier)) {
-      return "email";
-    } else if (phonePattern.test(identifier)) {
-      return "phoneNumber";
-    }
-  };
+  //   if (emailPattern.test(identifier)) {
+  //     return "email";
+  //   } else if (phonePattern.test(identifier)) {
+  //     return "phoneNumber";
+  //   }
+  // };
   const handleLogin = async () => {
     try {
-      dispatch(Login({ email:form.email,  password: form.password}))
+     dispatch(Login({ email: form.email, password: form.password }));
+      // Now you can use the action object
+      // console.log(action);
+      // console.log(action.meta.requestStatus==="fulfilled");
+   
       // dispatch(getData())
       // setError(null);
-      navigation('/admin/dashboard');
+      // logged?
+      // navigation('/admin/dashboard'):null
       // dispatch(fetchUser(response.data));
     } catch (err) {
       console.log(err);
@@ -60,10 +71,11 @@ export default function LoginPage() {
       } else if (err.response.status == "401") {
         setError("incorrect password");
       } else {
-      console.error(err.message);
+        console.error(err.message);
       }
     }
-  };
+   };
+   
   useEffect(() => {
     const wrapper = document.querySelector('.wrapper_log_cust');
     wrapper.classList.add('form-success');
@@ -107,12 +119,14 @@ export default function LoginPage() {
 
                   }} className={formVisible ? '' : 'fade-out'}>
                     <input type="text" placeholder="Email" onChange={(e) => {
+                      formValidation()
                       setForm({ ...form, email: e.target.value })
                     }} />
                     <input type="password" placeholder="Password" onChange={(e) => {
+                      formValidation();
                       setForm({ ...form, password: e.target.value })
                     }} />
-                    <button type="submit" id="login-button" onClick={handleLogin}>Login</button>
+                    <button type="submit" id="login-button" disabled={!formChecked} onClick={handleLogin}>Login</button>
                   </form>
                 </div>
 

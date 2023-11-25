@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 // ##############################
 // // // Chart variables
 // #############################
@@ -77,7 +60,7 @@ let chartExample1 = {
         labels: [],
         datasets: [
           {
-            label: "Hide/Show Chart",
+            label: "Empty Data",
             data: [],
           },
         ],
@@ -110,7 +93,7 @@ let chartExample1 = {
       labels: labels,
       datasets: [
         {
-          label: "Hide/Show Chart",
+          label: "Rentals Accepted",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -161,7 +144,7 @@ let chartExample1 = {
       labels: labels,
       datasets: [
         {
-          label: "Rental History",
+          label: "Rental Pending",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -221,7 +204,7 @@ let chartExample1 = {
       labels: labels,
       datasets: [
         {
-          label: "Hide/Show Chart",
+          label: "Rental Rejected",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -287,7 +270,7 @@ let chartExample2 = {
       labels: labels,
       datasets: [
         {
-          label: "Hide/Show Chart",
+          label: "User Count",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -353,7 +336,7 @@ let chartExample3 = {
       labels: labels,
       datasets: [
         {
-          label: "Hide/Show Chart",
+          label: "Income ",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -428,7 +411,7 @@ const chartExample4 = {
         labels: [],
         datasets: [
           {
-            label: "Hide/Show Chart",
+            label: "Cars Count",
             data: [],
           },
         ],

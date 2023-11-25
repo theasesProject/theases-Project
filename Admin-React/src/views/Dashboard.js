@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useEffect, useState } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
@@ -63,8 +46,10 @@ import { selectPending } from "Redux/adminSlice";
 import { selectRejected } from "Redux/adminSlice";
 import { selectForeignUser } from "Redux/adminSlice";
 import { getUserById } from "Redux/adminSlice";
+import { selectLoggedIn } from "Redux/adminSlice";
 
 function Dashboard() {
+  const logged = useSelector(selectLoggedIn)
   const foreignUser = useSelector(selectForeignUser)
   const rentalHistory = useSelector(selectApproved)?.historyData
   const pending = useSelector(selectPending)?.historyData
@@ -112,19 +97,19 @@ function Dashboard() {
     }
   }
   useEffect(() => {
-    dispatch(getAllUsers())
-    dispatch(getAllCars())
-    dispatch(getApprovedServices())
-    dispatch(getPendingServices())
-    dispatch(getRejectedServices())
-    console.log(rentalHistory);
-    console.log(pending)
-    console.log(rejected)
-    console.log(allUsers)
-    console.log(allCars)
-    loading ? setRefresh(!refresh) : console.log(null);
+    if (logged) {
+      const loadData = () => {
+        dispatch(getAllUsers());
+        dispatch(getAllCars());
+        dispatch(getApprovedServices());
+        dispatch(getPendingServices());
+        dispatch(getRejectedServices());
+      };
+      loadData();
+      loading && setRefresh(!refresh);
+    }
+  }, [dispatch, refresh]);
 
-  }, [dispatch, refresh])
   return (
     <>
       <div className="content">
@@ -134,8 +119,8 @@ function Dashboard() {
               <CardHeader>
                 <Row>
                   <Col className="text-left" sm="6">
-                    <h5 className="card-category">Rental History</h5>
-                    <CardTitle tag="h2">Performance</CardTitle>
+                    <h5 className="card-category">{"Rental History"}</h5>
+                    <CardTitle tag="h2">{"Performance"}</CardTitle>
                   </Col>
                   <Col sm="6">
                     <ButtonGroup
@@ -555,7 +540,7 @@ function Dashboard() {
                         <td>{u.Users[0].userName}</td>
                         <td>{u.Car.model}</td>
                         <td>{u.amount} DT</td>
-                        <td className="text-center">{u.endDate.slice(0,10)}</td>
+                        <td className="text-center">{u.endDate.slice(0, 10)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -575,6 +560,7 @@ function Dashboard() {
                 <Table className="tablesorter" responsive>
                   <thead className="text-primary">
                     <tr>
+                      <th>ID</th>
                       <th>Name</th>
                       <th>E-mail</th>
                       <th>Phone-Number</th>
@@ -584,6 +570,7 @@ function Dashboard() {
                   <tbody>
                     {allUsers.slice(startIndex, allUsers.length > 10 ? startIndex + 10 : undefined)?.map((u, i) => (
                       <tr key={i}>
+                        <td>{u.id}</td>
                         <td>{u.userName}</td>
                         <td>{u.email}</td>
                         <td>{u.phoneNumber}</td>

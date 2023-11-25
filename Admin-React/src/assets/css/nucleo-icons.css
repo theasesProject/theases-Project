@@ -17,7 +17,9 @@ Created using IcoMoon - icomoon.io
 /*------------------------
 	base class definition
 -------------------------*/
-
+.swal2-button{
+  background-color: red !important;
+}
 .tim-icons {
   display: inline-block;
   font: normal normal normal 1em/1 'Nucleo';

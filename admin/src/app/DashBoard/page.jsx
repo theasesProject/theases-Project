@@ -49,11 +49,13 @@ const Dashboard = () => {
   const refreshed = useSelector((state) => state.user.refreshed);
   const allRequests = useSelector((state) => state.user.requests);
   useEffect(() => {
-    dispatch(fetchReviews());
-    dispatch(getAllUsers());
-    dispatch(getAllRequests()).then(console.log(allRequests));
-    console.log(allUsers);
-    loading ? setRefresh(!refresh) : null;
+    if ( Object.values(loadingStatus).every(status => status === false)) {
+      dispatch(fetchReviews());
+      dispatch(getAllUsers());
+      dispatch(getAllRequests()).then(console.log(allRequests));
+      // console.log(allUsers);
+      // loading ? setRefresh(!refresh) : null;
+    }
   }, [dispatch, refresh]);
   const handleBlock = (id) => {
     try {
@@ -72,8 +74,6 @@ const Dashboard = () => {
   const handleApproveRequest = (request) => {
     try {
       dispatch(approveRequest(request));
-      setRefresh(!refresh);
-      closeModal();
     } catch (error) {
       console.error(error);
     }

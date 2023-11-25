@@ -20,15 +20,15 @@ function Sidebar(props) {
   const checkLog = () => {
     const token = localStorage.getItem("Token");
     if (token) {
-      console.log("jihed token accepted", token);
       dispatch(setLoggedIn(true))
+      console.log("jihed token accepted", token);
     } else {
       console.log("jihed token none", token);
-      dispatch(setLoggedIn(false))
+      // dispatch(setLoggedIn(false))
     }
   }
   useEffect(() => {
-    checkLog()
+    // checkLog()
     if (navigator.platform.indexOf("Win") > -1) {
       const ps = new PerfectScrollbar(sidebarRef.current, {
         suppressScrollX: true,

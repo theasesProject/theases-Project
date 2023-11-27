@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { setNewCar } from "../store/carFetch";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../store/userSlice";
@@ -77,30 +77,26 @@ function AddAgencyCar() {
 
   const pickerSelectStyles = {
     inputIOS: {
-      fontSize: 16,
-      paddingVertical: 12,
+      fontSize: 13,
+      paddingVertical: height * 0.012,
       paddingHorizontal: 10,
       borderWidth: 3,
       borderColor: "grey",
       borderRadius: 4,
       color: "black",
       gap: 5,
+      height: height * 0.06,
     },
     inputAndroid: {
-      fontSize: 16,
+      fontSize: 13,
       paddingHorizontal: 10,
-      paddingVertical: 8,
-      borderWidth: 2,
-      borderColor: "lightgrey",
       borderRadius: 10,
-      gap: 5,
       color: "black",
       marginTop: "1%",
-      marginBottom: "1%",
       paddingRight: 30,
       justifyContent: "center",
-      height: 40,
-      width: width * 0.95,
+      height: height * 0.06,
+      backgroundColor:"white"
     },
   };
   useEffect(() => {
@@ -116,13 +112,7 @@ function AddAgencyCar() {
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
-        <Image
-          source={img1}
-          style={{
-            width: width * 0.9,
-            height: height * 0.4,
-          }}
-        />
+        <Image source={img1} style={styles.mainImage} />
         <View style={styles.textSvgContainer}>
           <Text style={styles.introdcution1}>
             What are your car characteristics
@@ -140,18 +130,22 @@ function AddAgencyCar() {
           style={pickerSelectStyles}
           useNativeAndroidPickerStyle={false}
         />
-        {brandError !== "" && (
-          <Text style={styles.errorText}>{brandError}</Text>
-        )}
+        <View style={styles.errorContainer}>
+        {brandError !== "" ? 
+          <Text style={styles.errorText}>{brandError}</Text> : null
+        }
+        </View>
         <TextInput
           value={form.model}
           onChangeText={handleModel}
           placeholder="Enter Your Car Model"
           style={styles.input}
         />
+        <View style={styles.errorContainer}>
         {modelError !== "" && (
           <Text style={styles.errorText}>{modelError}</Text>
         )}
+        </View>
 
         <View style={styles.textSvgContainer}>
           <Text style={styles.introdcution1}>Optional information</Text>
@@ -163,6 +157,7 @@ function AddAgencyCar() {
           placeholder="Enter Some description for your Car"
           style={styles.input}
         />
+        <View style={styles.errorContainer} />
         <TextInput
           value={form.horsePower}
           keyboardType="number-pad"
@@ -171,52 +166,23 @@ function AddAgencyCar() {
           style={styles.input}
         />
       </ScrollView>
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          width: width * 0.9,
-        }}
-      >
+      <View style={styles.bottomNavigation}>
         <Pressable
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            height: 50,
-            borderRadius: 10,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
+          style={styles.arrowLeftCss}
           onPress={() => {
             navigation.navigate("Home");
           }}
         >
           <Arrowleft />
-          <Text style={{ color: "blue", fontFamily: "FiraMono-Medium" }}>
-            Back
-          </Text>
+          <Text style={styles.textCss}>Back</Text>
         </Pressable>
         <Pressable
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            height: 50,
-            borderRadius: 10,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
+          style={styles.arrowRightCss}
           onPress={() => {
             handleNext();
           }}
         >
-          <Text style={{ color: "blue", fontFamily: "FiraMono-Medium" }}>
-            Next
-          </Text>
+          <Text style={styles.textCss}>Next</Text>
           <Arrowright />
         </Pressable>
       </View>
@@ -226,34 +192,68 @@ function AddAgencyCar() {
 const styles = StyleSheet.create({
   editProfilePage: {
     flex: 1,
-    gap: 16,
-    alignItems: "center",
+    paddingHorizontal: width * 0.03,
+    width,
+    backgroundColor:"#F2F2F2"
   },
   introdcution1: {
     fontSize: 20,
-    marginTop: height * 0.01,
+    fontWeight:"bold",
+    // marginTop: height * 0.01,
+    color:"#6a78c1"
   },
   input: {
     width: "100%",
     borderRadius: 10,
-    height: 40,
-    paddingHorizontal: 10,
+    height: height * 0.06,
+    paddingHorizontal: 10, //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     fontSize: 16,
-    borderColor: "lightgrey",
-    borderWidth: 2,
-    marginTop: 5,
+    backgroundColor:"white",
   },
   errorText: {
     color: "red",
     fontSize: 14,
-    marginTop: 5,
+    // marginTop: 5,
+    paddingHorizontal:width * 0.02
   },
   textSvgContainer: {
     display: "flex",
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    marginTop: height * 0.01,
   },
+  mainImage: {
+    width: width * 0.9,
+    height: height * 0.38,
+  },
+  bottomNavigation: {
+    bottom: 0,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  arrowLeftCss: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  arrowRightCss: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "row",
+  },
+  textCss: { color: "#6C77BF", fontFamily: "FiraMono-Medium" },
+  errorContainer:{
+    height:height * 0.03,
+    justifyContent: "center",
+  }
 });
 export default AddAgencyCar;

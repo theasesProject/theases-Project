@@ -187,17 +187,20 @@ const AllBookings = () => {
                   <View style={styles.buttons}>
                     {(booking?.acceptation === "accepted" ||
                       booking?.acceptation === "pending") && (
-                      <View style={styles.button}>
+                      <View style={booking?.acceptation === "pending" ?styles.button1: null}>
                         <TouchableOpacity
                           style={styles.cancel}
                           onPress={() => handleCancelBooking(booking)}
                         >
                           <Text>Cancel</Text>
                         </TouchableOpacity>
+                        {booking?.acceptation === "pending" ? <TouchableOpacity onPress={()=>handleChatting(booking.Car.Agency.UserId)}>
+                          <Image style={styles.chat} source={charIcon}></Image>
+                        </TouchableOpacity> : null}
                       </View>
                     )}
                     {booking?.acceptation === "accepted" && (
-                      <View style={styles.button}>
+                      <View style={styles.button2}>
                      
                         {/* <View style={styles.payment}> */}
                         <PaymentBtn amount={booking.amount} />
@@ -374,12 +377,16 @@ marginLeft:20
     gap: 15,
     alignItems: "flex-end",
   },
-  button: {
-    flexDirection:"row"
-    // flex: 1,
-    // justifyContent: "center",
-    // alignContent: "center",
-    // backgroundColor:"green"
+  button1: {
+    flexDirection:"row",
+    display:"flex",
+    justifyContent:"space-between",
+    width:"100%"
+  },
+  button2: {
+    flexDirection:"row",
+    // display:"flex",
+    // width:"100%"
   },
   modalContent: {
     backgroundColor: "white",

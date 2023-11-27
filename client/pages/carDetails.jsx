@@ -119,6 +119,9 @@ const CarDetails = () => {
               <Image
                 style={styles.userImage}
                 src={carData.Agency.avatar}
+                onPress={()=>{
+                  
+                }}
               ></Image>
               <View style={styles.detailsOwner}>
                 <Text style={styles.agencyName}>{carData.Agency.name}</Text>

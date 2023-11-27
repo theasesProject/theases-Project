@@ -43,6 +43,7 @@ import AllBookings from "./pages/AllBookings.jsx";
 // import AddReview from "./components/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
 import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
+// import MyWork from "./pages/MyWork.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -52,7 +53,7 @@ function App() {
         publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
       >
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="AgencyProfileUser">
             <Stack.Screen
               name="Home"
               component={Home}

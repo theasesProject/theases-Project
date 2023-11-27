@@ -186,7 +186,7 @@ const SignUp = ({ navigation, props }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
       <View style={styles.SignUpContainer}>
         <Text style={styles.header}>Create New Account</Text>
         <Text style={styles.subheader}>

@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import Loc from "../assets/Svg/loc.svg";
 import Sat from "../assets/Svg/satellite-dish-solid.svg";
 import Carte from "../assets/Svg/map-solid.svg";
-import HouCar from "../assets/Svg/houcar.svg";
+import HouCar from "../assets/Svg/car-garage.svg";
 // import { Audio } from 'expo-av';
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
@@ -606,24 +606,29 @@ const styles = StyleSheet.create({
     top: 20,
     right: 20,
     flexDirection: "column",
+    justifyContent: "center",
   },
   zoomButton: {
-    backgroundColor: "white",
-    padding: 15,
-    margin: 5,
-    // bottom: 300,
-    // height:800,
-    // width:'50%',
+  padding:10,
+    backgroundColor: "lightgrey",
 
-    // left:200,
+    margin: 5, 
     borderRadius: 5,
   },
   changeView: {
-    paddingLeft: 40,
+  padding:10,
+    backgroundColor: "lightgrey",
+
+    margin: 5, 
+    borderRadius: 5,
   },
   locsvg: {
-    paddingLeft: 40,
-    // margin: 5,
+  padding:10,
+    backgroundColor: "lightgrey",
+
+    margin: 5, 
+    borderRadius: 5,
+   
   },
   sliderContainer: {
     flex: 1,

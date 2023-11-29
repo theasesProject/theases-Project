@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import LeftArrow from "../assets/Svg/leftArrowProfile.svg";
 import Hamburger from "../assets/Svg/hamburgerProfile.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { OneAgency, getOne } from "../store/agencySlice";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getallCarByAgency } from "../store/carFetch";

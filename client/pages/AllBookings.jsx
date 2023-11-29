@@ -28,12 +28,14 @@ import PaymentBtn from "../components/PaymentBtn";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 import { useNavigation } from "@react-navigation/native";
+import PushNotification from "react-native-push-notification";
+
 const AllBookings = () => {
-  const navigation =useNavigation()
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const userBookings = useSelector((state) => state.booking.allServiceUser);
-  console.log('userrrrr', userBookings);
+  console.log("userrrrr", userBookings);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
@@ -60,41 +62,62 @@ const AllBookings = () => {
     };
 
     dispatch(createNotifcationForSpecifiqueUser(notificationData));
-    console.log(activeUser.id, selectedBooking.id, "selectedBooking.id");
+    console.log(activeUser?.id, selectedBooking?.id, "selectedBooking.id");
     dispatch(
-      deletedServiceByUser({ UserId: activeUser.id, id: selectedBooking.id })
+      deletedServiceByUser({ UserId: activeUser?.id, id: selectedBooking?.id })
     );
     socket.emit("request", {
       senderId: activeUser.id,
-      receiverId: selectedBooking.Car.AgencyId,
-      message: `Service cancel ${selectedBooking.Car.model}`,
+      receiverId: selectedBooking?.Car.AgencyId,
+      message: `Service cancel ${selectedBooking?.Car.model}`,
     });
 
     Alert.alert(
       "Booking Canceled",
-      `Booking with ID ${selectedBooking.id} canceled successfully.`
+      `Booking with ID ${selectedBooking?.id} canceled successfully.`
     );
   };
+  // const scheduleNotification = (endDate) => {
+  //   const daysUntilEnd = Math.ceil(
+  //     (new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24)
+  //   );
 
+  //   if (daysUntilEnd > 0 && daysUntilEnd <= 7) {
+  //     PushNotification.localNotification({
+  //       channelId: "default",
+  //       title: "Make review  ",
+  //       message: `Your booking for ${selectedBooking?.Car.model} ends in ${daysUntilEnd} days.`,
+  //       vibrate: true,
+  //       vibration: 300,
+  //       playSound: true,
+  //       soundName: "default",
+  //     });
+  //   }
+  // };
   const closeModal = () => {
     setCancelModalVisible(false);
     setSelectedBooking(null);
   };
 
-
   const getRoomData = async (room) => {
-    console.log(room,'ghjkghgh');
+    console.log(room, "ghjkghgh");
     if (activeUser.id === room.UserId) {
       await axios
         .get(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
         )
         .then((response) => {
-          console.log('res',response.data);
-          dispatch(setRoom({ ...room, name:response.data.userName, avatarUrl:response.data.avatar }));
-          setTimeout(()=>{
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
             navigation.navigate("conversation");
-          },200)
+          }, 200);
         });
     } else {
       await axios
@@ -102,11 +125,17 @@ const AllBookings = () => {
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`
         )
         .then((response) => {
-          console.log('res',response.data);
-          dispatch(setRoom({ ...room, name:response.data.userName, avatarUrl:response.data.avatar }));
-          setTimeout(()=>{
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
             navigation.navigate("conversation");
-          },200)
+          }, 200);
         });
     }
   };
@@ -114,31 +143,29 @@ const AllBookings = () => {
   const handleChatting = async (id) => {
     // setRequestMakerId(id)
     try {
-
       const roomPossibility1 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: activeUser.id*1, user2: id*1 }
+        { user1: activeUser.id * 1, user2: id * 1 }
       );
-      console.log('room1',roomPossibility1);
+      console.log("room1", roomPossibility1);
       const roomPossibility2 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: id*1, user2: (activeUser.id)*1 }
+        { user1: id * 1, user2: activeUser.id * 1 }
       );
-      console.log('room2',);
+      console.log("room2");
       if (!roomPossibility1 && !roomPossibility2) {
         const room = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
-          { UserId: activeUser.id*1, user2: id*1 }
+          { UserId: activeUser.id * 1, user2: id * 1 }
         );
-          // console.log("here");
+        // console.log("here");
         getRoomData(room);
-       
+
         return;
       } else {
-        const room = roomPossibility1.data|| roomPossibility2.data;
-        console.log(room,'here');
+        const room = roomPossibility1.data || roomPossibility2.data;
+        console.log(room, "here");
         getRoomData(room);
-      
       }
     } catch (e) {
       console.error(e);
@@ -161,63 +188,76 @@ const AllBookings = () => {
         {userBookings
           .slice()
           .reverse()
-          .map((booking) => (
-            <View style={styles.card} key={booking.id}>
-              {console.log('booking',booking.Car.Agency.UserId)}
-              <View style={styles.cardContainer}>
-                <Image style={styles.ImageCar} source={car}></Image>
-                <View style={styles.carDetails}>
-                  <Text style={styles.CarName}>{booking?.Car?.model}</Text>
-                  <View style={styles.dates}>
-                    <Image style={styles.agenda} source={agenda}></Image>
-                    <Text style={styles.date}>
-                      {formatDate(booking?.startDate)} -{" "}
-                      {formatDate(booking?.endDate)}
-                    </Text>
-                    <View style={styles.prices}>
-                      <Image style={styles.price} source={price}></Image>
-                      <Text style={styles.date}>{booking?.amount}$</Text>
+          .map((booking) => {
+            const { endDate, Car } = booking;
+            const carModel = Car?.model || "";
+            // scheduleNotification(endDate, carModel);
+            return (
+              <View style={styles.card} key={booking.id}>
+                <View style={styles.cardContainer}>
+                  <Image style={styles.ImageCar} source={car}></Image>
+                  <View style={styles.carDetails}>
+                    <Text style={styles.CarName}>{booking?.Car?.model}</Text>
+                    <View style={styles.dates}>
+                      <Image style={styles.agenda} source={agenda}></Image>
+                      <Text style={styles.date}>
+                        {formatDate(booking?.startDate)} -{" "}
+                        {formatDate(booking?.endDate)}
+                      </Text>
+                      <View style={styles.prices}>
+                        <Image style={styles.price} source={price}></Image>
+                        <Text style={styles.date}>{booking?.amount}$</Text>
+                      </View>
                     </View>
-                  </View>
-                  <View>
-                    <Text style={styles.status}>
-                      Status: {booking?.acceptation}
-                    </Text>
-                  </View>
-                  <View style={styles.buttons}>
-                    {(booking?.acceptation === "accepted" ||
-                      booking?.acceptation === "pending") && (
-                      <View style={booking?.acceptation === "pending" ?styles.button1: null}>
-                        <TouchableOpacity
-                          style={styles.cancel}
-                          onPress={() => handleCancelBooking(booking)}
-                        >
-                          <Text>Cancel</Text>
-                        </TouchableOpacity>
-                        {booking?.acceptation === "pending" ? <TouchableOpacity onPress={()=>handleChatting(booking.Car.Agency.UserId)}>
-                          <Image style={styles.chat} source={charIcon}></Image>
-                        </TouchableOpacity> : null}
-                      </View>
-                    )}
-                    {booking?.acceptation === "accepted" && (
-                      <View style={styles.button2}>
-                     
-                        {/* <View style={styles.payment}> */}
-                        <PaymentBtn amount={booking.amount} />
-                        {/* </View> */}
-                        <View style={styles.chatt}>
-
-                        <TouchableOpacity onPress={()=>handleChatting(booking.Car.Agency.UserId)}>
-                          <Image style={styles.chat} source={charIcon}></Image>
-                        </TouchableOpacity>
+                    <View>
+                      <Text style={styles.status}>
+                        Status: {booking?.acceptation}
+                      </Text>
+                    </View>
+                    <View style={styles.buttons}>
+                      {(booking?.acceptation === "accepted" ||
+                        booking?.acceptation === "pending") && (
+                        <View style={styles.button}>
+                          <TouchableOpacity
+                            style={styles.cancel}
+                            onPress={() => handleCancelBooking(booking)}
+                          >
+                            <Text>Cancel</Text>
+                          </TouchableOpacity>
                         </View>
-                      </View>
-                    )}
+                      )}
+                      {booking?.acceptation === "accepted" && (
+                        <View style={styles.button}>
+                          <LinearGradient
+                            style={styles.payment}
+                            colors={["#88b4e2", "#6C77BF"]}
+                          >
+                            <TouchableOpacity>
+                              <Text style={{ fontFamily: "FiraMono-Medium" }}>
+                                Payment
+                              </Text>
+                            </TouchableOpacity>
+                          </LinearGradient>
+
+                          {/* <View style={styles.payment}> */}
+                          <PaymentBtn amount={booking.amount} />
+                          {/* </View> */}
+                          {/* <View style={styles.chatt}> */}
+                          <TouchableOpacity>
+                            <Image
+                              style={styles.chat}
+                              source={charIcon}
+                            ></Image>
+                          </TouchableOpacity>
+                          {/* </View> */}
+                        </View>
+                      )}
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          ))}
+            );
+          })}
 
         <Modal
           isVisible={cancelModalVisible}
@@ -288,13 +328,13 @@ const styles = StyleSheet.create({
     height: height * 0.2,
     borderRadius: 15,
   },
-  chatt:{
-    flex:1,
-// backgroundColor:"black",
-// alignItems:"center",
-justifyContent:"center",
-marginLeft:20
-// padding:50,
+  chatt: {
+    flex: 1,
+    // backgroundColor:"black",
+    // alignItems:"center",
+    justifyContent: "center",
+    marginLeft: 20,
+    // padding:50,
   },
   cardContainer: {
     flexDirection: "column",
@@ -332,7 +372,7 @@ marginLeft:20
   },
 
   payment: {
-    flex:1,
+    flex: 1,
     height: height * 0.05,
     width: width * 0.3,
     // justifyContent: "space-between",
@@ -377,16 +417,12 @@ marginLeft:20
     gap: 15,
     alignItems: "flex-end",
   },
-  button1: {
-    flexDirection:"row",
-    display:"flex",
-    justifyContent:"space-between",
-    width:"100%"
-  },
-  button2: {
-    flexDirection:"row",
-    // display:"flex",
-    // width:"100%"
+  button: {
+    flexDirection: "row",
+    // flex: 1,
+    // justifyContent: "center",
+    // alignContent: "center",
+    // backgroundColor:"green"
   },
   modalContent: {
     backgroundColor: "white",

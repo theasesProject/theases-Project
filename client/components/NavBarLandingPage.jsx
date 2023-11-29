@@ -113,7 +113,7 @@ function ProfileLandingPage({ style }) {
       <View>
         {loggedIn && activeUser?.type === "client" ? (
           <Pressable
-            onPress={() => navigation.navigate("Userprofile")}
+            onPress={() => navigation.navigate("UsersProfile")}
             style={styles.userAvatar}
           >
             <Image

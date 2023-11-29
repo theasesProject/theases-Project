@@ -127,8 +127,8 @@ function Userprofile({ navigation }) {
             <Text style={styles.logoutText}>Logout</Text>
           </LinearGradient>
         </TouchableOpacity>
+        <NavBar style={styles.navBar} />
       </View>
-      <NavBar style={styles.navBar} />
     </View>
   );
 }

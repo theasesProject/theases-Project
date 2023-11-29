@@ -5,7 +5,7 @@ const {height , width} = Dimensions.get("screen")
 
 function AgencyStatistics() {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{marginTop:height *0.05}}>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{marginVertical:height *0.05 }}>
         <Chart/>
     </ScrollView>
   )

@@ -77,13 +77,17 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   }, []);
   useEffect(() => {
     const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
+      try {
+        loadFonts();
+        await Font.loadAsync({
+          "FiraMono-Bold": FiraMonoBold,
+          "FiraMono-Medium": FiraMonoMedium,
+        });
+      } catch (error) {
+          console.log(error);
+      }
     };
 
-    loadFonts();
   }, []);
 
   return (

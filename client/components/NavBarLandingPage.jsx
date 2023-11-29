@@ -74,10 +74,14 @@ function ProfileLandingPage({ style }) {
 
   useEffect(() => {
     const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
+      try {
+        await Font.loadAsync({
+          "FiraMono-Bold": FiraMonoBold,
+          "FiraMono-Medium": FiraMonoMedium,
+        });
+      } catch (error) {
+          console.log(error);
+      }
     };
 
     loadFonts();
@@ -123,7 +127,7 @@ function ProfileLandingPage({ style }) {
         ) : null}
         {loggedIn && activeUser?.type === "agency" ? (
           <Pressable
-            onPress={() => navigation.navigate("AgencyProfileUser")}
+            onPress={() => navigation.navigate("AgencyProfile")}
             style={styles.userAvatar}
           >
             <Image

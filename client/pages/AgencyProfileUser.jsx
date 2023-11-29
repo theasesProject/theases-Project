@@ -30,12 +30,10 @@ function AgencyProfileUser() {
   const agencyCars = useSelector((state) => state.car.agencyCar)
   const loading = useSelector((state) => state.car.loading);
   const route = useRoute();
+  const {agencyId} = route.params
   const dispatch = useDispatch();
   const navigation = useNavigation()
-  const agencyId = 1;
   const activeUser = useSelector(selectUser)
-  // const agencyId= activeUser.Agency.UserId;
-  console.log( activeUser.Agency.UserId);
   const [selectedView, setSelectedView] = useState({
     view1: true,
     view2: false,
@@ -59,10 +57,14 @@ function AgencyProfileUser() {
 
   useEffect(() => {
     const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
+      try{
+        await Font.loadAsync({
+          "FiraMono-Bold": FiraMonoBold,
+          "FiraMono-Medium": FiraMonoMedium,
+        });
+      } catch(err){
+        console.log(err);
+      }
     };
     loadFonts();
   }, []);
@@ -76,9 +78,9 @@ function AgencyProfileUser() {
           }}>
             <LeftArrow />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleSliderToggle}>
+          {/* <TouchableOpacity onPress={handleSliderToggle}>
             <Hamburger />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <Text style={styles.textProfile}>Profile</Text>
         <View style={styles.mainInfo}>
@@ -165,25 +167,12 @@ function AgencyProfileUser() {
         >
           Reviews
         </Text>
-        <Text
-          style={{
-            ...styles.selectableViewText,
-            fontWeight: selectedView.view3 ? "600" : "400",
-            color: selectedView.view3 ? "#6a71c1" : null,
-          }}
-          onPress={() => {
-            setSelectedView({ view1: false, view2: false, view3: true });
-          }}
-        >
-          Statistics
-        </Text>
+        
       </View>
       {selectedView.view1 ? (
         <AllCars cars={agencyCars} />
       ) : selectedView.view2 ? (
         <AllReviews />
-      ) : selectedView.view3 ? (
-        <AgencyStatistics />
       ) : null}
       {isSliderOpen ? (
           <SliderMenu
@@ -200,7 +189,7 @@ const styles = StyleSheet.create({
   entirePage: {
     height,
     width,
-    backgroundColor: "#F2F2F2",
+    backgroundColor: "#F7F7F7",
     display: "flex",
     flexDirection: "column",
     padding: height * 0.02,
@@ -288,7 +277,7 @@ const styles = StyleSheet.create({
     marginTop: height * 0.4,
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
   },
   selectableViewText: {
     fontSize: 15,

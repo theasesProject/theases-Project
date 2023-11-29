@@ -35,6 +35,9 @@ function AllCars({ cars }) {
             ) : (
               <Image style={styles.carImage} source={carImage} />
             )}
+            <View style={{backgroundColor:"#F2F2F2",height:height * 0.001,width:"100%",marginVertical:height * 0.02}}>
+
+            </View>
             <View style={styles.informationView}>
               <View style={styles.infoContainer}>
                 <Text style={styles.infoTitle}>Model:</Text>
@@ -56,7 +59,7 @@ function AllCars({ cars }) {
                 <Text style={{ fontWeight: "700" }}>{car?.car?.price}$</Text>
               </View>
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
             style={styles.bookButton}
               onPress={() => {
                 dispatch(carDetail(car.car));
@@ -64,7 +67,7 @@ function AllCars({ cars }) {
               }}
             >
               <Text style={{fontWeight:"800",fontSize:18,color:"white"}}>Book Now!</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         );
       })}
@@ -75,7 +78,7 @@ function AllCars({ cars }) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    height: height * 0.4,
+    height: height * 0.3,
     borderRadius: 15,
     padding: height * 0.03,
     display: "flex",
@@ -87,13 +90,14 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "50%",
     resizeMode: "contain",
+
   },
   informationView: {
     display: "flex",
     width: "100%",
     justifyContent: "space-between",
-    marginTop: "7%",
-    gap: 5,
+    // marginTop: "7%",
+    gap: 10,
   },
   infoContainer: {
     display: "flex",

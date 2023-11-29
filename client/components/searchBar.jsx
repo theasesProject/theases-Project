@@ -24,10 +24,14 @@ function SearchBar({ onSearch }) {
   const navigation = useNavigation();
   useEffect(() => {
     const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
+      try {
+        await Font.loadAsync({
+          "FiraMono-Bold": FiraMonoBold,
+          "FiraMono-Medium": FiraMonoMedium,
+        });
+      } catch (error) {
+          console.log(error);
+      }
     };
 
     loadFonts();

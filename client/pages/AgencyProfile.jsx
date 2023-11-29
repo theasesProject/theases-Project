@@ -41,6 +41,7 @@ const AgencyProfile = ({ navigation }) => {
     console.log("slider toggled");
     setSliderOpen(!isSliderOpen);
   };
+  
   return (
     <View style={styles.agencyProfile}>
       <View style={styles.topSection}>

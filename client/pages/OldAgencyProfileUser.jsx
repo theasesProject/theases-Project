@@ -27,7 +27,7 @@ import car from "../assets/car2.png";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
-function AgencyProfileUser({ navigation }) {
+function OldAgencyProfile({ navigation }) {
   const ag = useSelector(OneAgency);
   const agencyCars = useSelector((state) => state.car.agencyCar);
   const loading = useSelector((state) => state.car.loading);
@@ -345,4 +345,4 @@ const styles = StyleSheet.create({
     fontFamily: "FiraMono-Bold",
   },
 });
-// export default AgencyProfileUser;
+export default OldAgencyProfile;

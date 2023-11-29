@@ -1,13 +1,13 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Dimensions, ScrollView, Text, View } from 'react-native'
+import Chart from "../components/Stats";
+const {height , width} = Dimensions.get("screen")
 
 function AgencyStatistics() {
   return (
-    <View>
-        <Text>
-            agency statistics
-        </Text>
-    </View>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{marginTop:height *0.05}}>
+        <Chart/>
+    </ScrollView>
   )
 }
 

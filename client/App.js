@@ -53,7 +53,7 @@ function App() {
         publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
       >
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="AgencyProfileUser">
+          <Stack.Navigator initialRouteName="Home">
             <Stack.Screen
               name="Home"
               component={Home}

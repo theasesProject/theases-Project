@@ -123,7 +123,7 @@ function ProfileLandingPage({ style }) {
         ) : null}
         {loggedIn && activeUser?.type === "agency" ? (
           <Pressable
-            onPress={() => navigation.navigate("AgencyProfile")}
+            onPress={() => navigation.navigate("AgencyProfileUser")}
             style={styles.userAvatar}
           >
             <Image

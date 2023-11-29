@@ -11,7 +11,7 @@ import LeftArrow from "../assets/Svg/leftArrowProfile.svg";
 import Hamburger from "../assets/Svg/hamburgerProfile.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { OneAgency, getOne } from "../store/agencySlice";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { getallCarByAgency } from "../store/carFetch";
 import AgencySvg from "../assets/Svg/agencyName.svg";
 import Phone from "../assets/Svg/agencyPhone.svg";
@@ -21,6 +21,8 @@ import Delivery from "../assets/Svg/delivery.svg";
 import AllCars from "../components/AllCars";
 import AllReviews from "../components/AllReviews";
 import AgencyStatistics from "../components/AgencyStatistics";
+import SliderMenu from "../components/SideBar";
+import { selectUser } from "../store/userSlice";
 const { height, width } = Dimensions.get("screen");
 
 function AgencyProfileUser() {
@@ -29,14 +31,22 @@ function AgencyProfileUser() {
   const loading = useSelector((state) => state.car.loading);
   const route = useRoute();
   const dispatch = useDispatch();
-  // const { agencyId } = route.params;
+  const navigation = useNavigation()
   const agencyId = 1;
+  const activeUser = useSelector(selectUser)
+  // const agencyId= activeUser.Agency.UserId;
+  console.log( activeUser.Agency.UserId);
   const [selectedView, setSelectedView] = useState({
     view1: true,
     view2: false,
     view3: false,
   });
+  const [isSliderOpen, setSliderOpen] = useState(false);
   console.log(ag?.agencyById);
+  const handleSliderToggle = () => {
+    console.log("slider toggled");
+    setSliderOpen(!isSliderOpen);
+  };
 
   useEffect(() => {
     dispatch(getallCarByAgency(agencyId));
@@ -61,10 +71,12 @@ function AgencyProfileUser() {
     <View style={styles.entirePage}>
       <View style={styles.staticTopView}>
         <View style={styles.navbar}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate("Home")
+          }}>
             <LeftArrow />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleSliderToggle}>
             <Hamburger />
           </TouchableOpacity>
         </View>
@@ -167,12 +179,19 @@ function AgencyProfileUser() {
         </Text>
       </View>
       {selectedView.view1 ? (
-        <AllCars cars={[...agencyCars,{},{}]} />
+        <AllCars cars={agencyCars} />
       ) : selectedView.view2 ? (
         <AllReviews />
       ) : selectedView.view3 ? (
         <AgencyStatistics />
       ) : null}
+      {isSliderOpen ? (
+          <SliderMenu
+            isOpen={isSliderOpen}
+            onClose={handleSliderToggle}
+            navigation={navigation}
+          />
+        ) : null}
     </View>
   );
 }

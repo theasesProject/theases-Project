@@ -10,15 +10,20 @@ import {
   ScrollView,
 } from "react-native";
 import carImage from "../assets/car2.png";
+import { useDispatch } from "react-redux";
+import { carDetail } from "../store/carFetch";
+import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("screen");
 
 function AllCars({ cars }) {
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
+  
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       {cars?.map((car, i) => {
-        console.log(car.car);
         return (
-          <View style={styles.card}>
+          <View style={styles.card} key={i}>
             {car?.carImage?.media ? (
               // console.log('ele in map',car.car),
               <Image
@@ -54,7 +59,7 @@ function AllCars({ cars }) {
             <TouchableOpacity
             style={styles.bookButton}
               onPress={() => {
-                dispatch(carDetail(element.car));
+                dispatch(carDetail(car.car));
                 navigation.navigate("Booking");
               }}
             >

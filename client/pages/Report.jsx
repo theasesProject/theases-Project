@@ -61,16 +61,8 @@ const ReportAgency = () => {
     setForm(newForm);
   };
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
+
 
   useEffect(() => {
     setsender();
@@ -176,7 +168,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontFamily: "FiraMono-Bold",
+ 
     marginBottom: 20,
   },
   container: {

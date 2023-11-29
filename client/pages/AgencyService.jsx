@@ -26,9 +26,6 @@ import price from "../assets/price.jpg";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import io from "socket.io-client";
 import PushNotification from "react-native-push-notification";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 function AgencyService() {
@@ -185,16 +182,7 @@ function AgencyService() {
     setSelectedService(null);
   };
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   return (
     <View style={styles.page}>
       {allService ? (
@@ -355,7 +343,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 1,
     color: "black",
-    fontFamily: "FiraMono-Bold",
+  
   },
   date: {
     color: "grey",
@@ -363,13 +351,12 @@ const styles = StyleSheet.create({
   status: {
     color: "grey",
     fontSize: 14,
-    fontFamily: "FiraMono-Bold",
   },
   emptyText: {
     textAlign: "center",
     fontSize: 16,
     color: "grey",
-    fontFamily: "FiraMono-Medium",
+
   },
 
   message: {
@@ -381,7 +368,7 @@ const styles = StyleSheet.create({
   emptyText1: {
     textAlign: "center",
     fontSize: 18,
-    fontFamily: "FiraMono-Bold",
+
 
     color: "grey",
   },
@@ -443,7 +430,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 15,
     textAlign: "center",
-    fontFamily: "FiraMono-Bold",
+ 
   },
   modalButtons: {
     flexDirection: "row",

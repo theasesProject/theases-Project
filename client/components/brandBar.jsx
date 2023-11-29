@@ -23,9 +23,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const { width, height } = Dimensions.get("screen");
 import { useDispatch, useSelector } from "react-redux";
 import { filterCars } from "../store/carFetch";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 function BrandBar({ onPress, onFilterByBrand, resetData }) {
   const dispatch = useDispatch();
   const [carByBrand, setCarByBrand] = useState([]);
@@ -48,16 +46,7 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
           });
   };
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   return (
     <View style={styles.brand}>
       <View style={styles.BrandBar}>
@@ -188,10 +177,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.04999999,
   },
   topBrand: {
-    // fontWeight: "bold",
     fontSize: 21,
     paddingBottom: height * 0.01,
-    fontFamily: "FiraMono-Bold",
+  
   },
   ViewAll: {
     color: "#8B91B6",
@@ -233,7 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     // backgroundColor:"black",
     width: width * 0.22,
-    fontFamily: "FiraMono-Medium",
+  
   },
 });
 

@@ -75,21 +75,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   useEffect(() => {
     checkBookMarked();
   }, []);
-  useEffect(() => {
-    const loadFonts = async () => {
-      try {
-        loadFonts();
-        await Font.loadAsync({
-          "FiraMono-Bold": FiraMonoBold,
-          "FiraMono-Medium": FiraMonoMedium,
-        });
-      } catch (error) {
-          console.log(error);
-      }
-    };
-
-  }, []);
-
+ 
   return (
     <View style={styles.card}>
       <View style={styles.imageCar}>
@@ -99,7 +85,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           </TouchableOpacity>
         </View>
         <View style={styles.imageCar1}>
-          {/* <Image style={styles.imageCar2} src={oneCar?.Media[0]?.media}></Image> */}
+          <Image style={styles.imageCar2} src={oneCar?.Media[0]?.media}></Image>
         </View>
       </View>
 
@@ -285,18 +271,14 @@ const styles = StyleSheet.create({
   name: {
     color: "#9EB8D9",
     fontSize: 16,
-    fontFamily: "FiraMono-Medium",
   },
   name1: {
     fontSize: 16,
-    // fontWeight: "bold",
-    fontFamily: "FiraMono-Bold",
   },
   price1: {
     fontSize: 16,
     // fontWeight: "bold",
     color: "#9EB8D9",
-    fontFamily: "FiraMono-Bold",
   },
   vitesse: {
     width: width * 0.06,
@@ -306,7 +288,6 @@ const styles = StyleSheet.create({
   VitesseName: {
     color: "grey",
     fontSize: 13,
-    fontFamily: "FiraMono-Medium",
   },
   Vitesse1: {
     width: width * 0.081,

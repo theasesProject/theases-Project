@@ -8,24 +8,13 @@ import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
 import { useSelector } from "react-redux";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 const { height } = Dimensions.get("screen");
 function NavBar({ style }) {
   const loggedIn = useSelector((state) => state.user.loggedIn);
 
   const navigation = useNavigation();
   const route = useRoute();
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-    loadFonts();
-  }, []);
   const isActive = (routeName) =>
     route.name === routeName ? "#6C77BF" : "grey";
   return (
@@ -37,7 +26,7 @@ function NavBar({ style }) {
         <View style={styles.hm}>
           <Hm fill={isActive("Home")} />
           <Text
-            style={{ color: isActive("Home"), fontFamily: "FiraMono-Medium" }}
+            style={{ color: isActive("Home")}}
           >
             Home
           </Text>
@@ -53,7 +42,7 @@ function NavBar({ style }) {
           <Text
             style={{
               color: isActive("Messages"),
-              fontFamily: "FiraMono-Medium",
+           
             }}
           >
             Messeges
@@ -78,7 +67,7 @@ function NavBar({ style }) {
           <Text
             style={{
               color: isActive("Favorites"),
-              fontFamily: "FiraMono-Medium",
+              
               fontSize:13
             }}
           >
@@ -86,13 +75,14 @@ function NavBar({ style }) {
           </Text>
         </View>
       </Pressable>
-
-      <Pressable
+{
+  loggedIn ? (
+<Pressable
       style={styles.quarter}
       onPress={() => {
         loggedIn
           ? navigation.navigate("Notification")
-          : navigation.navigate("SignUp");
+          : null;
       }}
       >
             <Bell fill={isActive("Notification")} />
@@ -100,14 +90,14 @@ function NavBar({ style }) {
             <Text
             style={{
               color: isActive("Notification"),
-              fontFamily: "FiraMono-Medium",
-
             }}
           >
-            {loggedIn ? "Notifs" : "SignUp"}
+            {loggedIn ? "Notifs" : null}
           </Text>
           
-      </Pressable>
+      </Pressable>):null
+}
+      
       <Pressable
         style={styles.quarter}
         onPress={() => {
@@ -123,7 +113,7 @@ function NavBar({ style }) {
           <Text
             style={{
               color: isActive("Userprofile"),
-              fontFamily: "FiraMono-Medium",
+           
             }}
           >
             {loggedIn ? "Profile" : "Login"}

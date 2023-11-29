@@ -56,16 +56,16 @@ function MyCars() {
     priceWeekly: selectedCar?.priceWeekly,
     priceMonthly: selectedCar?.priceMonthly,
   });
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   const handleDeleteCar = (carId) => {
     console.log(carId);
     dispatch(
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   },
   favouriteText: {
     color: "black",
-    fontFamily: "FiraMono-Bold",
+
     fontSize: 18,
   },
 

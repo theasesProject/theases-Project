@@ -25,12 +25,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { filterCars } from "../store/carFetch";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
+import * as SplashScreen from 'expo-splash-screen';
 import * as Font from "expo-font";
 function BrandBar({ onPress, onFilterByBrand, resetData }) {
   const dispatch = useDispatch();
   const [carByBrand, setCarByBrand] = useState([]);
   const allCars = useSelector((state) => state.car.allCars);
   const navigation = useNavigation();
+  const [isFontsLoaded, setFontsLoaded] = useState(false);
   const [error, setError] = useState(false);
   const handleFilterByBrand = (brandName) => {
     !allCars.length
@@ -47,19 +49,41 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
             console.log("error", error);
           });
   };
-
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      "FiraMono-Bold": FiraMonoBold,
+      "FiraMono-Medium": FiraMonoMedium,
+    });
+  };
+  
+async function prepare() {
+  try {
+    await loadFonts();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await SplashScreen.hideAsync();
+  }
+ }
+ const [fontsLoaded] = Font.useFonts({
+  'FiraMono-Bold': FiraMonoBold,
+  'FiraMono-Medium': FiraMonoMedium,
+});
   useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
+    prepare();
   }, []);
-  return (
+  
+  // useEffect(() => {
+  //   loadFonts().then(() => setFontsLoaded(true));
+  //  }, []);
+   
+
+  if (!fontsLoaded) {
+    return null;
+  } else {
+    return(
     <View style={styles.brand}>
+    
       <View style={styles.BrandBar}>
         <View style={styles.barText}>
           <Text style={styles.topBrand}>Top Brands</Text>
@@ -161,8 +185,8 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
         </TouchableOpacity>
       </ScrollView>
     </View>
-  );
-}
+  )
+}}
 const styles = StyleSheet.create({
   brand: {
     width: width,

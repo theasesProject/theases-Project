@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   identifierErrorContainer: {
     textAlign: "left",
-    fontFamily: "FiraMono-Medium",
+
   },
   error: {
     color: "red",

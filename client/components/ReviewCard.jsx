@@ -6,7 +6,7 @@ const { width, height } = Dimensions.get("screen");
 
 const ReviewCard = ({ review }) => {
   const car = review.Car;
-  // console.log("car: ", car);
+
   return (
     <View style={styles.reviewCard}>
       <View style={styles.topSection}>

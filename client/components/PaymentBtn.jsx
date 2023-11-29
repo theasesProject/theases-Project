@@ -16,16 +16,7 @@ const { height, width } = Dimensions.get("window");
 const PaymentBtn = ({amount}) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const activeUser = useSelector(selectUser);
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
-
-  //   loadFonts();
-  // }, []);
+ 
   const handleStripe = async () => {
     try {
       const response = await axios.post(

@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   },
   favouriteText: {
     color: "black",
-    fontFamily: "FiraMono-Bold",
+
     fontSize: 18,
   },
 

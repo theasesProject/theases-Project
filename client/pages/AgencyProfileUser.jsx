@@ -45,28 +45,8 @@ function AgencyProfileUser() {
     // console.log("slider toggled");
     setSliderOpen(!isSliderOpen);
   };
-  const { agencyId } = route.params;
+ 
 
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
-
-  //   loadFonts();
-  // }, []);
-  // const handleHeartPress = async () => {
-  //   // setHeartSelected(!heartSelected);
-  //   // if (!heartSelected) {
-  //   setHeartClicked(!isHeartClicked);
-
-  //   dispatch(CreateBookMark({ CarId: oneCar.id, UserId: activeUser.id }));
-  //   // } else if (heartSelected) {
-  //   // dispatch(removedBookMark(oneCar.id));
-  //   // }
-  // };
 
   useEffect(() => {
     dispatch(getallCarByAgency(agencyId));
@@ -76,20 +56,6 @@ function AgencyProfileUser() {
   const handleRent = async () => {
     handlePress();
   };
-
-  useEffect(() => {
-    const loadFonts = async () => {
-      try{
-        await Font.loadAsync({
-          "FiraMono-Bold": FiraMonoBold,
-          "FiraMono-Medium": FiraMonoMedium,
-        });
-      } catch(err){
-        console.log(err);
-      }
-    };
-    loadFonts();
-  }, []);
 
   return (
     <View style={styles.entirePage}>

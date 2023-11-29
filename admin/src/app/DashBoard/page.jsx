@@ -99,9 +99,7 @@ const Dashboard = () => {
   }
   return (
     <div
-      style={{
-        fontFamily: "MuseoModerno",
-      }}
+   
     >
       <div>
         <h1>Dashboard</h1>

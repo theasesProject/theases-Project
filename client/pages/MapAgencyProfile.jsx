@@ -29,16 +29,7 @@ const MapAgencyProfile = ({ navigation }) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
-
-  //   loadFonts();
-  // }, []);
+ 
   const handleMapPress = (e) => {
     const selectedLatitude = e.nativeEvent.coordinate.latitude;
     const selectedLongitude = e.nativeEvent.coordinate.longitude;

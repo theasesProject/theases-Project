@@ -10,9 +10,6 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import { createCar, emptyNewCar, setNewCar } from "../store/carFetch";
@@ -135,16 +132,7 @@ function AddCarAgency3() {
       }, 5000);
     }
   };
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
 
-  //   loadFonts();
-  // }, []);
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
@@ -302,7 +290,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     paddingVertical: height * 0.01,
-    fontFamily: "FiraMono-Medium",
     fontWeight: "bold",
     color: "#6a78c1",
   },
@@ -403,7 +390,6 @@ const styles = StyleSheet.create({
   },
   textCss: { 
     color: "#6C77BF",
-    fontFamily: "FiraMono-Medium" 
   },
   errorContainer:{
     height:height * 0.03,

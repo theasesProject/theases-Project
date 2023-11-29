@@ -11,9 +11,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
 const { height, width } = Dimensions.get("window");
 
 function OneMessage({ message, user, user2avatar, isLastMessage }) {
@@ -34,16 +31,7 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
     }
   }, [showDate]);
 
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
 
-  //   loadFonts();
-  // }, []);
   const renderContent = () => {
     if (message.type && message.type.startsWith("image/")) {
       return (
@@ -67,7 +55,7 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
 <Text  style={{
             color: isCurrentUser ? "white" : "black",
             fontSize: 18,
-            fontFamily: "FiraMono-Medium",
+          
           }}>{"Document received"}</Text>
        </View>
       );
@@ -79,7 +67,7 @@ function OneMessage({ message, user, user2avatar, isLastMessage }) {
           style={{
             color: isCurrentUser ? "white" : "black",
             fontSize: 18,
-            fontFamily: "FiraMono-Medium",
+          
           }}
         >
           {message.message}

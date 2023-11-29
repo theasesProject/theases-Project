@@ -48,16 +48,6 @@ function Favorites() {
     );
   };
 
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
-
-  //   loadFonts();
-  // }, []);
   return (
     <View style={styles.favoritesPage}>
       <ScrollView

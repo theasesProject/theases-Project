@@ -94,7 +94,7 @@ function App() {
             <Stack.Screen
               name="Notification"
               component={Notification}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="AgencyService"

@@ -28,16 +28,9 @@ function Bookings() {
   const handleDeled = (car) => {
     deletedAgencyCar(activeUser.id, car);
   };
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
 
-  //   loadFonts();
-  // }, []);
+
+ 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ padding: 10, flexGrow: 1 }}>

@@ -20,9 +20,7 @@ import Arrowleft from "../assets/Svg/arrowleft.svg";
 import Arrowright from "../assets/Svg/arrowright.svg";
 import Thinker from "../assets/Svg/thinking1.svg";
 import Thinker2 from "../assets/Svg/thinker2.svg";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 function AddAgencyCar() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -99,16 +97,6 @@ function AddAgencyCar() {
       backgroundColor:"white"
     },
   };
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
-
-  //   loadFonts();
-  // }, []);
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
@@ -250,7 +238,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
   },
-  textCss: { color: "#6C77BF", fontFamily: "FiraMono-Medium" },
+  textCss: { color: "#6C77BF",  },
   errorContainer:{
     height:height * 0.03,
     justifyContent: "center",

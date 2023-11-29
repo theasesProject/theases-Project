@@ -42,16 +42,9 @@ const ResetPassword = ({ navigation }) => {
     setConfirmPasswordError(null);
     return true;
   };
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
 
-  //   loadFonts();
-  // }, []);
+
+
   const handlePasswordStrength = () => {
     var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
     if (newPassword.length < 8 && !regex.test(newPassword)) {
@@ -242,7 +235,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
-    fontFamily: "FiraMono-Medium",
+   
   },
   confirmBtnContainer: {
     width: "100%",
@@ -259,7 +252,7 @@ const styles = StyleSheet.create({
   confirmBtnContent: {
     color: "white",
     fontSize: 18,
-    fontFamily: "FiraMono-Medium",
+
   },
 });
 

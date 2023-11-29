@@ -5,9 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { Dimensions } from "react-native";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 const { width, height } = Dimensions.get("window");
 function OneRoom({ room }) {
   const dispatch = useDispatch();
@@ -15,16 +13,7 @@ function OneRoom({ room }) {
   const user = useSelector((state) => state.user.data);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [name, setName] = useState("");
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   const getRoomData = async () => {
     if (user.id === room.UserId) {
       await axios
@@ -66,7 +55,6 @@ function OneRoom({ room }) {
           marginLeft: 40,
           fontWeight: 500,
           fontSize: 17,
-          fontFamily: "FiraMono-Medium",
         }}
       >
         {name || null}

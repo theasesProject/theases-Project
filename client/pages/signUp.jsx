@@ -53,16 +53,7 @@ const SignUp = ({ navigation, props }) => {
         });
     }
   };
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
-
-  //   loadFonts();
-  // }, []);
+ 
   const [confirm, setConfirm] = useState("");
   const [inputForm, setInputForm] = useState({
     userName: "",
@@ -322,7 +313,7 @@ const SignUp = ({ navigation, props }) => {
             )}
           </View>
           {passwordError ? (
-            <Text style={{ color: "red", fontFamily: "FiraMono-Medium" }}>
+            <Text style={{ color: "red", }}>
               {passwordError}
             </Text>
           ) : null}
@@ -369,7 +360,7 @@ const SignUp = ({ navigation, props }) => {
             )}
           </View>
           {confirmedError ? (
-            <Text style={{ color: "red", fontFamily: "FiraMono-Medium" }}>
+            <Text style={{ color: "red", }}>
               {confirmedError}
             </Text>
           ) : null}
@@ -409,7 +400,7 @@ const SignUp = ({ navigation, props }) => {
               locations={[0, 1]}
               style={styles.buttonContainer2}
             >
-              <Text style={{ fontFamily: "FiraMono-Medium" }}>
+              <Text >
                 Date of Birth
               </Text>
             </LinearGradient>
@@ -455,9 +446,9 @@ const SignUp = ({ navigation, props }) => {
           }}
           onPressOut={() => setColor("#6C77BF")}
         >
-          <Text style={{ fontFamily: "FiraMono-Medium" }}>
+          <Text >
             Already have an account?
-            <Text style={{ color: color, fontFamily: "FiraMono-Medium" }}>
+            <Text style={{ color: color,}}>
               {" "}
               Log in
             </Text>
@@ -522,7 +513,7 @@ const styles = StyleSheet.create({
   googleText: {
     fontSize: 15,
     fontWeight: "400",
-    fontFamily: "FiraMono-Medium",
+  
   },
   extraSign: {
     display: "flex",
@@ -592,7 +583,7 @@ const styles = StyleSheet.create({
     color: "#000",
     marginVertical: 10,
 
-    fontFamily: "FiraMono-Bold",
+   
   },
   subheader: {
     fontSize: 14,
@@ -600,11 +591,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 20,
     marginBottom: 30,
-    fontFamily: "FiraMono-Medium",
+
   },
   input: {
     paddingLeft: 40,
-    fontFamily: "FiraMono-Medium",
+   
     zIndex: -1,
     height: 50,
     width: width * 0.8,
@@ -634,7 +625,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     textAlign: "center",
-    fontFamily: "FiraMono-Medium",
+   
   },
 });
 

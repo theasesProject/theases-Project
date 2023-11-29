@@ -21,16 +21,7 @@ function Carou() {
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
   const navigation = useNavigation();
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
 
-  //   loadFonts();
-  // }, []);
   const data = [
     {
       id: "1",
@@ -148,7 +139,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    fontFamily: "FiraMono-Bold",
+  
   },
   stext: {
     fontSize: 16,
@@ -158,7 +149,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "left",
     color: "blue",
-    fontFamily: "FiraMono-Medium",
   },
   footer: {
     flexDirection: "row",
@@ -186,7 +176,6 @@ const styles = StyleSheet.create({
   next: {
     textAlign: "right",
     fontSize: 18,
-    fontFamily: "FiraMono-Medium",
   },
 });
 

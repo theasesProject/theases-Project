@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   leac: {
     fontSize: 21,
     fontStyle: "italic",
-    fontFamily: "FiraMono-Medium",
+
   },
   rightSection: {
     // height: height * 0.12,
@@ -309,12 +309,12 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 18,
-    fontFamily: "FiraMono-Bold",
+   
     color: "black",
   },
   avaible: {
     fontSize: 15,
-    fontFamily: "FiraMono-Bold",
+    
     color: "green",
   },
   carPrice: {
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   },
   carPrice: {
     fontSize: 18,
-    fontFamily: "FiraMono-Bold",
+
     color: "rgb(172, 133, 234)",
   },
   bookingCar: {
@@ -342,7 +342,6 @@ const styles = StyleSheet.create({
   },
   bookingCar1: {
     fontSize: 16,
-    fontFamily: "FiraMono-Bold",
   },
 });
 export default OldAgencyProfile;

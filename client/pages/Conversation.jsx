@@ -268,7 +268,7 @@ function Conversation() {
             style={{
               fontWeight: 700,
               fontSize: 20,
-              fontFamily: "FiraMono-Medium",
+            
             }}
           >
             {room.name.charAt(0).toUpperCase() + room.name.slice(1)}

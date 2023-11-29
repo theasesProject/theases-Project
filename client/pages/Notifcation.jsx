@@ -23,6 +23,8 @@ import {
 const { width, height } = Dimensions.get("screen");
 import ring from "../assets/r.jpg";
 import { selectUser, setUser } from "../store/userSlice";
+import NavBar from "../components/NavBar";
+import NavBarAgency from "../components/NavBarAgency";
 const NotificationPage = () => {
   const activeUser = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -98,6 +100,7 @@ const NotificationPage = () => {
             </View>
           ))}
       </ScrollView>
+      {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>
   );
 };

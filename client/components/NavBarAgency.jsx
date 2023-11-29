@@ -18,6 +18,7 @@ import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
+import Bell from "../assets/Svg/bell-notification.svg"
 import Plus from ".././assets/Svg/plus-solid.svg";
 import Car from ".././assets/Svg/car-side-solid.svg";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
@@ -93,22 +94,25 @@ function NavBarAgency({ style }) {
         </View>
       </Pressable>
       <Pressable
-        style={styles.quarter}
-        onPress={() => {
-          loggedIn
-            ? navigation.navigate("MyCars")
-            : navigation.navigate("SignUp");
-        }}
+      style={styles.quarter}
+      onPress={() => {
+        loggedIn
+          ? navigation.navigate("Notification")
+          : navigation.navigate("SignUp");
+      }}
       >
-        <View style={styles.hm}>
-          <Car fill={isActive("MyCars")} />
+            <Bell fill={isActive("Notification")} />
 
-          <Text
-            style={{ color: isActive("MyCars"), fontFamily: "FiraMono-Medium" }}
+            <Text
+            style={{
+              color: isActive("Notification"),
+              fontFamily: "FiraMono-Medium",
+
+            }}
           >
-            My Cars
+            {loggedIn ? "Notifs" : "SignUp"}
           </Text>
-        </View>
+          
       </Pressable>
       <Pressable
         style={styles.quarter}

@@ -1,39 +1,50 @@
+import React, { useEffect, useState } from "react";
 import {
-  Text,
-  View,
-  StyleSheet,
   Dimensions,
-  ImageBackground,
-  TextInput,
-  TouchableOpacity,
   Image,
-  ScrollView,
-  Pressable,
-  Modal,
-  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import React, { useState, useEffect } from "react";
-import NavBar from "../components/NavBar";
-import { useRoute } from "@react-navigation/native";
-const { width, height } = Dimensions.get("screen");
-import Left from "../assets/Svg/left-long-solid.svg";
-import Dots from "../assets/Svg/three-dots-svgrepo-com.svg";
-import { getOne, OneAgency } from "../store/agencySlice";
+import LeftArrow from "../assets/Svg/leftArrowProfile.svg";
+import Hamburger from "../assets/Svg/hamburgerProfile.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { OneUserbid, getOneById } from "../store/userSlice";
-import { carDetail, getallCarByAgency } from "../store/carFetch";
-import CardCar from "../components/CardCar";
-import car from "../assets/car2.png";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
-function AgencyProfileUser({ navigation }) {
-  const ag = useSelector(OneAgency);
-  const agencyCars = useSelector((state) => state.car.agencyCar);
-  const loading = useSelector((state) => state.car.loading);
+import { OneAgency, getOne } from "../store/agencySlice";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { getallCarByAgency } from "../store/carFetch";
+import AgencySvg from "../assets/Svg/agencyName.svg";
+import Phone from "../assets/Svg/agencyPhone.svg";
+import NumberOfCars from "../assets/Svg/carsNumber.svg";
+import AverageRating from "../assets/Svg/averageRating.svg";
+import Delivery from "../assets/Svg/delivery.svg";
+import AllCars from "../components/AllCars";
+import AllReviews from "../components/AllReviews";
+import AgencyStatistics from "../components/AgencyStatistics";
+import SliderMenu from "../components/SideBar";
+import { selectUser } from "../store/userSlice";
+const { height, width } = Dimensions.get("screen");
 
+function AgencyProfileUser() {
+  const ag = useSelector(OneAgency);
+  const agencyCars = useSelector((state) => state.car.agencyCar)
+  const loading = useSelector((state) => state.car.loading);
   const route = useRoute();
+  const {agencyId} = route.params
   const dispatch = useDispatch();
+  const navigation = useNavigation()
+  const activeUser = useSelector(selectUser)
+  const [selectedView, setSelectedView] = useState({
+    view1: true,
+    view2: false,
+    view3: false,
+  });
+  const [isSliderOpen, setSliderOpen] = useState(false);
+  // console.log(ag?.agencyById);
+  const handleSliderToggle = () => {
+    // console.log("slider toggled");
+    setSliderOpen(!isSliderOpen);
+  };
   const { agencyId } = route.params;
 
   // useEffect(() => {
@@ -61,287 +72,238 @@ function AgencyProfileUser({ navigation }) {
     dispatch(getallCarByAgency(agencyId));
     dispatch(getOne(agencyId));
   }, [dispatch]);
+
   const handleRent = async () => {
-    // dispatch(carDetail(oneCar));
-    // dispatch(saveDetails(oneCar));
     handlePress();
   };
 
-  return (
-    <View>
-      <View style={styles.agency}>
-        <ScrollView>
-          <View style={styles.vbgImg}>
-            <ImageBackground
-              source={{
-                uri: ag?.agencyById?.backgroundImage,
-              }}
-              style={styles.bgim}
-            />
-          </View>
-          <View style={styles.vav}>
-            <View style={styles.bvav}>
-              <Image
-                source={{
-                  uri: ag?.userid?.avatar,
-                }}
-                style={styles.avatar}
-              />
-            </View>
-          </View>
-          <View style={styles.acna}>
-            <View style={styles.leftSection}>
-              <Text style={styles.leac}>{ag?.agencyById?.name}</Text>
-              <Text style={styles.number}>{ag?.agencyById?.companyNumber}</Text>
-            </View>
-            <View style={styles.rightSection}>
-              <Text>
-                {ag?.agencyById?.transportation
-                  ? "With Delivery"
-                  : "Without Delivery"}
-              </Text>
-            </View>
-          </View>
+  useEffect(() => {
+    const loadFonts = async () => {
+      try{
+        await Font.loadAsync({
+          "FiraMono-Bold": FiraMonoBold,
+          "FiraMono-Medium": FiraMonoMedium,
+        });
+      } catch(err){
+        console.log(err);
+      }
+    };
+    loadFonts();
+  }, []);
 
-          <View style={styles.mape}>
-            {agencyCars?.map((element, i) => (
-              <View key={i} style={styles.card}>
-                <Pressable style={styles.Image} onPress={handleRent}>
-                  {element ? (
-                    // console.log('ele in map',element.car),
-                    <Image
-                      style={styles.carImage}
-                      source={{
-                        uri: element?.carImage.media,
-                      }}
-                    />
-                  ) : (
-                    <Image style={styles.carImage} source={car} />
-                  )}
-                </Pressable>
-                <View style={styles.carDetails}>
-                  <View style={styles.NameAvaib}>
-                    <Text style={styles.carName}>{element.car.model}</Text>
-                    <Text style={styles.avaible}>{element.car.status}</Text>
-                  </View>
-                  <View style={styles.PriceStar}>
-                    <View style={styles.booking}>
-                      <Text style={styles.carPrice}>
-                        ${element.car.price}/Daily
-                      </Text>
-                      <View style={styles.bookingCar}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            dispatch(carDetail(element.car));
-                            navigation.navigate("Booking");
-                          }}
-                        >
-                          <Text style={styles.bookingCar1}>Booking</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                    <View style={styles.reviews}>
-                      {/* <TouchableOpacity onPress={handleStarPress}>
-                    <Image style={styles.heart} source={starImage} />
-                  </TouchableOpacity> */}
-                      <Text style={styles.avaible}>(150 review)</Text>
-                    </View>
-                  </View>
+  return (
+    <View style={styles.entirePage}>
+      <View style={styles.staticTopView}>
+        <View style={styles.navbar}>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate("Home")
+          }}>
+            <LeftArrow />
+          </TouchableOpacity>
+          {/* <TouchableOpacity onPress={handleSliderToggle}>
+            <Hamburger />
+          </TouchableOpacity> */}
+        </View>
+        <Text style={styles.textProfile}>Profile</Text>
+        <View style={styles.mainInfo}>
+          <Image
+            source={{ uri: ag?.userid?.avatar }}
+            style={styles.agencyImage}
+          />
+          <View style={styles.agencyNameContainer}>
+            <AgencySvg />
+            <Text style={styles.agencyNameText}>{ag?.agencyById?.name}</Text>
+          </View>
+          <View style={styles.rowsContainer}>
+            <View style={styles.agencyLastInfo}>
+              <View style={styles.numberOfCarsContainer}>
+                <NumberOfCars />
+                <View>
+                  <Text>
+                    {agencyCars.length} car{agencyCars.length > 1 ? "s" : null}
+                  </Text>
+                  <Text
+                    style={{ fontSize: 12, fontWeight: "500", opacity: 0.3 }}
+                  >
+                    Offered
+                  </Text>
                 </View>
               </View>
-            ))}
+              <View style={styles.agencyNumberContainer}>
+                <Delivery />
+                <Text
+                  style={{
+                    marginLeft: width * 0.01,
+                    fontWeight: "500",
+                    color: ag?.agencyById?.transportation ? "green" : "red",
+                  }}
+                >
+                  {ag?.agencyById?.transportation ? "Delivery" : "No Delivery"}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.agencySecondInfo}>
+              <View style={styles.numberOfCarsContainer}>
+                <AverageRating />
+                <View>
+                  <Text>3.9</Text>
+                  <Text
+                    style={{ fontSize: 12, fontWeight: "500", opacity: 0.3 }}
+                  >
+                    Rating
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.agencyNumberContainer}>
+                <Phone />
+                <Text style={styles.agencyNumberText}>
+                  {ag?.agencyById?.companyNumber}
+                </Text>
+              </View>
+            </View>
           </View>
-        </ScrollView>
+        </View>
       </View>
-
-      <NavBar />
+      <View style={styles.selectViews}>
+        <Text
+          style={{
+            ...styles.selectableViewText,
+            fontWeight: selectedView.view1 ? "600" : "400",
+            color: selectedView.view1 ? "#6a71c1" : null,
+          }}
+          onPress={() => {
+            setSelectedView({ view1: true, view2: false, view3: false });
+          }}
+        >
+          All Cars
+        </Text>
+        <Text
+          style={{
+            ...styles.selectableViewText,
+            fontWeight: selectedView.view2 ? "600" : "400",
+            color: selectedView.view2 ? "#6a71c1" : null,
+          }}
+          onPress={() => {
+            setSelectedView({ view1: false, view2: true, view3: false });
+          }}
+        >
+          Reviews
+        </Text>
+        
+      </View>
+      {selectedView.view1 ? (
+        <AllCars cars={agencyCars} />
+      ) : selectedView.view2 ? (
+        <AllReviews />
+      ) : null}
+      {isSliderOpen ? (
+          <SliderMenu
+            isOpen={isSliderOpen}
+            onClose={handleSliderToggle}
+            navigation={navigation}
+          />
+        ) : null}
     </View>
   );
 }
+
 const styles = StyleSheet.create({
-  mape: {
-    gap: 30,
-    paddingHorizontal: 30,
+  entirePage: {
+    height,
+    width,
+    backgroundColor: "#F7F7F7",
+    display: "flex",
+    flexDirection: "column",
+    padding: height * 0.02,
   },
-
-  agency: {
-    //   zIndex: 0,
-    width: width,
-    height: "93%",
-  },
-  vbgImg: {
+  staticTopView: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    left: 0,
+    padding: height * 0.02,
+    backgroundColor: "#293859",
     height: height * 0.25,
-    width: width,
-    borderBottomColor: "#6a78c1",
-    borderBottomWidth: 3,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
   },
-  bgim: {
-    height: "100%",
-    width: "100%",
-    // objectFit:'cover'
-  },
-  vav: {
-    marginTop: -height * 0.07,
-    justifyContent: "center",
+  navbar: {
+    display: "flex",
+    justifyContent: "space-between",
     alignItems: "center",
-  },
-  bvav: {
-    // borderRadius: 10,
-    //    width:width*0.25,
-    // borderWidth: 1.25,
-    // padding: 23,
-    // height:height*0.12,
-    //   marginTop: '5%',
-  },
-  avatar: {
-    height: height * 0.12,
-    width: width * 0.25,
-    borderWidth: 2,
-    borderColor: "#6a78c1",
-    borderRadius: 75,
-  },
-  acna: {
-    // flex: 1,
     flexDirection: "row",
-    //   padding: 20,
-    // height:height*0.01,
-    // backgroundColor:"lightgrey",
   },
-  leftSection: {
-    flex: 1, // Takes up 50% of the container's width
-    // backgroundColor: 'lightblue', // Optional background color for the left section
-    // height: height * 0.08,
-    marginTop: "-10%",
-    // marginLeft:height*0.01,
-    alignItems: "center",
-    // justifyContent: "center",
-    // borderWidth: 1,
-    // borderRadius: 10,
-  },
-  leac: {
-    fontSize: 21,
-    fontStyle: "italic",
-    fontFamily: "FiraMono-Medium",
-  },
-  rightSection: {
-    // height: height * 0.12,
-    // alignItems: "center",
-    justifyContent: "center",
-    marginTop: -height * 0.06,
-    marginLeft: 100,
-    flex: 1, // Takes up 50% of the container's width
-    // backgroundColor: 'lightgreen', // Optional background color for the right section
-  },
-  stats: {
-    height: height * 0.5,
-    padding: 20, // Adjust the value as needed to move the "Stats" section up
-    // flex: 1,
-    // backgroundColor: "green",
-  },
-  map: {
-    height: height * 0.15,
-    width: width * 0.5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  btn: {
-    justifyContent: "center",
-    height: height * 0.05,
-    width: width * 0.2,
-    // backgroundColor: "white",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 5,
-  },
-  temap: { fontSize: 25, color: "lightblue" },
-  foot: {
-    justifyContent: "flex-end", // Align the component to the bottom
-    alignItems: "center",
-    backgroundColor: "green",
-  },
-  card: {
+  mainInfo: {
     backgroundColor: "white",
-    height: height * 0.35,
-    borderRadius: 10,
+    height: height * 0.25,
+    borderRadius: 15,
+    padding: height * 0.03,
+    display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 110,
   },
-  barText: {
-    width: 360,
-    height: 35,
-    borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  textProfile: {
+    color: "white",
+    textAlign: "center",
+    margin: height * 0.02,
+    fontWeight: "500",
+    fontSize: 20,
   },
-
-  carImage: {
-    width: width * 0.8,
-    height: 150,
+  agencyImage: {
+    height: "40%",
+    borderRadius: 15,
+    width: "50%",
+    resizeMode: "contain",
   },
-  heart: {
-    width: 30,
-    height: 28,
-  },
-  Image: {
+  rowsContainer: {
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "flex-start",
-    gap: 10,
-    height: 150,
+    width: "100%",
+    paddingTop: width * 0.015,
   },
-  NameAvaib: {
+  agencyNameContainer: {
+    display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 180,
+    paddingVertical: height * 0.005,
   },
-  PriceStar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  reviews: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    gap: 10,
-  },
-  carName: {
-    fontSize: 18,
-    fontFamily: "FiraMono-Bold",
-    color: "black",
-  },
-  avaible: {
-    fontSize: 15,
-    fontFamily: "FiraMono-Bold",
-    color: "green",
-  },
-  carPrice: {
-    fontSize: 17,
-    paddingLeft: width * 0.5,
-    fontWeight: "bold",
-    color: "#6C77BF",
-    fontSize: 14,
-    color: "rgb(130, 124, 140)",
-  },
-  carPrice: {
-    fontSize: 18,
-    fontFamily: "FiraMono-Bold",
-    color: "rgb(172, 133, 234)",
-  },
-  bookingCar: {
-    borderWidth: 2,
-    width: 120,
-    height: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "lightgrey",
-    borderRadius: 5,
-    backgroundColor: "lightblue",
-  },
-  bookingCar1: {
+  agencyNameText: {
+    fontWeight: "500",
     fontSize: 16,
-    fontFamily: "FiraMono-Bold",
+    paddingLeft: width * 0.01,
+  },
+  agencyNumberContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  agencyNumberText: {
+    fontWeight: "500",
+    fontSize: 16,
+    paddingLeft: width * 0.01,
+  },
+  agencySecondInfo: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  agencyLastInfo: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  numberOfCarsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  selectViews: {
+    position: "relative",
+    marginTop: height * 0.4,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  selectableViewText: {
+    fontSize: 15,
   },
 });
+
 export default AgencyProfileUser;

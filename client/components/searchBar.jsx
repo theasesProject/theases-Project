@@ -25,10 +25,14 @@ function SearchBar({ onSearch }) {
   console.log(searchedCar, "searchedCar");
   useEffect(() => {
     const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
+      try {
+        await Font.loadAsync({
+          "FiraMono-Bold": FiraMonoBold,
+          "FiraMono-Medium": FiraMonoMedium,
+        });
+      } catch (error) {
+          console.log(error);
+      }
     };
 
     loadFonts();

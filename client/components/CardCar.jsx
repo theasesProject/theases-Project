@@ -37,6 +37,7 @@ import { Booking } from "../pages/Booking.jsx";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 function CardCar({ oneCar, setNothing, handlePress }) {
+  console.log(oneCar,"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
   const [heartSelected, setHeartSelected] = useState(false);
 
   const activeUser = useSelector(selectUser) || {};
@@ -76,13 +77,17 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   }, []);
   useEffect(() => {
     const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
+      try {
+        loadFonts();
+        await Font.loadAsync({
+          "FiraMono-Bold": FiraMonoBold,
+          "FiraMono-Medium": FiraMonoMedium,
+        });
+      } catch (error) {
+          console.log(error);
+      }
     };
 
-    loadFonts();
   }, []);
 
   return (
@@ -105,7 +110,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
       >
         <View style={styles.carInformation}>
           <View style={styles.agencyName}>
-            <Text style={styles.name}>{oneCar?.Agency?.name}</Text>
+            <Text style={styles.name}>{oneCar?.Agency.Name}</Text>
           </View>
           <View style={styles.carName}>
             <Text style={styles.name1}>{oneCar?.model}</Text>

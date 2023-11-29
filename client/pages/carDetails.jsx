@@ -24,6 +24,8 @@ import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
 import Rate from "../assets/Svg/addRating.svg";
+import axios from "axios";
+
 const CarDetails = () => {
   const navigation = useNavigation();
   const [isButtonEnabled, setButtonEnabled] = useState(false);
@@ -64,7 +66,7 @@ const CarDetails = () => {
     getRatingForOneCar();
   }, []);
   const getRatingForOneCar = async () => {
-    console.log(carData.id);
+    // console.log(carData.id);
     try {
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/ratingByCar/${carData.id}`
@@ -76,7 +78,7 @@ const CarDetails = () => {
     }
   };
 
-  console.log(rating, "rating");
+  // console.log(rating, "rating");
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
@@ -164,6 +166,9 @@ const CarDetails = () => {
               <Image
                 style={styles.userImage}
                 src={carData.Agency.avatar}
+                onPress={()=>{
+                  
+                }}
               ></Image>
               <View style={styles.detailsOwner}>
                 <Text style={styles.agencyName}>{carData.Agency.name}</Text>

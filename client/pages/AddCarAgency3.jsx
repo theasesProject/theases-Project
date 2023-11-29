@@ -148,21 +148,11 @@ function AddCarAgency3() {
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
+        <Image source={image} style={styles.mainImage} />
         <View style={styles.textSvgContainer}>
           <Text style={styles.introdcution1}>Additional information</Text>
-          <Image
-            source={lastSvg}
-            style={{ width: width * 0.08, height: height * 0.04 }}
-          />
+          <Image source={lastSvg} style={styles.introImage} />
         </View>
-        <Image
-          source={image}
-          style={{
-            width: width * 0.9,
-            height: height * 0.6,
-          }}
-        />
-
         <RNPickerSelect
           placeholder={{
             label: "Select type of Fuel ",
@@ -174,7 +164,9 @@ function AddCarAgency3() {
           style={pickerSelectStyles}
           useNativeAndroidPickerStyle={false}
         />
-
+        <View style={styles.errorContainer}>
+          
+        </View>
         <RNPickerSelect
           placeholder={{
             label: "Select characteristics  your  of car ",
@@ -185,7 +177,9 @@ function AddCarAgency3() {
           style={pickerSelectStyles}
           useNativeAndroidPickerStyle={false}
         />
+        <View style={styles.errorContainer}>
         {charError !== "" && <Text style={styles.errorText}>{charError}</Text>}
+        </View>
         <RNPickerSelect
           placeholder={{
             label: "Select type  your  of car ",
@@ -196,8 +190,10 @@ function AddCarAgency3() {
           style={pickerSelectStyles}
           useNativeAndroidPickerStyle={false}
         />
+        <View style={styles.errorContainer}>
         {typeError !== "" && <Text style={styles.errorText}>{typeError}</Text>}
-        <RemoveBackground />
+        </View>
+        {/* <RemoveBackground /> */}
         <View style={styles.picture}>
           <TouchableOpacity
             style={styles.addImgTextContainer}
@@ -223,49 +219,26 @@ function AddCarAgency3() {
         </View>
       </ScrollView>
       <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          width: width * 0.9,
-        }}
+        style={styles.bottomNavigation}
       >
         <Pressable
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            height: 50,
-            borderRadius: 10,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
+          style={styles.leftArrow}
           onPress={() => {
             navigation.navigate("AddCarAgency2");
           }}
         >
           <Arrowleft />
-          <Text style={{ color: "blue", fontFamily: "FiraMono-Medium" }}>
+          <Text style={styles.textCss}>
             Back
           </Text>
         </Pressable>
         <Pressable
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            height: 50,
-            borderRadius: 10,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
+          style={styles.rightArrow}
           onPress={() => {
             handleCreateCar();
           }}
         >
-          <Text style={{ color: "blue", fontFamily: "FiraMono-Medium" }}>
+          <Text style={styles.textCss}>
             Add
           </Text>
           <Arrowright />
@@ -288,31 +261,26 @@ function AddCarAgency3() {
 
 const pickerSelectStyles = {
   inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
+    fontSize: 13,
+    paddingVertical: height * 0.012,
     paddingHorizontal: 10,
     borderWidth: 3,
     borderColor: "grey",
     borderRadius: 4,
     color: "black",
     gap: 5,
-    // to ensure the text is never behind the icon
+    height: height * 0.06,
   },
   inputAndroid: {
-    fontSize: 16,
+    fontSize: 13,
     paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 2,
-    borderColor: "lightgrey",
     borderRadius: 10,
-    gap: 5,
     color: "black",
     marginTop: "1%",
-    marginBottom: "1%",
     paddingRight: 30,
     justifyContent: "center",
-    height: 40,
-    fontFamily: "FiraMono-Medium",
+    height: height * 0.06,
+    backgroundColor:"white"
   },
 };
 
@@ -322,37 +290,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    marginTop: height * 0.01,
+    marginBottom: height * 0.02
   },
   editProfilePage: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    flexDirection: "column",
-    backgroundColor: "white",
-    gap: 16,
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
-  },
-  introdcution: {
-    textAlign: "center",
-    fontSize: 18,
-    padding: 20,
-    fontFamily: "FiraMono-Medium",
+    paddingHorizontal: width * 0.05,
+    width,
+    backgroundColor: "#F2F2F2",
   },
   introdcution1: {
-    // textAlign: "center",
-    fontSize: 22,
-    padding: 20,
+    textAlign: "center",
+    fontSize: 20,
+    paddingVertical: height * 0.01,
     fontFamily: "FiraMono-Medium",
+    fontWeight: "bold",
+    color: "#6a78c1",
   },
   input: {
     width: "100%",
@@ -371,25 +323,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: "5%",
   },
-  profilePictureContainer: {
-    width: "100%",
-  },
-  profilePicture: {
-    width: 80,
-    height: 40,
-    borderWidth: 2,
-    borderColor: "rgb(219, 217, 224)",
-    backgroundColor: "white",
-  },
-  input1: {
-    padding: 5,
-    fontSize: 25,
-    backgroundColor: "lightgrey",
-    textAlign: "center",
-    borderRadius: 8,
-    color: "white",
-    fontFamily: "FiraMono-Medium",
-  },
   input2: {
     fontSize: 18,
     justifyContent: "flex-start",
@@ -402,39 +335,14 @@ const styles = StyleSheet.create({
     padding: 4,
     borderWidth: 2,
   },
-  input3: {
-    width: "100%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    height: 40,
-    borderColor: "lightgrey",
-    marginBottom: "5%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    padding: 10,
-  },
   errorText: {
     color: "red",
     fontSize: 14,
-    marginTop: 5,
+    // marginTop: 5,
   },
   addImgTextContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  imgsContainer: {
-    flexWrap: "wrap",
-    flexDirection: "row",
-    gap: 10,
-    backgroundColor: "white",
-    height: 100,
-  },
-  imgContainer: {
-    position: "relative",
-    backgroundColor: "#DBDBDB",
-    width: 100,
-    height: 70,
   },
   xBtn: {
     position: "absolute",
@@ -460,6 +368,47 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     color: "green",
   },
+  introImage: { 
+    width: width * 0.08,
+    height: height * 0.04 
+  },
+  mainImage: {
+    width: width * 0.9,
+    height: height * 0.5,
+  },
+  bottomNavigation: {
+    bottom: 0,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  leftArrow: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  rightArrow: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  textCss: { 
+    color: "#6C77BF",
+    fontFamily: "FiraMono-Medium" 
+  },
+  errorContainer:{
+    height:height * 0.03,
+    justifyContent: "center",
+  }
 });
 
 export default AddCarAgency3;

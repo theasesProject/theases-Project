@@ -132,9 +132,9 @@ function Home({ navigation }) {
       console.error("error coming from home", e);
     }
   };
-useEffect(()=>{
-  dispatch(getAllCars())
-},[])
+  useEffect(() => {
+    dispatch(getAllCars());
+  }, []);
   useEffect(() => {
     if (!loading && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
@@ -198,8 +198,8 @@ useEffect(()=>{
         <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
         {!loading ? (
           allCars
-            .slice()
-            .reverse()
+            ?.slice()
+            ?.reverse()
             ?.map((element, i) => (
               <View style={styles.allcars} key={i}>
                 <CardCar

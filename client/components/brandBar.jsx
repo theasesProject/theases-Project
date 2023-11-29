@@ -48,15 +48,15 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
           });
   };
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  const loadFont = async () => {
+    await Font.loadAsync({
+      "FiraMono-Bold": FiraMonoBold,
+      "FiraMono-Medium": FiraMonoMedium,
+    });
+  };
 
-    loadFonts();
+  useEffect(() => {
+    loadFont();
   }, []);
   return (
     <View style={styles.brand}>
@@ -198,9 +198,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingBottom: height * 0.01,
   },
-  allBrandImage: {
-    // borderRadius: 10,
-  },
+  allBrandImage: {},
   brandLogo: {
     width: width * 0.16,
     height: height * 0.06,
@@ -211,7 +209,6 @@ const styles = StyleSheet.create({
   allBrandImage: {
     display: "flex",
     flexDirection: "row",
-    // gap: 100,
   },
   brandDetails: {
     backgroundColor: "white",

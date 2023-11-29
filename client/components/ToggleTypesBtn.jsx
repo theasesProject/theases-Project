@@ -1,12 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { filterSelection, setSelected } from "../store/carFetch";
 const { width, height } = Dimensions.get("screen");
 
 const ToggleTypesBtn = ({ text }) => {
-  const selected = useSelector(filterSelection).type.value;
+  const selected = useSelector(filterSelection).type;
   const dispatch = useDispatch();
 
   const handlePress = () => {
@@ -16,6 +16,10 @@ const ToggleTypesBtn = ({ text }) => {
     dispatch(setSelected({ key: "type", value: text }));
     console.log("state: ", selected);
   };
+
+  useEffect(() => {
+    dispatch(setSelected({ key: "type", value: "All" }));
+  }, []);
 
   return (
     <TouchableOpacity onPress={handlePress}>

@@ -208,7 +208,7 @@ function App() {
             <Stack.Screen
               name="FiltredCar"
               component={FiltredCar}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="AddAgencyCar"

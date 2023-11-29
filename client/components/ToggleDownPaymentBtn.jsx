@@ -1,13 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { filterSelection, setSelected } from "../store/carFetch";
 const { width, height } = Dimensions.get("screen");
 
 const ToggleDownPaymentBtn = ({ text }) => {
   // const [isPressed, setIsPressed] = useState(initState);
-  const selected = useSelector(filterSelection).downPayment.value;
+  const selected = useSelector(filterSelection).downPayment;
   const dispatch = useDispatch();
 
   const handlePress = () => {
@@ -18,6 +18,10 @@ const ToggleDownPaymentBtn = ({ text }) => {
     }
     dispatch(setSelected({ key: "downPayment", value: text }));
   };
+
+  useEffect(() => {
+    dispatch(setSelected({ key: "downPayment", value: "All" }));
+  }, []);
 
   return (
     <TouchableOpacity onPress={handlePress}>

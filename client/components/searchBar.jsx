@@ -57,15 +57,14 @@ function SearchBar({ onSearch }) {
         style={[styles.input, { fontFamily: "FiraMono-Medium" }]}
         placeholder="Search cars or locations…"
         placeholderTextColor="gray"
-      ></TextInput>
-
+      />
       <Pressable onPress={() => navigation.navigate("Search")}>
         <LinearGradient
           style={styles.filterImage}
           colors={["#6C77BF", "#4485C5"]}
           locations={[0, 1]}
         >
-          <Filter />
+          <Filter onPress={() => navigation.navigate("Search")} />
         </LinearGradient>
       </Pressable>
     </View>

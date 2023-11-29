@@ -172,16 +172,16 @@ const AllBookings = () => {
     }
   };
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   return (
     <View style={styles.page}>
       <ScrollView style={styles.container}>
@@ -233,23 +233,22 @@ const AllBookings = () => {
                             colors={["#88b4e2", "#6C77BF"]}
                           >
                             <TouchableOpacity>
-                              <Text style={{ fontFamily: "FiraMono-Medium" }}>
+                              <Text >
                                 Payment
                               </Text>
                             </TouchableOpacity>
                           </LinearGradient>
 
-                          {/* <View style={styles.payment}> */}
+                     
                           <PaymentBtn amount={booking.amount} />
-                          {/* </View> */}
-                          {/* <View style={styles.chatt}> */}
+                    
                           <TouchableOpacity>
                             <Image
                               style={styles.chat}
                               source={charIcon}
                             ></Image>
                           </TouchableOpacity>
-                          {/* </View> */}
+                  
                         </View>
                       )}
                     </View>
@@ -363,20 +362,16 @@ const styles = StyleSheet.create({
   },
   date: {
     color: "grey",
-    fontFamily: "FiraMono-Medium",
   },
   status: {
     color: "grey",
     fontSize: 14,
-    fontFamily: "FiraMono-Bold",
   },
 
   payment: {
     flex: 1,
     height: height * 0.05,
     width: width * 0.3,
-    // justifyContent: "space-between",
-    // alignItems: "center",
     borderRadius: 10,
   },
   agenda: {
@@ -448,12 +443,11 @@ const styles = StyleSheet.create({
   yesButton: {
     color: "white",
     backgroundColor: "grey",
-    fontFamily: "FiraMono-Bold",
+  
   },
   noButton: {
     color: "white",
     backgroundColor: "blue",
-    fontFamily: "FiraMono-Bold",
   },
 });
 

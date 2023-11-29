@@ -23,6 +23,8 @@ import {
 const { width, height } = Dimensions.get("screen");
 import ring from "../assets/r.jpg";
 import { selectUser, setUser } from "../store/userSlice";
+import NavBar from "../components/NavBar";
+import NavBarAgency from "../components/NavBarAgency";
 const NotificationPage = () => {
   const activeUser = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -38,16 +40,7 @@ const NotificationPage = () => {
     dispatch(getAllNotifcationByUser(activeUser.id));
   }, [dispatch, activeUser.id]);
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   return (
     <View style={styles.pageContainer}>
       <ScrollView style={styles.scrollContainer}>
@@ -55,7 +48,7 @@ const NotificationPage = () => {
           .slice()
           .reverse()
           .map((notification, i) => (
-            <View>
+            <View key={i}>
               <View style={styles.cardContainer} key={i}>
                 <View style={styles.allText}>
                   <LinearGradient
@@ -98,6 +91,7 @@ const NotificationPage = () => {
             </View>
           ))}
       </ScrollView>
+      {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>
   );
 };
@@ -147,14 +141,14 @@ const styles = StyleSheet.create({
 
   text: {
     alignItems: "flex-start",
-    fontFamily: "FiraMono-Medium",
+  
     fontSize: 13,
     color: "black",
   },
   time: {
     color: "darkgrey",
     fontSize: 12,
-    fontFamily: "FiraMono-Medium",
+
   },
   image: {
     justifyContent: "center",
@@ -164,7 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 37,
   },
   booking: {
-    fontFamily: "FiraMono-Bold",
+  
     fontSize: 18,
   },
   bookingText: {

@@ -67,29 +67,9 @@ function Messages() {
     console.log(rooms);
   }, [refresh]);
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
   return (
     <View style={styles.messages}>
       <Text style={styles.title}> Messages </Text>
-      <TouchableOpacity
-        style={{ backgroundColor: "grey" }}
-        onPress={handleAddRoom}
-      >
-        <Text style={{ color: "white" }}>add room</Text>
-      </TouchableOpacity>
-      <TextInput
-        placeholder="enter the other user id"
-        onChangeText={handleInput}
-      ></TextInput>
       <View style={styles.searchDiv}>
         <TouchableOpacity>
           <Search />
@@ -112,10 +92,10 @@ function Messages() {
 const styles = StyleSheet.create({
   messages: {
     top: height * 0.05,
-    flex: 1,
-    // justifyContent: "center",
+    display:"flex",
+    flexDirection:"column",
     alignItems: "center",
-    width: "100%",
+    padding:15
   },
   title: {
     fontSize: 27,
@@ -125,7 +105,7 @@ const styles = StyleSheet.create({
   searchDiv: {
     borderWidth: 1,
     borderColor: "#d4d4d4",
-    width: "80%",
+    width: "100%",
     height: 50,
     paddingLeft: "3%",
     borderRadius: 10,

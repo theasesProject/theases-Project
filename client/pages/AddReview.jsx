@@ -11,12 +11,9 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, useEffect } from "react";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import { useSelector } from "react-redux";
 import { selectUser, setUser } from "../store/userSlice";
 import NavBar from "../components/NavBar";
-import * as Font from "expo-font";
 import NavBarAgency from "../components/NavBarAgency";
 import Logo from "../assets/tempLogo.png";
 import axios from "axios";
@@ -60,16 +57,7 @@ const AddReview = () => {
       console.error(err);
     }
   };
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
+ 
   return (
     <View style={styles.reviewPage}>
       <View style={styles.logoContainer}>
@@ -155,7 +143,6 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 24,
-    fontFamily: "FiraMono-Bold",
     textAlign: "right",
   },
   agencyName: {
@@ -194,7 +181,6 @@ const styles = StyleSheet.create({
   submitBtnContent: {
     color: "white",
     fontSize: 18,
-    fontFamily: "FiraMono-Medium",
   },
   navbarContainer: {
     width: width,

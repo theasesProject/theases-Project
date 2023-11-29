@@ -58,6 +58,7 @@ function Home({ navigation }) {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allCars = useSelector((state) => state.car.allCars);
+  console.log(allCars,"------------------------------------------------------------------");
   const fixedData = useSelector((state) => state.car.fixedData);
   const loading = useSelector((state) => state.car.loading);
   const [refreshing, setRefreshing] = useState(false);
@@ -311,7 +312,7 @@ useEffect(()=>{
         }}
       /> */}
 
-      <Text
+      {/* <Text
         onPress={() => {
           navigation.navigate("TransportationMap", {
             agencyId:
@@ -322,7 +323,7 @@ useEffect(()=>{
         }}
       >
         map transportation{" "}
-      </Text>
+      </Text> */}
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>

@@ -23,7 +23,7 @@ module.exports = (DataTypes, connection) => {
 
     status: {
       type: DataTypes.ENUM("available", "rented"),
-      allowNull: false,
+      allowNull: true,
       defaultValue: "available",
     },
     horsePower: {

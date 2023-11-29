@@ -37,6 +37,7 @@ import { Booking } from "../pages/Booking.jsx";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 function CardCar({ oneCar, setNothing, handlePress }) {
+  // console.log(oneCar,"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
   const [heartSelected, setHeartSelected] = useState(false);
 
   const activeUser = useSelector(selectUser) || {};
@@ -74,17 +75,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
   useEffect(() => {
     checkBookMarked();
   }, []);
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
-
+ 
   return (
     <View style={styles.card}>
       <View style={styles.imageCar}>
@@ -94,7 +85,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
           </TouchableOpacity>
         </View>
         <View style={styles.imageCar1}>
-          {/* <Image style={styles.imageCar2} src={oneCar?.Media[0]?.media}></Image> */}
+          <Image style={styles.imageCar2} src={oneCar?.Media[0]?.media}></Image>
         </View>
       </View>
 
@@ -105,7 +96,7 @@ function CardCar({ oneCar, setNothing, handlePress }) {
       >
         <View style={styles.carInformation}>
           <View style={styles.agencyName}>
-            <Text style={styles.name}>{oneCar?.Agency?.name}</Text>
+            <Text style={styles.name}>{oneCar?.Agency?.Name}</Text>
           </View>
           <View style={styles.carName}>
             <Text style={styles.name1}>{oneCar?.model}</Text>
@@ -280,18 +271,14 @@ const styles = StyleSheet.create({
   name: {
     color: "#9EB8D9",
     fontSize: 16,
-    fontFamily: "FiraMono-Medium",
   },
   name1: {
     fontSize: 16,
-    // fontWeight: "bold",
-    fontFamily: "FiraMono-Bold",
   },
   price1: {
     fontSize: 16,
     // fontWeight: "bold",
     color: "#9EB8D9",
-    fontFamily: "FiraMono-Bold",
   },
   vitesse: {
     width: width * 0.06,
@@ -301,7 +288,6 @@ const styles = StyleSheet.create({
   VitesseName: {
     color: "grey",
     fontSize: 13,
-    fontFamily: "FiraMono-Medium",
   },
   Vitesse1: {
     width: width * 0.081,

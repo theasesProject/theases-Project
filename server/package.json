@@ -12,6 +12,8 @@
     "carMedia": "node  seeds/carMedia.js",
     "start": "nodemon index.js",
     "chat": "nodemon chat.server.js",
+    "agency": "node seeds/agency.js",
+    "request": "node seeds/request.js",
     "notification": "nodemon notification.js"
   },
   "keywords": [],

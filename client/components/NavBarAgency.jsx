@@ -18,11 +18,10 @@ import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
 import Pr from ".././assets/Svg/user-nav.svg";
+import Bell from "../assets/Svg/bell-notification.svg"
 import Plus from ".././assets/Svg/plus-solid.svg";
 import Car from ".././assets/Svg/car-side-solid.svg";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 import { useSelector } from "react-redux";
 const { height, width } = Dimensions.get("screen");
 function NavBarAgency({ style }) {
@@ -34,16 +33,7 @@ function NavBarAgency({ style }) {
   const isActive = (routeName) =>
     route.name === routeName ? "#6C77BF" : "grey";
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   return (
     <View style={[styles.navBar, style]}>
       <Pressable
@@ -53,7 +43,7 @@ function NavBarAgency({ style }) {
         <View style={styles.hm}>
           <Hm fill={isActive("Home")} />
           <Text
-            style={{ color: isActive("Home"), fontFamily: "FiraMono-Medium" }}
+            style={{ color: isActive("Home"),}}
           >
             Home
           </Text>
@@ -69,7 +59,7 @@ function NavBarAgency({ style }) {
           <Text
             style={{
               color: isActive("Messages"),
-              fontFamily: "FiraMono-Medium",
+            
             }}
           >
             Messeges
@@ -85,7 +75,7 @@ function NavBarAgency({ style }) {
           <Text
             style={{
               color: isActive("AddAgencyCar"),
-              fontFamily: "FiraMono-Medium",
+         
             }}
           >
             Add Car
@@ -93,22 +83,25 @@ function NavBarAgency({ style }) {
         </View>
       </Pressable>
       <Pressable
-        style={styles.quarter}
-        onPress={() => {
-          loggedIn
-            ? navigation.navigate("MyCars")
-            : navigation.navigate("SignUp");
-        }}
+      style={styles.quarter}
+      onPress={() => {
+        loggedIn
+          ? navigation.navigate("Notification")
+          : navigation.navigate("SignUp");
+      }}
       >
-        <View style={styles.hm}>
-          <Car fill={isActive("MyCars")} />
+            <Bell fill={isActive("Notification")} />
 
-          <Text
-            style={{ color: isActive("MyCars"), fontFamily: "FiraMono-Medium" }}
+            <Text
+            style={{
+              color: isActive("Notification"),
+            
+
+            }}
           >
-            My Cars
+            {loggedIn ? "Notifs" : "SignUp"}
           </Text>
-        </View>
+          
       </Pressable>
       <Pressable
         style={styles.quarter}
@@ -121,7 +114,7 @@ function NavBarAgency({ style }) {
           <Text
             style={{
               color: isActive("AgencyService"),
-              fontFamily: "FiraMono-Medium",
+       
             }}
           >
             Requests
@@ -131,9 +124,6 @@ function NavBarAgency({ style }) {
     </View>
   );
 }
-
-// ... rest of your code
-// ... rest of your code
 
 const styles = StyleSheet.create({
   navBar: {

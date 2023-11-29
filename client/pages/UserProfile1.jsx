@@ -49,14 +49,9 @@ const UsersProfile = ({ navigation }) => {
   };
   useEffect(() => {
     dispatch(allServiceForUser(activeUser?.id));
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
+
+  
   }, []);
   return (
     <View style={styles.AllPage}>
@@ -96,7 +91,7 @@ const UsersProfile = ({ navigation }) => {
 
                     <Text
                       style={{
-                        fontFamily: "FiraMono-Medium",
+                    
                         color: "grey",
                         fontSize: 14,
                       }}
@@ -117,7 +112,7 @@ const UsersProfile = ({ navigation }) => {
 
                   <Text
                     style={{
-                      fontFamily: "FiraMono-Medium",
+                  
                       color: "grey",
                       fontSize: 14,
                     }}
@@ -135,7 +130,7 @@ const UsersProfile = ({ navigation }) => {
                   {/* <Image source={stg} style={styles.icon} /> */}
                   <Text
                     style={{
-                      fontFamily: "FiraMono-Medium",
+           
                       color: "grey",
                       fontSize: 14,
                     }}
@@ -163,7 +158,7 @@ const UsersProfile = ({ navigation }) => {
                   {activeUser?.type === "client" ? (
                     <Text
                       style={{
-                        fontFamily: "FiraMono-Medium",
+                      
                         color: "grey",
                         fontSize: 14,
                       }}
@@ -173,7 +168,7 @@ const UsersProfile = ({ navigation }) => {
                   ) : (
                     <Text
                       style={{
-                        fontFamily: "FiraMono-Medium",
+                    
                         color: "grey",
                         fontSize: 14,
                       }}
@@ -195,7 +190,7 @@ const UsersProfile = ({ navigation }) => {
                   {/* <Image source={stg} style={styles.icon} /> */}
                   <Text
                     style={{
-                      fontFamily: "FiraMono-Medium",
+                   
                       color: "grey",
                       fontSize: 14,
                     }}
@@ -215,7 +210,6 @@ const UsersProfile = ({ navigation }) => {
 
                 <Text
                   style={{
-                    fontFamily: "FiraMono-Medium",
                     color: "grey",
                     fontSize: 14,
                   }}

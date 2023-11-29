@@ -23,7 +23,6 @@ function NavBar({ style }) {
         "FiraMono-Medium": FiraMonoMedium,
       });
     };
-
     loadFonts();
   }, []);
   const isActive = (routeName) =>
@@ -89,7 +88,7 @@ function NavBar({ style }) {
         style={styles.quarter}
         onPress={() => {
           if (loggedIn) {
-            navigation.navigate("Userprofile");
+            navigation.navigate("UsersProfile");
           } else {
             navigation.navigate("Login");
           }

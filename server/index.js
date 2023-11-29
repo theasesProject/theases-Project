@@ -140,10 +140,10 @@ io.on("connection", (socket) => {
       console.log(`User with UserId ${receiverId} not found or offline.`);
     }
   });
-  socket.on('updateLocation', (location) => {
+  socket.on("updateLocation", (location) => {
     // Broadcast the location to all connected clients
-    console.log('here in back',location);
-    io.emit('locationUpdated', location);
+    console.log("here in back", location);
+    io.emit("locationUpdated", location);
   });
   socket.on("rejectService", ({ senderId, receiverId, message }) => {
     const receiver = onlineUsers.find((user) => user.userId === receiverId);

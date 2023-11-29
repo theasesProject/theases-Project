@@ -172,6 +172,7 @@ export const CreateBookMark = createAsyncThunk(
 export const removedBookMark = createAsyncThunk(
   "car/removedBookMark",
   async (id) => {
+    
     try {
       const response = await axios.delete(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/delete/${id}`

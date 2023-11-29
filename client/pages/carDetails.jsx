@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import car from "../assets/car2.png";
+import AddReview from "./AddReview";
+import emptyStar from "../assets/emptyStar.png";
 import star from "../assets/star1.png";
 import heart from "../assets/heart.png";
 import user from "../assets/user.jpg";
@@ -22,15 +24,36 @@ import { useNavigation } from "@react-navigation/native";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
+import Rate from "../assets/Svg/addRating.svg";
 const CarDetails = () => {
   const navigation = useNavigation();
   const [isButtonEnabled, setButtonEnabled] = useState(false);
   const carData = useSelector((state) => state.car.RentDetails);
-  console.log("jiiiii", carData);
-  const [text, setText] = useState(`${carData.price}`);
-  const [intervalId, setIntervalId] = useState(null);
-  const [period, setPeriod] = useState("daily");
-  const [periodIntervalId, setPeriodIntervalId] = useState(null);
+  const [rating, setRating] = useState([]);
+
+  const averageRating =
+    rating.length > 0
+      ? rating.reduce(
+          (acc, curr) => acc + curr.rating * 1,
+
+          0
+        ) / rating.length
+      : 0;
+
+  const renderStars = () => {
+    const stars = [];
+    const roundedRating = Math.round(averageRating);
+
+    for (let i = 0; i < 5; i++) {
+      if (i < roundedRating) {
+        stars.push(<Image key={i} style={styles.star} source={star} />);
+      } else {
+        stars.push(<Image key={i} style={styles.star} source={emptyStar} />);
+      }
+    }
+
+    return stars;
+  };
   useEffect(() => {
     const enableButtonAfter24Hours = () => {
       setTimeout(() => {
@@ -39,15 +62,22 @@ const CarDetails = () => {
     };
 
     enableButtonAfter24Hours();
+    getRatingForOneCar();
   }, []);
+  const getRatingForOneCar = async () => {
+    console.log(carData.id);
+    try {
+      const response = await axios.get(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/ratingByCar/${carData.id}`
+      );
 
-  const handleAnotherButtonClick = () => {
-    if (isButtonEnabled) {
-      console.log("Another Button clicked");
-    } else {
-      console.log("Another Button is disabled");
+      setRating(response.data);
+    } catch (error) {
+      console.error(error);
     }
   };
+
+  console.log(rating, "rating");
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
@@ -62,6 +92,14 @@ const CarDetails = () => {
     <View style={styles.CarDetails}>
       <View style={styles.page}>
         <View style={styles.carImage}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("AddReview");
+            }}
+            style={styles.rating}
+          >
+            <Rate style={styles.rate} />
+          </TouchableOpacity>
           <Image style={styles.imageCar} source={car} />
         </View>
 
@@ -71,12 +109,14 @@ const CarDetails = () => {
           </View>
           <View style={styles.reviewsDetails}>
             <View style={styles.reviews}>
-              <Text style={styles.reviewText}>Out of 5/5</Text>
-              <Image style={styles.star} source={star}></Image>
-              <Image style={styles.star} source={star}></Image>
-              <Image style={styles.star} source={star}></Image>
-              <Image style={styles.star} source={star}></Image>
-              <Image style={styles.star} source={star}></Image>
+              <View style={styles.reviews}>
+                <View>
+                  <Text
+                    style={styles.reviewText}
+                  >{`Average Rating: ${Math.round(averageRating)}/5`}</Text>
+                </View>
+                {renderStars()}
+              </View>
             </View>
             <Image style={styles.heart} source={heart}></Image>
           </View>
@@ -348,16 +388,33 @@ const styles = StyleSheet.create({
   },
   carImage: {
     backgroundColor: "lightgrey",
-    width: width,
-    height: height * 0.3,
+    width: "100%",
+    height: height * 0.28,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
+    flexDirection: "column",
   },
   imageCar: {
     width: width * 0.95,
-    height: height * 0.25,
+    height: height * 0.23,
+    marginBottom: "5%",
+  },
+  rating: {
+    marginTop: "8%",
+    width: "100%",
+    paddingHorizontal: width * 0.02,
+    paddingVertical: height * 0.01,
+    // flexDirection: "row",
+    // justifyContent: "space-around",
+    alignItems: "flex-end",
+    // position: "absolute",
+  },
+  rate: {
+    // backgroundColor: "red",
+    width: 30,
+    height: 40,
   },
 
   details: {
@@ -526,53 +583,5 @@ const styles = StyleSheet.create({
     fontFamily: "FiraMono-Bold",
     marginLeft: "4%",
   },
-  // scrollContainer: {
-  //   marginLeft: -height * 0.01,
-  // },
-  // container_n2: {
-  //   gap: 10,
-  //   paddingTop: 10,
-  // },
-  // descContainer: {
-  //   marginLeft: 10,
-  //   gap: 10,
-  //   padding: 5,
-  //   alignItems: "center",
-  //   height: height * 0.075,
-  //   borderWidth: width * 0.001,
-  //   borderColor: "#rgb(138, 114, 185)",
-  //   width: width * 0.32,
-  //   borderRadius: 4,
-  //   backgroundColor: "#dadcea",
-  // },
-  // description: {
-  //   paddingHorizontal: width * 0.04,
-  //   paddingVertical: height * 0.04,
-  // },
-  // carModel: {
-  //   fontSize: 23,
-  //   fontWeight: "600",
-  // },
-  // CarDetails: {
-  //   height: height,
-  //   backgroundColor: "white",
-  // },
-  // carImage: {
-  //   width: 430,
-  //   borderRadius: 10,
-  //   height: height * 0.25,
-  //   objectFit: "contain",
-  // },
-  // imageContainer: {
-  //   width: 250,
-  //   paddingHorizontal: 200,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   shadowColor: "#000",
-  //   shadowOffset: { width: 0, height: 2 },
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 3.84,
-  //   elevation: 5,
-  // },
 });
 export default CarDetails;

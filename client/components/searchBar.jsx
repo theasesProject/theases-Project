@@ -22,6 +22,7 @@ import * as Font from "expo-font";
 function SearchBar({ onSearch }) {
   const [searchedCar, setSearchedCar] = useState();
   const navigation = useNavigation();
+  console.log(searchedCar, "searchedCar");
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
@@ -41,7 +42,7 @@ function SearchBar({ onSearch }) {
   const searchCarsByModel = async (model) => {
     try {
       const response = await axios.get(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/searchName/${model}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/car/searchName/${searchedCar}`
       );
       onSearch(response.data);
     } catch (error) {
@@ -52,7 +53,7 @@ function SearchBar({ onSearch }) {
   return (
     <View style={styles.inputAndButton}>
       <TextInput
-        onSubmitEditing={(text) => handleSearch(text)}
+        onSubmitEditing={(event) => handleSearch(event.nativeEvent.text)}
         style={[styles.input, { fontFamily: "FiraMono-Medium" }]}
         placeholder="Search cars or locations…"
         placeholderTextColor="gray"

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Image,
   StyleSheet,
@@ -10,7 +10,7 @@ import {
   Pressable,
   Dimensions,
 } from "react-native";
-import React,{useEffect} from "react";
+
 import UserNormal from "../assets/Svg/user-normal.svg";
 import Email from "../assets/Svg/email.svg";
 import Phone from "../assets/Svg/phone.svg";

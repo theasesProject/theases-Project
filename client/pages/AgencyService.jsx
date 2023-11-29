@@ -23,12 +23,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import price from "../assets/price.jpg";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import io from "socket.io-client";
 import PushNotification from "react-native-push-notification";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
-import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 function AgencyService() {
@@ -44,18 +44,24 @@ function AgencyService() {
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
   const getRoomData = async (room) => {
-    console.log(room,'ghjkghgh');
+    console.log(room, "ghjkghgh");
     if (activeUser.id === room.UserId) {
       await axios
         .get(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
         )
         .then((response) => {
-          console.log('res',response.data);
-          dispatch(setRoom({ ...room, name:response.data.userName, avatarUrl:response.data.avatar }));
-          setTimeout(()=>{
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
             navigation.navigate("conversation");
-          },200)
+          }, 200);
         });
     } else {
       await axios
@@ -63,11 +69,17 @@ function AgencyService() {
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`
         )
         .then((response) => {
-          console.log('res',response.data);
-          dispatch(setRoom({ ...room, name:response.data.userName, avatarUrl:response.data.avatar }));
-          setTimeout(()=>{
+          console.log("res", response.data);
+          dispatch(
+            setRoom({
+              ...room,
+              name: response.data.userName,
+              avatarUrl: response.data.avatar,
+            })
+          );
+          setTimeout(() => {
             navigation.navigate("conversation");
-          },200)
+          }, 200);
         });
     }
   };
@@ -98,32 +110,30 @@ function AgencyService() {
   const handleChatting = async (id) => {
     // setRequestMakerId(id)
     try {
-
       const roomPossibility1 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: activeUser.id*1, user2: id*1 }
+        { user1: activeUser.id * 1, user2: id * 1 }
       );
       const roomPossibility2 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
-        { user1: id*1, user2: (activeUser.id)*1 }
+        { user1: id * 1, user2: activeUser.id * 1 }
       );
       console.log(roomPossibility1.data);
       console.log(roomPossibility2.data);
       if (!roomPossibility1.data && !roomPossibility2.data) {
-        console.log('heeeeeerrrreeee');
+        console.log("heeeeeerrrreeee");
         const room = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
-          { UserId: activeUser.id*1, user2: id*1 }
+          { UserId: activeUser.id * 1, user2: id * 1 }
         );
-          // console.log("here");
+        // console.log("here");
         getRoomData(room);
-       
+
         return;
       } else {
-        const room = roomPossibility1.data|| roomPossibility2.data;
-        
+        const room = roomPossibility1.data || roomPossibility2.data;
+
         getRoomData(room);
-      
       }
     } catch (e) {
       console.error(e);

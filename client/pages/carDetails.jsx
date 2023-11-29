@@ -24,6 +24,7 @@ import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
 import Rate from "../assets/Svg/addRating.svg";
+import axios from "axios";
 const CarDetails = () => {
   const navigation = useNavigation();
   const [isButtonEnabled, setButtonEnabled] = useState(false);
@@ -99,7 +100,8 @@ const CarDetails = () => {
           >
             <Rate style={styles.rate} />
           </TouchableOpacity>
-          <Image style={styles.imageCar} source={car} />
+          {console.log(carData,'details')}
+          <Image style={styles.imageCar} src={carData.Media[0].media} />
         </View>
 
         <View style={styles.details}>

@@ -303,7 +303,7 @@ useEffect(()=>{
         }}
       /> */}
 
-      <Text
+      {/* <Text
         onPress={() => {
           navigation.navigate("TransportationMap", {
             agencyId:
@@ -314,7 +314,7 @@ useEffect(()=>{
         }}
       >
         map transportation{" "}
-      </Text>
+      </Text> */}
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>

@@ -46,7 +46,7 @@ function ProfileLandingPage({ style }) {
         const nearestAddress = nearestAddressResponse[0];
         const place = ` ${nearestAddress.city}`;
         const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
-        setUserAddress(place);
+        setUserAddress(fullNearestAddress);
       }
     }
   };

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, ScrollView, StyleSheet, Text, View , Pressable} from 'react-native'
 import ReviewCard from "../components/ReviewCard";
 import { useSelector } from 'react-redux';
 import { selectUser } from '../store/userSlice';
@@ -18,7 +18,7 @@ function AllReviews() {
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/getAllByAgencyId/${activeUser.id}`
       );
-      console.log("reviews: ", response.data);
+      // console.log("reviews: ", response.data);
       setAllReviews(response.data);
       setSomeReviews(response.data.slice(0, 1));
     } catch (err) {
@@ -33,15 +33,13 @@ function AllReviews() {
   }, []);
 
   return (
-    <ScrollView>
-        <View style={styles.agencyReviews}>
-          
+    <ScrollView showsVerticalScrollIndicator={false}>
           {(reviewsView === "view more" ? someReviews : allReviews).map(
-            (review, index) => (
-              <ReviewCard review={review} key={index} />
-            )
+            (review, index) => {
+              // console.log(allReviews.length ,"---------------------------------------------------------------------");
+              return <ReviewCard review={review} key={index} />
+            }
           )}
-        </View>
         {allReviews.length > 0 ? (
           <Pressable
             onPress={() => {
@@ -68,6 +66,7 @@ const styles = StyleSheet.create({
     width: width,
     alignItems: "center",
     marginBottom: height * 0.02,
+    marginTop: height * 0.02
   },
   agencyReviews: {},
 });

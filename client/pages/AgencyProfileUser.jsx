@@ -40,9 +40,9 @@ function AgencyProfileUser() {
     view3: false,
   });
   const [isSliderOpen, setSliderOpen] = useState(false);
-  console.log(ag?.agencyById);
+  // console.log(ag?.agencyById);
   const handleSliderToggle = () => {
-    console.log("slider toggled");
+    // console.log("slider toggled");
     setSliderOpen(!isSliderOpen);
   };
 

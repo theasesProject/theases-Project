@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     marginTop: height * 0.04,
-    borderBlockColor:"blue"
   },
   carImage: {
     width: "100%",

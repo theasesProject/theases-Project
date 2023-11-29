@@ -78,16 +78,16 @@ const CarDetails = () => {
   };
 
   console.log(rating, "rating");
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   return (
     <View style={styles.CarDetails}>
       <View style={styles.page}>
@@ -145,6 +145,7 @@ const CarDetails = () => {
             </View>
           </View>
           <View style={styles.descreptionCar}>
+           
             <Text style={styles.storyTitle}>Car Description</Text>
             <Text style={styles.descreption}>
               {`Horsepower: ${carData.horsePower}`}
@@ -157,7 +158,7 @@ const CarDetails = () => {
             </Text>
             <Text style={styles.descreption}>
               {`Weekly Price: $${carData.priceWeekly} `}{" "}
-              {`  |   Monthly Price: $${carData.priceMonthly}`}
+              {`| Monthly Price: $${carData.priceMonthly}`}
             </Text>
           </View>
           <View style={styles.descreptionCar}>
@@ -165,7 +166,7 @@ const CarDetails = () => {
             <View style={styles.OwnerDetails}>
               <Image
                 style={styles.userImage}
-                src={carData.Agency.avatar}
+                src={carData.Agency.backgroundImage}
               ></Image>
               <View style={styles.detailsOwner}>
                 <Text style={styles.agencyName}>{carData.Agency.name}</Text>

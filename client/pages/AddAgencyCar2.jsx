@@ -29,16 +29,16 @@ function AddAgencyCar2() {
   const [priceError, setPriceError] = useState("");
   const [priceErrorWeekly, setPriceWeeklyError] = useState("");
   const [priceErrorMonthly, setPriceMonthlyError] = useState("");
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   const handlePrice = (price) => {
     setForm({ ...form, price });
   };

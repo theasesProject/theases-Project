@@ -38,16 +38,16 @@ const NotificationPage = () => {
     dispatch(getAllNotifcationByUser(activeUser.id));
   }, [dispatch, activeUser.id]);
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   return (
     <View style={styles.pageContainer}>
       <ScrollView style={styles.scrollContainer}>

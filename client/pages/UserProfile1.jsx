@@ -47,17 +47,17 @@ const UsersProfile = ({ navigation }) => {
     dispatch(logUserOut());
     navigation.navigate("Home");
   };
-  useEffect(() => {
-    dispatch(allServiceForUser(activeUser?.id));
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   dispatch(allServiceForUser(activeUser?.id));
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   return (
     <View style={styles.AllPage}>
       <View style={styles.userContainer}>

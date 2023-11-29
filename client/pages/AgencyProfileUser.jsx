@@ -36,16 +36,16 @@ function AgencyProfileUser({ navigation }) {
   const dispatch = useDispatch();
   const { agencyId } = route.params;
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   // const handleHeartPress = async () => {
   //   // setHeartSelected(!heartSelected);
   //   // if (!heartSelected) {

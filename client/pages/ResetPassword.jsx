@@ -42,16 +42,16 @@ const ResetPassword = ({ navigation }) => {
     setConfirmPasswordError(null);
     return true;
   };
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   const handlePasswordStrength = () => {
     var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
     if (newPassword.length < 8 && !regex.test(newPassword)) {

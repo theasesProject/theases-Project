@@ -5,8 +5,8 @@ import axios from "axios";
 // import myUploadPreset from './env.js'
 
 export const cloudinaryUpload = async (imageUri) => {
-  const cloudName = "torbaga";
-  const myUploadPreset = "zpsqdpwt";
+  const cloudName = "ds4outzra";
+  const myUploadPreset = "r0xpswmo";
 
   try {
     const formData = new FormData();

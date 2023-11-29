@@ -16,15 +16,15 @@ function NavBar({ style }) {
 
   const navigation = useNavigation();
   const route = useRoute();
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-    loadFonts();
-  }, []);
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
+  //   loadFonts();
+  // }, []);
   const isActive = (routeName) =>
     route.name === routeName ? "#6C77BF" : "grey";
   return (

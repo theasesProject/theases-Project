@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SignUp from ".././assets/Svg/signUpNav.svg";
+import Bell from "../assets/Svg/bell-notification.svg"
 import Hm from ".././assets/Svg/house-solid.svg";
 import Ms from ".././assets/Svg/envelope-solid.svg";
 import Fa from ".././assets/Svg/heart-solid.svg";
@@ -78,11 +79,34 @@ function NavBar({ style }) {
             style={{
               color: isActive("Favorites"),
               fontFamily: "FiraMono-Medium",
+              fontSize:13
             }}
           >
             {loggedIn ? "Favorites" : "SignUp"}
           </Text>
         </View>
+      </Pressable>
+
+      <Pressable
+      style={styles.quarter}
+      onPress={() => {
+        loggedIn
+          ? navigation.navigate("Notification")
+          : navigation.navigate("SignUp");
+      }}
+      >
+            <Bell fill={isActive("Notification")} />
+
+            <Text
+            style={{
+              color: isActive("Notification"),
+              fontFamily: "FiraMono-Medium",
+
+            }}
+          >
+            {loggedIn ? "Notifs" : "SignUp"}
+          </Text>
+          
       </Pressable>
       <Pressable
         style={styles.quarter}

@@ -48,14 +48,14 @@ function AddAgencyCar() {
   };
 
   const brand = [
-    { label: "toyota", value: "toyota" },
+    { label: "isuzu", value: "isuzu" },
     { label: "bmw", value: "bmw" },
     { label: "peugeot", value: "peugeot" },
-
-    { label: "ford", value: "ford" },
-    { label: "honda", value: "honda" },
-    { label: "hyndai", value: "hyndai" },
-    { label: "porch", value: "porch" },
+    {label: "suzuki", value: "suzuki" },
+    { label: "Mercedes", value: "Mercedes" },
+    { label: "dacia", value: "dacia" },
+    { label: "skoda", value: "skoda" },
+    { label: "opel", value: "opel" },
     { label: "renault", value: "renault" },
     { label: "volkswagen", value: "volkswagen" },
     { label: "other", value: "other" },

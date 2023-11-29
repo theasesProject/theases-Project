@@ -66,10 +66,10 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
           <Text
             style={styles.ViewAll}
             onPress={() => {
-              navigation.navigate("Notification");
+              resetData()
             }}
           >
-            Notification{" "}
+            View All{" "}
           </Text>
         </View>
       </View>

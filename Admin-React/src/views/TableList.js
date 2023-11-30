@@ -84,8 +84,8 @@ function Tables() {
           </Col>
           <Col md="12">
             <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Reports from Clients</CardTitle>
+              {/* <CardHeader> */}
+                {/* <CardTitle tag="h4">Reports from Clients</CardTitle>
               </CardHeader>
               <CardBody>
                 <Table className="tablesorter" responsive>
@@ -108,7 +108,7 @@ function Tables() {
                     </tr>
                   </tbody>
                 </Table>
-              </CardBody>
+              </CardBody> */}
             </Card>
           </Col>
         </Row>

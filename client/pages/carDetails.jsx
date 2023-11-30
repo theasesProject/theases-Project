@@ -69,10 +69,10 @@ const CarDetails = () => {
     getRatingForOneCar();
   }, []);
   const getRatingForOneCar = async () => {
-    // console.log(carData.id);
+    // console.log(carData?.id);
     try {
       const response = await axios.get(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/ratingByCar/${carData.id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/ratingByCar/${carData?.id}`
       );
 
       setRating(response.data);
@@ -95,12 +95,12 @@ const CarDetails = () => {
               <Rate style={styles.rate} />
             </TouchableOpacity>
           )}
-          <Image style={styles.imageCar} src={carData.Media[0].media} />
+          <Image style={styles.imageCar} src={carData?.Media[0]?.media} />
         </View>
 
         <View style={styles.details}>
           <View style={styles.type}>
-            <Text style={styles.textType}>{carData.typevehicle}</Text>
+            <Text style={styles.textType}>{carData?.typevehicle}</Text>
           </View>
           <View style={styles.reviewsDetails}>
             <View style={styles.reviews}>
@@ -116,7 +116,7 @@ const CarDetails = () => {
             {/* <Image style={styles.heart} source={heart}></Image> */}
           </View>
           <View style={styles.detailsCar}>
-            <Text style={styles.carName}>Car Name</Text>
+            <Text style={styles.carName}>Car Details</Text>
             <View style={styles.carNameDetails}>
               <View style={styles.textDetails}>
                 <Text>Car Name </Text>
@@ -127,25 +127,25 @@ const CarDetails = () => {
                 <Text>:</Text>
               </View>
               <View style={styles.textDetails}>
-                <Text> {carData.model}</Text>
-                <Text> ${carData.price}/day</Text>
+                <Text> {carData?.model}</Text>
+                <Text> ${carData?.price}/day</Text>
               </View>
             </View>
           </View>
           <View style={styles.descreptionCar}>
             <Text style={styles.storyTitle}>Car Description</Text>
             <Text style={styles.descreption}>
-              {`Horsepower: ${carData.horsePower}`}
+              {`Horsepower: ${carData?.horsePower}`}
             </Text>
             <Text style={styles.descreption}>
-              {`Type of Fuel: ${carData.typeOfFuel}`}
+              {`Type of Fuel: ${carData?.typeOfFuel}`}
             </Text>
             <Text style={styles.descreption}>
-              {`Characteristics: ${carData.characteristics}`}
+              {`Characteristics: ${carData?.characteristics}`}
             </Text>
             <Text style={styles.descreption}>
-              {`Weekly Price: $${carData.priceWeekly} `}{" "}
-              {`| Monthly Price: $${carData.priceMonthly}`}
+              {`Weekly Price: $${carData?.priceWeekly} `}{" "}
+              {`| Monthly Price: $${carData?.priceMonthly}`}
             </Text>
           </View>
           <View style={styles.descreptionCar}>
@@ -153,10 +153,10 @@ const CarDetails = () => {
             <View style={styles.OwnerDetails}>
               <Image
                 style={styles.userImage}
-                src={carData.Agency.backgroundImage}
+                src={carData?.Agency?.User.avatar}
               ></Image>
               <View style={styles.detailsOwner}>
-                <Text style={styles.agencyName}>{carData.Agency.name}</Text>
+                <Text style={styles.agencyName}>{carData?.Agency?.name}</Text>
                 <View style={styles.owner}>
                   <Image style={styles.location} source={location}></Image>
                   <Text style={styles.descreption1}>Tunis</Text>
@@ -164,24 +164,13 @@ const CarDetails = () => {
                 <View style={styles.owner}>
                   <Image style={styles.phone} source={phone}></Image>
                   <Text style={styles.descreption1}>
-                    +{carData.Agency.companyNumber}
+                    +{carData?.Agency?.companyNumber}
                   </Text>
-                  {/* <LinearGradient
-                    style={styles.book1}
-                    colors={["#6C77BF", "#4485C5"]}
-                  >
-                    <TouchableOpacity
-                      onPress={handleAnotherButtonClick}
-                      disabled={!isButtonEnabled}
-                    >
-                      <Text style={styles.anotherButtonText}>AddReview</Text>
-                    </TouchableOpacity>
-                  </LinearGradient> */}
                 </View>
               </View>
             </View>
           </View>
-          <LinearGradient style={styles.book} colors={["#6C77BF", "#4485C5"]}>
+         {activeUser.type==="client"&& <LinearGradient style={styles.book} colors={["#6C77BF", "#4485C5"]}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("Booking");
@@ -189,7 +178,7 @@ const CarDetails = () => {
             >
               <Text style={styles.bookText}>Book Your Suitable Car</Text>
             </TouchableOpacity>
-          </LinearGradient>
+          </LinearGradient>}
         </View>
       </View>
     </View>
@@ -327,12 +316,12 @@ const styles = StyleSheet.create({
   },
   userImage: {
     width: width * 0.15,
-    height: height * 0.073,
+    height: height * 0.07,
     borderRadius: 40,
     borderColor: "lightgrey",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 5,
+    // justifyContent: "center",
+    // alignItems: "center",
+    // padding: 5,
     borderWidth: 1,
   },
   OwnerDetails: {

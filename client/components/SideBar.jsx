@@ -90,7 +90,7 @@ const Sidebar = ({ navigation, isOpen, onClose }) => {
       <TouchableOpacity
         onPress={() => navigation.navigate("EditAgencyProfile")}
       >
-        <Text style={styles.text}>Edit agency profile</Text>
+        <Text style={styles.text}>Edit  profile</Text>
         <View style={styles.line} />
       </TouchableOpacity>
       <TouchableOpacity onPress={handleLogout}>

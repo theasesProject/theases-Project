@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     paddingHorizontal: width * 0.01,
     borderRadius: 15,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: "#6a78c1",
   },
   reviewCreatedAt: {},

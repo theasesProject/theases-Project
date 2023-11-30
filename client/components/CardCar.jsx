@@ -25,7 +25,7 @@ import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 function CardCar({ oneCar, handlePress }) {
   const [heartSelected, setHeartSelected] = useState(false);
-
+console.log(oneCar,"FROM JIHEDDDDDDDDDDDDDDDDDDDDDDDDDD");
   const activeUser = useSelector(selectUser);
 
   const dispatch = useDispatch();

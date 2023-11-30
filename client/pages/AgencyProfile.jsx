@@ -88,7 +88,7 @@ function AgencyProfileUser() {
                 <NumberOfCars />
                 <View>
                   <Text>
-                    {agencyCars.length} car{agencyCars.length > 1 ? "s" : null}
+                    {agencyCars?.length} car{agencyCars?.length > 1 ? "s" : null}
                   </Text>
                   <Text
                     style={{ fontSize: 12, fontWeight: "500", opacity: 0.3 }}

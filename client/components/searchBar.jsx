@@ -20,7 +20,6 @@ const { height, width } = Dimensions.get("screen");
 function SearchBar({ onSearch }) {
   const [searchedCar, setSearchedCar] = useState();
   const navigation = useNavigation();
-  console.log(searchedCar, "searchedCar");
  
   const handleSearch = (text) => {
     setSearchedCar(text);

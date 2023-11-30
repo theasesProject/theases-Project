@@ -51,7 +51,6 @@ function MyCars() {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
-  console.log(unavailableDate, "unavailableDate");
   const [updatedCarInfo, setUpdatedCarInfo] = useState({
     price: selectedCar?.price,
     priceWeekly: selectedCar?.priceWeekly,
@@ -112,7 +111,10 @@ function MyCars() {
       setSelectedStartDate(null);
     }
   };
-
+  const handleSetSelectedCar = (newCar) => {
+    setSelectedCar(newCar);
+    setModalVisible1(true);
+  };
   const markDatesRed = () => {
     const markedRedDates = {};
 
@@ -184,6 +186,10 @@ function MyCars() {
             <MyCarsCard
               agencycar={agencycar}
               setSelectedCar={handleSetSelectedCar}
+              handleDeleteCar={handleDeleteCar}
+              handleUpdateCar={handleUpdateCar}
+              setModalVisible={ setModalVisible}
+
               key={i}
             />
           ))

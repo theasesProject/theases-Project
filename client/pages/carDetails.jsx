@@ -24,10 +24,12 @@ import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
 import Rate from "../assets/Svg/addRating.svg";
+import { selectUser } from "../store/userSlice";
 const CarDetails = () => {
   const navigation = useNavigation();
   const [isButtonEnabled, setButtonEnabled] = useState(false);
   const carData = useSelector((state) => state.car.RentDetails);
+  const activeUser = useSelector(selectUser);
   const [rating, setRating] = useState([]);
 
   const averageRating =
@@ -91,14 +93,16 @@ const CarDetails = () => {
     <View style={styles.CarDetails}>
       <View style={styles.page}>
         <View style={styles.carImage}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("AddReview");
-            }}
-            style={styles.rating}
-          >
-            <Rate style={styles.rate} />
-          </TouchableOpacity>
+          {activeUser?.type !== "agency" && (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("AddReview");
+              }}
+              style={styles.rating}
+            >
+              <Rate style={styles.rate} />
+            </TouchableOpacity>
+          )}
           <Image style={styles.imageCar} source={car} />
         </View>
 
@@ -117,7 +121,7 @@ const CarDetails = () => {
                 {renderStars()}
               </View>
             </View>
-            <Image style={styles.heart} source={heart}></Image>
+            {/* <Image style={styles.heart} source={heart}></Image> */}
           </View>
           <View style={styles.detailsCar}>
             <Text style={styles.carName}>Car Name</Text>

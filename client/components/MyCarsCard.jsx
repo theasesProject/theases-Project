@@ -10,7 +10,7 @@ import {
 import { Swipeable } from "react-native-gesture-handler";
 const { width, height } = Dimensions.get("screen");
 
-const MyCarsCard = ({ agencycar }) => {
+const MyCarsCard = ({ agencycar, setSelectedCar }) => {
   const renderRightActions = (progress, dragX, carId, car) => {
     const trans = dragX.interpolate({
       inputRange: [0, 50],
@@ -20,12 +20,17 @@ const MyCarsCard = ({ agencycar }) => {
 
     return (
       <View style={styles.rightActions}>
-        <TouchableOpacity
-          style={[styles.actionButton, styles.deleteButton]}
-          onPress={() => handleDeleteCar(carId)}
+        <LinearGradient
+          colors={["#F2F2F2", "white"]}
+          style={[styles.actionButton, styles.updateButton]}
         >
-          <Text style={styles.buttonText}>Delete</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.actionButton, styles.deleteButton]}
+            onPress={() => handleDeleteCar(carId)}
+          >
+            <Text style={styles.deleteButtonText}>Delete</Text>
+          </TouchableOpacity>
+        </LinearGradient>
         <LinearGradient
           colors={["#88b4e2", "#6C77BF"]}
           style={[styles.actionButton, styles.updateButton]}
@@ -33,11 +38,10 @@ const MyCarsCard = ({ agencycar }) => {
           <TouchableOpacity
             onPress={() => {
               setSelectedCar(car);
-              setModalVisible(true);
             }}
             style={[styles.actionButton, styles.updateButton]}
           >
-            <Text style={styles.buttonText}>Update</Text>
+            <Text style={styles.updateButtonText}>Update</Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>
@@ -66,7 +70,6 @@ const MyCarsCard = ({ agencycar }) => {
           <TouchableOpacity
             onPress={() => {
               setSelectedCar(agencycar?.car);
-              setModalVisible1(true);
             }}
             style={styles.button}
           >
@@ -158,33 +161,34 @@ const styles = StyleSheet.create({
   //   ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
 
   rightActions: {
-    // position: "absolute",
+    // backgroundColor: "red",
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
-    paddingRight: 16,
+    paddingHorizontal: width * 0.04,
+    flexDirection: "row",
+    gap: width * 0.06,
   },
   actionButton: {
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    width: "100%",
-    height: height * 0.1,
+    width: "50%",
+    height: height * 0.08,
   },
   deleteButton: {
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "lightgrey",
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    borderRadius: 10,
   },
   updateButton: {
-    justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    borderRadius: 10,
+  },
+  deleteButtonText: {
+    color: "#6C77BF",
+    fontWeight: "bold",
+  },
+  updateButtonText: {
+    fontWeight: "bold",
+    color: "white",
   },
 });
 

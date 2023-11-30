@@ -67,6 +67,12 @@ function MyCars() {
 
     loadFonts();
   }, []);
+
+  const handleSetSelectedCar = (newCar) => {
+    setSelectedCar(newCar);
+    setModalVisible1(true);
+  };
+
   const handleDeleteCar = (carId) => {
     console.log(carId);
     dispatch(
@@ -191,7 +197,11 @@ function MyCars() {
         ) : null}
         {agencyCars?.length > 0 ? (
           agencyCars.map((agencycar, i) => (
-            <MyCarsCard agencycar={agencycar} key={i} />
+            <MyCarsCard
+              agencycar={agencycar}
+              setSelectedCar={handleSetSelectedCar}
+              key={i}
+            />
           ))
         ) : (
           <View style={styles.message}>
@@ -242,13 +252,17 @@ function MyCars() {
               <TouchableOpacity onPress={() => handleUpdateCar(selectedCar.id)}>
                 <LinearGradient
                   colors={["#88b4e2", "#6C77BF"]}
+                  locations={[0, 1]}
                   style={styles.buttonContainer}
                 >
                   <Text style={styles.buttonText1}>Update Car</Text>
                 </LinearGradient>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={styles.cancelButton}
+              >
                 <Text style={styles.cancelText}>Cancel</Text>
               </TouchableOpacity>
             </View>
@@ -271,10 +285,10 @@ function MyCars() {
                 ...markedDates,
                 ...markDatesRed(),
               }}
-              todayBackgroundColor="blue"
+              todayBackgroundColor="#6C77BF"
               selectedDayColor="#daddf0"
               selectedDayTextColor="white"
-              selectedDisabledDatesTextStyle={{ color: "red" }}
+              selectedDisabledDatesTextStyle={{ color: "white" }}
               scaleFactor={375}
               textStyle={{
                 color: "black",
@@ -290,11 +304,11 @@ function MyCars() {
                 style={styles.buttonContainer1}
               >
                 <TouchableOpacity onPress={UpdateAvaibility}>
-                  <Text>Update Date</Text>
+                  <Text style={styles.textBtn}>Update Date</Text>
                 </TouchableOpacity>
               </LinearGradient>
               <LinearGradient
-                colors={["white", "#6C77BF"]}
+                colors={["white", "lightgrey"]}
                 style={styles.buttonContainer1}
               >
                 <TouchableOpacity onPress={() => setModalVisible1(false)}>
@@ -534,18 +548,19 @@ const styles = StyleSheet.create({
   },
   buttonContainer1: {
     borderRadius: 7,
-
     alignItems: "center",
     justifyContent: "center",
-
-    height: 30,
-    marginRight: "17%",
-    width: width * 0.3,
+    paddingVertical: height * 0.01,
+    width: width * 0.4,
+  },
+  textBtn: {
+    color: "white",
   },
   headerContainer: {
     zIndex: 1,
     width: width,
     backgroundColor: "rgb(219, 217, 224)",
+    paddingVertical: height * 0.01,
   },
   number: {
     textAlign: "center",
@@ -567,7 +582,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#88b4e2",
     borderWidth: 1,
     marginBottom: 10,
     borderRadius: 5,
@@ -581,7 +596,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   cancelText: {
-    color: "blue",
+    color: "#88b4e2",
     marginTop: 10,
     textAlign: "center",
   },
@@ -602,10 +617,10 @@ const styles = StyleSheet.create({
   },
   updateButton1: {
     flexDirection: "row",
-    justifyContent: "center",
+    width: "100%",
+    justifyContent: "space-around",
     alignItems: "center",
-    marginVertical: "10%",
-    marginLeft: "10%",
+    paddingVertical: "10%",
   },
 });
 

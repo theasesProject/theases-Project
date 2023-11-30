@@ -198,6 +198,7 @@ function AgencyService() {
             .map((service, index) => {
               return service.service.Service.acceptation === "pending" ? (
                 <View style={styles.card} key={index}>
+                  {console.log(service, "hhhhhhh")}
                   <Image style={styles.ImageCar} source={car} />
                   <View style={styles.carDetails}>
                     <Text style={styles.CarName}>{service.User.userName}</Text>

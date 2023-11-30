@@ -127,10 +127,7 @@ const CarDetails = () => {
                 <Text>:</Text>
               </View>
               <View style={styles.textDetails}>
-                <Text style={{ fontFamily: "FiraMono-Medium" }}>
-                  {" "}
-                  {carData.model}
-                </Text>
+                <Text> {carData.model}</Text>
                 <Text> ${carData.price}/day</Text>
               </View>
             </View>
@@ -237,6 +234,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
     width: 30,
     height: 40,
+    zIndex: 1,
   },
 
   details: {

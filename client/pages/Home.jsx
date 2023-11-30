@@ -131,9 +131,9 @@ function Home({ navigation }) {
       console.error("error coming from home", e);
     }
   };
-useEffect(()=>{
-  dispatch(getAllCars())
-},[])
+// useEffect(()=>{
+//   dispatch(getAllCars())
+// },[])
   useEffect(() => {
     if (!loading && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({

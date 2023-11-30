@@ -40,7 +40,7 @@ const UsersProfile = ({ navigation }) => {
   const activeUser = useSelector(selectUser);
   const dispatch = useDispatch();
   const userBookings = useSelector((state) => state.booking.allServiceUser);
-  const [numberOfBooking, setNumberOfBooking] = useState(userBookings.length);
+  const [numberOfBooking, setNumberOfBooking] = useState(userBookings?.length);
   const [favoryNumber, setFavory] = useState(bookMarks.length);
   const handleLogout = () => {
     dispatch(logoutUser());

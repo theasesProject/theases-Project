@@ -293,7 +293,7 @@ function MyCars() {
                 colors={["#88b4e2", "#6C77BF"]}
                 style={styles.buttonContainer1}
               >
-                <TouchableOpacity onPress={UpdateAvaibility}>
+                <TouchableOpacity onPress={()=>{UpdateAvaibility();setModalVisible1(false)}}>
                   <Text style={styles.textBtn}>Update Date</Text>
                 </TouchableOpacity>
               </LinearGradient>

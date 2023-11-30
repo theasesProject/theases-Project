@@ -1,294 +1,291 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   Dimensions,
   Image,
-  ImageBackground,
-  ScrollView,
-  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import LeftArrow from "../assets/Svg/leftArrowProfile.svg";
+import Hamburger from "../assets/Svg/hamburgerProfile.svg";
 import { useSelector, useDispatch } from "react-redux";
-import { logUserOut, selectUser } from "../store/userSlice";
-import Logo from "../assets/tempLogo.png";
-import NavBarAgency from "../components/NavBarAgency";
-import Chart from "../components/Stats";
-import BackArrow from "../assets/Svg/left-long-solid.svg";
-import Options from "../assets/Svg/three-dots-svgrepo-com.svg";
-import SliderMenu from "../components/SideBar";
-import TrueIcon from "../assets/Svg/true.svg";
-import FalseIcon from "../assets/Svg/false.svg";
-import axios from "axios";
-import ReviewCard from "../components/ReviewCard";
-import moment from "moment";
+import { OneAgency, getOne } from "../store/agencySlice";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { getallCarByAgency } from "../store/carFetch";
-const { width, height } = Dimensions.get("screen");
+import AgencySvg from "../assets/Svg/agencyName.svg";
+import Phone from "../assets/Svg/agencyPhone.svg";
+import NumberOfCars from "../assets/Svg/carsNumber.svg";
+import AverageRating from "../assets/Svg/averageRating.svg";
+import Delivery from "../assets/Svg/delivery.svg";
+import AllCars from "../components/AllCars";
+import AllReviews from "../components/AllReviews";
+import AgencyStatistics from "../components/AgencyStatistics";
+import SliderMenu from "../components/SideBar";
+import { selectUser } from "../store/userSlice";
+const { height, width } = Dimensions.get("screen");
 
-const AgencyProfile = ({ navigation }) => {
-  const [allReviews, setAllReviews] = useState([]);
-  const [someReviews, setSomeReviews] = useState([]);
-  const [reviewsView, setReviewsView] = useState("view more");
-  // ****************************************************************
-  const activeUser = useSelector(selectUser);
-  const myCars = useSelector((state) => state.car.agencyCar);
-  // ****************************************************************
-  const [isSliderOpen, setSliderOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+function AgencyProfileUser() {
+  const ag = useSelector(OneAgency);
+  const agencyCars = useSelector((state) => state.car.agencyCar);
+  const loading = useSelector((state) => state.car.loading);
+  const route = useRoute();
+  // const {agencyId} = route.params
   const dispatch = useDispatch();
-
+  const navigation = useNavigation();
+  const activeUser = useSelector(selectUser);
+  const agencyId = activeUser?.id;
+  // const agencyId= activeUser.Agency.UserId;
+  // console.log( activeUser.Agency.UserId);
+  const [selectedView, setSelectedView] = useState({
+    view1: true,
+    view2: false,
+    view3: false,
+  });
+  const [isSliderOpen, setSliderOpen] = useState(false);
+  console.log(ag?.agencyById);
   const handleSliderToggle = () => {
     console.log("slider toggled");
     setSliderOpen(!isSliderOpen);
   };
+
+  useEffect(() => {
+    dispatch(getallCarByAgency(agencyId));
+    dispatch(getOne(agencyId));
+  }, [dispatch]);
+
+  const handleRent = async () => {
+    handlePress();
+  };
+
   return (
-    <View style={styles.agencyProfile}>
-      <View style={styles.topSection}>
-        <View style={styles.navBar}>
-          <BackArrow
-            style={styles.backArrow}
-            onPress={() => navigation.navigate("Home")}
-          />
-          <Options style={styles.hamburger} onPress={handleSliderToggle} />
+    <View style={styles.entirePage}>
+      <View style={styles.staticTopView}>
+        <View style={styles.navbar}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Home");
+            }}
+          >
+            <LeftArrow />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSliderToggle}>
+            <Hamburger />
+          </TouchableOpacity>
         </View>
-        {isSliderOpen ? (
-          <SliderMenu
-            isOpen={isSliderOpen}
-            onClose={handleSliderToggle}
-            navigation={navigation}
+        <Text style={styles.textProfile}>Profile</Text>
+        <View style={styles.mainInfo}>
+          <Image
+            source={{ uri: ag?.userid?.avatar }}
+            style={styles.agencyImage}
           />
-        ) : null}
-        <Pressable
-          style={{
-            position: "absolute",
-            top: height * 0.05,
-            backgroundColor: "rgba(1, 1, 1, 0)",
-            width: width,
-            height: height,
-            zIndex: 0,
-          }}
-          onPress={() => setSliderOpen(false)}
-        ></Pressable>
-        <View style={styles.logosContainer}>
-          <View style={styles.agencyLogoContainer}>
-            <Image
-              style={styles.agencyLogo}
-              source={{ uri: activeUser?.avatar }}
-            />
+          <View style={styles.agencyNameContainer}>
+            <AgencySvg />
+            <Text style={styles.agencyNameText}>{ag?.agencyById?.name}</Text>
           </View>
-          <View style={styles.appLogoContainer}>
-            <Image style={styles.appLogo} source={Logo} />
+          <View style={styles.rowsContainer}>
+            <View style={styles.agencyLastInfo}>
+              <View style={styles.numberOfCarsContainer}>
+                <NumberOfCars />
+                <View>
+                  <Text>
+                    {agencyCars.length} car{agencyCars.length > 1 ? "s" : null}
+                  </Text>
+                  <Text
+                    style={{ fontSize: 12, fontWeight: "500", opacity: 0.3 }}
+                  >
+                    Offered
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.agencyNumberContainer}>
+                <Delivery />
+                <Text
+                  style={{
+                    marginLeft: width * 0.01,
+                    fontWeight: "500",
+                    color: ag?.agencyById?.transportation ? "green" : "red",
+                  }}
+                >
+                  {ag?.agencyById?.transportation ? "Delivery" : "No Delivery"}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.agencySecondInfo}>
+              <View style={styles.numberOfCarsContainer}>
+                <AverageRating />
+                <View>
+                  <Text>3.9</Text>
+                  <Text
+                    style={{ fontSize: 12, fontWeight: "500", opacity: 0.3 }}
+                  >
+                    Rating
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.agencyNumberContainer}>
+                <Phone />
+                <Text style={styles.agencyNumberText}>
+                  {ag?.agencyById?.companyNumber}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
       </View>
-      <ScrollView style={styles.dinamicPart} scrollEnabled={!isSliderOpen}>
-        <View style={styles.agencyInfo}>
-          <View style={styles.detailsSections}>
-            <Text style={styles.agencyName}>{activeUser?.Agency.name}</Text>
-            <Text style={styles.infoKeys}>
-              Num:{" "}
-              <Text style={styles.infoValues}>
-                {activeUser?.Agency.companyNumber}
-              </Text>
-            </Text>
-            <Text style={styles.infoKeys}>
-              Joined:{" "}
-              <Text style={styles.infoValues}>
-                {moment(new Date()).format("DD/MM/YYYY")}
-              </Text>
-            </Text>
-          </View>
-          <View style={styles.detailsSections}>
-            <View style={styles.deliveryLine}>
-              <Text style={styles.infoKeys}>
-                Delivery:{" "}
-                <View style={styles.infoValues}>
-                  {activeUser?.Agency.transportation ? (
-                    <TrueIcon style={styles.trueIcon} />
-                  ) : (
-                    <FalseIcon style={styles.falseIcon} />
-                  )}
-                </View>
-              </Text>
-            </View>
-
-            <Text style={styles.infoKeys}>
-              Cars owned: <Text style={styles.infoValues}>{myCars.length}</Text>
-            </Text>
-            <Text style={styles.infoKeys}>
-              Down Payment:{" "}
-              <Text style={styles.infoValues}>
-                {activeUser?.Agency.deposit}%
-              </Text>
-            </Text>
-          </View>
-        </View>
-        <View style={styles.agencyStats}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.header}>StAtIsTiCs</Text>
-          </View>
-          <View style={styles.chartContainer}>
-            <Chart />
-          </View>
-        </View>
-        <View style={styles.agencyReviews}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.header}>reviews</Text>
-          </View>
-          {(reviewsView === "view more" ? someReviews : allReviews).map(
-            (review, index) => (
-              <ReviewCard review={review} key={index} />
-            )
-          )}
-        </View>
-        {allReviews.length > 0 ? (
-          <Pressable
-            onPress={() => {
-              reviewsView === "view more"
-                ? handleReviewsView("view less")
-                : handleReviewsView("view more");
-            }}
-          >
-            <View style={styles.reviewsViewContainer}>
-              <Text style={styles.reviewsView}>{reviewsView}</Text>
-            </View>
-          </Pressable>
-        ) : (
-          <View style={styles.reviewsViewContainer}>
-            <Text style={styles.noReviews}>no reviews yet</Text>
-          </View>
-        )}
-      </ScrollView>
+      <View style={styles.selectViews}>
+        <Text
+          style={{
+            ...styles.selectableViewText,
+            fontWeight: selectedView.view1 ? "600" : "400",
+            color: selectedView.view1 ? "#6a71c1" : null,
+          }}
+          onPress={() => {
+            setSelectedView({ view1: true, view2: false, view3: false });
+          }}
+        >
+          All Cars
+        </Text>
+        <Text
+          style={{
+            ...styles.selectableViewText,
+            fontWeight: selectedView.view2 ? "600" : "400",
+            color: selectedView.view2 ? "#6a71c1" : null,
+          }}
+          onPress={() => {
+            setSelectedView({ view1: false, view2: true, view3: false });
+          }}
+        >
+          Reviews
+        </Text>
+        <Text
+          style={{
+            ...styles.selectableViewText,
+            fontWeight: selectedView.view3 ? "600" : "400",
+            color: selectedView.view3 ? "#6a71c1" : null,
+          }}
+          onPress={() => {
+            setSelectedView({ view1: false, view2: false, view3: true });
+          }}
+        >
+          Statistics
+        </Text>
+      </View>
+      {selectedView.view1 ? (
+        <AllCars cars={agencyCars} />
+      ) : selectedView.view2 ? (
+        <AllReviews />
+      ) : selectedView.view3 ? (
+        <AgencyStatistics />
+      ) : null}
+      {isSliderOpen ? (
+        <SliderMenu
+          isOpen={isSliderOpen}
+          onClose={handleSliderToggle}
+          navigation={navigation}
+        />
+      ) : null}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  agencyProfile: {
-    flex: 1,
-    zIndex: -1,
-  },
-  topSection: {
-    height: height * 0.2,
-    borderBottomWidth: 1,
-    borderColor: "#6a78c1",
+  entirePage: {
+    height,
+    width,
+    backgroundColor: "#F2F2F2",
+    display: "flex",
     flexDirection: "column",
+    padding: height * 0.02,
   },
-  navBar: {
-    width: width,
-    paddingHorizontal: width * 0.05,
-    paddingVertical: height * 0.02,
-    height: height * 0.05,
-    alignItems: "center",
+  staticTopView: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    left: 0,
+    padding: height * 0.02,
+    backgroundColor: "#293859",
+    height: height * 0.25,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+  },
+  navbar: {
+    display: "flex",
     justifyContent: "space-between",
+    alignItems: "center",
     flexDirection: "row",
   },
-  backArrow: {
-    width: width * 0.05,
-    height: height * 0.02,
-  },
-  hamburger: {
-    width: width * 0.05,
-    height: height * 0.02,
-  },
-  logosContainer: {
-    paddingHorizontal: width * 0.02,
-    paddingVertical: height * 0.025,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    zIndex: -1,
-  },
-  agencyLogoContainer: {
-    width: width * 0.23,
-    height: height * 0.103,
-    borderRadius: 50,
-    borderWidth: 2,
-    borderColor: "#6a78c1",
-    zIndex: -1,
-  },
-  agencyLogo: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 50,
-    zIndex: -1,
-  },
-  appLogoContainer: {
-    width: width * 0.8,
-    height: height * 0.09,
-    zIndex: -1,
-  },
-  appLogo: {
-    width: "100%",
-    height: "100%",
-    zIndex: -1,
-  },
-  dinamicPart: {
-    minHeight: height * 0.7,
-    paddingHorizontal: width * 0.02,
-    zIndex: -1,
-  },
-  agencyInfo: {
-    paddingVertical: height * 0.015,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  detailsSections: {
-    width: width * 0.45,
-    height: height * 0.13,
+  mainInfo: {
+    backgroundColor: "white",
+    height: height * 0.25,
     borderRadius: 15,
-    borderWidth: 1,
-    borderColor: "#6a78c1",
-    paddingHorizontal: width * 0.03,
-    paddingVertical: height * 0.01,
-    justifyContent: "space-between",
+    padding: height * 0.03,
+    display: "flex",
+    alignItems: "center",
   },
-  deliveryLine: {
+  textProfile: {
+    color: "white",
+    textAlign: "center",
+    margin: height * 0.02,
+    fontWeight: "500",
+    fontSize: 20,
+  },
+  agencyImage: {
+    height: "40%",
+    borderRadius: 15,
+    width: "50%",
+    resizeMode: "contain",
+  },
+  rowsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    paddingTop: width * 0.015,
+  },
+  agencyNameContainer: {
+    display: "flex",
+    flexDirection: "row",
+    paddingVertical: height * 0.005,
+  },
+  agencyNameText: {
+    fontWeight: "500",
+    fontSize: 16,
+    paddingLeft: width * 0.01,
+  },
+  agencyNumberContainer: {
+    display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    // backgroundColor: "red",
   },
-  infoKeys: {
-    color: "#6a78c1",
+  agencyNumberText: {
+    fontWeight: "500",
+    fontSize: 16,
+    paddingLeft: width * 0.01,
   },
-  infoValues: {
-    color: "#0e207f",
+  agencySecondInfo: {
+    display: "flex",
+    justifyContent: "space-between",
   },
-  trueIcon: {},
-  falseIcon: {},
-  agencyName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#0e207f",
+  agencyLastInfo: {
+    display: "flex",
+    justifyContent: "space-between",
   },
-  agencyStats: {
-    flexDirection: "column",
-    marginBottom: height * 0.02,
-  },
-  headerContainer: {
-    width: width,
-    alignItems: "center",
-    marginBottom: height * 0.02,
-  },
-  header: {
-    textAlign: "center",
-    fontSize: 24,
-    color: "#6a78c1",
-    fontWeight: "bold",
-    letterSpacing: 5,
-    textTransform: "uppercase",
-  },
-  reviewsViewContainer: {
-    width: width,
-    alignItems: "center",
-    marginBottom: height * 0.02,
-  },
-  temap: { fontSize: 25, color: "lightblue" },
-  foot: {
-    justifyContent: "flex-end",
+  numberOfCarsContainer: {
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
   },
-  agencyReviews: {},
+  selectViews: {
+    position: "relative",
+    marginTop: height * 0.4,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  selectableViewText: {
+    fontSize: 15,
+  },
 });
-export default AgencyProfile;
+
+export default AgencyProfileUser;

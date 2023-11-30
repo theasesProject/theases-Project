@@ -6,9 +6,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../store/userSlice";
 import moment from "moment";
 const { width, height } = Dimensions.get("screen");
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 const Stats = () => {
   const [realLineData, setRealLineData] = useState({
     labels: ["...", "...", "...", "...", "...", "..."],
@@ -156,22 +154,13 @@ const Stats = () => {
       },
     ],
   };
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   return (
     <View style={styles.container}>
       <View>
         <LineChart
           data={realLineData}
-          // data={lineData}
+        
           width={width * 1.15}
           height={height * 0.4}
           fromZero={true}

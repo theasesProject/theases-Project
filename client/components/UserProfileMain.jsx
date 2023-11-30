@@ -15,9 +15,7 @@ import bkg from "../assets/bkg.png";
 import stg from "../assets/settings.png";
 import UserRentHistory from "../components/UserRentHistory.jsx";
 import UserProfileSettings from "../components/UserProfileSettings.jsx";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 function Userprofile({ navigation }) {
   const [view, setView] = useState("main");
 

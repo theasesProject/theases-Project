@@ -26,9 +26,6 @@ import price from "../assets/price.jpg";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import io from "socket.io-client";
 import PushNotification from "react-native-push-notification";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 import NavBarAgency from "../components/NavBarAgency";
@@ -187,16 +184,6 @@ function AgencyService() {
     setSelectedService(null);
   };
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
   return (
     <View style={styles.page}>
       {allService ? (

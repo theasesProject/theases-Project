@@ -76,6 +76,9 @@ db.Review.belongsTo(db.Car);
 // db.Car.hasMany(db.Service);
 // db.Service.belongsTo(db.Car);
 
+db.User.hasMany(db.Service);
+db.Service.belongsTo(db.User);
+
 db.User.hasMany(db.Report);
 db.Report.belongsTo(db.User);
 

@@ -1,4 +1,3 @@
-import { StyleSheet, View, Text, Button, Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CarDetails from "./pages/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
@@ -38,7 +37,6 @@ import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 import AddAgencyCar2 from "./pages/AddAgencyCar2.jsx";
 import AddCarAgency3 from "./pages/AddCarAgency3.jsx";
-import Dmap from "./pages/Dmap.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
 import AddReview from "./pages/AddReview.jsx";
 // import AddReview from "./components/AddReview.jsx";
@@ -60,6 +58,7 @@ function App() {
               component={Home}
               options={{ headerShown: false }}
             />
+            {/* {(props) => <Home {...props} style={globalStyles.global} />} */}
             <Stack.Screen
               name="AddReview"
               component={AddReview}
@@ -81,11 +80,7 @@ function App() {
               options={{ headerShown: true }}
             />
 
-            <Stack.Screen
-              name="Dmap"
-              component={Dmap}
-              options={{ headerShown: true }}
-            />
+        
             <Stack.Screen
               name="MapForUser"
               component={MapForUser}
@@ -94,7 +89,7 @@ function App() {
             <Stack.Screen
               name="Notification"
               component={Notification}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="AgencyService"

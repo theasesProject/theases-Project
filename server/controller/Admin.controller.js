@@ -55,53 +55,34 @@ module.exports = {
   // checks if a Admin exists using email
   emailLogin: async (req, res) => {
     try {
+      console.log(req.body);
       const admin = await Admin.findOne({ where: { email: req.body.email } });
-      console.log("this is what admin foundddddd",admin);
-      if (!admin.dataValues) {
+      if (!admin) {
         return res.status(404).json("Admin does not exist");
       }
-      if (
-        !(await bcrypt.compare(req.body.password, admin.dataValues.password))
+      // if (!admin.dataValues) {
+      //   return res.status(404).json("Admin does not exist");
+      // }
+      if (!(await bcrypt.compare(req.body.password, admin.dataValues.password))
       ) {
-        console.log(
-          await bcrypt.compare(req.body.password, admin.dataValues.password)
-        );
         return res.status(401).json("wrong password");
       }
+      console.log("respone for login",await bcrypt.compare(req.body.password, admin.dataValues.password))
       const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
-      res.send(token);
+      res.status(200).send(token);
     } catch (err) {
-      throw err;
+      throw (err)
     }
   },
-
-  // checks if a Admin exists using phone number
-  phoneLogin: async (req, res) => {
-    try {
-      const admin = await Admin.findOne({
-        where: { phoneNumber: req.body.phoneNumber },
-      });
-      if (!Admin) {
-        return res.status(404).json("Admin does not exist");
-      }
-      if (!(await bcrypt.compare(req.body.password, Admin.password))) {
-        return res.status(401).json("wrong password");
-      }
-      const token = jwt.sign(Admin.dataValues, process.env.JWT_SECRET_KEY);
-      res.send(token);
-    } catch (err) {
-      res.status(500).send(err);
-    }
-  },
-
   // gets Admin token from the front to verify it and sends it back to front
   handleToken: async (req, res) => {
     try {
+      console.log("lllllllllllllllllllllllllll",req.body);
       const response = jwt.verify(req.body.token, process.env.JWT_SECRET_KEY);
-      delete response.password;
+      // delete response.password;
       res.status(200).json(response);
     } catch (err) {
-      res.status(500).send(err);
+      throw(err)
     }
   },
 

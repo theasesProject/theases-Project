@@ -24,16 +24,16 @@ const ForgotPassword = ({ navigation }) => {
   const [fullCode, setFullCode] = useState([]);
   const [received, setReceived] = useState(null);
   const [error, setError] = useState(null);
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
   const handleSubmit = async () => {
     try {
       if (identifierValidation(identifier) !== "email") {
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   identifierErrorContainer: {
     textAlign: "left",
-    fontFamily: "FiraMono-Medium",
+
   },
   error: {
     color: "red",

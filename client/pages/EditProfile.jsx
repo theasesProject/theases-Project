@@ -140,17 +140,6 @@ const EditProfile = ({ navigation }) => {
     formValidation();
   }, [form]);
 
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
-
-  //   loadFonts();
-  // }, []);
-
   return (
     <View style={styles.editProfilePage}>
       <View style={styles.navBar}>
@@ -399,7 +388,6 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
-    fontFamily: "FiraMono-Medium",
   },
   forgetPasswordContainer: {},
   forgotPassword: {
@@ -424,7 +412,6 @@ const styles = StyleSheet.create({
   saveChangesBtnContent: {
     color: "white",
     fontSize: 18,
-    fontFamily: "FiraMono-Medium",
   },
 });
 

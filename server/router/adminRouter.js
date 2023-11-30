@@ -16,8 +16,7 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/emailLogin", emailLogin);
-router.post("/phoneLogin", phoneLogin);
-router.post("/token", handleToken);
+router.post("/useToken", handleToken);
 router.post("/SignUpAdmin", SignUpAdmin);
 router.get("/allUsers", getAllUsers);
 router.put("/update/:id", updateOneUserblockState);

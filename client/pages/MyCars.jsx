@@ -57,22 +57,6 @@ function MyCars() {
     priceWeekly: selectedCar?.priceWeekly,
     priceMonthly: selectedCar?.priceMonthly,
   });
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
-
-  const handleSetSelectedCar = (newCar) => {
-    setSelectedCar(newCar);
-    setModalVisible1(true);
-  };
-
   const handleDeleteCar = (carId) => {
     console.log(carId);
     dispatch(
@@ -421,7 +405,7 @@ const styles = StyleSheet.create({
   },
   favouriteText: {
     color: "black",
-    fontFamily: "FiraMono-Bold",
+
     fontSize: 18,
   },
 

@@ -181,16 +181,7 @@ function Login({ navigation }) {
   useEffect(() => {
     formValidation();
   }, [form, error]);
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   return (
     <View style={styles.loginPage}>
       <View style={styles.headers}>
@@ -263,7 +254,7 @@ function Login({ navigation }) {
             style={{
               color: color2,
               ...styles.forgotPassword,
-              fontFamily: "FiraMono-Medium",
+          
             }}
           >
             Forgot Password?
@@ -286,7 +277,7 @@ function Login({ navigation }) {
       </TouchableOpacity>
       <View style={styles.bottomSection}>
         <View style={styles.createAcc}>
-          <Text style={{ fontFamily: "FiraMono-Medium" }}>
+          <Text >
             First time here?
           </Text>
           <Pressable
@@ -297,14 +288,14 @@ function Login({ navigation }) {
             }}
             onPressOut={() => setColor("#6C77BF")}
           >
-            <Text style={{ color: color, fontFamily: "FiraMono-Medium" }}>
+            <Text style={{ color: color, }}>
               Sign up
             </Text>
           </Pressable>
         </View>
-        <View style={styles.loginWith}>
+        {/* <View style={styles.loginWith}>
           <View style={styles.line}></View>
-          <Text style={{ fontFamily: "FiraMono-Medium" }}>Or sign in with</Text>
+          <Text >Or sign in with</Text>
           <View style={styles.line}></View>
         </View>
         <View style={styles.quickLoginContainer}>
@@ -316,7 +307,7 @@ function Login({ navigation }) {
               <View style={styles.icons}>
                 <Image source={google} alt="google" style={styles.icons} />
               </View>
-              <Text style={{ fontFamily: "FiraMono-Medium" }}>google</Text>
+              <Text >google</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
@@ -324,10 +315,10 @@ function Login({ navigation }) {
               <View style={styles.icons}>
                 <Image source={facebook} alt="facebook" style={styles.icons} />
               </View>
-              <Text style={{ fontFamily: "FiraMono-Medium" }}>facebook</Text>
+              <Text >facebook</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -364,15 +355,14 @@ const styles = StyleSheet.create({
   },
   welcome: {
     fontSize: 24,
-
     textAlign: "center",
-    fontFamily: "FiraMono-Bold",
+
   },
   paragraph: {
     color: "rgba(1,1,1,0.5)",
     textAlign: "center",
     width: 220,
-    fontFamily: "FiraMono-Medium",
+
   },
   loginForm: {
     width: "100%",
@@ -405,7 +395,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft: 40,
     zIndex: 0,
-    fontFamily: "FiraMono-Medium",
+   
   },
   passwordInput: {
     backgroundColor: "#eef1f8",
@@ -413,7 +403,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft: 40,
     zIndex: 0,
-    fontFamily: "FiraMono-Medium",
+
   },
   forgotPasswordContainer: {
     width: "100%",
@@ -431,11 +421,11 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
-    fontFamily: "FiraMono-Medium",
+  
   },
   forgotPassword: {
     textAlign: "right",
-    fontFamily: "FiraMono-Medium",
+   
   },
   loginBtnContainer: {
     width: "100%",
@@ -452,7 +442,7 @@ const styles = StyleSheet.create({
   loginBtnContent: {
     color: "white",
     fontSize: 18,
-    fontFamily: "FiraMono-Medium",
+
   },
   bottomSection: {
     width: "100%",

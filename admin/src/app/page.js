@@ -126,7 +126,7 @@ export default function LoginPage() {
               <input type="text" id="name" onChange={(e) => {
                 handleChangeIdentifier(e.target.value)
               }} onBlur={(e) => checkInput(e.target)} />
-              <label htmlFor="name">Username</label>
+              <label htmlFor="name">Email</label>
             </div>
             <div className="input-group">
               <input type="password" id="password" onChange={(e) => {
@@ -135,11 +135,11 @@ export default function LoginPage() {
               <label htmlFor="password">Password</label>
             </div>
             <div className="form-button" style={{ pointerEvents: formChecked ? 'none' : 'auto' }} onClick={handleLogin}>Go</div>
-            <div className="codepen-by">PLEASE LEAVE IF YOU ARE NOT AN ADMIN!!</div>
+            {/* <div className="codepen-by">PLEASE LEAVE IF YOU ARE NOT AN ADMIN!!</div> */}
           </div>
         )}
       </div>
-      <div className="codepen-by">THIS PAGE IS ONLY FOR OUR ADMINS,LEAVE IF YOU ARE A USER!</div>
+      {/* <div className="codepen-by">THIS PAGE IS ONLY FOR OUR ADMINS,LEAVE IF YOU ARE A USER!</div> */}
     </div>
   );
 }

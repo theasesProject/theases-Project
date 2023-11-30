@@ -76,16 +76,6 @@ function CardCar({ oneCar, handlePress }) {
   useEffect(() => {
     checkBookMarked();
   }, []);
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
 
   return (
     <View style={styles.card}>
@@ -201,7 +191,6 @@ const styles = StyleSheet.create({
   name: {
     color: "#9EB8D9",
     fontSize: 16,
-    fontFamily: "FiraMono-Medium",
   },
   carName: {
     width: width * 0.5,
@@ -209,8 +198,6 @@ const styles = StyleSheet.create({
   },
   name1: {
     fontSize: 16,
-    fontFamily: "FiraMono-Bold",
-    color: "#0e207f",
   },
   price: {
     justifyContent: "space-between",
@@ -221,7 +208,6 @@ const styles = StyleSheet.create({
   price1: {
     fontSize: 16,
     color: "#9EB8D9",
-    fontFamily: "FiraMono-Bold",
   },
   line: {
     height: height * 0.001,
@@ -248,7 +234,6 @@ const styles = StyleSheet.create({
   VitesseName: {
     color: "grey",
     fontSize: 13,
-    fontFamily: "FiraMono-Medium",
   },
 });
 

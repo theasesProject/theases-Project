@@ -5,6 +5,9 @@ const {
   UpdateService,
   GetAllServicesForAgency,
   GetAvailableCars,
+  getRentalHistory,
+  getRejectedHistory,
+  getPendingHistory,
   GetAllServicesForUser,
   MarkDatesAsUnavailable,
   deletedServiceForUser,
@@ -30,7 +33,9 @@ bookingRouter.get("/availabledates/:oneCar", GetAvailableDatesForCar);
 bookingRouter.put("/updatebooking", UpdateService);
 bookingRouter.post("/agencyUpdateDate", MarkDatesAsUnavailable);
 bookingRouter.get("/allServiceForAgency/:agencyId", GetAllServicesForAgency);
-
+bookingRouter.get("/rejectedHistory",getRejectedHistory)
+bookingRouter.get("/pedningHistory",getPendingHistory)
+bookingRouter.get("/rentalHistory",getRentalHistory)
 bookingRouter.post("/avaibleCar", GetAvailableCars);
 bookingRouter.get("/allserviceforUser/:userId", GetAllServicesForUser);
 module.exports = bookingRouter;

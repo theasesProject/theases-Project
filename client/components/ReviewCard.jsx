@@ -6,7 +6,7 @@ const { width, height } = Dimensions.get("screen");
 
 const ReviewCard = ({ review }) => {
   const car = review.Car;
-  console.log("car: ", car);
+
   return (
     <View style={styles.reviewCard}>
       <View style={styles.topSection}>
@@ -45,10 +45,11 @@ const ReviewCard = ({ review }) => {
 const styles = StyleSheet.create({
   reviewCard: {
     backgroundColor: "white",
-    marginBottom: height * 0.02,
+    // marginBottom: height * 0.02,
     borderRadius: 10,
     paddingHorizontal: width * 0.05,
     paddingVertical: height * 0.02,
+    marginTop: height *0.04
   },
   topSection: {
     flexDirection: "row",
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
   carImg: {
     width: width * 0.3,
     height: height * 0.07,
+    resizeMode:"contain"
   },
   carName: {},
   bottomSection: {},

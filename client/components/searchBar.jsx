@@ -16,23 +16,12 @@ import axios from "axios";
 import Filter from "../assets/Svg/filter.svg";
 import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("screen");
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 function SearchBar({ onSearch }) {
-  const [searchedCar, setSearchedCar] = useState("");
+  const [searchedCar, setSearchedCar] = useState();
   const navigation = useNavigation();
   console.log(searchedCar, "searchedCar");
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
+ 
   const handleSearch = (text) => {
     setSearchedCar(text);
 
@@ -54,7 +43,7 @@ function SearchBar({ onSearch }) {
     <View style={styles.inputAndButton}>
       <TextInput
         onSubmitEditing={(event) => handleSearch(event.nativeEvent.text)}
-        style={[styles.input, { fontFamily: "FiraMono-Medium" }]}
+        style={[styles.input]}
         placeholder="Search cars or locations…"
         placeholderTextColor="gray"
       />

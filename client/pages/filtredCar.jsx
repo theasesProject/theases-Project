@@ -23,17 +23,6 @@ import NavBarAgency from "../components/NavBarAgency.jsx";
 import NavBar from "../components/NavBar.jsx";
 function FiltredCar() {
   const avaibleCar = useSelector((state) => state.booking.avaibleCar);
-  const activeUser = useSelector(selectUser);
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
 
   return (
     <View style={styles.homePage}>

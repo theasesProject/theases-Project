@@ -187,13 +187,7 @@ function Home({ navigation }) {
       };
     }
   }, [socket, expoPushToken, activeUser?.id, activeUser?.stateBlocked]);
-  const [fontsLoaded] = Font.useFonts({
-    "FiraMono-Bold": FiraMonoBold,
-    "FiraMono-Medium": FiraMonoMedium,
-  });
-  if (!fontsLoaded) {
-    return null;
-  } else {
+ 
     return (
       <View style={styles.homePage}>
         <ScrollView
@@ -343,7 +337,7 @@ function Home({ navigation }) {
       </View>
     );
   }
-}
+
 
 const styles = StyleSheet.create({
   header: {},

@@ -8,15 +8,23 @@ module.exports = {
       const allCars = await db.Car.findAll({
         include: [
           { model: db.Media, as: "Media" },
-          { model: db.Agency, as: "Agency" },
+          { 
+            model: db.Agency, 
+            as: "Agency",
+            include: [{
+              model: db.User, 
+              as: "User"
+            }]
+          },
         ],
       });
-
+   
       res.status(200).send(allCars);
     } catch (error) {
       res.json(error);
     }
-  },
+   },
+   
 
   CreateCar: async function (req, res) {
     try {

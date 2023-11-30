@@ -40,7 +40,6 @@ function Favorites() {
           style={[styles.actionButton, styles.deleteButton]}
           onPress={() => {
             dispatch(removedBookMark(carId));
-            console.log("delete");
           }}
         >
           <Text>Delete</Text>
@@ -62,10 +61,13 @@ function Favorites() {
               .map((bookmark, i) => (
                 <FavoritesCard bookmark={bookmark} key={i} />
               ))
-          ) : (
-            <View style={styles.message}>
+          ) : 
+          (
+            <View style={styles.EmptyView}>
+              <View style={styles.icon}>
               <GreyHeart />
-              <View style={styles.messageContainer}>
+              </View>
+              <View style={styles.EmptyViewTextCt}>
                 <Text style={styles.emptyText1}>Empty Favourite list</Text>
                 <Text style={styles.emptyText}>
                   it feel like nothing to Collect in your favourite
@@ -102,6 +104,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
   },
+  EmptyView:{
+    // width: "100%",
+    display:"flex",
+    height:height,
+    flexDirection:"column",
+    alignContent:"center",
+    justifyContent:"center",
+  },
+  icon:{
+  },
+  EmptyViewTextCt:{
+  }
 });
 
 export default Favorites;

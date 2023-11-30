@@ -35,57 +35,66 @@ function AddCarAgency3() {
   const [selectedDocuments, setSelectedDocuments] = useState([]);
 
   const selectImage = async () => {
-    if (selectedDocuments.length >= 3) {
-      return setError("You can't add more than three images");
-    }
-
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (status !== "granted") {
-      console.log("Permission to access media library denied");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      selectionLimit: 3,
-    });
-
-    if (!result.canceled) {
-      const selectedAssets = result.assets;
-console.log('hereeeeeee');
-      const updatedSelectedDocuments = await Promise.all(
-        selectedAssets.map(async (file) => {
-          try {
-            console.log('file: ' + file.uri);
-            const cloudinaryResponse = await cloudinaryUpload(file.uri);
-            console.log(cloudinaryResponse);
-            return cloudinaryResponse;
-          } catch (err) {
-            console.error("Cloudinary Upload Error:", err);
-            return ;
-          }
-        })
-      );
-     
-      console.log('in the form');
-      setForm({
-        ...form,
-        img: [
-          ...form.img,
-          ...updatedSelectedDocuments.filter((image) => image !== null),
-        ],
+    try {
+      if (selectedDocuments.length >= 3) {
+        return setError("You can't add more than three images");
+      }
+  
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+      if (status !== "granted") {
+        console.log("Permission to access media library denied");
+        return;
+      }
+  
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        selectionLimit: 3,
       });
-    } else {
-      console.log("error");
+  
+      if (!result.canceled) {
+        const selectedAssets = result.assets;
+        const updatedSelectedDocuments = await Promise.all(
+          selectedAssets?.map(async (file) => {
+            try {
+              console.log('file: ' + file.uri);
+              const cloudinaryResponse = await cloudinaryUpload(file.uri);
+              console.log(cloudinaryResponse);
+              return cloudinaryResponse;
+            } catch (err) {
+              console.error("Cloudinary Upload Error:", err);
+              return ;
+            }
+          })
+        );
+       
+        console.log('in the form');
+        setForm({
+          ...form,
+          img: [
+            ...form.img,
+            ...updatedSelectedDocuments.filter((image) => image !== null),
+          ],
+        });
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log(error);
     }
+   
   };
   const handleDelete = (uri) => {
-    const copy = [...form.img];
-    const position = copy.indexOf(uri);
-    copy.splice(position, 1);
-    setForm({ ...form, img: [...copy] });
+    try {
+      const copy = [...form.img];
+      const position = copy.indexOf(uri);
+      copy.splice(position, 1);
+      setForm({ ...form, img: [...copy] });
+    } catch (error) {
+      console.log(error);
+    }
+   
   };
   const handleFuel = (fuel) => {
     setForm({ ...form, typeOfFuel: fuel });
@@ -116,17 +125,17 @@ console.log('hereeeeeee');
   ];
 
   const handleCreateCar = () => {
-    if (form.typevehicle === "") {
+    if (form?.typevehicle === "") {
       setTypeError("Please enter your car type Vehicle");
-    } else if (form.characteristics === "") {
+    } else if (form?.characteristics === "") {
       setCharError("Please enter characteristics for your car ");
-    } else if (form.img.length === 0) {
+    } else if (form?.img?.length === 0) {
       setImgError("Please enter picture for your car ");
     } else {
       dispatch(
         createCar({
           body: form,
-          media: form.img.map((file) => ({ media: file })),
+          media: form?.img?.map((file) => ({ media: file })),
         })
       );
       dispatch(emptyNewCar());
@@ -201,7 +210,7 @@ console.log('hereeeeeee');
           </TouchableOpacity>
         </View>
         <View style={styles.imgsContainer}>
-          {form.img.map((uri, index) => (
+          {form?.img?.map((uri, index) => (
             <View key={index} style={styles.imgContainer}>
               <Pressable onPress={() => handleDelete(uri)}>
                 <Image source={xBtn} style={styles.xBtn} />

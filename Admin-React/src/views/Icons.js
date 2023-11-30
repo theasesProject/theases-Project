@@ -323,8 +323,8 @@ function Icons() {
                                       if (result.isConfirmed) {
                                         handleBlock(user.id)
                                         Swal.fire({
-                                          title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
-                                          text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
+                                          title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                          text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                           icon: "success"
                                         });
                                       } else if (
@@ -427,8 +427,8 @@ function Icons() {
                                       if (result.isConfirmed) {
                                         handleBlock(user.id)
                                         Swal.fire({
-                                          title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
-                                          text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
+                                          title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                          text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                           icon: "success"
                                         });
                                       } else if (
@@ -524,8 +524,8 @@ function Icons() {
                                         if (result.isConfirmed) {
                                           handleBlock(user.id)
                                           Swal.fire({
-                                            title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
-                                            text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
+                                            title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                            text: user.stateBlocked ? "The user Can Now Login Freely" : "Thank you for your Job Admin.",
                                             icon: "success"
                                           });
                                         } else if (
@@ -623,8 +623,8 @@ function Icons() {
                                         if (result.isConfirmed) {
                                           handleBlock(user.id)
                                           Swal.fire({
-                                            title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
-                                            text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
+                                            title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                            text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                             icon: "success"
                                           });
                                         } else if (
@@ -719,8 +719,8 @@ function Icons() {
                                         if (result.isConfirmed) {
                                           handleBlock(user.id)
                                           Swal.fire({
-                                            title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
-                                            text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
+                                            title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                            text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                             icon: "success"
                                           });
                                         } else if (
@@ -817,8 +817,8 @@ function Icons() {
                                         if (result.isConfirmed) {
                                           handleBlock(user.id)
                                           Swal.fire({
-                                            title: user.stateBlocked ? `User <b>${user.userName}</b> unBanned!` : `User ${user.userName} Banned!`,
-                                            text: user.stateBlocked ? "The user has been Unbanned." : "The user has been banned.",
+                                            title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                            text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                             icon: "success"
                                           });
                                         } else if (

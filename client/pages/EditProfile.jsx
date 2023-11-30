@@ -140,8 +140,6 @@ const EditProfile = ({ navigation }) => {
     formValidation();
   }, [form]);
 
-
-
   return (
     <View style={styles.editProfilePage}>
       <View style={styles.navBar}>
@@ -368,6 +366,7 @@ const styles = StyleSheet.create({
     height: height * 0.065,
     paddingHorizontal: 10,
     fontSize: 16,
+    marginBottom: height * 0.019,
   },
   eye: {
     position: "absolute",
@@ -389,7 +388,6 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
-   
   },
   forgetPasswordContainer: {},
   forgotPassword: {

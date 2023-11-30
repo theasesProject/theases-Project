@@ -61,20 +61,20 @@ const UsersProfile = ({ navigation }) => {
           <Text style={styles.userName}>{activeUser?.userName}</Text>
           <View style={styles.statistique}>
             <View style={styles.statistiqueDetails}>
+              <Text style={styles.statistiqueText1}>Cars booked</Text>
               <Text style={styles.statistiqueText}>{numberOfBooking}</Text>
-              <Text style={styles.statistiqueText1}>Car booked</Text>
             </View>
             <View style={styles.statistiqueDetails}>
+              <Text style={styles.statistiqueText1}>Joined At</Text>
               <Text style={styles.statistiqueText}>
                 {activeUser?.createdAt.split("T")[0]}
               </Text>
-              <Text style={styles.statistiqueText1}>Join At</Text>
             </View>
             <View style={styles.statistiqueDetails}>
+              <Text style={styles.statistiqueText1}>Favourites</Text>
               <Text style={styles.statistiqueText}>
                 {favoryNumber ? favoryNumber : 0}
               </Text>
-              <Text style={styles.statistiqueText1}>Favourite</Text>
             </View>
           </View>
         </View>
@@ -221,9 +221,9 @@ const UsersProfile = ({ navigation }) => {
           </View>
         </View>
       </View>
-      {/* <View style={styles.navBar}>
+      <View style={styles.navBar}>
         {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
-      </View> */}
+      </View>
     </View>
   );
 };
@@ -239,13 +239,13 @@ const styles = StyleSheet.create({
     paddingRight: width * 0.015,
   },
   userContainer: {
-    flex: 1,
+    // flex: 1,
     paddingVertical: height * 0.05,
     paddingHorizontal: width * 0.2,
     backgroundColor: "white",
     paddingTop: height * 0.05,
     width: width * 0.94,
-    height: height * 0.9,
+    height: height * 0.86,
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
@@ -275,25 +275,26 @@ const styles = StyleSheet.create({
   },
   statistique: {
     // backgroundColor: "green",
-    width: width * 0.98,
+    width: width,
     height: height * 0.12,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
-    gap: width * 0.1,
-    padding: 10,
+    gap: width * 0.05,
+    // padding: 10,
+    paddingHorizontal: width * 0.07,
   },
   statistiqueDetails: {
     // backgroundColor: "grey",
-    width: 85,
-    height: 85,
+    width: width * 0.26,
     borderRadius: 10,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     borderColor: "lightgrey",
     borderWidth: 0.5,
-    padding: 1,
+    // paddingHorizontal: width * 0.02,
+    paddingVertical: height * 0.025,
   },
   statistiqueText: {
     fontSize: 14,

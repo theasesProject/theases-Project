@@ -25,12 +25,14 @@ import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
 import Rate from "../assets/Svg/addRating.svg";
+import { selectUser } from "../store/userSlice";
 import axios from "axios";
 
 const CarDetails = () => {
   const navigation = useNavigation();
   const [isButtonEnabled, setButtonEnabled] = useState(false);
   const carData = useSelector((state) => state.car.RentDetails);
+  const activeUser = useSelector(selectUser);
   const [rating, setRating] = useState([]);
 
   const averageRating =
@@ -79,20 +81,20 @@ const CarDetails = () => {
     }
   };
 
-
   return (
     <View style={styles.CarDetails}>
       <View style={styles.page}>
         <View style={styles.carImage}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("AddReview");
-            }}
-            style={styles.rating}
-          >
-            <Rate style={styles.rate} />
-          </TouchableOpacity>
-          {console.log(carData,'details')}
+          {activeUser?.type !== "agency" && (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("AddReview");
+              }}
+              style={styles.rating}
+            >
+              <Rate style={styles.rate} />
+            </TouchableOpacity>
+          )}
           <Image style={styles.imageCar} src={carData.Media[0].media} />
         </View>
 
@@ -111,33 +113,26 @@ const CarDetails = () => {
                 {renderStars()}
               </View>
             </View>
-            <Image style={styles.heart} source={heart}></Image>
+            {/* <Image style={styles.heart} source={heart}></Image> */}
           </View>
           <View style={styles.detailsCar}>
             <Text style={styles.carName}>Car Name</Text>
             <View style={styles.carNameDetails}>
               <View style={styles.textDetails}>
-                <Text >Car Name </Text>
-                <Text >Rental</Text>
+                <Text>Car Name </Text>
+                <Text>Rental</Text>
               </View>
               <View style={styles.textDetails}>
                 <Text>:</Text>
                 <Text>:</Text>
               </View>
               <View style={styles.textDetails}>
-                <Text >
-                  {" "}
-                  {carData.model}
-                </Text>
-                <Text >
-                  {" "}
-                  ${carData.price}/day
-                </Text>
+                <Text> {carData.model}</Text>
+                <Text> ${carData.price}/day</Text>
               </View>
             </View>
           </View>
           <View style={styles.descreptionCar}>
-           
             <Text style={styles.storyTitle}>Car Description</Text>
             <Text style={styles.descreption}>
               {`Horsepower: ${carData.horsePower}`}
@@ -197,7 +192,6 @@ const CarDetails = () => {
           </LinearGradient>
         </View>
       </View>
-    
     </View>
   );
 };
@@ -240,6 +234,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
     width: 30,
     height: 40,
+    zIndex: 1,
   },
 
   details: {
@@ -257,7 +252,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     borderBottomColor: "grey",
     borderBottomWidth: 2,
-  
   },
   reviewsDetails: {
     flexDirection: "row",
@@ -272,7 +266,6 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     fontSize: 10,
- 
   },
   star: {
     width: width * 0.03,
@@ -313,7 +306,6 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 22,
-  
   },
   textDetails: {
     flexDirection: "column",
@@ -328,7 +320,6 @@ const styles = StyleSheet.create({
   },
   storyTitle: {
     fontSize: 16,
-  
   },
   descreption: {
     fontSize: 12,
@@ -369,7 +360,6 @@ const styles = StyleSheet.create({
   descreption1: {
     fontSize: 14,
     color: "grey",
-
   },
   phone: {
     width: width * 0.038,
@@ -394,7 +384,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginLeft: "3%",
-  
   },
   bookText: {
     fontSize: 16,
@@ -404,7 +393,7 @@ const styles = StyleSheet.create({
   agencyName: {
     fontSize: 12,
     color: "grey",
-  
+
     marginLeft: "4%",
   },
 });

@@ -46,17 +46,15 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
           });
   };
 
-
   return (
     <View style={styles.brand}>
-    
       <View style={styles.BrandBar}>
         <View style={styles.barText}>
           <Text style={styles.topBrand}>Top Brands</Text>
           <Text
             style={styles.ViewAll}
             onPress={() => {
-              resetData()
+              resetData();
             }}
           >
             View All{" "}
@@ -151,7 +149,7 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
         </TouchableOpacity>
       </ScrollView>
     </View>
-  )
+  );
 }
 const styles = StyleSheet.create({
   brand: {
@@ -159,8 +157,7 @@ const styles = StyleSheet.create({
     height: height * 0.21,
     borderRadius: 10,
     alignItems: "center",
-    padding: height * 0.01,
-    paddingBottom: height * 0.01,
+    paddingHorizontal: width * 0.02,
   },
   BrandBar: {
     width: width,
@@ -180,16 +177,13 @@ const styles = StyleSheet.create({
   topBrand: {
     fontSize: 21,
     paddingBottom: height * 0.01,
-  
   },
   ViewAll: {
     color: "#8B91B6",
     fontSize: 14,
     paddingBottom: height * 0.01,
   },
-  allBrandImage: {
-    // borderRadius: 10,
-  },
+  allBrandImage: {},
   brandLogo: {
     width: width * 0.16,
     height: height * 0.06,
@@ -200,7 +194,6 @@ const styles = StyleSheet.create({
   allBrandImage: {
     display: "flex",
     flexDirection: "row",
-    // gap: 100,
   },
   brandDetails: {
     backgroundColor: "white",
@@ -209,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     borderRadius: 10,
-    width: width * 0.28,
+    width: width * 0.274,
     height: height * 0.13,
     marginLeft: width * 0.036,
   },
@@ -222,7 +215,6 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     // backgroundColor:"black",
     width: width * 0.22,
-  
   },
 });
 

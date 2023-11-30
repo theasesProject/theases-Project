@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
     marginTop: height * 0.04,
   },
   carImage: {
-    width: "100%",
+    width: "70%",
     height: "50%",
-    resizeMode: "contain",
+    // resizeMode: "contain",
 
   },
   informationView: {

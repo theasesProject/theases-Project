@@ -32,9 +32,10 @@ function AddCarAgency3() {
   const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
 
   const selectImage = async () => {
-    if (form.img.length >= 3) {
+    if (selectedDocuments.length >= 3) {
       return setError("You can't add more than three images");
     }
 
@@ -53,18 +54,22 @@ function AddCarAgency3() {
 
     if (!result.canceled) {
       const selectedAssets = result.assets;
-
+console.log('hereeeeeee');
       const updatedSelectedDocuments = await Promise.all(
         selectedAssets.map(async (file) => {
           try {
+            console.log('file: ' + file.uri);
             const cloudinaryResponse = await cloudinaryUpload(file.uri);
+            console.log(cloudinaryResponse);
             return cloudinaryResponse;
           } catch (err) {
             console.error("Cloudinary Upload Error:", err);
-            return null;
+            return ;
           }
         })
       );
+     
+      console.log('in the form');
       setForm({
         ...form,
         img: [
@@ -181,7 +186,7 @@ function AddCarAgency3() {
         <View style={styles.errorContainer}>
         {typeError !== "" && <Text style={styles.errorText}>{typeError}</Text>}
         </View>
-        {/* <RemoveBackground /> */}
+        <RemoveBackground />
         <View style={styles.picture}>
           <TouchableOpacity
             style={styles.addImgTextContainer}

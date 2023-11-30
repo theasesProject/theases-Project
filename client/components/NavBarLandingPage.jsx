@@ -183,9 +183,7 @@ const styles = StyleSheet.create({
   UserAdress: {
     fontSize: 14,
     color: "black",
-    
-    width: 180,
- 
+    width: 230,
   },
 });
 

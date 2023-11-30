@@ -293,7 +293,7 @@ function Login({ navigation }) {
             </Text>
           </Pressable>
         </View>
-        <View style={styles.loginWith}>
+        {/* <View style={styles.loginWith}>
           <View style={styles.line}></View>
           <Text >Or sign in with</Text>
           <View style={styles.line}></View>
@@ -318,7 +318,7 @@ function Login({ navigation }) {
               <Text >facebook</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );

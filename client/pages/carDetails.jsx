@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  Pressable,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import car from "../assets/car2.png";

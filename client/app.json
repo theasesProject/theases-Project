@@ -1,5 +1,6 @@
 {
   "expo": {
+    "assets": ["./fonts/MuseoModerno-VariableFont_wght.ttf"],
     "name": "theases",
     "slug": "theases",
     "version": "1.0.0",

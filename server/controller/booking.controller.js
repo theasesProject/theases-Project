@@ -13,9 +13,62 @@ function getDatesInRange(startDate, endDate) {
 }
 
 module.exports = {
+  getRentalHistory: async (req, res, next) => {
+    try {
+      const services = await db.Service.findAll({
+        where: {
+          acceptation: "accepted"
+        },
+        include: [db.User,"Car"] // Include associated users in the query
+      });
+      // const result = services.map(service => ({
+      //   ...service.dataValues,
+      //   userName: service.User.userName // Access the associated user directly
+      // }));
+      res.json({
+        "historyData": services,
+        // "userNames": result.map(e => e.userName),
+        "message": `history found , ${services.length} rentals`
+      });
+    } catch (error) {
+      next(error);
+    }
+   },
+   
+  getPendingHistory: async (req, res, next) => {
+    try {
+      const data = await db.Service.findAll({
+        where: {
+          acceptation: "pending"
+        }
+      })
+      res.json({
+        "historyData": data,
+        "message": `history is found ${data.length} rentals`
+      })
+    } catch (error) {
+      next(error)
+    }
+
+  },
+  getRejectedHistory: async (req, res, next) => {
+    try {
+      const data = await db.Service.findAll({
+        where: {
+          acceptation: "rejected"
+        }
+      })
+      res.json({
+        "historyData": data,
+        "message": `history is found ${data.length} rentals`
+      })
+    } catch (error) {
+      next(error)
+    }
+
+  },
   CreateBooking: async function (req, res) {
     const { CarId, UserId, startDate, endDate, amount, time } = req.body;
-
     const conflictingRental = await db.Service.findOne({
       where: {
         CarId: CarId,

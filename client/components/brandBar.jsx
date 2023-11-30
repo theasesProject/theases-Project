@@ -23,12 +23,12 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const { width, height } = Dimensions.get("screen");
 import { useDispatch, useSelector } from "react-redux";
 import { filterCars } from "../store/carFetch";
-
 function BrandBar({ onPress, onFilterByBrand, resetData }) {
   const dispatch = useDispatch();
   const [carByBrand, setCarByBrand] = useState([]);
   const allCars = useSelector((state) => state.car.allCars);
   const navigation = useNavigation();
+  const [isFontsLoaded, setFontsLoaded] = useState(false);
   const [error, setError] = useState(false);
   const handleFilterByBrand = (brandName) => {
     !allCars.length
@@ -49,6 +49,7 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
 
   return (
     <View style={styles.brand}>
+    
       <View style={styles.BrandBar}>
         <View style={styles.barText}>
           <Text style={styles.topBrand}>Top Brands</Text>
@@ -150,7 +151,7 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
         </TouchableOpacity>
       </ScrollView>
     </View>
-  );
+  )
 }
 const styles = StyleSheet.create({
   brand: {

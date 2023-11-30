@@ -64,6 +64,7 @@ function Home({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const scrollViewRef = useRef();
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [showNav, setShowNav] = useState(true);
   const [nothing, setNothing] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const swipeUpDownRef = useRef();
@@ -71,6 +72,7 @@ function Home({ navigation }) {
   const handlePress = () => {
     if (swipeUpDownRef.current) {
       swipeUpDownRef.current.showFull();
+      setShowNav(false);
     }
   };
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -177,7 +179,13 @@ function Home({ navigation }) {
       };
     }
   }, [socket, expoPushToken, activeUser?.id, activeUser?.stateBlocked]);
-
+  const [fontsLoaded] = Font.useFonts({
+    'FiraMono-Bold': FiraMonoBold,
+    'FiraMono-Medium': FiraMonoMedium,
+  });
+  if (!fontsLoaded) {
+    return null;
+  } else {
   return (
     <View style={styles.homePage}>
       <ScrollView
@@ -293,7 +301,7 @@ function Home({ navigation }) {
         itemFull={<CarDetails />}
         ref={swipeUpDownRef}
         extraMarginTop={140}
-        scrollEnabled={false}
+        // scrollEnabled={false}
         nestedScrollEnabled={false}
         animation="easeInEaseOut"
         style={{
@@ -320,7 +328,7 @@ function Home({ navigation }) {
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>
   );
-}
+}}
 
 const styles = StyleSheet.create({
   header: {},

@@ -40,14 +40,32 @@ function AddAgencyCar2() {
     setForm({ ...form, priceMonthly: price });
   };
 
+  //
   const handleNext = () => {
     if (form.price === "") {
       setPriceError("Please enter your car price ");
-    } else if (priceErrorWeekly === "") {
+    } else {
+      setPriceError(""); // Clear the error if the condition is met
+    }
+
+    if (form.priceWeekly === "") {
       setPriceWeeklyError("Please enter your car price of the week");
-    } else if (priceErrorMonthly === "") {
+    } else {
+      setPriceWeeklyError(""); // Clear the error if the condition is met
+    }
+
+    if (form.priceMonthly === "") {
       setPriceMonthlyError("Please enter your car price of the month");
     } else {
+      setPriceMonthlyError(""); // Clear the error if the condition is met
+    }
+
+    // Check if all errors are cleared before navigating
+    if (
+      priceError === "" &&
+      priceErrorWeekly === "" &&
+      priceErrorMonthly === ""
+    ) {
       dispatch(setNewCar(form));
       navigation.navigate("AddCarAgency3");
     }
@@ -175,7 +193,6 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 14,
     paddingHorizontal: width * 0.02,
- 
   },
   textSvgContainer: {
     display: "flex",
@@ -216,7 +233,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-  textCss: { color: "#6C77BF",  },
+  textCss: { color: "#6C77BF" },
 });
 
 export default AddAgencyCar2;

@@ -15,6 +15,38 @@ module.exports = {
       next(error);
     }
   },
+  bringSortedData: async (req, res, next) => {
+    try {
+      console.log("Type : ",req.params.DataType==="createdAt");
+      const list = await db.User.findAll({
+        order: [
+          req.params.DataType === "A-Z" ?
+            ['userName', 'ASC'] : req.params.DataType === "createdAt" ?
+              ['createdAt', 'ASC'] : req.params.DataType === "carsRented" ?
+                ["carsRented", 'ASC'] : null
+        ]
+      })
+      list?
+      res.json(list):res.json([])
+    } catch (error) {
+      next(error)
+    }
+  },
+  bringInvertedSortedData: async (req, res, next) => {
+    try {
+      const list = await db.User.findAll({
+        order: [
+          req.params.DataType === "A-Z-desc" ?
+            ['userName', 'DESC'] : req.params.DataType === "createdAt-desc" ?
+              ['createdAt', 'DESC'] : req.params.DataType === "carsRented-desc" ?
+                ["carsRented", 'DESC'] : null
+        ]
+      })
+      res.json(list)
+    } catch (error) {
+      next(error)
+    }
+  },
   SignUpUser: async (req, res, next) => {
     const NameCheck = await db.User.findAll({
       where: {

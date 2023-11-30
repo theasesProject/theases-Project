@@ -123,10 +123,6 @@ function NavBar({ style }) {
     </View>
   );
 }
-
-// ... rest of your code
-// ... rest of your code
-
 const styles = StyleSheet.create({
   navBar: {
     borderTopColor: "lightgrey",

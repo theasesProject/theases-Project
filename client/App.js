@@ -1,4 +1,3 @@
-import { StyleSheet, View, Text, Button, Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CarDetails from "./pages/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
@@ -16,7 +15,7 @@ import AddAgencyCar from "./pages/AddAgencyCar.jsx";
 import Messages from "./pages/Messages.jsx";
 const LazyComponent = lazy(() => import("./pages/Messages.jsx"));
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
-import FiltredCar from "./pages/FiltredCar.jsx";
+import FiltredCar from "./pages/filtredCar.jsx";
 import SignUp from "./pages/signUp.jsx";
 import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";
@@ -59,6 +58,7 @@ function App() {
               component={Home}
               options={{ headerShown: false }}
             />
+            {/* {(props) => <Home {...props} style={globalStyles.global} />} */}
             <Stack.Screen
               name="AddReview"
               component={AddReview}

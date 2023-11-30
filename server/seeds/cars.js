@@ -95,6 +95,7 @@ const cars = [
     horsePower: "6",
     typeOfFuel: "Gasoline",
     description: "Midsize luxury sedan with sporty performance.",
+    warrantyInsurance:500,
     deposit: 15,
     acceptation: "pending",
     typevehicle: "Sports",

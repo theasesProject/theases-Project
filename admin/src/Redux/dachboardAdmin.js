@@ -113,6 +113,19 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+    builder.addCase(approveRequest.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(approveRequest.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.oneUser = action.payload;
+    });
+    builder.addCase(approveRequest.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
 
     // get all requests
 

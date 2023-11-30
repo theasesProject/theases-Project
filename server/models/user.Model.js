@@ -12,6 +12,11 @@ module.exports = (DataTypes, connection) => {
       unique: true
 
     },
+    carsRented: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue:0
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false

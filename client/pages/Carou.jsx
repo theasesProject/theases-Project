@@ -27,21 +27,21 @@ function Carou() {
       id: "1",
       text: "Download App",
       secondText:
-        "Welcome to [Your App Name] We're thrilled you've chosen us. Stay tuned for updates and enjoy your journey with us",
+        "Welcome to RENT GO We're thrilled you've chosen us. Stay tuned for updates and enjoy your journey with us",
       image: frim,
     },
     {
       id: "2",
       text: "Select a Car",
       secondText:
-        "At [Your Business Name], you can rent a car and start your journey effortlessly",
+        "At RENT GO, you can rent a car and start your journey effortlessly",
       image: scim,
     },
     {
       id: "3",
       text: "Enjoy your Ride",
       secondText:
-        "At [Your Business Name], you can rent a car and start your journey effortlessly",
+        "At RENT GO, you can rent a car and start your journey effortlessly",
       image: thim,
     },
   ];

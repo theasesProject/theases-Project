@@ -42,8 +42,19 @@ function ProfileLandingPage({ style }) {
       });
       if (nearestAddressResponse.length > 0) {
         const nearestAddress = nearestAddressResponse[0];
-        const place = ` ${nearestAddress.city}`;
-        const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
+        // const place = ` ${nearestAddress.city}`;
+        const addressComponents = [
+          // nearestAddress.name,
+          nearestAddress.street,
+          nearestAddress.city,
+          nearestAddress.region,
+          nearestAddress.country,
+        ];
+
+        const fullNearestAddress = addressComponents
+          .filter((component) => component) // This will remove any null or undefined values
+          .join(", "); // This will join the array into a string, with each component separated by a comma and a space
+
         setUserAddress(fullNearestAddress);
       }
     }
@@ -69,7 +80,6 @@ function ProfileLandingPage({ style }) {
 
     getUserLocationAndNearestAddress();
   }, []);
-
 
   return (
     <View style={[styles.navBar, style]}>
@@ -153,10 +163,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   locationImage: {
-
     width: 45,
     height: 40,
-
   },
   allAdress: {
     paddingLeft: 10,
@@ -178,12 +186,11 @@ const styles = StyleSheet.create({
   yourLocation: {
     fontSize: 12,
     color: "rgb(130, 124, 140)",
- 
   },
   UserAdress: {
     fontSize: 14,
     color: "black",
-    width: 230,
+    width: 220,
   },
 });
 

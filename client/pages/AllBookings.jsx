@@ -20,6 +20,7 @@ import agenda from "../assets/agenda.jpg";
 const { width, height } = Dimensions.get("screen");
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import Modal from "react-native-modal";
+import { LinearGradient } from "expo-linear-gradient";
 import { selectUser, setUser } from "../store/userSlice";
 import io from "socket.io-client";
 import car from "../assets/car2.png";
@@ -166,22 +167,13 @@ const AllBookings = () => {
         const room = roomPossibility1.data || roomPossibility2.data;
         console.log(room, "here");
         getRoomData(room);
+        
       }
     } catch (e) {
       console.error(e);
     }
   };
 
-  // useEffect(() => {
-  //   const loadFonts = async () => {
-  //     await Font.loadAsync({
-  //       "FiraMono-Bold": FiraMonoBold,
-  //       "FiraMono-Medium": FiraMonoMedium,
-  //     });
-  //   };
-
-  //   loadFonts();
-  // }, []);
   return (
     <View style={styles.page}>
       <ScrollView style={styles.container}>
@@ -194,6 +186,7 @@ const AllBookings = () => {
             // scheduleNotification(endDate, carModel);
             return (
               <View style={styles.card} key={booking.id}>
+                {console.log(booking)}
                 <View style={styles.cardContainer}>
                   <Image style={styles.ImageCar} source={car}></Image>
                   <View style={styles.carDetails}>
@@ -228,24 +221,17 @@ const AllBookings = () => {
                       )}
                       {booking?.acceptation === "accepted" && (
                         <View style={styles.button}>
-                          <LinearGradient
-                            style={styles.payment}
-                            colors={["#88b4e2", "#6C77BF"]}
-                          >
-                            <TouchableOpacity>
-                              <Text >
-                                Payment
-                              </Text>
-                            </TouchableOpacity>
-                          </LinearGradient>
+                         
+                      
 
                      
                           <PaymentBtn amount={booking.amount} />
                     
-                          <TouchableOpacity>
+                          <TouchableOpacity onPress={()=>handleChatting(booking?.Car.Agency?.UserId)}>
                             <Image
                               style={styles.chat}
                               source={charIcon}
+
                             ></Image>
                           </TouchableOpacity>
                   

@@ -57,7 +57,7 @@ function Favorites() {
         <View>
           {bookMarks?.length > 0 ? (
             bookMarks
-              .reverse()
+              // .reverse()
               .map((bookmark, i) => (
                 <FavoritesCard bookmark={bookmark} key={i} />
               ))

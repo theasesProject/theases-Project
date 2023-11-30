@@ -23,7 +23,7 @@ import NavBarAgency from "../components/NavBarAgency.jsx";
 import NavBar from "../components/NavBar.jsx";
 function FiltredCar() {
   const avaibleCar = useSelector((state) => state.booking.avaibleCar);
-
+  const activeUser = useSelector(selectUser);
   return (
     <View style={styles.homePage}>
       <ScrollView style={styles.scrollView}>

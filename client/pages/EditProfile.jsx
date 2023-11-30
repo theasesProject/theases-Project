@@ -130,7 +130,7 @@ const EditProfile = ({ navigation }) => {
       setForm({});
       setCurrentPassword("");
       setConfirmPassword("");
-      navigation.navigate("Userprofile");
+      navigation.navigate("UsersProfile");
     } catch (err) {
       console.error(err);
     }

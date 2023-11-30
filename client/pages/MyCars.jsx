@@ -51,7 +51,6 @@ function MyCars() {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
-  console.log(unavailableDate, "unavailableDate");
   const [updatedCarInfo, setUpdatedCarInfo] = useState({
     price: selectedCar?.price,
     priceWeekly: selectedCar?.priceWeekly,
@@ -112,7 +111,10 @@ function MyCars() {
       setSelectedStartDate(null);
     }
   };
-
+  const handleSetSelectedCar = (newCar) => {
+    setSelectedCar(newCar);
+    setModalVisible1(true);
+  };
   const markDatesRed = () => {
     const markedRedDates = {};
 
@@ -183,7 +185,11 @@ function MyCars() {
           agencyCars.map((agencycar, i) => (
             <MyCarsCard
               agencycar={agencycar}
-              // setSelectedCar={handleSetSelectedCar}
+              setSelectedCar={handleSetSelectedCar}
+              handleDeleteCar={handleDeleteCar}
+              handleUpdateCar={handleUpdateCar}
+              setModalVisible={ setModalVisible}
+
               key={i}
             />
           ))
@@ -287,7 +293,7 @@ function MyCars() {
                 colors={["#88b4e2", "#6C77BF"]}
                 style={styles.buttonContainer1}
               >
-                <TouchableOpacity onPress={UpdateAvaibility}>
+                <TouchableOpacity onPress={()=>{UpdateAvaibility();setModalVisible1(false)}}>
                   <Text style={styles.textBtn}>Update Date</Text>
                 </TouchableOpacity>
               </LinearGradient>

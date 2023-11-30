@@ -10,7 +10,7 @@ import {
 import { Swipeable } from "react-native-gesture-handler";
 const { width, height } = Dimensions.get("screen");
 
-const MyCarsCard = ({ agencycar, setSelectedCar,handleDeleteCar }) => {
+const MyCarsCard = ({ agencycar, setSelectedCar,handleDeleteCar, setModalVisible,handleUpdateCar }) => {
   const renderRightActions = (progress, dragX, carId, car) => {
     const trans = dragX.interpolate({
       inputRange: [0, 50],
@@ -37,7 +37,8 @@ const MyCarsCard = ({ agencycar, setSelectedCar,handleDeleteCar }) => {
         >
           <TouchableOpacity
             onPress={() => {
-              setSelectedCar(car);
+              setModalVisible(true)
+              
             }}
             style={[styles.actionButton, styles.updateButton]}
           >

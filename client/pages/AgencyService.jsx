@@ -155,7 +155,7 @@ function AgencyService() {
       receiverId: id,
       message: `Service request accepted: ${message}`,
     });
-    alert("you success to accept the booking ");
+    alert("you have accepted this Request");
   };
 
   const rejectService = (idservice, message, id, CarId) => {
@@ -196,22 +196,22 @@ function AgencyService() {
             .slice()
             .reverse()
             .map((service, index) => {
-              return service.service.Service.acceptation === "pending" ? (
+              return  service.Service.acceptation==="pending"? (
                 <View style={styles.card} key={index}>
-                  {console.log(service, "hhhhhhh")}
-                  <Image style={styles.ImageCar} source={car} />
+                  <Image style={styles.ImageCar} src={service?.Media[0].media} />
+                {console.log(service, "hhhhhhh")}
                   <View style={styles.carDetails}>
-                    <Text style={styles.CarName}>{service.User.userName}</Text>
+                    <Text style={styles.CarName}>{service?.Service?.User?.userName}</Text>
                     <View style={styles.dates}>
                       <Image style={styles.agenda} source={agenda} />
                       <Text style={styles.greyText}>
-                        {formatDate(service.service?.Service.startDate)} -{" "}
-                        {formatDate(service.service?.Service.endDate)}
+                        {formatDate(service?.Service.startDate)} -{" "}
+                        {formatDate(service?.Service?.endDate)}
                       </Text>
                       <View style={styles.priceContainer}>
                         <Image style={styles.priceIcon} source={price} />
                         <Text style={styles.greyText}>
-                          {service.service?.Service.amount}$
+                          {service?.Service?.amount}$
                         </Text>
                       </View>
                     </View>
@@ -223,9 +223,9 @@ function AgencyService() {
                         <TouchableOpacity
                           onPress={() => {
                             acceptService(
-                              service?.service.Service.id,
-                              service.User.id,
-                              service.service.model
+                              service?.Service.id,
+                              service?.Service?.User.id,
+                              service?.model
                             );
                           }}
                         >
@@ -246,10 +246,10 @@ function AgencyService() {
                         <TouchableOpacity
                           onPress={() =>
                             rejectService(
-                              service.service.Service.id,
-                              service.service.model,
-                              service.User.id,
-                              service.service.id
+                              service?.Service?.id,
+                              service?.model,
+                              service?.Service?.User.id,
+                              service?.id
                             )
                           }
                         >
@@ -265,7 +265,7 @@ function AgencyService() {
                       </LinearGradient>
                       <TouchableOpacity
                         onPress={() => {
-                          handleChatting(service.service.Service.UserId);
+                          handleChatting(service?.Service?.UserId);
                         }}
                       >
                         <Image style={styles.chat} source={charIcon} />
@@ -273,7 +273,7 @@ function AgencyService() {
                     </View>
                   </View>
                 </View>
-              ) : null;
+              ):null ;
             })}
         </ScrollView>
       ) : (

@@ -140,16 +140,16 @@ const EditProfile = ({ navigation }) => {
     formValidation();
   }, [form]);
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
 
   return (
     <View style={styles.editProfilePage}>
@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
     height: height * 0.065,
     paddingHorizontal: 10,
     fontSize: 16,
+    marginBottom: height * 0.019,
   },
   eye: {
     position: "absolute",

@@ -37,6 +37,7 @@ import CalendarPicker from "react-native-calendar-picker";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
+import MyCarsCard from "../components/MyCarsCard.jsx";
 function MyCars() {
   const navigation = useNavigation();
   const [selectedCar, setSelectedCar] = useState(null);
@@ -165,7 +166,7 @@ function MyCars() {
   //         </TouchableOpacity>
   //       </LinearGradient>
   //     </View>
-    // );
+  // );
   // };
   const UpdateAvaibility = () => {
     dispatch(
@@ -176,94 +177,21 @@ function MyCars() {
       })
     );
   };
-  const renderRightActions = (progress, dragX, carId,car) => {
-    const trans = dragX.interpolate({
-      inputRange: [0, 50],
-      outputRange: [0, 30],
-      extrapolate: "clamp",
-    });
-
-    return (
-      <View style={styles.rightActions}>
-        <TouchableOpacity
-          style={[styles.actionButton, styles.deleteButton]}
-          onPress={() => handleDeleteCar(carId)}
-        >
-          <Text style={styles.buttonText}>Delete</Text>
-        </TouchableOpacity>
-        <LinearGradient
-          colors={["#88b4e2", "#6C77BF"]}
-          style={[styles.actionButton, styles.updateButton]}
-        >
-           <TouchableOpacity
-             onPress={() => {
-               setSelectedCar(car);
-               setModalVisible(true);
-             }}
-             style={[styles.actionButton, styles.updateButton]}
-           >
-             <Text style={styles.buttonText}>Update</Text>
-           </TouchableOpacity>
-         </LinearGradient>
-      </View>
-    );
-  };
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scroll}>
+      <ScrollView
+        style={styles.scrollStyle}
+        contentContainerStyle={styles.scrollContentContainerStyle}
+      >
         {agencyCars?.length > 0 ? (
-          <Text style={styles.number}>You Have {agencyCars.length} cars</Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.number}>You Have {agencyCars.length} cars</Text>
+          </View>
         ) : null}
         {agencyCars?.length > 0 ? (
           agencyCars.map((agencycar, i) => (
-            <Swipeable
-              key={i}
-              renderRightActions={(progress, dragX) =>
-                renderRightActions(progress, dragX, agencycar.car?.id, agencycar?.car)
-              }
-             
-            >
-              <View key={i} style={styles.carCard}>
-                <View style={styles.items}>
-                  <Image
-                    style={styles.car}
-                    source={{
-                      uri: agencycar.carImage?.media,
-                    }}
-                  />
-                  <View style={styles.lineContainer}>
-                    <View style={styles.line}></View>
-                  </View>
-
-                  <View style={styles.details}>
-                    <View style={styles.brtitle}>
-                      <Text style={styles.title}>{agencycar?.car.model}</Text>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setSelectedCar(agencycar?.car);
-                        setModalVisible1(true);
-                      }}
-                      style={styles.btn}
-                    >
-                      <Text style={styles.buttonText}>Avaibility</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={styles.sec}>
-                  <View style={styles.pr}>
-                    <Text style={styles.price}>{agencycar.car?.brand}</Text>
-                  </View>
-
-                  <View style={styles.th}>
-                    <Text style={styles.price}>
-                      Daily:DT {agencycar.car?.price}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </Swipeable>
+            <MyCarsCard agencycar={agencycar} key={i} />
           ))
         ) : (
           <View style={styles.message}>
@@ -350,7 +278,6 @@ function MyCars() {
               scaleFactor={375}
               textStyle={{
                 color: "black",
-
                 fontSize: 18,
               }}
               previousTitle="<"
@@ -378,19 +305,19 @@ function MyCars() {
           </View>
         </Modal>
       </View>
-      <NavBarAgency style={styles.NavBar} />
+      <View style={styles.navbarContainer}>
+        <NavBarAgency />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  NavBar: {
-    // position: "absolute",
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
-    height: height * 0.07,
-    justifyContent:"flex-end"
+  navbarContainer: {
+    position: "absolute",
+    zIndex: 1,
+    bottom: 0,
+    width: width,
   },
   pr: {
     flex: 1,
@@ -405,8 +332,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 3,
   },
-  scroll: {
-    marginBottom: 60,
+  scrollStyle: {
+    width: "100%",
+    paddingHorizontal: width * 0.03,
+  },
+  scrollContentContainerStyle: {
+    paddingBottom: height * 0.05,
   },
   sec: {
     flexDirection: "row",
@@ -433,8 +364,11 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   container: {
-    height: height ,
+    flex: 1,
+    backgroundColor: "rgb(219, 217, 224)",
     alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: height * 0.015,
   },
   text: {
     flex: 1,
@@ -608,11 +542,15 @@ const styles = StyleSheet.create({
     marginRight: "17%",
     width: width * 0.3,
   },
+  headerContainer: {
+    zIndex: 1,
+    width: width,
+    backgroundColor: "rgb(219, 217, 224)",
+  },
   number: {
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
-    padding: 5,
     color: "grey",
   },
   modalContainer: {

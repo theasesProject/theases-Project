@@ -124,7 +124,7 @@ function App() {
             <Stack.Screen
               name="Favorites"
               component={Favorites}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="mapforAgency"
@@ -198,6 +198,11 @@ function App() {
             <Stack.Screen
               name="editProfile"
               component={EditProfile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditAgencyProfile"
+              component={EditAgencyProfile}
               options={{ headerShown: false }}
             />
             <Stack.Screen

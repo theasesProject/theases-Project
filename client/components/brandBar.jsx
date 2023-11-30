@@ -169,8 +169,7 @@ const styles = StyleSheet.create({
     height: height * 0.21,
     borderRadius: 10,
     alignItems: "center",
-    padding: height * 0.01,
-    paddingBottom: height * 0.01,
+    paddingHorizontal: width * 0.02,
   },
   BrandBar: {
     width: width,
@@ -217,7 +216,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     borderRadius: 10,
-    width: width * 0.28,
+    width: width * 0.274,
     height: height * 0.13,
     marginLeft: width * 0.036,
   },

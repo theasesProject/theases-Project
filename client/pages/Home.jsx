@@ -146,7 +146,7 @@ function Home({ navigation }) {
   }, [loading]);
 
   useEffect(() => {
-    dispatch(autoLogin());
+    // dispatch(autoLogin());
     if (activeUser?.stateBlocked === true) {
       alert(
         "Sorry, your account is banned. Please contact  costumer support for assistance."
@@ -308,7 +308,7 @@ function Home({ navigation }) {
         }}
       /> */}
 
-      <Text
+      {/* <Text
         onPress={() => {
           navigation.navigate("TransportationMap", {
             agencyId:
@@ -319,7 +319,7 @@ function Home({ navigation }) {
         }}
       >
         map transportation{" "}
-      </Text>
+      </Text> */}
 
       {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
     </View>

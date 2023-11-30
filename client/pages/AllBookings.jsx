@@ -243,7 +243,11 @@ const AllBookings = () => {
                           <PaymentBtn amount={booking.amount} />
                           {/* </View> */}
                           {/* <View style={styles.chatt}> */}
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() =>
+                              handleChatting(booking.Car.Agency.UserId)
+                            }
+                          >
                             <Image
                               style={styles.chat}
                               source={charIcon}

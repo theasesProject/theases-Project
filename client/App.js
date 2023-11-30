@@ -15,7 +15,7 @@ import AddAgencyCar from "./pages/AddAgencyCar.jsx";
 import Messages from "./pages/Messages.jsx";
 const LazyComponent = lazy(() => import("./pages/Messages.jsx"));
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
-import FiltredCar from "./pages/filtredCar.jsx";
+import FiltredCar from "./pages/FiltredCar.jsx";
 import SignUp from "./pages/signUp.jsx";
 import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";

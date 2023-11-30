@@ -145,6 +145,20 @@ module.exports = {
     }
   },
 
+  // gets users token from the front to verify it and sends it back to front
+  reniewToken: async (req, res) => {
+    try {
+      const { token } = req.body;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const { id } = decoded;
+      const user = await User.findByPk(id);
+      const newToken = jwt.sign(user.dataValues, process.env.JWT_SECRET_KEY);
+      res.status(200).send(newToken);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
+
   // Get all user info by email
   getUserInfoByEmail: async (req, res) => {
     try {
@@ -195,7 +209,7 @@ module.exports = {
     try {
       const user = await User.findByPk(userId);
       if (user) {
-        console.log('here controller selim ',user);
+        console.log("here controller selim ", user);
         res.json(user);
       } else {
         res.status(404).json({ message: "User not found" });

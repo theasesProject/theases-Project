@@ -28,6 +28,12 @@ const initialState = {
     characteristics: "",
     img: [],
     AgencyId: "",
+    loadingStatus: {},
+  },
+  selectedFilter: {
+    type: { value: "All" },
+    characteristics: { value: "All" },
+    downPayment: { value: "All" },
   },
 };
 export const getOnecarById = createAsyncThunk(
@@ -104,7 +110,7 @@ export const fetchFilteredCars = createAsyncThunk(
   }
 );
 export const createCar = createAsyncThunk("car/createCar", async (params) => {
-  console.log(params.media,"iiiiiii");
+  console.log(params.media, "iiiiiii");
   if (!params) return;
   try {
     const response = await axios.post(
@@ -113,7 +119,7 @@ export const createCar = createAsyncThunk("car/createCar", async (params) => {
     );
 
     const requestId = response.data.id;
-    console.log('response data',response.data);
+    console.log("response data", response.data);
     await axios.post(
       `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/media/add/car/${requestId}`,
       params.media
@@ -172,7 +178,6 @@ export const CreateBookMark = createAsyncThunk(
 export const removedBookMark = createAsyncThunk(
   "car/removedBookMark",
   async (id) => {
-    
     try {
       const response = await axios.delete(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/bookmarks/delete/${id}`
@@ -211,12 +216,16 @@ const carSlice = createSlice({
     carDetail: (state, action) => {
       state.OneCar = action.payload;
     },
-    setNewCar : (state, action) => {
+    setNewCar: (state, action) => {
       state.NewCar = action.payload;
     },
-    emptyNewCar : (state, action) => {
-      state.NewCar = initialState.NewCar
-    }
+    emptyNewCar: (state, action) => {
+      state.NewCar = {};
+    },
+    setSelected: (state, action) => {
+      console.log(action.payload, " ");
+      state.selectedFilter[action.payload.key] = action.payload.value;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCars.pending, (state) => {
@@ -357,5 +366,13 @@ const carSlice = createSlice({
     });
   },
 });
-export const { filterCars, saveDetails, carDetail , setNewCar , emptyNewCar} = carSlice.actions;
+export const {
+  filterCars,
+  saveDetails,
+  carDetail,
+  setNewCar,
+  emptyNewCar,
+  setSelected,
+} = carSlice.actions;
+export const filterSelection = (state) => state.car.selectedFilter;
 export default carSlice.reducer;

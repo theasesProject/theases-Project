@@ -5,13 +5,13 @@ import { useDispatch } from "react-redux";
 const UserRow = ({ openModal, setUser, user, handleBlock, setTypeModal }) => {
   const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
-  return (
-    <tr style={{ 
-      // backgroundColor: user.type === "agency" ? "#6C77BF" : "fff", 
-      // color: user.type === "agency" ? "white" : "black",
-      transition: 'background-color 0.3s ease',
-      animation: 'rowFadeIn 0.5s ease'
-    }}>
+  return (<>
+    {/* <tr style={{ 
+    //   // backgroundColor: user.type === "agency" ? "#6C77BF" : "fff", 
+    //   // color: user.type === "agency" ? "white" : "black",
+    //   transition: 'background-color 0.3s ease',
+    //   animation: 'rowFadeIn 0.5s ease'
+    // }}>*/}
       <td>{user.userName}</td>
       <td>{user.email}</td>
       <td>{user.type}</td>
@@ -27,7 +27,7 @@ const UserRow = ({ openModal, setUser, user, handleBlock, setTypeModal }) => {
           style={{
             padding: "0.5rem 2.5rem",
             borderRadius: "0.3125rem",
-            background: "#9250bc",
+            background:!user.stateBlocked? "#9250bc":"red",
             padding:10,
             width:"8rem",
             color: "#fff",
@@ -38,7 +38,8 @@ const UserRow = ({ openModal, setUser, user, handleBlock, setTypeModal }) => {
           {!user.stateBlocked ? "Block" : "Unblock"}
         </button>
       </td>
-    </tr>
+     {/* </tr> */}
+    </>
   );
   
 };

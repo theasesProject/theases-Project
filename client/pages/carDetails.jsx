@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  Pressable,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import car from "../assets/car2.png";
@@ -24,12 +25,14 @@ import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
 import Rate from "../assets/Svg/addRating.svg";
+import { selectUser } from "../store/userSlice";
 import axios from "axios";
 
 const CarDetails = () => {
   const navigation = useNavigation();
   const [isButtonEnabled, setButtonEnabled] = useState(false);
   const carData = useSelector((state) => state.car.RentDetails);
+  const activeUser = useSelector(selectUser);
   const [rating, setRating] = useState([]);
 
   const averageRating =
@@ -66,10 +69,10 @@ const CarDetails = () => {
     getRatingForOneCar();
   }, []);
   const getRatingForOneCar = async () => {
-    // console.log(carData.id);
+    // console.log(carData?.id);
     try {
       const response = await axios.get(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/ratingByCar/${carData.id}`
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/review/ratingByCar/${carData?.id}`
       );
 
       setRating(response.data);
@@ -78,35 +81,26 @@ const CarDetails = () => {
     }
   };
 
-  // console.log(rating, "rating");
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
   return (
     <View style={styles.CarDetails}>
       <View style={styles.page}>
         <View style={styles.carImage}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("AddReview");
-            }}
-            style={styles.rating}
-          >
-            <Rate style={styles.rate} />
-          </TouchableOpacity>
-          <Image style={styles.imageCar} source={car} />
+          {activeUser?.type !== "agency" && (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("AddReview");
+              }}
+              style={styles.rating}
+            >
+              <Rate style={styles.rate} />
+            </TouchableOpacity>
+          )}
+          <Image style={styles.imageCar} src={carData?.Media[0]?.media} />
         </View>
 
         <View style={styles.details}>
           <View style={styles.type}>
-            <Text style={styles.textType}>{carData.typevehicle}</Text>
+            <Text style={styles.textType}>{carData?.typevehicle}</Text>
           </View>
           <View style={styles.reviewsDetails}>
             <View style={styles.reviews}>
@@ -119,45 +113,39 @@ const CarDetails = () => {
                 {renderStars()}
               </View>
             </View>
-            <Image style={styles.heart} source={heart}></Image>
+            {/* <Image style={styles.heart} source={heart}></Image> */}
           </View>
           <View style={styles.detailsCar}>
-            <Text style={styles.carName}>Car Name</Text>
+            <Text style={styles.carName}>Car Details</Text>
             <View style={styles.carNameDetails}>
               <View style={styles.textDetails}>
-                <Text style={{ fontFamily: "FiraMono-Medium" }}>Car Name </Text>
-                <Text style={{ fontFamily: "FiraMono-Medium" }}>Rental</Text>
+                <Text>Car Name </Text>
+                <Text>Rental</Text>
               </View>
               <View style={styles.textDetails}>
                 <Text>:</Text>
                 <Text>:</Text>
               </View>
               <View style={styles.textDetails}>
-                <Text style={{ fontFamily: "FiraMono-Medium" }}>
-                  {" "}
-                  {carData.model}
-                </Text>
-                <Text style={{ fontFamily: "FiraMono-Medium" }}>
-                  {" "}
-                  ${carData.price}/day
-                </Text>
+                <Text> {carData?.model}</Text>
+                <Text> ${carData?.price}/day</Text>
               </View>
             </View>
           </View>
           <View style={styles.descreptionCar}>
             <Text style={styles.storyTitle}>Car Description</Text>
             <Text style={styles.descreption}>
-              {`Horsepower: ${carData.horsePower}`}
+              {`Horsepower: ${carData?.horsePower}`}
             </Text>
             <Text style={styles.descreption}>
-              {`Type of Fuel: ${carData.typeOfFuel}`}
+              {`Type of Fuel: ${carData?.typeOfFuel}`}
             </Text>
             <Text style={styles.descreption}>
-              {`Characteristics: ${carData.characteristics}`}
+              {`Characteristics: ${carData?.characteristics}`}
             </Text>
             <Text style={styles.descreption}>
-              {`Weekly Price: $${carData.priceWeekly} `}{" "}
-              {`  |   Monthly Price: $${carData.priceMonthly}`}
+              {`Weekly Price: $${carData?.priceWeekly} `}{" "}
+              {`| Monthly Price: $${carData?.priceMonthly}`}
             </Text>
           </View>
           <View style={styles.descreptionCar}>
@@ -165,13 +153,10 @@ const CarDetails = () => {
             <View style={styles.OwnerDetails}>
               <Image
                 style={styles.userImage}
-                src={carData.Agency.avatar}
-                onPress={()=>{
-                  
-                }}
+                src={carData?.Agency?.User.avatar}
               ></Image>
               <View style={styles.detailsOwner}>
-                <Text style={styles.agencyName}>{carData.Agency.name}</Text>
+                <Text style={styles.agencyName}>{carData?.Agency?.name}</Text>
                 <View style={styles.owner}>
                   <Image style={styles.location} source={location}></Image>
                   <Text style={styles.descreption1}>Tunis</Text>
@@ -179,24 +164,13 @@ const CarDetails = () => {
                 <View style={styles.owner}>
                   <Image style={styles.phone} source={phone}></Image>
                   <Text style={styles.descreption1}>
-                    +{carData.Agency.companyNumber}
+                    +{carData?.Agency?.companyNumber}
                   </Text>
-                  {/* <LinearGradient
-                    style={styles.book1}
-                    colors={["#6C77BF", "#4485C5"]}
-                  >
-                    <TouchableOpacity
-                      onPress={handleAnotherButtonClick}
-                      disabled={!isButtonEnabled}
-                    >
-                      <Text style={styles.anotherButtonText}>AddReview</Text>
-                    </TouchableOpacity>
-                  </LinearGradient> */}
                 </View>
               </View>
             </View>
           </View>
-          <LinearGradient style={styles.book} colors={["#6C77BF", "#4485C5"]}>
+         {activeUser.type==="client"&& <LinearGradient style={styles.book} colors={["#6C77BF", "#4485C5"]}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("Booking");
@@ -204,142 +178,9 @@ const CarDetails = () => {
             >
               <Text style={styles.bookText}>Book Your Suitable Car</Text>
             </TouchableOpacity>
-          </LinearGradient>
+          </LinearGradient>}
         </View>
       </View>
-      {/* <View style={styles.imageContainer}>
-        <Image style={styles.carImage}  source={{
-              uri: carData?.Media[0]?.media,
-            }} />
-      </View>
-      <View style={styles.description}>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(carDetail(carData));
-            navigation.navigate("Booking");
-          }}
-        >
-          <Text>booking</Text>
-        </TouchableOpacity>
-        <Text style={styles.carModel}>{carData.model}</Text>
-        <Text>{carData.description}</Text>
-        <Text
-          style={{
-            color: "#00ab44",
-            paddingTop: height * 0.01,
-            fontSize: 15,
-            fontWeight: "500",
-          }}
-        >
-          available
-        </Text>
-        <View style={styles.container_n2}>
-          <Text style={{ fontSize: 18.5, fontWeight: "600" }}>
-            Specification
-          </Text>
-          <ScrollView
-            style={styles.scrollContainer}
-            nestedScrollEnabled={true}
-            horizontal={true}
-          >
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                type Of Energy
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {console.log(carData)}
-                {carData?.typeOfFuel}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>price</Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.price}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                period
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.period}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                Advance
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.deposit}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                type of car
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.typevehicle}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                Status
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.status}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                horsePower
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.horsePower}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                createdAt
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.createdAt}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                transportation
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.Agency?.transportation ? "true" : "false"}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                address
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.Agency?.address}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                company Number
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.Agency?.companyNumber}
-              </Text>
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={{ fontWeight: "300", color: "#8771b1" }}>
-                Company name
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {carData?.Agency?.name}
-              </Text>
-            </View>
-          </ScrollView>
-        </View>
-      </View> */}
     </View>
   );
 };
@@ -382,6 +223,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
     width: 30,
     height: 40,
+    zIndex: 1,
   },
 
   details: {
@@ -399,7 +241,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     borderBottomColor: "grey",
     borderBottomWidth: 2,
-    fontFamily: "FiraMono-Bold",
   },
   reviewsDetails: {
     flexDirection: "row",
@@ -414,7 +255,6 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     fontSize: 10,
-    fontFamily: "FiraMono-Medium",
   },
   star: {
     width: width * 0.03,
@@ -455,7 +295,6 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 22,
-    fontFamily: "FiraMono-Bold",
   },
   textDetails: {
     flexDirection: "column",
@@ -470,21 +309,19 @@ const styles = StyleSheet.create({
   },
   storyTitle: {
     fontSize: 16,
-    fontFamily: "FiraMono-Bold",
   },
   descreption: {
     fontSize: 12,
     color: "grey",
-    fontFamily: "FiraMono-Medium",
   },
   userImage: {
     width: width * 0.15,
-    height: height * 0.073,
+    height: height * 0.07,
     borderRadius: 40,
     borderColor: "lightgrey",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 5,
+    // justifyContent: "center",
+    // alignItems: "center",
+    // padding: 5,
     borderWidth: 1,
   },
   OwnerDetails: {
@@ -512,7 +349,6 @@ const styles = StyleSheet.create({
   descreption1: {
     fontSize: 14,
     color: "grey",
-    fontFamily: "FiraMono-Bold",
   },
   phone: {
     width: width * 0.038,
@@ -537,17 +373,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginLeft: "3%",
-    // marginTop: "5%",
   },
   bookText: {
     fontSize: 16,
-    fontFamily: "FiraMono-Bold",
+
     color: "white",
   },
   agencyName: {
     fontSize: 12,
     color: "grey",
-    fontFamily: "FiraMono-Bold",
+
     marginLeft: "4%",
   },
 });

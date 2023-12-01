@@ -45,6 +45,8 @@ function AgencyProfileUser() {
     // console.log("slider toggled");
     setSliderOpen(!isSliderOpen);
   };
+ 
+
 
   useEffect(() => {
     dispatch(getallCarByAgency(agencyId));
@@ -54,20 +56,6 @@ function AgencyProfileUser() {
   const handleRent = async () => {
     handlePress();
   };
-
-  useEffect(() => {
-    const loadFonts = async () => {
-      try{
-        await Font.loadAsync({
-          "FiraMono-Bold": FiraMonoBold,
-          "FiraMono-Medium": FiraMonoMedium,
-        });
-      } catch(err){
-        console.log(err);
-      }
-    };
-    loadFonts();
-  }, []);
 
   return (
     <View style={styles.entirePage}>

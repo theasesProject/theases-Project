@@ -27,13 +27,13 @@ const { height, width } = Dimensions.get("screen");
 
 function AgencyProfileUser() {
   const ag = useSelector(OneAgency);
-  const agencyCars = useSelector((state) => state.car.agencyCar)
+  const agencyCars = useSelector((state) => state.car.agencyCar);
   const loading = useSelector((state) => state.car.loading);
   const route = useRoute();
   // const {agencyId} = route.params
   const dispatch = useDispatch();
-  const navigation = useNavigation()
-  const activeUser = useSelector(selectUser)
+  const navigation = useNavigation();
+  const activeUser = useSelector(selectUser);
   const agencyId = activeUser?.id;
   // const agencyId= activeUser.Agency.UserId;
   // console.log( activeUser.Agency.UserId);
@@ -58,27 +58,15 @@ function AgencyProfileUser() {
     handlePress();
   };
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      try{
-        await Font.loadAsync({
-          "FiraMono-Bold": FiraMonoBold,
-          "FiraMono-Medium": FiraMonoMedium,
-        });
-      } catch(err){
-        console.log(err);
-      }
-    };
-    loadFonts();
-  }, []);
-
   return (
     <View style={styles.entirePage}>
       <View style={styles.staticTopView}>
         <View style={styles.navbar}>
-          <TouchableOpacity onPress={()=>{
-            navigation.navigate("Home")
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Home");
+            }}
+          >
             <LeftArrow />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleSliderToggle}>
@@ -101,7 +89,7 @@ function AgencyProfileUser() {
                 <NumberOfCars />
                 <View>
                   <Text>
-                    {agencyCars.length} car{agencyCars.length > 1 ? "s" : null}
+                    {agencyCars?.length} car{agencyCars?.length > 1 ? "s" : null}
                   </Text>
                   <Text
                     style={{ fontSize: 12, fontWeight: "500", opacity: 0.3 }}
@@ -191,12 +179,12 @@ function AgencyProfileUser() {
         <AgencyStatistics />
       ) : null}
       {isSliderOpen ? (
-          <SliderMenu
-            isOpen={isSliderOpen}
-            onClose={handleSliderToggle}
-            navigation={navigation}
-          />
-        ) : null}
+        <SliderMenu
+          isOpen={isSliderOpen}
+          onClose={handleSliderToggle}
+          navigation={navigation}
+        />
+      ) : null}
     </View>
   );
 }

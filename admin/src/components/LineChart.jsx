@@ -16,15 +16,16 @@ const LineChart = ({ allUsers, interval }) => {
         } else if (interval === "month") {
           date = new Date(user.createdAt).toLocaleString("default", { month: "long", year: "numeric" });
         } else if (interval === "week") {
-          date = new Date(user.createdAt).toISOString().split('T')[0]; // Replaced 'week' with 'day'
+          date = d3.timeFormat("%Y-%U")(new Date(user.createdAt)); // Format the date to the week number
         } else if (interval === "day") {
-          date = new Date(user.createdAt).toISOString().split('T')[0];
+          date = d3.timeFormat("%Y-%m-%d")(new Date(user.createdAt)); // Format the date to the day
         } else {
           date = new Date(user.createdAt).toISOString().split('T')[0]; // Get the date part of the timestamp
         }
         acc[date] = (acc[date] || 0) + 1; // Increment the count for this date
         return acc;
       }, {});
+      
     
 
     

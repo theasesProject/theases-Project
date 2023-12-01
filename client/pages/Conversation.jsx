@@ -164,16 +164,16 @@ function Conversation() {
       setAllMes((allMes) => [...allMes, data]);
     });
   }, [socket]);
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
+  // useEffect(() => {
+  //   const loadFonts = async () => {
+  //     await Font.loadAsync({
+  //       "FiraMono-Bold": FiraMonoBold,
+  //       "FiraMono-Medium": FiraMonoMedium,
+  //     });
+  //   };
 
-    loadFonts();
-  }, []);
+  //   loadFonts();
+  // }, []);
 
   useEffect(() => {
     const handleReceiveDocument = async (data) => {
@@ -268,7 +268,7 @@ function Conversation() {
             style={{
               fontWeight: 700,
               fontSize: 20,
-              fontFamily: "FiraMono-Medium",
+            
             }}
           >
             {room.name.charAt(0).toUpperCase() + room.name.slice(1)}

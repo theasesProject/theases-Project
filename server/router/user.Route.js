@@ -14,8 +14,15 @@ const {
   bringUsersData,
   checkPassword,
   sendResetPasswordConfirmationCode,
+  reniewToken,
+  bringSortedData,
+  bringInvertedSortedData,
 } = require("../controller/user.Controller");
 
+// Define routes for user operations
+router.get("/sort/:DataType", bringSortedData);
+router.get("/invSort/:DataType", bringInvertedSortedData);
+router.get("/getById/:id", getUserById);
 router.post("/emailLogin", emailLogin);
 router.post("/phoneLogin", phoneLogin);
 router.post("/token", handleToken);
@@ -33,5 +40,6 @@ router.post(
   "/sendResetPasswordConfirmationCode",
   sendResetPasswordConfirmationCode
 );
+router.post("/reniewToken", reniewToken);
 
 module.exports = router;

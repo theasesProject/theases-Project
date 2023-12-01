@@ -20,9 +20,7 @@ import {
 } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
+
 function ProfileLandingPage({ style }) {
   const navigation = useNavigation();
   const activeUser = useSelector(selectUser);
@@ -44,9 +42,20 @@ function ProfileLandingPage({ style }) {
       });
       if (nearestAddressResponse.length > 0) {
         const nearestAddress = nearestAddressResponse[0];
-        const place = ` ${nearestAddress.city}`;
-        const fullNearestAddress = `${nearestAddress.name}, ${nearestAddress.street}, ${nearestAddress.city}, ${nearestAddress.region}, ${nearestAddress.country}`;
-        setUserAddress(place);
+        // const place = ` ${nearestAddress.city}`;
+        const addressComponents = [
+          // nearestAddress.name,
+          nearestAddress.street,
+          nearestAddress.city,
+          nearestAddress.region,
+          nearestAddress.country,
+        ];
+
+        const fullNearestAddress = addressComponents
+          .filter((component) => component) // This will remove any null or undefined values
+          .join(", "); // This will join the array into a string, with each component separated by a comma and a space
+
+        setUserAddress(fullNearestAddress);
       }
     }
   };
@@ -72,20 +81,6 @@ function ProfileLandingPage({ style }) {
     getUserLocationAndNearestAddress();
   }, []);
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      try {
-        await Font.loadAsync({
-          "FiraMono-Bold": FiraMonoBold,
-          "FiraMono-Medium": FiraMonoMedium,
-        });
-      } catch (error) {
-          console.log(error);
-      }
-    };
-
-    loadFonts();
-  }, []);
   return (
     <View style={[styles.navBar, style]}>
       <View style={styles.allAdress}>
@@ -147,7 +142,6 @@ const styles = StyleSheet.create({
   navBar: {
     width: width,
     height: 60,
-    // paddingHorizontal:,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -161,7 +155,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
-    // padding: 10,
   },
   authBtn: {
     borderRadius: 10,
@@ -170,24 +163,20 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   locationImage: {
-    // marginLeft: 30,
     width: 45,
     height: 40,
-    // alignItems: "center",
   },
   allAdress: {
     paddingLeft: 10,
     flex: 1,
     flexDirection: "row",
     width: 200,
-    // justifyContent: "flex-start",
     gap: 1,
   },
   userAvatar: {
     padding: 23,
   },
   UserImage: {
-    // marginRight: 20,
     width: 50,
     height: 50,
     borderWidth: 2,
@@ -197,14 +186,11 @@ const styles = StyleSheet.create({
   yourLocation: {
     fontSize: 12,
     color: "rgb(130, 124, 140)",
-    fontFamily: "FiraMono-Medium",
   },
   UserAdress: {
     fontSize: 14,
     color: "black",
-    // fontWeight: "bold",
-    width: 180,
-    fontFamily: "FiraMono-Bold",
+    width: 220,
   },
 });
 

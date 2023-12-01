@@ -29,16 +29,7 @@ function AddAgencyCar2() {
   const [priceError, setPriceError] = useState("");
   const [priceErrorWeekly, setPriceWeeklyError] = useState("");
   const [priceErrorMonthly, setPriceMonthlyError] = useState("");
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   const handlePrice = (price) => {
     setForm({ ...form, price });
   };
@@ -49,14 +40,32 @@ function AddAgencyCar2() {
     setForm({ ...form, priceMonthly: price });
   };
 
+  //
   const handleNext = () => {
     if (form.price === "") {
       setPriceError("Please enter your car price ");
-    } else if (priceErrorWeekly === "") {
+    } else {
+      setPriceError(""); // Clear the error if the condition is met
+    }
+
+    if (form.priceWeekly === "") {
       setPriceWeeklyError("Please enter your car price of the week");
-    } else if (priceErrorMonthly === "") {
+    } else {
+      setPriceWeeklyError(""); // Clear the error if the condition is met
+    }
+
+    if (form.priceMonthly === "") {
       setPriceMonthlyError("Please enter your car price of the month");
     } else {
+      setPriceMonthlyError(""); // Clear the error if the condition is met
+    }
+
+    // Check if all errors are cleared before navigating
+    if (
+      priceError === "" &&
+      priceErrorWeekly === "" &&
+      priceErrorMonthly === ""
+    ) {
       dispatch(setNewCar(form));
       navigation.navigate("AddCarAgency3");
     }
@@ -153,7 +162,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     paddingVertical: height * 0.01,
-    fontFamily: "FiraMono-Medium",
     fontWeight: "bold",
     color: "#6a78c1",
   },
@@ -185,9 +193,6 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 14,
     paddingHorizontal: width * 0.02,
-    fontFamily: "FiraMono-Medium",
-    // backgroundColor:"yellow",
-    // marginVertical:height *0.01
   },
   textSvgContainer: {
     display: "flex",
@@ -228,7 +233,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-  textCss: { color: "#6C77BF", fontFamily: "FiraMono-Medium" },
+  textCss: { color: "#6C77BF" },
 });
 
 export default AddAgencyCar2;

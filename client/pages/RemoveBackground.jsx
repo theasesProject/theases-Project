@@ -5,6 +5,7 @@ import {
   Button,
   ScrollView,
   StyleSheet,
+  Dimensions,
   Alert,
   TouchableOpacity,
   Text,
@@ -13,7 +14,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import axios from "axios";
-
+const { height, width } = Dimensions.get("screen");
 const apiKey = "EmqYuiutvbF3wUkE7vyQfrrn";
 var Buffer = require("buffer/").Buffer;
 const RemoveBackground = () => {
@@ -125,7 +126,7 @@ const RemoveBackground = () => {
   return (
     <View style={styles.container}>
       <View style={styles.picture}>
-        <TouchableOpacity onPress={selectImages}>
+        <TouchableOpacity style={styles.btnContainer} onPress={selectImages}>
           <Text style={styles.input2}>Select Images</Text>
         </TouchableOpacity>
       </View>
@@ -165,6 +166,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+    btnContainer:{
+      width:width*.9
+    },
   image: {
     width: 200,
     height: 200,

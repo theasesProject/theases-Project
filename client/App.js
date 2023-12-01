@@ -1,4 +1,3 @@
-import { StyleSheet, View, Text, Button, Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CarDetails from "./pages/carDetails.jsx";
 import { NavigationContainer } from "@react-navigation/native";
@@ -6,8 +5,8 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Carou from "./pages/Carou.jsx";
 import store from "./store/store";
-import { lazy, Suspense } from "react";
-import { Provider } from "react-redux";
+import { lazy, Suspense, useEffect } from "react";
+import { Provider, useDispatch } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
@@ -16,7 +15,7 @@ import AddAgencyCar from "./pages/AddAgencyCar.jsx";
 import Messages from "./pages/Messages.jsx";
 const LazyComponent = lazy(() => import("./pages/Messages.jsx"));
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
-import FiltredCar from "./pages/FiltredCar.jsx";
+import FiltredCar from "./pages/filtredCar.jsx";
 import SignUp from "./pages/signUp.jsx";
 import ChangeRole from "./pages/changeRole.jsx";
 import Mape from "./pages/Mape.jsx";
@@ -38,7 +37,6 @@ import MapForUser from "./pages/MapForUser.jsx";
 import AgencyProfileUser from "./pages/AgencyProfileUser.jsx";
 import AddAgencyCar2 from "./pages/AddAgencyCar2.jsx";
 import AddCarAgency3 from "./pages/AddCarAgency3.jsx";
-import Dmap from "./pages/Dmap.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
 import AddReview from "./pages/AddReview.jsx";
 // import AddReview from "./components/AddReview.jsx";
@@ -60,6 +58,7 @@ function App() {
               component={Home}
               options={{ headerShown: false }}
             />
+            {/* {(props) => <Home {...props} style={globalStyles.global} />} */}
             <Stack.Screen
               name="AddReview"
               component={AddReview}
@@ -81,11 +80,7 @@ function App() {
               options={{ headerShown: true }}
             />
 
-            <Stack.Screen
-              name="Dmap"
-              component={Dmap}
-              options={{ headerShown: true }}
-            />
+        
             <Stack.Screen
               name="MapForUser"
               component={MapForUser}
@@ -94,12 +89,12 @@ function App() {
             <Stack.Screen
               name="Notification"
               component={Notification}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="AgencyService"
               component={AgencyService}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="ResetPassword"
@@ -124,7 +119,7 @@ function App() {
             <Stack.Screen
               name="Favorites"
               component={Favorites}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="mapforAgency"
@@ -201,14 +196,19 @@ function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="EditAgencyProfile"
+              component={EditAgencyProfile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="Search"
               component={AdvancedSearch}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="FiltredCar"
               component={FiltredCar}
-              options={{ headerShown: true }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="AddAgencyCar"

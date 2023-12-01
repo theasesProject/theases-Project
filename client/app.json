@@ -1,5 +1,6 @@
 {
   "expo": {
+    "assets": ["./fonts/MuseoModerno-VariableFont_wght.ttf"],
     "name": "theases",
     "slug": "theases",
     "version": "1.0.0",
@@ -10,8 +11,7 @@
     },
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/car-logo.png",
-      "resizeMode": "cover",
+      "image": "./assets/tempLogo.png",
       "backgroundColor": "#ffffff"
     },
     "permissions": {

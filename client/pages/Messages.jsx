@@ -67,16 +67,6 @@ function Messages() {
     console.log(rooms);
   }, [refresh]);
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
   return (
     <View style={styles.messages}>
       <Text style={styles.title}> Messages </Text>

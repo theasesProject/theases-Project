@@ -27,6 +27,24 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
   }
 });
 
+export const autoLogin = createAsyncThunk(
+  "user/autoLogin",
+  async (test, thunkAPI) => {
+    try {
+      const token = await AsyncStorage.getItem("UserToken");
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/reniewToken`,
+        { token: token }
+      );
+      await AsyncStorage.setItem("UserToken", response.data);
+      // const decoded = thunkAPI.dispatch(fetchUser(response.data));
+      thunkAPI.dispatch(fetchUser(response.data));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+);
+
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 export const MakeReport = createAsyncThunk(
   "user/createReport",
@@ -148,6 +166,17 @@ const userSlice = createSlice({
         state.oneUser = action.payload;
       })
       .addCase(getOneById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(autoLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(autoLogin.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(autoLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

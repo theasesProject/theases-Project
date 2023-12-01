@@ -130,7 +130,7 @@ const EditProfile = ({ navigation }) => {
       setForm({});
       setCurrentPassword("");
       setConfirmPassword("");
-      navigation.navigate("Userprofile");
+      navigation.navigate("UsersProfile");
     } catch (err) {
       console.error(err);
     }
@@ -139,17 +139,6 @@ const EditProfile = ({ navigation }) => {
   useEffect(() => {
     formValidation();
   }, [form]);
-
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
 
   return (
     <View style={styles.editProfilePage}>
@@ -377,6 +366,7 @@ const styles = StyleSheet.create({
     height: height * 0.065,
     paddingHorizontal: 10,
     fontSize: 16,
+    marginBottom: height * 0.019,
   },
   eye: {
     position: "absolute",
@@ -398,7 +388,6 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
-    fontFamily: "FiraMono-Medium",
   },
   forgetPasswordContainer: {},
   forgotPassword: {
@@ -423,7 +412,6 @@ const styles = StyleSheet.create({
   saveChangesBtnContent: {
     color: "white",
     fontSize: 18,
-    fontFamily: "FiraMono-Medium",
   },
 });
 

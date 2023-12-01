@@ -23,14 +23,12 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const { width, height } = Dimensions.get("screen");
 import { useDispatch, useSelector } from "react-redux";
 import { filterCars } from "../store/carFetch";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
 function BrandBar({ onPress, onFilterByBrand, resetData }) {
   const dispatch = useDispatch();
   const [carByBrand, setCarByBrand] = useState([]);
   const allCars = useSelector((state) => state.car.allCars);
   const navigation = useNavigation();
+  const [isFontsLoaded, setFontsLoaded] = useState(false);
   const [error, setError] = useState(false);
   const handleFilterByBrand = (brandName) => {
     !allCars.length
@@ -48,16 +46,6 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
           });
   };
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
-
-    loadFonts();
-  }, []);
   return (
     <View style={styles.brand}>
       <View style={styles.BrandBar}>
@@ -66,7 +54,7 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
           <Text
             style={styles.ViewAll}
             onPress={() => {
-              resetData()
+              resetData();
             }}
           >
             View All{" "}
@@ -169,8 +157,7 @@ const styles = StyleSheet.create({
     height: height * 0.21,
     borderRadius: 10,
     alignItems: "center",
-    padding: height * 0.01,
-    paddingBottom: height * 0.01,
+    paddingHorizontal: width * 0.02,
   },
   BrandBar: {
     width: width,
@@ -188,19 +175,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.04999999,
   },
   topBrand: {
-    // fontWeight: "bold",
     fontSize: 21,
     paddingBottom: height * 0.01,
-    fontFamily: "FiraMono-Bold",
   },
   ViewAll: {
     color: "#8B91B6",
     fontSize: 14,
     paddingBottom: height * 0.01,
   },
-  allBrandImage: {
-    // borderRadius: 10,
-  },
+  allBrandImage: {},
   brandLogo: {
     width: width * 0.16,
     height: height * 0.06,
@@ -211,7 +194,6 @@ const styles = StyleSheet.create({
   allBrandImage: {
     display: "flex",
     flexDirection: "row",
-    // gap: 100,
   },
   brandDetails: {
     backgroundColor: "white",
@@ -220,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     borderRadius: 10,
-    width: width * 0.28,
+    width: width * 0.274,
     height: height * 0.13,
     marginLeft: width * 0.036,
   },
@@ -233,7 +215,6 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     // backgroundColor:"black",
     width: width * 0.22,
-    fontFamily: "FiraMono-Medium",
   },
 });
 

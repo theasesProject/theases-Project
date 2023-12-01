@@ -13,9 +13,60 @@ function getDatesInRange(startDate, endDate) {
 }
 
 module.exports = {
+  getRentalHistory: async (req, res, next) => {
+    try {
+      const services = await db.Service.findAll({
+        where: {
+          acceptation: "accepted",
+        },
+        include: [db.User, "Car"], // Include associated users in the query
+      });
+      // const result = services.map(service => ({
+      //   ...service.dataValues,
+      //   userName: service.User.userName // Access the associated user directly
+      // }));
+      res.json({
+        historyData: services,
+        // "userNames": result.map(e => e.userName),
+        message: `history found , ${services.length} rentals`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getPendingHistory: async (req, res, next) => {
+    try {
+      const data = await db.Service.findAll({
+        where: {
+          acceptation: "pending",
+        },
+      });
+      res.json({
+        historyData: data,
+        message: `history is found ${data.length} rentals`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  getRejectedHistory: async (req, res, next) => {
+    try {
+      const data = await db.Service.findAll({
+        where: {
+          acceptation: "rejected",
+        },
+      });
+      res.json({
+        historyData: data,
+        message: `history is found ${data.length} rentals`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
   CreateBooking: async function (req, res) {
     const { CarId, UserId, startDate, endDate, amount, time } = req.body;
-
     const conflictingRental = await db.Service.findOne({
       where: {
         CarId: CarId,
@@ -156,7 +207,6 @@ module.exports = {
 
   GetAllServicesForAgency: async function (req, res) {
     try {
-      const serviceObj = [];
       const { agencyId } = req.params;
 
       const services = await db.Car.findAll({
@@ -165,28 +215,42 @@ module.exports = {
         },
         include: [
           {
-            model: db.Service,
+            model: db.Agency,
+            include: [
+              {
+                model: db.User,
+                as: "User",
+              },
+            ],
           },
+          {
+            model: db.Service,
+            include: [
+              {
+                model: db.User,
+                as: "User",
+              },
+            ],
+            where: { UserId: db.Sequelize.col("Agency.User.id") },
+          },
+          {
+            model: db.Media,
+            where: { CarId: db.Sequelize.col("Car.id") },
+          },
+          
         ],
         where: {
           "$Service.id$": { [db.Sequelize.Op.not]: null },
         },
       });
 
-      for (var i = 0; services.length > i; i++) {
-        const user = await db.User.findOne({
-          where: { id: services[i].Service.UserId },
-        });
-
-        serviceObj.push({ service: services[i], User: user });
-      }
-
-      return res.json(serviceObj);
+      return res.json(services);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal server error" });
     }
   },
+
   GetAvailableCars: async function (req, res) {
     try {
       const { startDate, endDate, price, characteristics, type, deposit } =

@@ -10,9 +10,6 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import { createCar, emptyNewCar, setNewCar } from "../store/carFetch";
@@ -35,55 +32,69 @@ function AddCarAgency3() {
   const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
 
   const selectImage = async () => {
-    if (form.img.length >= 3) {
-      return setError("You can't add more than three images");
-    }
-
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (status !== "granted") {
-      console.log("Permission to access media library denied");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      selectionLimit: 3,
-    });
-
-    if (!result.canceled) {
-      const selectedAssets = result.assets;
-
-      const updatedSelectedDocuments = await Promise.all(
-        selectedAssets.map(async (file) => {
-          try {
-            const cloudinaryResponse = await cloudinaryUpload(file.uri);
-            return cloudinaryResponse;
-          } catch (err) {
-            console.error("Cloudinary Upload Error:", err);
-            return null;
-          }
-        })
-      );
-      setForm({
-        ...form,
-        img: [
-          ...form.img,
-          ...updatedSelectedDocuments.filter((image) => image !== null),
-        ],
+    try {
+      if (selectedDocuments.length >= 3) {
+        return setError("You can't add more than three images");
+      }
+  
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+      if (status !== "granted") {
+        console.log("Permission to access media library denied");
+        return;
+      }
+  
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        selectionLimit: 3,
       });
-    } else {
-      console.log("error");
+  
+      if (!result.canceled) {
+        const selectedAssets = result.assets;
+        const updatedSelectedDocuments = await Promise.all(
+          selectedAssets?.map(async (file) => {
+            try {
+              console.log('file: ' + file.uri);
+              const cloudinaryResponse = await cloudinaryUpload(file.uri);
+              console.log(cloudinaryResponse);
+              return cloudinaryResponse;
+            } catch (err) {
+              console.error("Cloudinary Upload Error:", err);
+              return ;
+            }
+          })
+        );
+       
+        console.log('in the form');
+        setForm({
+          ...form,
+          img: [
+            ...form.img,
+            ...updatedSelectedDocuments.filter((image) => image !== null),
+          ],
+        });
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log(error);
     }
+   
   };
   const handleDelete = (uri) => {
-    const copy = [...form.img];
-    const position = copy.indexOf(uri);
-    copy.splice(position, 1);
-    setForm({ ...form, img: [...copy] });
+    try {
+      const copy = [...form.img];
+      const position = copy.indexOf(uri);
+      copy.splice(position, 1);
+      setForm({ ...form, img: [...copy] });
+    } catch (error) {
+      console.log(error);
+    }
+   
   };
   const handleFuel = (fuel) => {
     setForm({ ...form, typeOfFuel: fuel });
@@ -114,17 +125,17 @@ function AddCarAgency3() {
   ];
 
   const handleCreateCar = () => {
-    if (form.typevehicle === "") {
+    if (form?.typevehicle === "") {
       setTypeError("Please enter your car type Vehicle");
-    } else if (form.characteristics === "") {
+    } else if (form?.characteristics === "") {
       setCharError("Please enter characteristics for your car ");
-    } else if (form.img.length === 0) {
+    } else if (form?.img?.length === 0) {
       setImgError("Please enter picture for your car ");
     } else {
       dispatch(
         createCar({
           body: form,
-          media: form.img.map((file) => ({ media: file })),
+          media: form?.img?.map((file) => ({ media: file })),
         })
       );
       dispatch(emptyNewCar());
@@ -135,16 +146,7 @@ function AddCarAgency3() {
       }, 5000);
     }
   };
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   return (
     <View style={styles.editProfilePage}>
       <ScrollView>
@@ -193,7 +195,7 @@ function AddCarAgency3() {
         <View style={styles.errorContainer}>
         {typeError !== "" && <Text style={styles.errorText}>{typeError}</Text>}
         </View>
-        {/* <RemoveBackground /> */}
+        <RemoveBackground />
         <View style={styles.picture}>
           <TouchableOpacity
             style={styles.addImgTextContainer}
@@ -208,7 +210,7 @@ function AddCarAgency3() {
           </TouchableOpacity>
         </View>
         <View style={styles.imgsContainer}>
-          {form.img.map((uri, index) => (
+          {form?.img?.map((uri, index) => (
             <View key={index} style={styles.imgContainer}>
               <Pressable onPress={() => handleDelete(uri)}>
                 <Image source={xBtn} style={styles.xBtn} />
@@ -302,7 +304,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     paddingVertical: height * 0.01,
-    fontFamily: "FiraMono-Medium",
     fontWeight: "bold",
     color: "#6a78c1",
   },
@@ -403,7 +404,6 @@ const styles = StyleSheet.create({
   },
   textCss: { 
     color: "#6C77BF",
-    fontFamily: "FiraMono-Medium" 
   },
   errorContainer:{
     height:height * 0.03,

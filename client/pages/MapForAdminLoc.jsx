@@ -83,16 +83,7 @@ const MapComponent = ({ navigation }) => {
     } else {
     }
   };
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   // const customMapStyle = [
   //   {
   //     "featureType": "road.arterial",

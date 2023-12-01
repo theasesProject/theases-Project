@@ -6,20 +6,9 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
-const ResultSearch = ({ results, onLocationSelect }) => {
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
+const ResultSearch = ({ results, onLocationSelect }) => {
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -30,8 +19,8 @@ const ResultSearch = ({ results, onLocationSelect }) => {
             style={styles.locationItem}
             onPress={() => onLocationSelect(item)}
           >
-            <Text style={{ fontFamily: "FiraMono-Medium" }}>{item.name}</Text>
-            <Text style={{ fontFamily: "FiraMono-Medium" }}>
+            <Text >{item.name}</Text>
+            <Text >
               {item.address}
             </Text>
           </TouchableOpacity>

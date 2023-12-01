@@ -21,36 +21,27 @@ function Carou() {
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
   const navigation = useNavigation();
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "FiraMono-Bold": FiraMonoBold,
-        "FiraMono-Medium": FiraMonoMedium,
-      });
-    };
 
-    loadFonts();
-  }, []);
   const data = [
     {
       id: "1",
       text: "Download App",
       secondText:
-        "Welcome to [Your App Name] We're thrilled you've chosen us. Stay tuned for updates and enjoy your journey with us",
+        "Welcome to RENT GO We're thrilled you've chosen us. Stay tuned for updates and enjoy your journey with us",
       image: frim,
     },
     {
       id: "2",
       text: "Select a Car",
       secondText:
-        "At [Your Business Name], you can rent a car and start your journey effortlessly",
+        "At RENT GO, you can rent a car and start your journey effortlessly",
       image: scim,
     },
     {
       id: "3",
       text: "Enjoy your Ride",
       secondText:
-        "At [Your Business Name], you can rent a car and start your journey effortlessly",
+        "At RENT GO, you can rent a car and start your journey effortlessly",
       image: thim,
     },
   ];
@@ -148,7 +139,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    fontFamily: "FiraMono-Bold",
+  
   },
   stext: {
     fontSize: 16,
@@ -158,7 +149,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "left",
     color: "blue",
-    fontFamily: "FiraMono-Medium",
   },
   footer: {
     flexDirection: "row",
@@ -186,7 +176,6 @@ const styles = StyleSheet.create({
   next: {
     textAlign: "right",
     fontSize: 18,
-    fontFamily: "FiraMono-Medium",
   },
 });
 

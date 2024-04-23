@@ -29,7 +29,7 @@ import PaymentBtn from "../components/PaymentBtn";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 import { useNavigation } from "@react-navigation/native";
-import PushNotification from "react-native-push-notification";
+// import PushNotification from "react-native-push-notification";
 
 const AllBookings = () => {
   const navigation = useNavigation();

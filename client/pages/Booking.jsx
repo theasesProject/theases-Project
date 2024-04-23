@@ -41,7 +41,7 @@ function Booking() {
   const [total, setTotal] = useState(0);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const isTransportationAvailable = oneCar?.Agency.transportation;
-  console.log(unavailableDate, oneCar.id, "unvaibledate");
+  // console.log(unavailableDate, oneCar.id, "unvaibledate");
   const [selectedTime, setSelectedTime] = useState(null);
 
   const timeSlots = [
@@ -99,8 +99,8 @@ function Booking() {
       const isDatesAvailable = datesInRangeFormatted.every(
         (date) => !unavailableDate.includes(date)
       );
-      console.log(unavailableDate, "unavailableDate");
-      console.log(isDatesAvailable, "isDatesAvailable");
+      // console.log(unavailableDate, "unavailableDate");
+      // console.log(isDatesAvailable, "isDatesAvailable");
 
       if (!isDatesAvailable) {
         alert(
@@ -153,7 +153,7 @@ function Booking() {
       }
 
       const total = durationInDays * pricePerDay;
-      console.log(total, "total");
+      // console.log(total, "total");
       setTotal(total);
     } else if (startDate && !endDate) {
       setTotal(0);

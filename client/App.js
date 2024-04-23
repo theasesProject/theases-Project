@@ -79,8 +79,6 @@ function App() {
               component={TransportationMap}
               options={{ headerShown: true }}
             />
-
-        
             <Stack.Screen
               name="MapForUser"
               component={MapForUser}

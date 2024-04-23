@@ -43,14 +43,14 @@ function AgencyService() {
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
   const getRoomData = async (room) => {
-    console.log(room, "ghjkghgh");
+    // console.log(room, "ghjkghgh");
     if (activeUser.id === room.UserId) {
       await axios
         .get(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
         )
         .then((response) => {
-          console.log("res", response.data);
+          // console.log("res", response.data);
           dispatch(
             setRoom({
               ...room,
@@ -68,7 +68,7 @@ function AgencyService() {
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`
         )
         .then((response) => {
-          console.log("res", response.data);
+          // console.log("res", response.data);
           dispatch(
             setRoom({
               ...room,
@@ -87,7 +87,7 @@ function AgencyService() {
     dispatch(allServiceForAgency(activeUser.id));
 
     socket.on("receive-notification", (data) => {
-      console.log("Received Notification:", data);
+      // console.log("Received Notification:", data);
 
       PushNotification.localNotification({
         channelId: "default",
@@ -97,7 +97,7 @@ function AgencyService() {
     });
 
     socket.on("disconnect", () => {
-      console.log("Socket disconnected");
+      // console.log("Socket disconnected");
     });
 
     return () => {
@@ -117,10 +117,10 @@ function AgencyService() {
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
         { user1: id * 1, user2: activeUser.id * 1 }
       );
-      console.log(roomPossibility1.data);
-      console.log(roomPossibility2.data);
+      // console.log(roomPossibility1.data);
+      // console.log(roomPossibility2.data);
       if (!roomPossibility1.data && !roomPossibility2.data) {
-        console.log("heeeeeerrrreeee");
+        // console.log("heeeeeerrrreeee");
         const room = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
           { UserId: activeUser.id * 1, user2: id * 1 }
@@ -135,7 +135,7 @@ function AgencyService() {
         getRoomData(room);
       }
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
   };
 
@@ -199,7 +199,7 @@ function AgencyService() {
               return  service.Service.acceptation==="pending"? (
                 <View style={styles.card} key={index}>
                   <Image style={styles.ImageCar} src={service?.Media[0].media} />
-                {console.log(service, "hhhhhhh")}
+                {/* {console.log(service, "hhhhhhh")} */}
                   <View style={styles.carDetails}>
                     <Text style={styles.CarName}>{service?.Service?.User?.userName}</Text>
                     <View style={styles.dates}>

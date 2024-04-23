@@ -42,7 +42,7 @@ const ForgotPassword = ({ navigation }) => {
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOneByEmail/${identifier}`
       );
-      console.log("response: ", response.data);
+      // console.log("response: ", response.data);
       if (response.data === "user exists") {
         const response = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/sendResetPasswordConfirmationCode`,
@@ -51,7 +51,7 @@ const ForgotPassword = ({ navigation }) => {
         const userInfo = await axios.get(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getInfoByMail/${identifier}`
         );
-        console.log("userInfo: ", userInfo.data);
+        // console.log("userInfo: ", userInfo.data);
         await AsyncStorage.setItem("id", JSON.stringify(userInfo.data.id));
         setReceived(response.data);
       }
@@ -97,7 +97,7 @@ const ForgotPassword = ({ navigation }) => {
 
   const handleVerifyCode = () => {
     if (fullCode.join("") != received) {
-      console.log("Invalid Code", received, " ", fullCode.join(""));
+      // console.log("Invalid Code", received, " ", fullCode.join(""));
       return setError("Invalid Code");
     }
     setError(null);

@@ -40,7 +40,7 @@ const Stats = () => {
 
   const fetchServices = async () => {
     try {
-      console.log("reached");
+      // console.log("reached");
       const response = await axios.get(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/allServiceForAgency/${activeUser.id}`
       );
@@ -89,7 +89,7 @@ const Stats = () => {
       }
     }
 
-    console.log("acc: ", acc);
+    // console.log("acc: ", acc);
 
     for (let value of latestMonths) {
       if (acc.hasOwnProperty(value)) {

@@ -30,7 +30,7 @@ const removeBackground = async (inputPath, outputPath) => {
       console.error("Error:", response.status, response.statusText);
     } else {
       await RNFS.writeFile(outputPath, response.data, "base64");
-      console.log("Background removed and saved to", outputPath);
+      // console.log("Background removed and saved to", outputPath);
     }
   } catch (error) {
     console.error("Request failed:", error);

@@ -57,7 +57,7 @@ function MyCars() {
     priceMonthly: selectedCar?.priceMonthly,
   });
   const handleDeleteCar = (carId) => {
-    console.log(carId);
+    // console.log(carId);
     dispatch(
       deletedAgencyCar({
         id: carId,

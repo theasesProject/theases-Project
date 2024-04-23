@@ -65,8 +65,8 @@ function AdvancedSearch() {
 
   const prices = () => {
     if (allCars.length === 0) {
-      console.log("AdvancedSearch.jsx LINE 145");
-      console.log("no cars fetched");
+      // console.log("AdvancedSearch.jsx LINE 145");
+      // console.log("no cars fetched");
       return;
     }
 

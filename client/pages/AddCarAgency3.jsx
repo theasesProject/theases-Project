@@ -43,7 +43,7 @@ function AddCarAgency3() {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
   
       if (status !== "granted") {
-        console.log("Permission to access media library denied");
+        // console.log("Permission to access media library denied");
         return;
       }
   
@@ -58,9 +58,9 @@ function AddCarAgency3() {
         const updatedSelectedDocuments = await Promise.all(
           selectedAssets?.map(async (file) => {
             try {
-              console.log('file: ' + file.uri);
+              // console.log('file: ' + file.uri);
               const cloudinaryResponse = await cloudinaryUpload(file.uri);
-              console.log(cloudinaryResponse);
+              // console.log(cloudinaryResponse);
               return cloudinaryResponse;
             } catch (err) {
               console.error("Cloudinary Upload Error:", err);
@@ -69,7 +69,7 @@ function AddCarAgency3() {
           })
         );
        
-        console.log('in the form');
+        // console.log('in the form');
         setForm({
           ...form,
           img: [
@@ -78,10 +78,10 @@ function AddCarAgency3() {
           ],
         });
       } else {
-        console.log("error");
+        // console.log("error");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
    
   };
@@ -92,7 +92,7 @@ function AddCarAgency3() {
       copy.splice(position, 1);
       setForm({ ...form, img: [...copy] });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
    
   };

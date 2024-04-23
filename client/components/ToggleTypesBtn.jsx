@@ -14,7 +14,7 @@ const ToggleTypesBtn = ({ text }) => {
       return dispatch(setSelected({ key: "type", value: "All" }));
     }
     dispatch(setSelected({ key: "type", value: text }));
-    console.log("state: ", selected);
+    // console.log("state: ", selected);
   };
 
   useEffect(() => {

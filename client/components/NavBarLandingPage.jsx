@@ -65,7 +65,7 @@ function ProfileLandingPage({ style }) {
     try {
       const tokenResponse = await AsyncStorage.getItem("UserToken");
       if (tokenResponse) {
-        console.log(tokenResponse);
+        // console.log(tokenResponse);
         setTokenValue(true);
         dispatch(fetchUser(tokenResponse));
       } else {

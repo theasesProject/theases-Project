@@ -93,7 +93,7 @@ export const SignUpClick = createAsyncThunk(
 export const logUserOut = createAsyncThunk("user/logout", async () => {
   try {
     await AsyncStorage.removeItem("UserToken");
-    console.log("UserToken removed");
+    // console.log("UserToken removed");
   } catch (e) {
     console.error("error coming from home", e);
   }

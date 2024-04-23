@@ -96,7 +96,7 @@ function ChangeRole({ navigation }) {
         setLoc(place);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
   const selectImage = async () => {
@@ -107,7 +107,7 @@ function ChangeRole({ navigation }) {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== "granted") {
-      console.log("Permission to access media library denied");
+      // console.log("Permission to access media library denied");
       return;
     }
 

@@ -52,17 +52,17 @@ const cloudinaryUpload = async (fileUri, fileType) => {
     if (response.status === 200) {
       return response.data.secure_url;
     } else {
-      console.error("Media upload failed");
+      // console.error("Media upload failed");
     }
   } catch (error) {
-    console.error("Cloudinary upload error:", JSON.stringify(error));
+    // console.error("Cloudinary upload error:", JSON.stringify(error));
   }
 };
 function Conversation() {
   const [outputDirectory, setOutputDirectory] = useState(null);
 
   const room = useSelector((state) => state.chatRoom.room);
-  console.log('hhhhh',room);
+  // console.log('hhhhh',room);
   const user = useSelector((state) => state.user.data);
   const [allMes, setAllMes] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
@@ -75,10 +75,10 @@ function Conversation() {
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getMessages/${room.id}`
       );
       setAllMes(response.data);
-      console.log("messages returned");
+      // console.log("messages returned");
       scrollViewRef.current?.scrollToEnd({ animated: true });
     } catch (error) {
-      console.log("error getting messages", error);
+      // console.log("error getting messages", error);
     }
   };
 
@@ -105,10 +105,10 @@ function Conversation() {
           data: cloudinaryResponse,
         });
 
-        console.log("sent to the server");
+        // console.log("sent to the server");
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
   const isLastMessage = (index) => {
@@ -147,7 +147,7 @@ function Conversation() {
         setCurrentMessage("");
         scrollViewRef.current?.scrollToEnd({ animated: true });
       } catch (error) {
-        console.error("Error sending message:", error);
+        // console.error("Error sending message:", error);
       } finally {
         // Reset the sending flag after the cooldown period (e.g., 2 seconds)
         setTimeout(() => {
@@ -178,12 +178,12 @@ function Conversation() {
   useEffect(() => {
     const handleReceiveDocument = async (data) => {
       try {
-        console.log("Receive document", data);
+        // console.log("Receive document", data);
         // sendMessage(data.data,data.mimeType,data)
         await ImagePicker.requestMediaLibraryPermissionsAsync();
         const dir = `${FileSystem.documentDirectory}received_documents/`;
         const filePath = `${dir}${data.name}`;
-        console.log("dir: ", dir);
+        // console.log("dir: ", dir);
 
         await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
 
@@ -197,7 +197,7 @@ function Conversation() {
 
         setReceivedDocuments(updatedDocuments);
 
-        console.log("The file has been saved!", `${dir}${data.name}`);
+        // console.log("The file has been saved!", `${dir}${data.name}`);
 
         if (updatedDocuments.length === 0) {
           Alert.alert("No processed images to save.");
@@ -205,7 +205,7 @@ function Conversation() {
         }
 
         const assetPromises = updatedDocuments.map(async (imageUri) => {
-          console.log("imageUri: ", imageUri?.localUri, "imguri");
+          // console.log("imageUri: ", imageUri?.localUri, "imguri");
           if (imageUri?.localUri) {
             const asset = await MediaLibrary.createAssetAsync(
               imageUri.localUri
@@ -219,7 +219,7 @@ function Conversation() {
 
         Alert.alert("Images saved to gallery.");
       } catch (error) {
-        console.error("Error receiving document:", error);
+        // console.error("Error receiving document:", error);
       }
     };
 

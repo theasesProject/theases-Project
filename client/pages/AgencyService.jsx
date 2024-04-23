@@ -25,7 +25,7 @@ import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import price from "../assets/price.jpg";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import io from "socket.io-client";
-import PushNotification from "react-native-push-notification";
+// import PushNotification from "react-native-push-notification";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
 import NavBarAgency from "../components/NavBarAgency";

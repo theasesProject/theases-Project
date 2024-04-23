@@ -79,7 +79,7 @@ function Userprofile({ navigation }) {
 
           <TouchableOpacity
             style={styles.profileOption}
-            onPress={() => console.log("settings")}
+            // onPress={() => console.log("settings")}
           >
             <Image source={stg} style={styles.icon} />
             <Text >Settings</Text>

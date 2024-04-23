@@ -10,7 +10,7 @@ const ToggleCharacteristicsBtn = ({ text }) => {
   const dispatch = useDispatch();
 
   const handlePress = () => {
-    console.log("state: ", selected);
+    // console.log("state: ", selected);
     if (selected === text && text !== "All") {
       return dispatch(setSelected({ key: "characteristics", value: "All" }));
     }

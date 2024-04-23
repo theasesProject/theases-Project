@@ -44,7 +44,7 @@ const EditProfile = ({ navigation }) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== "granted") {
-      console.log("Permission to access media library denied");
+      // console.log("Permission to access media library denied");
       return;
     }
 
@@ -59,11 +59,11 @@ const EditProfile = ({ navigation }) => {
       try {
         const cloudinaryResponse = await cloudinaryUpload(selectedAsset.uri);
 
-        console.log("img link: ", cloudinaryResponse);
+        // console.log("img link: ", cloudinaryResponse);
         setImg(cloudinaryResponse);
         setForm({ ...form, avatar: cloudinaryResponse });
       } catch (err) {
-        console.error("Cloudinary Upload Error:", err);
+        // console.error("Cloudinary Upload Error:", err);
       }
     }
   };

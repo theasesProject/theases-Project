@@ -57,14 +57,14 @@ function Messages() {
         { UserId: parseInt(user.data.id), user2: parseInt(user2ID) }
       )
       .then(() => {
-        console.log("success");
+        // console.log("success");
         setRefresh(!refresh);
       });
   };
 
   useEffect(() => {
     fetch();
-    console.log(rooms);
+    // console.log(rooms);
   }, [refresh]);
 
   return (

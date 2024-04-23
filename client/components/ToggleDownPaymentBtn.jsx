@@ -11,8 +11,8 @@ const ToggleDownPaymentBtn = ({ text }) => {
   const dispatch = useDispatch();
 
   const handlePress = () => {
-    console.log("text: ", text);
-    console.log("state: ", selected);
+    // console.log("text: ", text);
+    // console.log("state: ", selected);
     if (selected === text && text !== "All") {
       return dispatch(setSelected({ key: "downPayment", value: "All" }));
     }

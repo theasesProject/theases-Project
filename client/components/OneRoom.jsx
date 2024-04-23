@@ -21,7 +21,7 @@ function OneRoom({ room }) {
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
         )
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setAvatarUrl(response.data.avatar);
           setName(response.data.userName);
         });
@@ -39,7 +39,7 @@ function OneRoom({ room }) {
 
   useEffect(() => {
     getRoomData();
-    console.log(avatarUrl, name);
+    // console.log(avatarUrl, name);
   }, []);
   return (
     <Pressable

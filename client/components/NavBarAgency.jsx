@@ -127,7 +127,7 @@ function NavBarAgency({ style }) {
 
 const styles = StyleSheet.create({
   navBar: {
-    borderTopColor: "lightgrey",
+    borderTopColor: "#6C77BF",
     borderTopWidth: 1,
     backgroundColor: "white",
     height: height * 0.07,

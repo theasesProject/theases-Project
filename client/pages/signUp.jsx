@@ -40,10 +40,10 @@ const SignUp = ({ navigation, props }) => {
   const dispatch = useDispatch();
   const SignUpHandle = (inputForm) => {
     if (inputForm.password === confirm) {
-      console.log(inputForm);
+      // console.log(inputForm);
       dispatch(SignUpClick(inputForm))
         .then((response) => {
-          console.log("RESPONSE§§§", response.meta);
+          // console.log("RESPONSE§§§", response.meta);
           if (response.meta.requestStatus === "fulfilled") {
             navigation.navigate("Home");
           }

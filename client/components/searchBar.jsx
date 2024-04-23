@@ -60,6 +60,8 @@ function SearchBar({ onSearch }) {
 }
 const styles = StyleSheet.create({
   input: {
+    borderWidth:1,
+    borderColor:"#6C77BF",
     backgroundColor: "white",
     height: height * 0.07,
     borderRadius: 10,
@@ -95,6 +97,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     width: width,
     flexDirection: "row",
+    
     // justifyContent: "space-between",
     alignItems: "center",
     // gap: 20,

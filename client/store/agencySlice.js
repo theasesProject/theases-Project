@@ -13,7 +13,7 @@ export const CreateAgency = createAsyncThunk(
   async (params) => {
     if (!params) return;
     try {
-      console.log("here creating agency");
+      // console.log("here creating agency");
       const response = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/request/create/${params.id}`,
         params.body

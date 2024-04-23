@@ -73,7 +73,7 @@ const MapComponent = ({ navigation }) => {
       latitude: selectedLatitude,
       longitude: selectedLongitude,
     });
-    console.log("selected", selectedLocation);
+    // console.log("selected", selectedLocation);
   };
 
   const handleLoc = () => {

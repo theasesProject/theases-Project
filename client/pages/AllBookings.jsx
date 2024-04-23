@@ -36,7 +36,7 @@ const AllBookings = () => {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const userBookings = useSelector((state) => state.booking.allServiceUser);
-  console.log("userrrrr", userBookings);
+  // console.log("userrrrr", userBookings);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
@@ -63,7 +63,7 @@ const AllBookings = () => {
     };
 
     dispatch(createNotifcationForSpecifiqueUser(notificationData));
-    console.log(activeUser?.id, selectedBooking?.id, "selectedBooking.id");
+    // console.log(activeUser?.id, selectedBooking?.id, "selectedBooking.id");
     dispatch(
       deletedServiceByUser({ UserId: activeUser?.id, id: selectedBooking?.id })
     );
@@ -101,14 +101,14 @@ const AllBookings = () => {
   };
 
   const getRoomData = async (room) => {
-    console.log(room, "ghjkghgh");
+    // console.log(room, "ghjkghgh");
     if (activeUser.id === room.UserId) {
       await axios
         .get(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.user2}`
         )
         .then((response) => {
-          console.log("res", response.data);
+          // console.log("res", response.data);
           dispatch(
             setRoom({
               ...room,
@@ -126,7 +126,7 @@ const AllBookings = () => {
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/getOne/${room.UserId}`
         )
         .then((response) => {
-          console.log("res", response.data);
+          // console.log("res", response.data);
           dispatch(
             setRoom({
               ...room,
@@ -148,12 +148,12 @@ const AllBookings = () => {
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
         { user1: activeUser.id * 1, user2: id * 1 }
       );
-      console.log("room1", roomPossibility1);
+      // console.log("room1", roomPossibility1);
       const roomPossibility2 = await axios.post(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/getOneRoom`,
         { user1: id * 1, user2: activeUser.id * 1 }
       );
-      console.log("room2");
+      // console.log("room2");
       if (!roomPossibility1 && !roomPossibility2) {
         const room = await axios.post(
           `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/chat/makeRoom`,
@@ -165,12 +165,12 @@ const AllBookings = () => {
         return;
       } else {
         const room = roomPossibility1.data || roomPossibility2.data;
-        console.log(room, "here");
+        // console.log(room, "here");
         getRoomData(room);
         
       }
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
   };
 
@@ -186,7 +186,7 @@ const AllBookings = () => {
             // scheduleNotification(endDate, carModel);
             return (
               <View style={styles.card} key={booking.id}>
-                {console.log(booking)}
+                {/* {console.log(booking)} */}
                 <View style={styles.cardContainer}>
                   <Image style={styles.ImageCar} source={car}></Image>
                   <View style={styles.carDetails}>

@@ -9,8 +9,8 @@ const ItineraryModal = ({
   handleNavigateToProfile,
   estimatedDuration,
 }) => {
-  console.log("agency in modal", agency);
-  console.log(estimatedDuration);
+  // console.log("agency in modal", agency);
+  // console.log(estimatedDuration);
 
   return (
     <Modal visible={isVisible} animationType="slide" transparent>

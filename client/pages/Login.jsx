@@ -85,12 +85,12 @@ function Login({ navigation }) {
       if (type === "success") {
         // Successfully signed in with Google
         // Use the accessToken or user data as needed
-        console.log("Google Sign-In success:", user);
+        // console.log("Google Sign-In success:", user);
       } else {
-        console.log("Google Sign-In failed:", type);
+        // console.log("Google Sign-In failed:", type);
       }
     } catch (error) {
-      console.error("Error during Google Sign-In:", error);
+      // console.error("Error during Google Sign-In:", error);
     }
   };
   const formValidation = () => {
@@ -147,12 +147,12 @@ function Login({ navigation }) {
           password: form.password,
         }
       );
-      console.log(response.data.stateBlocked, "stateBlocked");
+      // console.log(response.data.stateBlocked, "stateBlocked");
       if (response.data.stateBlocked === true) {
         dispatch(logUserOut());
-        console.log(
-          "Sorry, your account is banned. Please contact support for assistance."
-        );
+        // console.log(
+          // "Sorry, your account is banned. Please contact support for assistance."
+        // );
         Alert.alert(
           "Sorry, your account is banned. Please contact support for assistance."
         );

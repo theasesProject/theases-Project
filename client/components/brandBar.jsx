@@ -42,25 +42,26 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
             onFilterByBrand(response.data);
           })
           .catch((error) => {
-            console.log("error", error);
+            // console.log("error", error);
           });
   };
 
   return (
     <View style={styles.brand}>
-      <View style={styles.BrandBar}>
-        <View style={styles.barText}>
-          <Text style={styles.topBrand}>Top Brands</Text>
-          <Text
-            style={styles.ViewAll}
-            onPress={() => {
-              resetData();
-            }}
-          >
-            View All{" "}
-          </Text>
-        </View>
+      {/* <View style={styles.BrandBar}> */}
+      <View style={styles.barText}>
+        <Text style={styles.topBrand}>Top Brands</Text>
+        <View style={styles.line} />
+        <Text
+          style={styles.ViewAll}
+          onPress={() => {
+            resetData();
+          }}
+        >
+          View All{" "}
+        </Text>
       </View>
+      {/* </View> */}
       <ScrollView
         horizontal={true}
         style={styles.allBrandImage}
@@ -153,6 +154,7 @@ function BrandBar({ onPress, onFilterByBrand, resetData }) {
 }
 const styles = StyleSheet.create({
   brand: {
+    gap: height * 0.01,
     width: width,
     height: height * 0.21,
     borderRadius: 10,
@@ -166,22 +168,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   barText: {
-    flex: 1,
+    borderRadius: 5,
+    // flex: 1,
+    display:"flex",
     flexDirection: "row",
     justifyContent: "space-between",
     height: height * 0.05,
     width: width * 0.88,
     alignItems: "center",
     paddingHorizontal: width * 0.04999999,
+    // paddingBottom: height * 0.01,
+    borderWidth: 1,
+    borderColor: "#6C77BF",
   },
   topBrand: {
     fontSize: 21,
-    paddingBottom: height * 0.01,
+    lineHeight:24
   },
   ViewAll: {
     color: "#8B91B6",
-    fontSize: 14,
-    paddingBottom: height * 0.01,
+    fontSize: 15,
+    lineHeight:24,
+  },
+  line: {
+    position: 'absolute',
+    top: '50%', // Center vertically
+    bottom: '50%', // Center vertically
+    right:   0, // Align to the right edge of the parent
+    width:   1, // Width of the line
+    height:   1, // Height of the line
+    backgroundColor: '#6C77BF', // Color of the line
+    transform: [{ rotate: '45deg' }], // Rotate the line  45 degrees
   },
   allBrandImage: {},
   brandLogo: {
@@ -196,6 +213,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   brandDetails: {
+    borderWidth: 1,
+    borderColor: "#6C77BF",
     backgroundColor: "white",
     display: "flex",
     alignItems: "center",

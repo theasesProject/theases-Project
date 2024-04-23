@@ -170,7 +170,7 @@ const CarDetails = () => {
               </View>
             </View>
           </View>
-         {activeUser.type==="client"&& <LinearGradient style={styles.book} colors={["#6C77BF", "#4485C5"]}>
+         { Object.values(activeUser)===0&& activeUser.type==="client"&& <LinearGradient style={styles.book} colors={["#6C77BF", "#4485C5"]}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("Booking");

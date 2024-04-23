@@ -19,7 +19,7 @@ export const CreateBooking = createAsyncThunk(
 
         params
       );
-      console.log(response.data, "booking");
+      // console.log(response.data, "booking");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -62,7 +62,7 @@ export const UpdateServiceByAgency = createAsyncThunk(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/updatebooking`,
         params
       );
-      console.log(response.data, "params");
+      // console.log(response.data, "params");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -116,7 +116,7 @@ export const deletedServiceByAgency = createAsyncThunk(
 export const deletedServiceByUser = createAsyncThunk(
   "booking/deletedServiceByUser",
   async (body) => {
-    console.log(body, "service");
+    // console.log(body, "service");
     const UserId = body.UserId;
     const id = body.id;
     try {
@@ -138,7 +138,7 @@ export const getAllCarByDate = createAsyncThunk(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/avaibleCar`,
         body
       );
-      console.log(response.data, "response");
+      // console.log(response.data, "response");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -153,7 +153,7 @@ export const updateAgencyDate = createAsyncThunk(
         `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/booking/agencyUpdateDate`,
         body
       );
-      console.log(response.data, "response");
+      // console.log(response.data, "response");
       return response.data;
     } catch (error) {
       console.log(error);

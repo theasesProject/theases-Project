@@ -88,7 +88,7 @@ const TransportationMap = () => {
   }, [socket]);
 
   const handleStartItinerary = () => {
-    console.log("Starting itinerary to user location");
+    // console.log("Starting itinerary to user location");
   };
   const customMapStyle = [
     {

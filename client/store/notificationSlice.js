@@ -17,7 +17,7 @@ export const createNotifcationForSpecifiqueUser = createAsyncThunk(
 
         notification
       );
-      console.log(notification, "not");
+      // console.log(notification, "not");
       return response.data;
     } catch (error) {
       console.log(error);

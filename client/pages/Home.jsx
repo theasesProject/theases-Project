@@ -62,10 +62,10 @@ function Home({ navigation }) {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allCars = useSelector((state) => state.car.allCars);
-  console.log(
-    allCars,
-    "------------------------------------------------------------------"
-  );
+  // console.log(
+  //   allCars,
+  //   "------------------------------------------------------------------"
+  // );
   const fixedData = useSelector((state) => state.car.fixedData);
   const loading = useSelector((state) => state.car.loading);
   const [refreshing, setRefreshing] = useState(false);
@@ -86,12 +86,12 @@ function Home({ navigation }) {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-  console.log(activeUser, "acitveUser");
+  // console.log(activeUser, "acitveUser");
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
     );
-
+    onRefresh();
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
@@ -99,7 +99,7 @@ function Home({ navigation }) {
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        // console.log(response);
       });
 
     return () => {
@@ -132,10 +132,10 @@ function Home({ navigation }) {
     try {
       const value = await AsyncStorage.getItem("UserToken");
       if (value !== null) {
-        console.log(value);
+        // console.log(value);
       }
     } catch (e) {
-      console.error("error coming from home", e);
+      // console.error("error coming from home", e);
     }
   };
   // useEffect(()=>{
@@ -187,125 +187,120 @@ function Home({ navigation }) {
       };
     }
   }, [socket, expoPushToken, activeUser?.id, activeUser?.stateBlocked]);
- 
-    return (
-      <View style={styles.homePage}>
-        <ScrollView
-          ref={scrollViewRef}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          showsVerticalScrollIndicator={false}
-        >
-          <ProfileLandingPage style={styles.header} />
-          <View style={{ width: "100%" }}>
-            <SearchBar onSearch={updateFilteredCars} />
-          </View>
-          <BrandBar
-            onFilterByBrand={updateFilteredCars}
-            resetData={resetData}
-          />
-          {!loading ? (
-            allCars
-              ?.slice()
-              ?.reverse()
-              ?.map((element, i) => (
-                <View style={styles.allcars} key={i}>
-                  <CardCar
-                    setNothing={setNothing}
-                    key={i}
-                    oneCar={element}
-                    handlePress={handlePress}
-                  />
-                </View>
-              ))
-          ) : (
-            <>
-              <View style={{ alignItems: "center", paddingTop: 20 }}>
-                <View
-                  style={{
-                    width: width * 0.9,
-                    borderRadius: 10,
-                    overflow: "hidden",
-                    backgroundColor: "white",
-                    padding: 10,
-                  }}
-                >
-                  <ShimmerPlaceholder
-                    style={{
-                      width: "100%",
-                      height: width * 0.374,
-                      borderRadius: 10,
-                    }}
-                    shimmerColors={["#f3f3f3", "white", "#f3f3f3"]}
-                  />
-                  <ShimmerPlaceholder
-                    style={{
-                      width: "100%",
-                      height: width * 0.15,
-                      marginTop: 10,
-                      borderRadius: 10,
-                    }}
-                    shimmerColors={["#f3f3f3", "white", "#f3f3f3"]}
-                  />
-                </View>
-              </View>
-              <View style={{ alignItems: "center", paddingTop: 20 }}>
-                <View
-                  style={{
-                    width: width * 0.9,
-                    borderRadius: 10,
-                    overflow: "hidden",
-                    backgroundColor: "white",
-                    padding: 10,
-                  }}
-                >
-                  <ShimmerPlaceholder
-                    style={{
-                      width: "100%",
-                      height: width * 0.374,
-                      borderRadius: 10,
-                    }}
-                    shimmerColors={["#f3f3f3", "#e6e6e6", "#f3f3f3"]}
-                  />
-                  <ShimmerPlaceholder
-                    style={{
-                      width: "100%",
-                      height: width * 0.15,
-                      marginTop: 10,
-                      borderRadius: 10,
-                    }}
-                    shimmerColors={["#f3f3f3", "#e6e6e6", "#f3f3f3"]}
-                  />
-                </View>
-              </View>
-            </>
-          )}
-        </ScrollView>
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "space-around",
-          }}
-        >
-          <Text>Your expo push token: {expoPushToken}</Text>
-          <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <Text>
-              Title: {notification && notification.request.content.title}{" "}
-            </Text>
-            <Text>
-              Body: {notification && notification.request.content.body}
-            </Text>
-            <Text>
-              Data:{" "}
-              {notification &&
-                JSON.stringify(notification.request.content.data)}
-            </Text>
-          </View>
-        </View>
 
-        {/* <SwipeUpDown
+  return (
+    <View style={styles.homePage}>
+      <ScrollView
+        ref={scrollViewRef}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.topHeader}></View>
+        <ProfileLandingPage style={styles.header} />
+        <View style={{ width: "100%" }}>
+          <SearchBar onSearch={updateFilteredCars} />
+        </View>
+        <BrandBar onFilterByBrand={updateFilteredCars} resetData={resetData} />
+        {!loading ? (
+          allCars
+            ?.slice()
+            ?.reverse()
+            ?.map((element, i) => (
+              <View style={styles.allcars} key={i}>
+                <CardCar
+                  setNothing={setNothing}
+                  key={i}
+                  oneCar={element}
+                  handlePress={handlePress}
+                />
+              </View>
+            ))
+        ) : (
+          <>
+            <View style={{ alignItems: "center", paddingTop: 20 }}>
+              <View
+                style={{
+                  width: width * 0.9,
+                  borderRadius: 10,
+                  overflow: "hidden",
+                  backgroundColor: "white",
+                  padding: 10,
+                }}
+              >
+                <ShimmerPlaceholder
+                  style={{
+                    width: "100%",
+                    height: width * 0.374,
+                    borderRadius: 10,
+                  }}
+                  shimmerColors={["#f3f3f3", "white", "#f3f3f3"]}
+                />
+                <ShimmerPlaceholder
+                  style={{
+                    width: "100%",
+                    height: width * 0.15,
+                    marginTop: 10,
+                    borderRadius: 10,
+                  }}
+                  shimmerColors={["#f3f3f3", "white", "#f3f3f3"]}
+                />
+              </View>
+            </View>
+            <View style={{ alignItems: "center", paddingTop: 20 }}>
+              <View
+                style={{
+                  width: width * 0.9,
+                  borderRadius: 10,
+                  overflow: "hidden",
+                  backgroundColor: "white",
+                  padding: 10,
+                }}
+              >
+                <ShimmerPlaceholder
+                  style={{
+                    width: "100%",
+                    height: width * 0.374,
+                    borderRadius: 10,
+                  }}
+                  shimmerColors={["#f3f3f3", "#e6e6e6", "#f3f3f3"]}
+                />
+                <ShimmerPlaceholder
+                  style={{
+                    width: "100%",
+                    height: width * 0.15,
+                    marginTop: 10,
+                    borderRadius: 10,
+                  }}
+                  shimmerColors={["#f3f3f3", "#e6e6e6", "#f3f3f3"]}
+                />
+              </View>
+            </View>
+          </>
+        )}
+      </ScrollView>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
+        <Text>Your expo push token: {expoPushToken}</Text>
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <Text>
+            Title: {notification && notification.request.content.title}{" "}
+          </Text>
+          <Text>Body: {notification && notification.request.content.body}</Text>
+          <Text>
+            Data:{" "}
+            {notification && JSON.stringify(notification.request.content.data)}
+          </Text>
+        </View>
+      </View>
+
+      {/* <SwipeUpDown
         itemFull={<CarDetails />}
         ref={swipeUpDownRef}
         extraMarginTop={140}
@@ -320,7 +315,7 @@ function Home({ navigation }) {
         }}
       /> */}
 
-        {/* <Text
+      {/* <Text
         onPress={() => {
           navigation.navigate("TransportationMap", {
             agencyId:
@@ -333,13 +328,22 @@ function Home({ navigation }) {
         map transportation{" "}
       </Text> */}
 
-        {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
-      </View>
-    );
-  }
-
+      {activeUser?.type === "agency" ? <NavBarAgency /> : <NavBar />}
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
+  topHeader: {
+    width: width,
+    height: height * 0.015,
+    // borderBottomRightRadius: 10,
+    // borderBottomLeftRadius: 10,
+    marginBottom: height * 0.005,
+    borderBottomColor: "#6C77BF",
+    borderBottomWidth: 1,
+    backgroundColor:"white"
+  },
   header: {},
   SearchBar: {},
   NavBar: {
@@ -422,7 +426,7 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
+    // console.log(token);
   } else {
     alert("Must use physical device for Push Notifications");
   }

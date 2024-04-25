@@ -11,8 +11,8 @@
     },
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/tempLogo.png",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/aqwaWhite.png",
+      "backgroundColor": "#000000"
     },
     "permissions": {
       "camera": {

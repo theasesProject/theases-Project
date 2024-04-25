@@ -28,6 +28,7 @@ import ToggleTypesBtn from "../components/ToggleTypesBtn";
 import ToggleCharacteristicsBtn from "../components/ToggleCharacteristicsBtn";
 import ToggleDownPaymentBtn from "../components/ToggleDownPaymentBtn";
 import moment from "moment";
+import NavTab from "../components/NavBar";
 const { width, height } = Dimensions.get("screen");
 
 function AdvancedSearch() {
@@ -315,6 +316,7 @@ function AdvancedSearch() {
           </LinearGradient>
         </View>
       </ScrollView>
+      <NavTab/>
     </View>
   );
 }

@@ -39,10 +39,12 @@ import AddAgencyCar2 from "./pages/AddAgencyCar2.jsx";
 import AddCarAgency3 from "./pages/AddCarAgency3.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
 import AddReview from "./pages/AddReview.jsx";
-// import AddReview from "./components/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
 import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 import Userprofile1 from "./pages/UserProfile1.jsx";
+import NewHome from "./pages/NewHome.jsx";
+
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -51,11 +53,17 @@ function App() {
       <StripeProvider
         publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
       >
+        
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="NewHome">
             <Stack.Screen
               name="Home"
               component={Home}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="NewHome"
+              component={NewHome}
               options={{ headerShown: false }}
             />
             {/* {(props) => <Home {...props} style={globalStyles.global} />} */}

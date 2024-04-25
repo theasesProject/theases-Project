@@ -9,21 +9,14 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import car from "../assets/car2.png";
-import AddReview from "./AddReview";
+import {  useSelector } from "react-redux";
 import emptyStar from "../assets/emptyStar.png";
 import star from "../assets/star1.png";
-import heart from "../assets/heart.png";
-import user from "../assets/user.jpg";
 import location from "../assets/localisation.png";
 import phone from "../assets/phone.png";
 import { LinearGradient } from "expo-linear-gradient";
 const { height, width } = Dimensions.get("screen");
 import { useNavigation } from "@react-navigation/native";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
 import Rate from "../assets/Svg/addRating.svg";
 import { selectUser } from "../store/userSlice";
 import axios from "axios";

@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as Font from "expo-font";
 import * as ImagePicker from "expo-image-picker";
-import { Permissions } from 'expo';
-
-import { Camera, CameraType } from "expo-camera";
+import { Camera } from "expo-camera";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   View,
@@ -20,6 +18,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+// import { Camera } from "expo-camera";
 import { Image } from "react-native";
 import Arrowright from "../assets/Svg/arrowright.svg";
 import RotatableSvg from "../components/RotatedArrow";
@@ -28,7 +27,7 @@ const SignUpAgency = () => {
   const flatListRef = useRef(null);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [Document, setDocument] = useState([]);
+  const [Document, setDocument] = useState("");
   const [companyDetails, setCompanyDetails] = useState({
     name: "",
     address: "",
@@ -39,6 +38,7 @@ const SignUpAgency = () => {
     name: "",
     phone: "",
     email: "",
+    password: ""
   });
   useEffect(() => {
     const loadFonts = async () => {
@@ -50,6 +50,16 @@ const SignUpAgency = () => {
 
     loadFonts();
   }, []);
+  function isFormComplete(companyDetails, managerDetails, Document) {
+    return (
+      Object.values(companyDetails).length === 4 &&
+      Object.values(managerDetails).length === 4 &&
+      Object.values(companyDetails).every((value) => value !== "") &&
+      Object.values(managerDetails).every((value) => value !== "") &&
+      Document
+    );
+  }
+
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -99,35 +109,12 @@ const SignUpAgency = () => {
     const pageNum = Math.floor(contentOffset.x / viewSize.width);
     setActiveIndex(pageNum);
   };
-  const requestCameraPermission = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    if (status !== 'granted') {
-       alert('Sorry, we need camera permissions to make this work!');
-    }
-   };
-   
+
   const pickImage = async () => {
     try {
-      requestCameraPermission();
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setDocument(result.uri);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const e = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
+        allowsEditing: false,
         aspect: [4, 3],
         quality: 1,
       });
@@ -162,16 +149,22 @@ const SignUpAgency = () => {
               style={{
                 alignItems: "center",
                 justifyContent: "space-evenly",
+                // backgroundColor:"red",
                 height,
               }}
             >
+              <View style={{
+                height:height*.2,
+                // backgroundColor:"green"
+              }}>
               <Image
                 style={styles.img}
                 source={require("../assets/aqwaWhite.png")}
-              />
+              /></View>
               <View
                 style={{
-                  height: height * 0.3,
+                  height: height * 0.4,
+                  // backgroundColor:"yellow"
                 }}
               >
                 <TextInput
@@ -206,13 +199,13 @@ const SignUpAgency = () => {
                 />
                 <Pressable onPress={pickImage}>
                   <TextInput
-                    style={styles.input}
-                    placeholder="Upload a photo of your work license  🌆"
-                    placeholderTextColor={"#cccccc"}
-                    onChangeText={(text) =>
-                      handleCompanyChange("license", text)
+                    style={[styles.input,{opacity:Document?0.5:1}]}
+                    placeholder={
+                      Document
+                        ? "Tap here to change Image  ☑️"
+                        : "Upload a photo of your work license  🖨️"
                     }
-                    value={companyDetails.email}
+                    placeholderTextColor={"#cccccc"}
                     // keyboardType="email-address"
                     editable={false} // Make the TextInput not editable
                   />
@@ -239,16 +232,22 @@ const SignUpAgency = () => {
               style={{
                 alignItems: "center",
                 justifyContent: "space-evenly",
+                // backgroundColor:"red",
                 height,
               }}
             >
+              <View style={{
+                height:height*.2,
+                // backgroundColor:"green"
+              }}>
               <Image
                 style={styles.img}
                 source={require("../assets/aqwaWhite.png")}
-              />
+              /></View>
               <View
                 style={{
-                  height: height * 0.3,
+                  height: height * 0.4,
+                  // backgroundColor:"yellow"
                 }}
               >
                 <TextInput
@@ -273,6 +272,15 @@ const SignUpAgency = () => {
                   onChangeText={(text) => handleManagerChange("email", text)}
                   value={managerDetails.email}
                   keyboardType="email-address"
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Manager's Password"
+                  placeholderTextColor={"#cccccc"}
+                  onChangeText={(text) => handleManagerChange("password", text)}
+                  value={managerDetails.password}
+                  keyboardType="default"
+                  secureTextEntry={true}
                 />
               </View>
             </View>
@@ -304,7 +312,11 @@ const SignUpAgency = () => {
         <Pressable
           activeOpacity={0.5}
           style={[styles.FlatBtn, { backgroundColor: "#321947" }]} // Adjusted to use a solid color
-          onPress={handleButtonPress}
+          onPress={() =>
+            isFormComplete(companyDetails, managerDetails, Document)
+              ? console.log("form Submitted")
+              : handleButtonPress()
+          }
         >
           <View
             style={{
@@ -314,7 +326,13 @@ const SignUpAgency = () => {
               backgroundColor: "transparent",
             }}
           >
-            {activeIndex === 1 ? <RotatableSvg rotation={180} /> : null}
+            {isFormComplete(
+              companyDetails,
+              managerDetails,
+              Document,
+            ) ? null : activeIndex === 1 ? (
+              <RotatableSvg rotation={180} />
+            ) : null}
             <Text
               style={{
                 color: "#fff",
@@ -324,13 +342,19 @@ const SignUpAgency = () => {
                 paddingBottom: height * 0.01,
               }}
             >
-              {activeIndex === 0
-                ? "Next"
-                : activeIndex === 1
-                  ? "Previous"
-                  : "Submit"}
+              {isFormComplete(companyDetails, managerDetails, Document)
+                ? "Submit"
+                : activeIndex === 0
+                  ? "Next"
+                  : activeIndex === 1
+                    ? "Previous"
+                    : null}
             </Text>
-            {activeIndex === 0 ? <Arrowright /> : null}
+            {isFormComplete(companyDetails, managerDetails, Document) ? (
+              <Arrowright />
+            ) : activeIndex === 0 ? (
+              <Arrowright />
+            ) : null}
           </View>
         </Pressable>
       )}
@@ -393,8 +417,10 @@ const styles = StyleSheet.create({
     width: width,
   },
   ScrollContainer: {
+    height,
     alignItems: "center",
-    justifyContent: "space-evenly",
+    // justifyContent: "space-evenly",
+    flexGrow:1
   },
 });
 

@@ -1,5 +1,5 @@
 {
-  "name": "theases",
+  "name": "aqwa_cars",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "permissions": [
@@ -29,12 +29,14 @@
     "base-64": "^1.0.0",
     "base64-js": "^1.5.1",
     "buffer": "^6.0.3",
+    "depcheck": "^1.4.7",
     "deprecated-react-native-prop-types": "^5.0.0",
     "eas-cli": "^5.8.0",
     "expo": "~49.0.15",
     "expo-auth-session": "~5.0.2",
     "expo-av": "~13.4.1",
     "expo-calendar": "~11.3.2",
+    "expo-camera": "~13.4.4",
     "expo-constants": "~14.4.2",
     "expo-device": "~5.4.0",
     "expo-document-picker": "~11.5.4",
@@ -73,7 +75,8 @@
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-image": "^0.1.1",
-    "react-native-image-picker": "^7.0.2",
+    "react-native-image-picker": "^7.1.2",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-linking": "^0.0.0",
     "react-native-loading-spinner-overlay": "^3.0.1",
@@ -91,7 +94,7 @@
     "react-native-select-dropdown": "^3.4.0",
     "react-native-shimmer-placeholder": "^2.0.9",
     "react-native-slider": "^0.11.0",
-    "react-native-svg": "13.9.0",
+    "react-native-svg": "^15.2.0",
     "react-native-svg-transformer": "^1.1.0",
     "react-native-swipe-up-down": "^1.2.0",
     "react-native-swipe-up-down-fix": "^1.0.8",
@@ -108,6 +111,9 @@
     "timeago.js": "^4.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "eslint": "^8.52.0",
+    "prettier": "^3.1.0",
+    "prettier-eslint": "^16.1.2"
   }
 }

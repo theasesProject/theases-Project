@@ -43,6 +43,8 @@ import AddReview from "./pages/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
 import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 import Userprofile1 from "./pages/UserProfile1.jsx";
+import Welcome from "./pages/Welcome.jsx";
+import SignUpAgency from "./pages/SignUpAgency.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -52,7 +54,7 @@ function App() {
         publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
       >
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="Welcome">
             <Stack.Screen
               name="Home"
               component={Home}
@@ -62,6 +64,11 @@ function App() {
             <Stack.Screen
               name="AddReview"
               component={AddReview}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Welcome"
+              component={Welcome}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -145,7 +152,11 @@ function App() {
               component={ChangeRole}
               options={{ headerShown: false }}
             />
-
+            <Stack.Screen
+              name="SignUpAgency"
+              component={SignUpAgency}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Mape"
               component={Mape}

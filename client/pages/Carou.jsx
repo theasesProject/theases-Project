@@ -10,12 +10,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-reanimated-carousel";
-import frim from "../assets/Fst-removebg-preview.png";
+import frim from '../assets/Fst-removebg-preview.png';
 import scim from "../assets/secondpage-removebg-preview.png";
 import thim from "../assets/ddd.png";
-import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
-import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
-import * as Font from "expo-font";
 function Carou() {
   const [activeSlide, setActiveSlide] = React.useState(0);
   const width = Dimensions.get("window").width;

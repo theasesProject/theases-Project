@@ -29,7 +29,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import FiraMonoBold from "../assets/fonts/FiraMono-Bold.ttf";
 import FiraMonoMedium from "../assets/fonts/FiraMono-Medium.ttf";
 import * as Font from "expo-font";
-const SignUp = ({ navigation, props }) => {
+const SignUp = ({ navigation }) => {
   const inputRefName = useRef();
   const inputRefEmail = useRef();
   const inputRefPhone = useRef();

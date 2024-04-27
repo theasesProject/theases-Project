@@ -45,6 +45,8 @@ import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 import Userprofile1 from "./pages/UserProfile1.jsx";
 import Welcome from "./pages/Welcome.jsx";
 import SignUpAgency from "./pages/SignUpAgency.jsx";
+import NewSignUp from "./pages/NewSignUp.jsx";
+import NewLogIn from "./pages/NewLogIn.jsx"
 const Stack = createStackNavigator();
 
 function App() {
@@ -69,6 +71,16 @@ function App() {
             <Stack.Screen
               name="Welcome"
               component={Welcome}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="newSignUp"
+              component={NewSignUp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="newLogIn"
+              component={NewLogIn}
               options={{ headerShown: false }}
             />
             <Stack.Screen

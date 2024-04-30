@@ -39,7 +39,6 @@ import AddAgencyCar2 from "./pages/AddAgencyCar2.jsx";
 import AddCarAgency3 from "./pages/AddCarAgency3.jsx";
 import AllBookings from "./pages/AllBookings.jsx";
 import AddReview from "./pages/AddReview.jsx";
-// import AddReview from "./components/AddReview.jsx";
 import TransportationMap from "./pages/TransportationMap.jsx";
 import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 import Userprofile1 from "./pages/UserProfile1.jsx";
@@ -47,6 +46,13 @@ import Welcome from "./pages/Welcome.jsx";
 import SignUpAgency from "./pages/SignUpAgency.jsx";
 import NewSignUp from "./pages/NewSignUp.jsx";
 import NewLogIn from "./pages/NewLogIn.jsx"
+import NewHome from "./pages/NewHome.jsx";
+import CarsList from "./pages/CarsList.jsx";
+import NewCarDetails from "./pages/NewCarDetails.jsx";
+import NewProfile from "./pages/NewProfile.jsx";
+import TermsAndConditions from "./pages/TermsAndConditions.jsx";
+import ReviewAndBook from "./pages/ReviewAndBook.jsx";
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -55,11 +61,37 @@ function App() {
       <StripeProvider
         publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
       >
+        
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Welcome">
             <Stack.Screen
-              name="Home"
-              component={Home}
+              name="CarsList"
+              component={CarsList}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ReviewAndBook"
+              component={ReviewAndBook}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="NewCarDetails"
+              component={NewCarDetails}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TermsAndConditions"
+              component={TermsAndConditions}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="NewProfile"
+              component={NewProfile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="NewHome"
+              component={NewHome}
               options={{ headerShown: false }}
             />
             {/* {(props) => <Home {...props} style={globalStyles.global} />} */}

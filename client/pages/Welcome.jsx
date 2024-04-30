@@ -90,7 +90,7 @@ const Welcome = () => {
             onPress={() => {
               setLoading(true);
               setTimeout(() => {
-                navigation.navigate("SignUp");
+                navigation.navigate("newSignUp");
                 setLoading(false);
               }, 100);
             }}
@@ -107,7 +107,7 @@ const Welcome = () => {
             onPress={() => {
               setLoading2(true);
               setTimeout(() => {
-                navigation.navigate("Login");
+                navigation.navigate("newLogIn");
                 setLoading2(false);
               }, 100);
             }}
@@ -181,6 +181,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#8c52ff",
     width: width * 0.85,
+    height:height*.053,
+    justifyContent:"center",
     alignItems: "center",
     padding: 10,
     margin: 10,

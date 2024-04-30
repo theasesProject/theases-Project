@@ -47,6 +47,7 @@ import { selectRejected } from "Redux/adminSlice";
 import { selectForeignUser } from "Redux/adminSlice";
 import { getUserById } from "Redux/adminSlice";
 import { selectLoggedIn } from "Redux/adminSlice";
+import { getData } from "Redux/adminSlice";
 
 function Dashboard() {
   const logged = useSelector(selectLoggedIn)
@@ -71,7 +72,7 @@ function Dashboard() {
     }
   };
   const handleDownClickCar = () => {
-    if (startIndexCar + 10 < allUsers.length) {
+    if (startIndexCar + 10 < allUsers?.length) {
       setStartIndexCar(startIndexCar + 10);
     }
   }
@@ -84,7 +85,7 @@ function Dashboard() {
   };
 
   const handleDownClick = () => {
-    if (startIndex + 10 < allUsers.length) {
+    if (startIndex + 10 < allUsers?.length) {
       setStartIndex(startIndex + 10);
     }
   }
@@ -96,19 +97,22 @@ function Dashboard() {
       console.error(error);
     }
   }
-  useEffect(() => {
-    if (logged) {
-      const loadData = () => {
-        dispatch(getAllUsers());
-        dispatch(getAllCars());
-        dispatch(getApprovedServices());
-        dispatch(getPendingServices());
-        dispatch(getRejectedServices());
-      };
-      loadData();
-      loading && setRefresh(!refresh);
-    }
-  }, [dispatch, refresh]);
+  // useEffect(() => {
+  //   const tk = localStorage.getItem("Token")
+  //   console.log(logged)
+  //   if (logged) {
+  //     const loadData = () => {
+  //       dispatch(getData(tk))
+  //       dispatch(getAllUsers());
+  //       dispatch(getAllCars());
+  //       dispatch(getApprovedServices());
+  //       dispatch(getPendingServices());
+  //       dispatch(getRejectedServices());
+  //     };
+  //     loadData();
+  //     loading && setRefresh(!refresh);
+  //   }
+  // }, [dispatch, refresh]);
 
   return (
     <>
@@ -199,7 +203,7 @@ function Dashboard() {
               <CardHeader>
                 <h5 className="card-category">Total Users Count</h5>
                 <CardTitle tag="h3">
-                  <i className="tim-icons icon-bell-55 text-info" /> {allUsers.length}
+                  <i className="tim-icons icon-bell-55 text-info" /> {allUsers?.length}
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -219,7 +223,7 @@ function Dashboard() {
                 <h5 className="card-category">Total Income</h5>
                 <CardTitle tag="h3">
                   <i className="tim-icons icon-delivery-fast text-primary" />{" "}
-                  {[].length}
+                  {[]?.length}
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -237,7 +241,7 @@ function Dashboard() {
               <CardHeader>
                 <h5 className="card-category">Cars count</h5>
                 <CardTitle tag="h3">
-                  <i className="tim-icons icon-send text-success" />{allCars.length}
+                  <i className="tim-icons icon-send text-success" />{allCars?.length}
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -533,7 +537,7 @@ function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {rentalHistory?.slice(startIndexCar, rentalHistory.length > 10 ? startIndexCar + 10 : undefined)?.map((u, i) =>
+                    {rentalHistory?.slice(startIndexCar, rentalHistory?.length > 10 ? startIndexCar + 10 : undefined)?.map((u, i) =>
                     (
                       <tr key={i}>
                         {/* console.log(u) */}

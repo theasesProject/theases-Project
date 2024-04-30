@@ -8,6 +8,7 @@ import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
 import LoginPage from "views/Login";
+import AddNewEntities from "views/AddNewEntities";
 
 var routes = [
   {
@@ -26,14 +27,14 @@ var routes = [
     component: <Icons />,
     layout: "/admin",
   },
-  {
-    path: "/map",
-    name: "Map",
-    rtlName: "خرائط",
-    icon: "tim-icons icon-map-big",
-    component: <Map />,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/map",
+  //   name: "Map",
+  //   rtlName: "خرائط",
+  //   icon: "tim-icons icon-map-big",
+  //   component: <Map />,
+  //   layout: "/admin",
+  // },
   // {
   //   path: "/notifications",
   //   name: "Notifications",
@@ -64,6 +65,14 @@ var routes = [
     rtlName: "تسجيل دخول",
     icon: "tim-icons icon-app",
     component: <LoginPage />,
+    layout: "/admin",
+  },
+  {
+    path: "/Add-New-Entities",
+    name: "Add New Entities",
+    rtlName: "قائمة الجدول",
+    icon: "tim-icons icon-laptop",
+    component: <AddNewEntities />,
     layout: "/admin",
   },
   // {

@@ -44,6 +44,8 @@ import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 import Userprofile1 from "./pages/UserProfile1.jsx";
 import Welcome from "./pages/Welcome.jsx";
 import SignUpAgency from "./pages/SignUpAgency.jsx";
+import NewSignUp from "./pages/NewSignUp.jsx";
+import NewLogIn from "./pages/NewLogIn.jsx"
 import NewHome from "./pages/NewHome.jsx";
 import CarsList from "./pages/CarsList.jsx";
 import NewCarDetails from "./pages/NewCarDetails.jsx";
@@ -61,7 +63,7 @@ function App() {
       >
         
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="NewCarDetails">
+          <Stack.Navigator initialRouteName="Welcome">
             <Stack.Screen
               name="CarsList"
               component={CarsList}
@@ -101,6 +103,16 @@ function App() {
             <Stack.Screen
               name="Welcome"
               component={Welcome}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="newSignUp"
+              component={NewSignUp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="newLogIn"
+              component={NewLogIn}
               options={{ headerShown: false }}
             />
             <Stack.Screen

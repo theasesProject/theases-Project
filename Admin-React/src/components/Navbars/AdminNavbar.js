@@ -170,15 +170,15 @@ function AdminNavbar(props) {
                   <p className="d-lg-none">Log out</p>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
-                  <NavLink tag="li">
+                  {/* <NavLink tag="li">
                     <DropdownItem className="nav-item" onClick={()=>{
                       navigate("/admin/user-profile")
                     }}>Profile</DropdownItem>
-                  </NavLink>
+                  </NavLink> */}
                   {/* <NavLink tag="li">
                     <DropdownItem className="nav-item">Settings</DropdownItem>
                   </NavLink> */}
-                  <DropdownItem divider tag="li" />
+                  {/* <DropdownItem divider tag="li" /> */}
                   <NavLink tag="li">
                     <DropdownItem className="nav-item" onClick={()=>{
                       dispatch(logout());

@@ -197,7 +197,10 @@ const SignUpAgency = () => {
                   value={companyDetails.email}
                   keyboardType="email-address"
                 />
-                <Pressable onPress={pickImage}>
+                <Pressable 
+                // onPress={pickImage}
+                >
+                  
                   <TextInput
                     style={[styles.input,{opacity:Document?0.5:1}]}
                     placeholder={

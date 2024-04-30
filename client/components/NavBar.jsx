@@ -1,146 +1,84 @@
-import React, { useEffect } from "react";
-import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import SignUp from ".././assets/Svg/signUpNav.svg";
-import Bell from "../assets/Svg/bell-notification.svg"
-import Hm from ".././assets/Svg/house-solid.svg";
-import Ms from ".././assets/Svg/envelope-solid.svg";
-import Fa from ".././assets/Svg/heart-solid.svg";
-import Pr from ".././assets/Svg/user-nav.svg";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Animated, Platform } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Updated to MaterialIcons
 
-const { height } = Dimensions.get("screen");
-function NavBar({ style }) {
-  const loggedIn = useSelector((state) => state.user.loggedIn);
+const { width, height } = Dimensions.get("window");
 
-  const navigation = useNavigation();
-  const route = useRoute();
-  const isActive = (routeName) =>
-    route.name === routeName ? "#6C77BF" : "grey";
-  return (
-    <View style={[styles.navBar, style]}>
-      <Pressable
-        style={styles.quarter}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <View style={styles.hm}>
-          <Hm fill={isActive("Home")} />
-          <Text
-            style={{ color: isActive("Home")}}
-          >
-            Home
-          </Text>
-        </View>
-      </Pressable>
+// Define the position object outside the component
+const position = {
+ NewHome: 0,
+ Search: width * 0.25,
+ History: width * 0.5,
+ Profile: width * 0.75,
+};
 
-      <Pressable
-        style={styles.quarter}
-        onPress={() => navigation.navigate("Messages")}
-      >
-        <View style={styles.hm}>
-          <Ms fill={isActive("Messages")} />
-          <Text
-            style={{
-              color: isActive("Messages"),
-           
-            }}
-          >
-            Messeges
-          </Text>
-        </View>
-      </Pressable>
+const NavTab = () => {
+ const route = useRoute();
+ const navigation = useNavigation();
+ const [slideAnim] = useState(new Animated.Value(position[route.name])); // Initialize slideAnim with the current route's position
 
-      <Pressable
-        style={styles.quarter}
-        onPress={() => {
-          loggedIn
-            ? navigation.navigate("Favorites")
-            : navigation.navigate("SignUp");
-        }}
-      >
-        <View style={styles.hm}>
-          {!loggedIn ? (
-            <SignUp fill={isActive("Favorites")} />
-          ) : (
-            <Fa fill={isActive("Favorites")} />
-          )}
-          <Text
-            style={{
-              color: isActive("Favorites"),
-              
-              fontSize:13
-            }}
-          >
-            {loggedIn ? "Favorites" : "SignUp"}
-          </Text>
-        </View>
-      </Pressable>
-{
-  loggedIn ? (
-<Pressable
-      style={styles.quarter}
-      onPress={() => {
-        loggedIn
-          ? navigation.navigate("Notification")
-          : null;
-      }}
-      >
-            <Bell fill={isActive("Notification")} />
+ useEffect(() => {
+    Animated.spring(slideAnim, {
+      toValue: position[route.name],
+      useNativeDriver: false,
+      bounciness: 10, 
+    }).start();
+ }, [route]);
 
-            <Text
-            style={{
-              color: isActive("Notification"),
-            }}
-          >
-            {loggedIn ? "Notifs" : null}
-          </Text>
-          
-      </Pressable>):null
-}
-      
-      <Pressable
-        style={styles.quarter}
-        onPress={() => {
-          if (loggedIn) {
-            navigation.navigate("UsersProfile");
-          } else {
-            navigation.navigate("Login");
-          }
-        }}
-      >
-        <View style={styles.hm}>
-          <Pr fill={isActive("Userprofile")} />
-          <Text
-            style={{
-              color: isActive("Userprofile"),
-           
-            }}
-          >
-            {loggedIn ? "Profile" : "Login"}
-          </Text>
-        </View>
-      </Pressable>
+ const handlePress = (tabName) => {
+    navigation.navigate(tabName);
+ };
+
+ return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.tab} onPress={() => handlePress('NewHome')}>
+        <Icon name="home" size={20} color={route.name === 'Home' ? '#8c52ff' : '#bdbdbd'} />
+        {route.name === 'Home' && <Text style={[styles.tabText, { color: '#8c52ff' }]}>Home</Text>}
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.tab} onPress={() => handlePress('Search')}>
+        <Icon name="search" size={20} color={route.name === 'Search' ? '#8c52ff' : '#bdbdbd'} />
+        {route.name === 'Search' && <Text style={[styles.tabText, { color: '#8c52ff' }]}>Search</Text>}
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.tab} onPress={() => handlePress('History')}>
+        <Icon name="history" size={20} color={route.name === 'History' ? '#8c52ff' : '#bdbdbd'} />
+        {route.name === 'History' && <Text style={[styles.tabText, { color: '#8c52ff' }]}>History</Text>}
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.tab} onPress={() => handlePress('Profile')}>
+        <Icon name="person" size={20} color={route.name === 'Profile' ? '#8c52ff' : '#bdbdbd'} />
+        {route.name === 'Profile' && <Text style={[styles.tabText, { color: '#8c52ff' }]}>Profile</Text>}
+      </TouchableOpacity>
+      <Animated.View style={[styles.tabIndicator, { transform: [{ translateX: slideAnim }]}]} />
     </View>
-  );
-}
+ );
+};
+
 const styles = StyleSheet.create({
-  navBar: {
-    borderTopColor: "#6C77BF",
-    borderTopWidth: 1,
-    backgroundColor: "white",
-    height: height * 0.07,
-    flexDirection: "row",
-    justifyContent: "space-around", // Distribute items evenly along the row
-    alignItems: "center", // Center items vertically
-  },
-  quarter: {
-    flex: 1,
-    justifyContent: "center", // Center items vertically
-    alignItems: "center", // Center items horizontally
-  },
-  hm: {
-    alignItems: "center", // Center items horizontally
-  },
+ container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#ebebeb',
+    height: height * 0.09,
+    width: width * 1,
+ },
+ tab: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width * 0.25,
+    height: height * 0.1
+ },
+ tabText: {
+    fontSize: 14,
+    marginTop: 4,
+ },
+ tabIndicator: {
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: '#8c52ff',
+    height: 3,
+    width: width * 0.25,
+ },
 });
 
-export default NavBar;
+export default NavTab;

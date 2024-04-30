@@ -58,9 +58,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    // borderTopWidth: 1,
-    // borderTopColor: '#ccc',
+    backgroundColor: '#ebebeb',
     height: height * 0.09,
     width: width * 1,
  },
@@ -76,8 +74,8 @@ const styles = StyleSheet.create({
  },
  tabIndicator: {
     position: 'absolute',
-    bottom: 5,
-    backgroundColor: '#8c52ff', // Updated color
+    bottom: 0,
+    backgroundColor: '#8c52ff',
     height: 3,
     width: width * 0.25,
  },

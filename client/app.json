@@ -1,75 +1,66 @@
 {
   "expo": {
-    "assets": ["./fonts/MuseoModerno-VariableFont_wght.ttf"],
-    "name": "theases",
-    "slug": "theases",
-    "version": "1.0.0",
-    "jsEngine": "jsc",
-    "orientation": "portrait",
-    "androidNavigationBar": {
-      "visible": "sticky-immersive"
-    },
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/aqwaWhite.png",
-      "backgroundColor": "#000000"
-    },
-    "permissions": {
-      "camera": {
-        "settings": {
-          "ios": {
-            "require": true
-          }
-        }
-      },
-      "microphone": {
-        "settings": {
-          "ios": {
-            "require": true
-          }
-        }
-      }
-    },
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSCameraUsageDescription": "This app needs access to the camera to make video calls",
-        "NSMicrophoneUsageDescription": "This app needs access to the microphone to make video calls"
-      }
-    },
-    "android": {
-      "package": "android.package",
-      "googleServiceFile": "./google-services.json",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "permissions": [
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "CAMERA",
-        "RECORD_AUDIO"
-      ]
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      [
-        "@config-plugins/react-native-webrtc",
-        {
-          "audio": true,
-          "video": true
-        }
-      ],
-      ["@config-plugins/react-native-webrtc"],
-      "expo-document-picker"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "23c0b65b-8ab5-4a64-9a56-0ff2118515ad"
-      }
-    }
+     "assets": ["./fonts/MuseoModerno-VariableFont_wght.ttf"],
+     "name": "aqwa cars",
+     "slug": "theases",
+     "version": "1.0.0",
+     "jsEngine": "jsc",
+     "orientation": "portrait",
+     "androidNavigationBar": {
+       "visible": "sticky-immersive"
+     },
+     "userInterfaceStyle": "light",
+     "splash": {
+       "image": "./assets/aqwaWhite.png",
+       "backgroundColor": "#000000"
+     },
+     "permissions": [
+       "CAMERA",
+       "MICROPHONE"
+     ],
+     "assetBundlePatterns": ["**/*"],
+     "ios": {
+       "supportsTablet": true,
+       "infoPlist": {
+         "NSCameraUsageDescription": "This app needs access to the camera to make video calls",
+         "NSMicrophoneUsageDescription": "This app needs access to the microphone to make video calls"
+       }
+     },
+     "android": {
+       "package": "android.package",
+       "googleServiceFile": "./google-services.json",
+       "adaptiveIcon": {
+         "foregroundImage": "./assets/adaptive-icon.png",
+         "backgroundColor": "#ffffff"
+       }
+     },
+     "web": {
+       "favicon": "./assets/favicon.png"
+     },
+     "plugins": [
+       [
+         "expo-camera",
+         {
+           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+           "recordAudioAndroid": true
+         }
+       ],
+       [
+         "@config-plugins/react-native-webrtc",
+         {
+           "audio": true,
+           "video": true
+         }
+       ],
+       "expo-document-picker",
+       "expo-image-picker"
+     ],
+     "extra": {
+       "eas": {
+         "projectId": "23c0b65b-8ab5-4a64-9a56-0ff2118515ad"
+       }
+     }
   }
-}
+ }
+ 

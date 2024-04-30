@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Platform, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Platform,TextInput, TouchableOpacity, ImageBackground, Pressable } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import ToggleSwitch from '../components/ToggleSwitch';
 import NavBar from '../components/NavBar';
 import { Calendar } from 'react-native-calendars';
 import ModalFooter from '../components/ModalFooter';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get("window");
+const backgroundHeight = Platform.OS === 'android' ? height * 0.59 : height * 0.55;
 
 const NewHome = () => {
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedFinishDate, setSelectedFinishDate] = useState(() => {
@@ -19,16 +22,13 @@ const NewHome = () => {
   });
   const [disabledDates, setDisabledDates] = useState({});
   const [markedDates, setMarkedDates] = useState({});
-  console.log('these are the ranged dates',markedDates)
 
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  // Function to disable dates before the current date
   const disablePastDates = () => {
     const today = new Date();
     const disabledDates = {};
     const dateString = today.toISOString().split('T')[0];
-    // Mark all dates before today as disabled, excluding today
     for (let i = 1; i < today.getDate(); i++) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
@@ -38,26 +38,18 @@ const NewHome = () => {
     return disabledDates;
   };
 
-  useState(() => {
-    setDisabledDates(disablePastDates());
-  });
-
   useEffect(() => {
-    const initialMarkedDates = {
-      [selectedStartDate]: { startingDay: true, selected: true, color: '#8c52ff', textColor: 'white' },
-      [selectedFinishDate]: { endingDay: true, selected: true, color: '#8c52ff', textColor: 'white' },
-    };
-    setMarkedDates(initialMarkedDates);
+    setDisabledDates(disablePastDates());
   }, []);
 
   const onDayPress = (day) => {
     const selectedDate = new Date(day.dateString);
     const today = new Date();
-    
+
     if (selectedDate < today) {
       return;
     }
-    
+
     if (!selectedStartDate || selectedDate < new Date(selectedStartDate)) {
       setSelectedStartDate(day.dateString);
       setSelectedFinishDate(null);
@@ -70,7 +62,7 @@ const NewHome = () => {
         ...markedDates,
         [day.dateString]: { endingDay: true, selected: true, color: '#8c52ff', textColor: 'white' },
       });
-  
+
       const startDate = new Date(selectedStartDate);
       const finishDate = new Date(day.dateString);
       const datesToMark = {};
@@ -93,19 +85,23 @@ const NewHome = () => {
       setMarkedDates({});
     }
   };
-  
-
 
   const calendarTheme = {
     backgroundColor: '#ffffff',
     calendarBackground: '#ffffff',
     textSectionTitleDisabledColor: '#d9e1e8',
-    selectedDayBackgroundColor: '#8c52ff', 
+    selectedDayBackgroundColor: '#8c52ff',
     todayTextColor: '#8c52ff',
     arrowColor: '#8c52ff',
-
   };
-  
+
+  const [showAdditionalRow, setShowAdditionalRow] = useState(false);
+
+  const handleTogglePress = () => {
+    console.log('befooooore',showAdditionalRow)
+    setShowAdditionalRow(!showAdditionalRow);
+    console.log('afteeeeeer',showAdditionalRow)
+  };
 
   return (
     <View style={styles.container}>
@@ -113,29 +109,48 @@ const NewHome = () => {
         <ImageBackground style={styles.background} source={require('../assets/Karhba.png')} resizeMode='cover'>
           <Image style={styles.logo} source={require('../assets/aqwaWhite.png')} />
         </ImageBackground>
-        <View styles={styles.filterCardWrapper}>
+        <View style={styles.filterCardWrapper}>
           <View style={styles.filterCard}>
-            <View style={styles.firstRow}>
-              <Text style={styles.firstText}>Different return station</Text>
-              <ToggleSwitch />
-            </View>
+          <View style={styles.firstRow}>
+  <Text style={styles.firstText}>Different return station</Text>
+  <ToggleSwitch isEnabled={showAdditionalRow} onToggle={setShowAdditionalRow} />
+</View>
+
             <View style={styles.secondRow}>
-              <Ionicons name="ios-car" size={25} color="grey" />
+              <Ionicons name="car-outline" size={25} color="grey" />
               <Text style={styles.firstText}>Your Location</Text>
             </View>
+            {showAdditionalRow && (
+        <View style={styles.additionalRow}>
+          <Ionicons name="add" size={20} color="grey" />
+          <TextInput
+            style={[styles.additionalText, { color: 'grey' }]}
+            editable={false}
+            placeholder="Another Return Station"
+          />
+        </View>
+      )}
             <TouchableOpacity style={styles.thirdRow} onPress={() => setModalVisible(true)}>
               <View style={styles.date}>
-                <Ionicons name="ios-calendar" size={25} color="grey" />
-                <Text style={styles.firstText}>{`From ${selectedStartDate}`}</Text>
+                <Ionicons name="calendar-outline" size={25} color="grey" />
+                <View style={styles.column}>
+                  <Text style={styles.firstText}>{selectedStartDate ? `From ${selectedStartDate} -` : " pick a date"}</Text>
+                  <Text style={styles.firstText}>{selectedFinishDate ? `To      ${selectedFinishDate}` : " pick a date"}</Text>
+                </View>
               </View>
               <View style={styles.time}>
                 <Ionicons name="time-outline" size={25} color="grey" />
                 <Text style={styles.firstText}>{`${currentTime}`}</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.find}>
-              <Text style={styles.textButton}>Book a car</Text>
-            </TouchableOpacity>
+            <View style={styles.BtnContainer}>
+              <TouchableOpacity style={styles.find}>
+                <Text style={styles.textButton}>Book a car</Text>
+              </TouchableOpacity>
+              <Pressable onPress={() => navigation.navigate('Welcome')}>
+                <Text style={styles.secondText}>Sign in or create account</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </View>
@@ -178,7 +193,7 @@ const styles = StyleSheet.create({
   },
   background: {
     width: width * 1,
-    height: height * 0.62,
+    height: backgroundHeight,
     alignItems: 'center',
   },
   logo: {
@@ -190,7 +205,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     width: width * 1,
-    gap: -19
+    gap: -90
   },
   filterCardWrapper: {
     flex: 1,
@@ -210,13 +225,25 @@ const styles = StyleSheet.create({
   },
   filterCard: {
     borderRadius: 20,
-    borderWidth: 0.6,
+    // borderWidth: 0.6,
     width: width * 1,
+    // height: height * 0.38,
     backgroundColor: 'white',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   firstRow: {
     height: height * 0.078,
-    paddingHorizontal: 28,
+    paddingHorizontal: width * 0.05,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -225,7 +252,7 @@ const styles = StyleSheet.create({
   },
   secondRow: {
     height: height * 0.078,
-    paddingLeft: 20,
+    paddingHorizontal: width * 0.05,
     flexDirection: 'row',
     gap: 5,
     // borderBottomWidth: 0.2,
@@ -251,20 +278,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 20,
+    paddingLeft: width * 0.08,
   },
   find: {
-    width: width * 1,
+    width: width * 0.93,
     alignItems: 'center',
     justifyContent: 'center',
-    height: height * 0.08,
+    height: height * 0.065,
     backgroundColor: 'black',
-    borderBottomEndRadius: 20,
-    borderBottomStartRadius: 20
+    borderRadius: 15,
+    // borderBottomEndRadius: 20,
+    // borderBottomStartRadius: 20
   },
   textButton: {
     color: 'white',
-    fontSize: 17,
+    fontSize: 15,
     fontWeight: '700',
   },
   modal: {
@@ -289,9 +317,32 @@ const styles = StyleSheet.create({
   markedDayText: {
     color: 'white'
   },
-  firstText:{
-    fontSize:15,
-    fontWeight:'600',
+  firstText: {
+    fontSize: 15,
+    fontWeight: '600',
     // fontFamily:'leagueSpartan'
+  },
+  BtnContainer: {
+    alignItems: 'center',
+    marginBottom: height * 0.02,
+    gap: Platform.OS === "android" ? 17 : 7
+  },
+  secondText: {
+    fontSize: 12,
+    fontWeight: '500',
+    textDecorationLine: 'underline'
+  },
+  additionalRow: {
+    height: height * 0.078,
+    paddingHorizontal: width * 0.05,
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomColor: "grey",
+    // borderBottomWidth: 0.2,
+  },
+  additionalText: {
+    fontSize: 15,
+    fontWeight: '600',
   }
 });

@@ -52,7 +52,7 @@ function ChangeRole({ navigation }) {
     "50%",
     "100%",
   ];
- 
+
   const handleChangeName = (content) => {
     if (!content) {
       let copy = form;
@@ -161,14 +161,14 @@ function ChangeRole({ navigation }) {
         <TextInput
           value={form.name}
           onChangeText={handleChangeName}
-          placeholder="Enter Your Agency Name"
+          placeholder="Type Your Agency Name Here...."
           style={styles.input}
         />
         <TextInput
           value={form.companyNumber}
           onChangeText={handleChangeCompanyPhone}
           keyboardType="phone-pad"
-          placeholder="Enter Your Agency Number"
+          placeholder="Type Your Agency Number Here...."
           style={styles.input}
         />
         {!agencyLocation ? (
@@ -195,7 +195,7 @@ function ChangeRole({ navigation }) {
 
         <View style={styles.dropdownContainer}>
           <Text style={styles.dropdownTitle}>
-            pick your default deposit value...
+            pick your default deposit value
           </Text>
           <SelectDropdown
             onSelect={(selectedItem, index) => {
@@ -204,7 +204,7 @@ function ChangeRole({ navigation }) {
             buttonStyle={styles.dropdown}
             dropdownStyle={{ ...styles.dropdownOptions, height: 250 }} // adjust the height as needed
             defaultButtonText={
-              <Text style={{ fontSize: 14, color: "gray" }}>deposit: </Text>
+              <Text style={{ fontSize: 13, color: "grey" }}>deposit: </Text>
             }
             data={deposit}
             dropdownIconPosition="right"
@@ -264,11 +264,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginBottom: height * 0.01,
     borderRadius: 5,
+    color:"grey",
     height: 50,
-    fontSize: 14,
+    fontSize: 13,
     padding: 10,
   },
   locationInput: {
+    padding: 10,
     borderWidth: 1,
     borderColor: "#6C77BF",
     borderRadius: 5,
@@ -276,15 +278,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     display: "flex",
     height: 50,
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
   },
   inputIcon: {
-    borderRadius: 5,
-    borderRadius: 5,
-    paddingRight: 140,
-    fontSize: 12,
-
+    justifyContent: "flex-start",
+    // paddingRight: 140,
+    color:"grey",
+    fontSize: 13,
   },
   locationText: {
     paddingVertical: height * 0.0155,
@@ -292,10 +293,11 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: "absolute",
-    top: 16,
-    left: "88%",
-    width: "10%",
+    top: height*.015,
+    left: width*.8,
     zIndex: 1,
+    // height:height*.1,
+    // width: "40%"
   },
   check: {
     borderWidth: 1,
@@ -322,7 +324,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   dropdownTitle: {
-    fontSize: 11,
+    fontSize: 13,
   },
   dropdown: {
     backgroundColor: "white",
@@ -345,15 +347,13 @@ const styles = StyleSheet.create({
   },
   addImgText: {
     color: "white",
-    fontSize: 16,
-
+    fontSize: 18,
   },
   errorText: {
     color: "red",
-
   },
   imgsContainer: {
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: "#6C77BF",
     borderRadius: 5,
     flexWrap: "wrap",
@@ -397,7 +397,6 @@ const styles = StyleSheet.create({
   submitBtnContent: {
     color: "white",
     fontSize: 18,
-
   },
 });
 

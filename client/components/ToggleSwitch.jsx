@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Switch, View, StyleSheet,Dimensions } from 'react-native';
 const { width, height } = Dimensions.get("window");
-const ToggleSwitch = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-
+const ToggleSwitch = ({ isEnabled, onToggle }) => {
   const toggleSwitch = () => {
-    setIsEnabled((previousState) => !previousState);
+    onToggle(!isEnabled);
   };
 
   return (

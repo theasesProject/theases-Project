@@ -1,80 +1,45 @@
-.tabChangeContainer {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  padding-top: 1rem;
-  /* background-color: red; */
-  /* height: 1vh; Adjust the height as needed */
-  flex-direction: row; /* Stack the children vertically */
-}
-.separator {
-  height: 4.5rem; /* Adjust the height as needed */
-  width: 0.01rem; /* Adjust the width as needed */
-  background-color: #000; /* Adjust the color as needed */
-  margin-right: 1rem;
-  margin-left: 1rem;
-  /* margin:1rem; Adds some space around the separator */
-}
-.header {
-  height: 9vh;
-  cursor:pointer;
-  font-family: league system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  /* width: 12vh; */
-  padding-bottom: 1rem;
-  color: #000;
-  font-size: 1.6rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* background-color: red; */
+.CardHeader{
+  font-size: 1.5rem;
 }
 .centerBody{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.custom-swal-container {
-  top: -20% !important; /* Adjust this value as needed */
- }
- .custum-file-upload {
-  height: 200px;
-  width: 300px;
   display: flex;
-  flex-direction: column;
-  align-items: space-between;
-  gap: 20px;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed #cacaca;
-  background-color: rgba(255, 255, 255, 1);
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
+  flex-direction: row;
+}
+.separator{
+  width: .005rem;
+  background-color: #30416B;
+}
+#Title{
+  font-size: 3.5rem;
+  color: #30416B;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.list-map {
+  padding: 3rem;
+  /* background-color: #30416B; */
+  height: 4rem;
+  margin-Left:.1rem;
+  color: black;
+  margin-bottom:.2rem;
+  border-bottom-style:ridge;
+  border-bottom-width:.1rem;
+  border-bottom-color:black;
+  /* border-radius: .5rem; */
+  /* width: 12rem; */
+  border-bottom-color: "#00000";
+  /* border-width:.01rem; */
+  border-bottom-style: ridge;
+  display: flex; /* Make this a flex container */
+  justify-content: flex-start; /* Align items to the start */
+  align-items: center; /* Center items vertically */
+  margin-top: 1rem;
+  /* margin: 1rem; */
+  /* margin: 1rem; */
+}
+.modal {
+  position: fixed; /* Fixed position to cover the entire screen */
+  top: 50%; /* Move the modal down by half its height */
+  left: 50%; /* Move the modal right by half its width */
+  transform: translate(-50%, -50%); /* Adjust the modal's position to perfectly center it */
 }
 
-.custum-file-upload .icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.custum-file-upload .icon svg {
-  height: 80px;
-  fill: rgba(75, 85, 99, 1);
-}
-
-.custum-file-upload .text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.custum-file-upload .text span {
-  font-weight: 400;
-  color: rgba(75, 85, 99, 1);
-}
-
-.custum-file-upload input {
-  display: none;
-}

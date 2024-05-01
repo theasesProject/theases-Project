@@ -94,6 +94,7 @@ function Sidebar(props) {
     <BackgroundColorContext.Consumer>
       {({ color }) => (
         <div className="sidebar" style={{
+          width:"15.8rem",
           pointerEvents: !logged ? 'none' : 'auto',
           backdropFilter: !logged ? 'blur(10px)' : 'none',
           filter: !logged ? 'blur(5px)' : "none"

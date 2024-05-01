@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import {
   Card,
   CardBody,
   Row,
   Col,
+  CardHeader,
+  Button,
+
+  ListGroupItem,
+  ListGroup,
 } from "reactstrap";
 import "../assets/css/addNewEntities.css"
+import { Modal } from 'react-responsive-modal';
 import Select from 'react-select'
+import "../assets/css/customUpload.css"
+import { ReactComponent as Add } from '../assets/Svg/add-circle.svg';
 const data = {
   "Al-Kāf": {
     "key1": "value1",
@@ -108,9 +116,10 @@ const data = {
 }
 const AddNewEntities = () => {
   const [activeTab, setActiveTab] = useState('car');
-  const [currentStep, setCurrentStep] = useState(1); // Initialize the current step
+  const [isOpen, setIsOpen] = useState(false);
   const [imageUri, setImageUri] = useState(null); // State to store the image URI
-
+  const onOpenModal = () => setIsOpen(true);
+  const onCloseModal = () => setIsOpen(false);
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -233,21 +242,35 @@ const AddNewEntities = () => {
       setImage(URL.createObjectURL(file)); // Update the image state with the selected file
     }
   };
-
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+  const fileInputRef = useRef(null);
   return (
     <>
       <div className="content">
         <Row>
           <Col md="12">
-            <Card className='boxContainer'>
-              <div className='tabChangeContainer'>
-                {/* <div className='header' onClick={() => (handleTabClick('car'), openModal(1))} active={activeTab === 'car'}>Add a Car</div>
+            <Card className='boxContainer' style={{
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+            }}>
+              <CardHeader style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                height: "3rem"
+              }}>
+                {/* <div className='CardHeader'>
+                  List Of Recently Added Cars And Newly Joined Companies
+                </div> */}
+              </CardHeader>
+              {/* <div className='tabChangeContainer'> */}
+              {/* <div className='header' onClick={() => (handleTabClick('car'), openModal(1))} active={activeTab === 'car'}>Add a Car</div>
                 <div className="separator"></div>
                 <div className='header' onClick={() => handleTabClick('company')} active={activeTab === 'company'}>Add a Company</div> */}
-              </div>
-              <CardBody className='centerBody'>
-
-                <div style={{
+              {/* </div> */}
+              {/* <div style={{
                   width: "50vh"
                 }}>
                   <Select
@@ -261,40 +284,143 @@ const AddNewEntities = () => {
 
                 </div>
                 <div>
-                  <label className="custum-file-upload" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} for="file">
-                    <div className="icon">
-                      {image ? (
-                        <img src={image} alt="Selected" style={{ width: '100%', height: 'auto' }} />
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24">
-                          {/* SVG content */}
-                        </svg>
-                      )}
-                    </div>
-                    <div className="text">
-                      <span>Click to upload image</span>
-                    </div>
-                    <input type="file" id="file" onChange={handleChange} />
-                  </label>
+                  <form className="file-upload-form">
+                    <label htmlFor="file" className="file-upload-label" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+                      <div className="file-upload-design">
+                        {image ? (
+                          <img src={image} alt="Selected" style={{ width: '100%', height: 'auto' }} />
+                        ) : (
+                          <svg viewBox="0 0 640 512" height="1em">
+                            <path
+                              d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+                            ></path>
+                          </svg>
+                        )}
+                        <p>Drag and Drop</p>
+                        <p>or</p>
+                        <span className="browse-button" onClick={handleClick}>Browse file</span>
+                      </div>
+                      <input id="file" type="file" ref={fileInputRef} onChange={handleChange} style={{ display: 'none' }} />
+                    </label>
+                  </form>
 
+                </div> */}
+              <CardBody style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+
+                // backgroundColor:"red"
+              }}>
+                <Modal className="Modal" open={isOpen} onClose={onCloseModal} center>
+                  <h2>Simple centered modal</h2>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                    pulvinar risus non risus hendrerit venenatis. Pellentesque sit amet
+                    hendrerit risus, sed porttitor quam.
+                  </p>
+                </Modal>
+                <div className='half' style={{
+                  justifyContent: "flex-start",
+                  display: "flex",
+                  flexDirection: "column"
+                }}>
+                  <div id='Title'>Recently Added Cars</div>
+                  <Button onClick={onOpenModal} style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                    width: "17rem",
+                    marginTop: "2rem",
+                  }}><Add />Add a New Car</Button>
+                  <ListGroup style={{
+                    marginTop: "5rem",
+                    gap: "1rem"
+                  }} flush>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Cras justo odio</ListGroupItem>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Dapibus ac facilisis in</ListGroupItem>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Morbi leo risus </ListGroupItem>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Porta ac consectetur ac </ListGroupItem>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Vestibulum at eros</ListGroupItem>
+                  </ListGroup>
                 </div>
-                {activeTab === 'car' && (
-                  <div>
-                    <p>Recently Added Cars :</p>
-                    {/* Content for Car tab */}
-                  </div>
-                )}
-                {activeTab === 'company' && (
-                  <div>
-                    <p>Companies Who Recently Joined Us :</p>
-                    {/* Content for Company tab */}
-                  </div>
-                )}
+                <div className='separator'></div>
+                <div className='half'>
+                  <div id='Title'>Newly Joined Companies</div>
+                  <Button style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                    width: "17rem",
+                    marginTop: "2rem",
+                  }}><Add />Add a New Company</Button>
+                  <ListGroup style={{
+                    marginTop: "5rem",
+                    gap: "1rem"
+                  }} flush>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Cras justo odio</ListGroupItem>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Dapibus ac facilisis in</ListGroupItem>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Morbi leo risus </ListGroupItem>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Porta ac consectetur ac </ListGroupItem>
+                    <ListGroupItem style={{
+                      borderStyle: "ridge",
+                      borderWidth: ".1rem",
+                      borderColor: "#30416B",
+                      borderRadius: "5px"
+                    }}>Vestibulum at eros</ListGroupItem>
+                  </ListGroup>
+                </div>
               </CardBody>
             </Card>
           </Col>
         </Row>
       </div>
+
     </>
   );
 };

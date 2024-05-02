@@ -267,7 +267,7 @@ function Icons() {
                         All Clients:
                       </div>
                       <Row>
-                        {allUsers.map((user, i) =>
+                        {allUsers?.map((user, i) =>
                           user.type === "client" ? (
                             <Col
                               key={i}
@@ -367,7 +367,7 @@ function Icons() {
                         All Agencies:
                       </div>
                       <Row>
-                        {allUsers.map((user, i) =>
+                        {allUsers?.map((user, i) =>
                           user.type === "agency" ? (
 
                             <Col
@@ -465,7 +465,7 @@ function Icons() {
                           All Clients:
                         </div>
                         <Row>
-                          {allUsers.map((user, i) =>
+                          {allUsers?.map((user, i) =>
                             user.type === "client" ? (
                               < Col
                                 key={i}
@@ -564,7 +564,7 @@ function Icons() {
                           All Agencies:
                         </div>
                         <Row>
-                          {allUsers.map((user, i) =>
+                          {allUsers?.map((user, i) =>
                             user.type === "agency" ? (
                               <Col
                                 key={i}
@@ -660,7 +660,7 @@ function Icons() {
                           All Banned :
                         </div>
                         <Row>
-                          {allUsers.map((user, i) =>
+                          {allUsers?.map((user, i) =>
                             user.stateBlocked ? (
                               < Col
                                 key={i}
@@ -758,7 +758,7 @@ function Icons() {
                           All Active :
                         </div>
                         <Row>
-                          {allUsers.map((user, i) =>
+                          {allUsers?.map((user, i) =>
                             !user.stateBlocked ? (
                               < Col
                                 key={i}

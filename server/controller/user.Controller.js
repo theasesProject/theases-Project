@@ -89,6 +89,46 @@ module.exports = {
   //     next(err);
   //   }
   // },
+  SignUpCompany: async (req, res, next) => {
+    try {
+      req.body.type = "agency"
+      const NameCheck = await db.User.findAll({
+        where: {
+          userName: req.body.userName,
+        },
+      });
+      const emailCheck = await db.User.findAll({
+        where: {
+          email: req.body.email,
+        },
+      });
+      if (NameCheck[0] || emailCheck[0]) {
+        if (NameCheck[0]) {
+          return res.status(403).send({
+            status: "Blocked",
+            message: "This UserName Already Exists",
+            found: NameCheck,
+          });
+        }
+        if (emailCheck[0]) {
+          return res.status(403).send({
+            status: "Blocked",
+            message: "This Email Already Exists",
+            found: emailCheck,
+          });
+        }
+      } else {
+        const Company = await db.User.create(req.body);
+        res.status(201).send({
+          status: "success",
+          message: "Company added successfully!!!",
+          data: Company,
+        });
+      }
+    } catch (err) {
+      next(err);
+    }
+  },
   // checks if a user exists using email
 
   // SignUpUser: async (req, res, next) => {

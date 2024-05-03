@@ -22,7 +22,7 @@ const {
   sendOTPForgetPassword,
   sendWelcomeEmail,
   forgetPassword,
-  changePassword
+  changePassword,
   SignUpCompany
 } = require("../controller/user.Controller");
 

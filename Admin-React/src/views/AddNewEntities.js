@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Swal from 'sweetalert2';
 import {
@@ -16,6 +16,9 @@ import Select from 'react-select'
 import "../assets/css/customUpload.css"
 import Modal from 'react-modal';
 import { ReactComponent as Add } from '../assets/Svg/add-circle.svg';
+import companyImage from "../assets/img/companyImage.jpeg"
+import { SignUpCompany } from 'Redux/adminSlice';
+import { useDispatch } from 'react-redux';
 const data = {
   "Al-Kāf": {
     "key1": "value1",
@@ -114,152 +117,169 @@ const data = {
     "key2": "value2"
   }
 }
-let subtitle;
+const years = [];
+const currentYear = new Date().getFullYear();
+
+for (let year = 1901; year <= currentYear; year++) {
+  years.push(year);
+}
+
+// Assuming you're using a library like react-select or a similar component that expects options in a specific format
+const options = years.map(year => ({ label: year.toString(), value: year.toString() }));
+
 const customStyles = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
   content: {
     top: '50%',
     left: '50%',
     right: 'auto',
     borderWidth: ".01rem",
     borderStyle: "groove",
-    borderColor:"#30416B",
+    borderColor: "#30416B",
     bottom: 'auto',
     marginRight: '-50%',
-    width:"50rem",
-    height:"35rem",
+    width: "70rem",
+    height: "50rem",
     transform: 'translate(-50%, -50%)',
-
+  },
+};
+const customStyles2 = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    borderWidth: ".01rem",
+    borderStyle: "groove",
+    borderColor: "#30416B",
+    bottom: 'auto',
+    marginRight: '-50%',
+    width: "70rem",
+    height: "25",
+    transform: 'translate(-50%, -50%)',
   },
 };
 const AddNewEntities = () => {
+  const dispatch = useDispatch()
   const [activeTab, setActiveTab] = useState('car');
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [modalIsOpen2, setIsOpen2] = React.useState(false);
+  const [companyDetails, setCompanyDetails] = useState({
+    userName: "",
+    RNE: "",
+    idCard: "",
+    email: "",
+    phoneNumber: "",
+    avatar: ""
+  })
+  const [carDetails, setCarDetails] = useState({
+    Owner: "",
+    Brand: "",
+    Type: "",
+    Year: "",
+    Category: "",
+    DoorNumber: "",
+    Capacity: ""
+  })
+  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImageCompany, setSelectedImageCompany] = useState(null);
+  const handleImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const image = event.target.files[0];
+      setSelectedImage(URL.createObjectURL(image));
+    }
+  };
+  const handleImageChangeCompany = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const image = event.target.files[0];
+      handleSelectChange("avatar", URL.createObjectURL(image));
+    }
+  };
   function openModal() {
     setIsOpen(true);
   }
-
-  // function afterOpenModal() {
-  //   // references are now sync'd and can be accessed.
-  //   subtitle.style.color = '#f00';
-  // }
-
+  function openModal2() {
+    setIsOpen2(true);
+  }
   function closeModal() {
     setIsOpen(false);
   }
+  function closeModal2() {
+    setIsOpen2(false);
+  }
 
-  // const openModal = (selectedValue) => {
-  //   Swal.fire({
-  //     title: 'You selected',
-  //     text: selectedValue,
-  //     icon: 'success',
-  //     confirmButtonText: 'OK'
-  //   });
+
+  // }; // State to store the selected or dropped image
+  // const handleClick = () => {
+  //   fileInputRef.current.click();
   // };
+  const handleSelectChange = (id, value) => {
+    setCarDetails(prevDetails => ({
+      ...prevDetails, // Spread the previous state to maintain other properties
+      [id]: value // Use computed property name to dynamically set the property
+    }));
+  };
+  const handleCompanyChange = (id, value) => {
+    console.log(`Updating ${id} with value: ${value}`);
+    setCompanyDetails(prevDetails => {
+      const newDetails = {
+        ...prevDetails,
+        [id]: value
+      };
+      console.log('New state:', newDetails);
+      return newDetails;
+    });
+  };
 
-  // const openModal = (initialStep = 1) => {
-  //   setCurrentStep(initialStep); // Set the initial step
-  //   const showModal = (step) => {
-  //     if (step === 1) { // First step: Input field
-  //       Swal.fire({
-  //         title: 'Select field validation',
-  //         input: 'select',
-  //         inputOptions: data,
-  //         inputPlaceholder: 'Select a Company',
-  //         showCancelButton: true,
-  //         customClass: {
-  //           popup: 'custom-swal-container'
-  //         },
-  //         // didOpen: () => {
-  //         //   const input = Swal.getInput();
-  //         //   input.addEventListener('input', (event) => {
-  //         //     const searchValue = event.target.value.toLowerCase();
-  //         //     const select = Swal.getPopup().querySelector('.swal2-select');
-  //         //     const options = select.querySelectorAll('option');
-  //         //     options.forEach(option => {
-  //         //       const optionText = option.textContent.toLowerCase();
-  //         //       option.style.display = optionText.includes(searchValue) ? 'block' : 'none';
-  //         //     });
-  //         //   });
-  //         // }
-  //       })
-  //     } else if (step === 2) { // Second step: File selection and additional input
-  //       Swal.fire({
-  //         title: 'Step 2',
-  //         html: `
-  //           <input id="fileInput" class="swal2-file" type="file" accept="image/*" style="display:none" />
-  //           <label  class="swal2-file" for="fileInput">Select an image</label>
-  //           <input id="additionalInput" type="text" placeholder="Additional input" />
-  //         `,
-  //         showCancelButton: true,
-  //         confirmButtonText: 'Next',
-  //         cancelButtonText: 'Cancel',
-  //         preConfirm: () => {
-  //           const fileInput = document.getElementById('fileInput');
-  //           const additionalInput = document.getElementById('additionalInput');
-  //           if (!fileInput.files.length) {
-  //             Swal.showValidationMessage("You need to upload an image!");
-  //           } else if (!additionalInput.value) {
-  //             Swal.showValidationMessage("You need to fill in the additional input!");
-  //           } else {
-  //             setCurrentStep(step + 1); // Move to the next step
-  //             showModal(step + 1); // Open the next modal
-  //           }
-  //         }
-  //       });
-  //     } else if (step === 3) { // Third step: Three dropdowns
-  //       Swal.fire({
-  //         title: 'Step 3',
-  //         input: 'select',
-  //         inputOptions: {
-  //           'Option 1': 'option1',
-  //           'Option 2': 'option2',
-  //           'Option 3': 'option3'
-  //         },
-  //         inputPlaceholder: 'Select an option',
-  //         showCancelButton: true,
-  //         confirmButtonText: 'Finish',
-  //         cancelButtonText: 'Cancel',
-  //         inputValidator: (value) => {
-  //           if (!value) {
-  //             return 'You need to select an option!';
-  //           }
-  //         },
-  //         preConfirm: () => {
-  //           Swal.close(); // Close the modal
-  //         }
-  //       });
-  //     }
-  //   };
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        dispatch(SignUpCompany(companyDetails))
+      }
+    };
 
-  //   showModal(currentStep); // Start the modal with the current step
-  // };
-
-  // Your component's return statement and other logic remain unchanged
-  // const handleSelectChange = (selectedOption) => {
-  //   // Open the modal and pass the selected value
-  //   openModal(selectedOption.value);
-  // };
-  const [image, setImage] = useState(null); // State to store the selected or dropped image
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const files = e.dataTransfer.files;
-    if (files.length) {
-      const file = files[0];
-      setImage(URL.createObjectURL(file)); // Update the image state with the dropped file
+    // Add event listener when modal is open
+    if (modalIsOpen2) {
+      window.addEventListener('keydown', handleKeyDown);
     }
-  };
-  const handleChange = (e) => {
-    if (e.target.files.length) {
-      const file = e.target.files[0];
-      setImage(URL.createObjectURL(file)); // Update the image state with the selected file
+
+    // Remove event listener when modal is closed
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [modalIsOpen2, companyDetails]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        console.log(carDetails);
+      }
+    };
+
+    // Add event listener when modal is open
+    if (modalIsOpen) {
+      window.addEventListener('keydown', handleKeyDown);
     }
-  };
-  const handleClick = () => {
-    fileInputRef.current.click();
-  };
-  const handleSelectChange = (selectedOption) => {
-    // your handleSelectChange function here
-  };
+
+    // Remove event listener when modal is closed
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [modalIsOpen, carDetails]);
   const fileInputRef = useRef(null);
   return (
     <>
@@ -267,7 +287,8 @@ const AddNewEntities = () => {
         <Row>
           <Col md="12">
             <Card className='boxContainer' style={{
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              marginLeft: "1rem"
             }}>
               <CardHeader style={{
                 display: "flex",
@@ -336,7 +357,9 @@ const AddNewEntities = () => {
                 <div className='separator'></div>
                 <div className='half'>
                   <div id='Title'>Newly Joined Companies</div>
-                  <Button style={{
+                  <Button onClick={() => {
+                    openModal2()
+                  }} style={{
                     display: "flex",
                     gap: "0.5rem",
                     alignItems: "center",
@@ -388,83 +411,314 @@ const AddNewEntities = () => {
         isOpen={modalIsOpen}
         // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
+        onAfterClose={() => setSelectedImage("")}
         style={customStyles}
         contentLabel="Example Modal"
       >
         <div className="whiteboard-container">
-          <div className="image-input-container">
-            <div className="image-input-text">Press here to add image</div>
-            {/* <input className="title-input" type="text" placeholder="Input the car's details" /> */}
+          <div className="image-input-container" style={{
+            backgroundColor: selectedImage ? "transparent" : "#f3f3f3"
+          }} onClick={() => document.getElementById('imageInput').click()}>
+            {selectedImage ? (
+              <img src={selectedImage} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
+
+            ) : (
+              <div className="image-input-text">Press here to add image</div>
+            )}
+            <input
+              type="file"
+              id="imageInput"
+              style={{ display: 'none' }}
+              onChange={handleImageChange}
+            />
           </div>
-          <Select
-            className="select-box"
-            options={Object.keys(data).map(key => ({ label: key, value: key }))}
-            onChange={handleSelectChange}
-            menuPortalTarget={document.body}
-            styles={{
-              menuPortal: base => ({ ...base, zIndex: 9999 })
-            }}
-          />
+          <div style={{
+            fontSize: "1.2rem",
+            paddingBottom: "0.5rem"
+          }}>Input The Car's Details here :</div>
+          <div className='first-select-container'>
+            <div style={{
+              fontSize: ".9rem"
+            }}>Which Company Owns This Car :</div>
+            <Select
+              className="select-box"
+              options={Object.keys(data).map(key => ({ label: key, value: key }))}
+              onChange={(selectedOption) => handleSelectChange("Owner", selectedOption.value)}
+              menuportaltarget={document.body}
+              styles={{
+                menuPortal: base => ({ ...base, zIndex: 9999 })
+              }}
+            />
+
+          </div>
+          <div className="two-select-container">
+            <div className='select-container'>
+              <div style={{
+                fontSize: ".9rem"
+              }}>Insert The Brand Of The Car :</div>
+              <div className="input-container">
+                <input
+                  className="input-box"
+                  placeholder='Type here...'
+                  options={Object.keys(data).map(key => ({ label: key, value: key }))}
+                  onChange={(e) => handleSelectChange("Brand", e.target.value)}
+                  menuportaltarget={document.body}
+                  styles={{
+                    menuPortal: base => ({ ...base, zIndex: 9999 })
+                  }}
+                />
+              </div>
+            </div>
+            <div className="select-container">
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select The Type Of The Car :</div>
+              <Select
+                className="select-box"
+                options={[
+                  { value: 'Automatic', label: 'Automatic' },
+                  { value: 'Manual', label: 'Manual' },
+                ]}
+                onChange={(selectedOption) => handleSelectChange("Type", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+          </div>
+          <div className="two-select-container">
+            <div className='select-container'>
+              <div style={{
+                fontSize: ".9rem"
+              }}>What Year Was The Car Created At :</div>
+              <Select
+                className="select-box"
+                options={options.reverse()}
+                onChange={(selectedOption) => handleSelectChange("Year", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+            <div className="select-container">
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select The Category Of The Car :</div>
+              <Select
+                className="select-box"
+                options={[
+                  { value: 'Economic Class', label: 'Economic Class' },
+                  { value: 'Luxery Car', label: 'Luxery Car' },
+                  { value: 'Sports', label: 'Sports' },
+                ]}
+                onChange={(selectedOption) => handleSelectChange("Category", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+          </div>
+
           <div className="two-select-container">
             <div className="select-container">
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select How Many Doors In Your Car :</div>
+              <Select
+                className="select-box"
+                options={[
+                  { label: '3', value: 3 },
+                  { label: '5', value: 5 },
+                ]}
+                onChange={(selectedOption) => handleSelectChange("DoorNumber", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+            <div className="select-container">
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select the Capacity of the Car's Luggage :</div>
+              <Select
+                className="select-box"
+                options={[
+                  { label: "1 suitcase", value: 1 },
+                  { label: "2 suitcases", value: 2 },
+                  { label: "3 suitcases", value: 3 },
+                  { label: "4 suitcases", value: 4 },
+                  { label: "5 suitcases", value: 5 }
+                ]}
+                onChange={(selectedOption) => handleSelectChange("Capacity", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+          </div>
+          <div style={{
+            color: "grey",
+            fontSize: ".8rem",
+            paddingTop: "1rem"
+          }}>Press Enter to Submit the form or click here</div>
+        </div>
+      </Modal >
+      <Modal
+        isOpen={modalIsOpen2}
+        // onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal2}
+        onAfterClose={() => setSelectedImage("")}
+        style={customStyles2}
+        contentLabel="Example Modal"
+      >
+        <div className="whiteboard-container">
+          <div className="image-input-container" style={{
+            backgroundColor: companyDetails.avatar ? "transparent" : "#f3f3f3"
+          }} onClick={() => document.getElementById('imageInput').click()}>
+            {companyDetails.avatar ? (
+              <img src={companyDetails.avatar} alt="Selected" style={{ maxWidth: '100%', maxHeight: "10rem" }} />
+
+
+            ) : (
+              <div className="image-input-text">Press here to add image</div>
+            )}
+            <input
+              type="file"
+              id="imageInput"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  const file = e.target.files[0];
+                  const imageUri = URL.createObjectURL(file);
+                  handleCompanyChange("avatar", imageUri);
+                }
+              }}
+            />
+
+
+          </div>
+          <div style={{
+            fontSize: "1.2rem",
+            paddingBottom: "0.5rem"
+          }}>Input The Company's Details here :</div>
+          <div className='first-select-container'>
+            <div style={{
+              fontSize: ".9rem"
+            }}>What Is The Name Of The Company :</div>
+            <div className="input-container-long">
               <input
                 className="select-box"
+                placeholder='Input The Company Name Here...'
                 options={Object.keys(data).map(key => ({ label: key, value: key }))}
-                onChange={handleSelectChange}
-                menuPortalTarget={document.body}
-                styles={{
-                  menuPortal: base => ({ ...base, zIndex: 9999 })
-                }}
-              />
-            </div>
-            <div className="select-container">
-              <Select
-                className="select-box"
-                options={Object.keys(data).map(key => ({ label: key, value: key }))}
-                onChange={handleSelectChange}
-                menuPortalTarget={document.body}
+                onChange={(e) => handleCompanyChange("userName", e.target.value)}
+                menuportaltarget={document.body}
                 styles={{
                   menuPortal: base => ({ ...base, zIndex: 9999 })
                 }}
               />
             </div>
           </div>
-          <Select
-            className="select-box"
-            options={Object.keys(data).map(key => ({ label: key, value: key }))}
-            onChange={handleSelectChange}
-            menuPortalTarget={document.body}
-            styles={{
-              menuPortal: base => ({ ...base, zIndex: 9999 })
-            }}
-          />
           <div className="two-select-container">
-            <div className="select-container">
-              <Select
+            <div className='select-container'>
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select An Image/Document Of The R.N.E :</div>
+              <div className="input-container">
+                <input
+                  className="input-box"
+                  type="file"
+                  placeholder='Type here...'
+                  onChange={(e) => {
+                    // Check if a file is selected
+                    if (e.target.files && e.target.files.length > 0) {
+                      // Create a URL for the selected file
+                      const fileURI = URL.createObjectURL(e.target.files[0]);
+                      // Update the state with the file URI
+                      handleCompanyChange("RNE", fileURI);
+                    }
+                  }}
+                  menuportaltarget={document.body}
+                  styles={{
+                    menuPortal: base => ({ ...base, zIndex: 9999 })
+                  }}
+                />
+
+              </div>
+            </div>
+            <div className='select-container'>
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select A Picture/Document Of the ID card Of The Owner :</div>
+              <div className="input-container">
+                <input
+                  className="input-box"
+                  type="file"
+                  placeholder='Type here...'
+                  onChange={(e) => {
+                    // Check if a file is selected
+                    if (e.target.files && e.target.files.length > 0) {
+                      // Create a URL for the selected file
+                      const fileURI = URL.createObjectURL(e.target.files[0]);
+                      // Update the state with the file URI
+                      handleCompanyChange("idCard", fileURI);
+                    }
+                  }}
+                  menuportaltarget={document.body}
+                  styles={{
+                    menuPortal: base => ({ ...base, zIndex: 9999 })
+                  }}
+                />
+
+              </div>
+            </div>
+          </div>
+          <div className='first-select-container'>
+            <div style={{
+              fontSize: ".9rem",
+            }}>What Is The E-mail Of The Owner :</div>
+            <div className="input-container-long">
+              <input
                 className="select-box"
+                type="email"
+                placeholder='Input The Email Here...'
                 options={Object.keys(data).map(key => ({ label: key, value: key }))}
-                onChange={handleSelectChange}
-                menuPortalTarget={document.body}
+                onChange={(e) => handleCompanyChange("email", e.target.value)}
+                menuportaltarget={document.body}
                 styles={{
                   menuPortal: base => ({ ...base, zIndex: 9999 })
                 }}
               />
             </div>
-            <div className="select-container">
-              <Select
+          </div><div className='first-select-container'>
+            <div style={{
+              fontSize: ".9rem"
+            }}>What Is The Phone Number Of The Owner :</div>
+            <div className="input-container-long">
+              <input
                 className="select-box"
+                placeholder='Input The Phone Number Here...'
+                type="number"
                 options={Object.keys(data).map(key => ({ label: key, value: key }))}
-                onChange={handleSelectChange}
-                menuPortalTarget={document.body}
+                onChange={(e) => handleCompanyChange("phoneNumber", e.target.value)}
+                menuportaltarget={document.body}
                 styles={{
                   menuPortal: base => ({ ...base, zIndex: 9999 })
                 }}
               />
             </div>
           </div>
-          <div>Press Enter to Submit the form or click here</div>
+          <div style={{
+            color: "grey",
+            fontSize: ".8rem",
+            paddingTop: "1rem"
+          }}>Press Enter to Submit the form or click here</div>
         </div>
-      </Modal>
+      </Modal >
     </>
   );
 };

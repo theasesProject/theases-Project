@@ -19,7 +19,8 @@ module.exports = (DataTypes, connection) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true,
+      defaultValue:"1234"
     },
     email: {
       type: DataTypes.STRING,
@@ -27,9 +28,13 @@ module.exports = (DataTypes, connection) => {
       unique: true
 
     },
+    RNE: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     dateOfBirth: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       // defaultValue:"Sun Oct 29 2023 13:44:49 GMT+0100 (West Africa Standard Time)"
     },
     avatar: {
@@ -49,7 +54,7 @@ module.exports = (DataTypes, connection) => {
     },
     stateBlocked: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false,
     },
     isActive:{

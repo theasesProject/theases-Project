@@ -1,29 +1,33 @@
-.CardHeader{
+.CardHeader {
   font-size: 1.5rem;
 }
-.centerBody{
+.centerBody {
   display: flex;
   flex-direction: row;
 }
-.separator{
-  width: .005rem;
-  background-color: #30416B;
+.separator {
+  width: 0.005rem;
+  background-color: #30416b;
 }
-#Title{
+#Title {
   font-size: 3.5rem;
-  color: #30416B;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #30416b;
+  border-bottom-style: ridge;
+  border-bottom-width: 0.2rem;
+  border-bottom-color: #30416b;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 .list-map {
   padding: 3rem;
   /* background-color: #30416B; */
   height: 4rem;
-  margin-Left:.1rem;
+  margin-left: 0.1rem;
   color: black;
-  margin-bottom:.2rem;
-  border-bottom-style:ridge;
-  border-bottom-width:.1rem;
-  border-bottom-color:black;
+  margin-bottom: 0.2rem;
+  border-bottom-style: ridge;
+  border-bottom-width: 0.1rem;
+  border-bottom-color: black;
   /* border-radius: .5rem; */
   /* width: 12rem; */
   border-bottom-color: "#00000";
@@ -45,16 +49,21 @@
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background-color: rgba(0, 0, 0, 0.5) !important; /* Adjust the background color as needed */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ) !important; /* Adjust the background color as needed */
 }
 .whiteboard-container {
- align-items: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   background-color: white;
-  padding: 20px;
+  /* padding: 20px; */
   box-sizing: border-box;
 }
 
@@ -63,11 +72,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom-width: .01rem;
+  border-bottom-width: 0.01rem;
   border-bottom-style: groove;
-  border-bottom-color:#30416B;
+  border-bottom-color: #30416b;
   width: 100%;
-  height: 35%;
+  height: 45%;
+  padding-bottom: 1rem;
   cursor: pointer;
   margin-bottom: 20px;
 }
@@ -94,11 +104,21 @@
   width: 100%;
   margin-bottom: 10px;
 }
+.input-box {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px;
+  font-size: 16px;
+  width: 100%;
+
+  /* margin: bottom 200px !important; */
+}
 
 .two-select-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-content: center;
+  justify-items: center;
   width: 100%;
 }
 
@@ -107,6 +127,41 @@
   flex-direction: column;
   width: 48%;
 }
+.first-select-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.input-container {
+  display: flex;
+  height: 3.6rem;
+  flex-direction: column;
+  border-radius: 4px;
+  width: 100%;
+  /* margin-bottom: 10px; */
+  padding-left: 8px;
+  padding-right: 8px;
+
+  border-width: 0.12rem;
+  border-color: lightgrey;
+  justify-content: center;
+  border-style: ridge;
+}
+.input-container-long {
+  display: flex;
+  height: 3.6rem;
+  flex-direction: column;
+  border-radius: 4px;
+  width: 100%;
+  padding: 8px;
+  padding-top: 16px;
+  border-width: 0.12rem;
+  border-color: lightgrey;
+  justify-content: center; /* Centers content horizontally */
+  align-items: center; /* Centers content vertically */
+  border-style: ridge;
+ }
+ 
 
 .phrase {
   font-size: 16px;

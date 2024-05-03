@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import store from "./Redux/store"
 import AdminLayout from "layouts/Admin/Admin.js";
 import RTLLayout from "layouts/RTL/RTL.js";
-
+import Modal from 'react-modal';
 import "./assets/scss/black-dashboard-react.scss";
 import "assets/demo/demo.css";
 import "assets/css/nucleo-icons.css";
@@ -16,7 +16,7 @@ import BackgroundColorWrapper from "./components/BackgroundColorWrapper/Backgrou
 import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
+Modal.setAppElement('#root');
 root.render(
   
   <ThemeContextWrapper>

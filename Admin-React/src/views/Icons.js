@@ -61,11 +61,11 @@ function Icons() {
   const searchCustomStyles = {
     menu: (provied, state) => ({
       ...provied,
-      background: "#1E1E2F"
+      background: "#fff"
     }),
     control: (provided, state) => ({
       ...provided,
-      background: '#1E1E2F',
+      background: '#fff',
       borderColor: state.isFocused ? '#007BFF' : '#ced4da',
       boxShadow: state.isFocused ? '0 0 0 1px #007BFF' : 'none',
       '&:hover': {
@@ -78,17 +78,17 @@ function Icons() {
     minHeight: '20px',
     option: (provided, state) => ({
       ...provided,
-      background: state.isFocused ? 'white' : state.isSelected ? 'white' : '#1E1E2F',
-      color: state.isFocused ? '#1E1E2F' : state.isSelected ? 'black' : '#fff',
+      background: state.isFocused ? '#1E1E2F' : state.isSelected ? '#1E1E2F' : '#fff',
+      color: state.isFocused ? '#fff' : state.isSelected ? '#fff' : '#1E1E2F',
       width: "25rem",
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: 'white', // Change this to your desired selected value color
+      color: '#fff', // Change this to your desired selected value color
     }),
     input: (provided) => ({
       ...provided,
-      color: 'white', // change this to the color you want
+      color: '#1E1E2F', // change this to the color you want
     }),
     menuList: (provided) => ({
       ...provided,
@@ -101,11 +101,11 @@ function Icons() {
   const customStyles = {
     menu: (provied, state) => ({
       ...provied,
-      background: "#1E1E2F"
+      background: "#fff",
     }),
     control: (provided, state) => ({
       ...provided,
-      background: "#1E1E2F",
+      background: "#fff",
       borderColor: state.isFocused ? '#007BFF' : '#ced4da',
       boxShadow: state.isFocused ? '0 0 0 1px #007BFF' : 'none',
       '&:hover': {
@@ -118,13 +118,13 @@ function Icons() {
     minHeight: '20px',
     option: (provided, state) => ({
       ...provided,
-      background: state.isFocused ? 'white' : state.isSelected ? 'white' : '#1E1E2F',
-      color: state.isFocused ? '#1E1E2F' : state.isSelected ? 'black' : '#fff',
+      background: state.isFocused ? '#1E1E2F' : state.isSelected ? '#1E1E2F' : '#fff',
+      color: state.isFocused ? '#fff' : state.isSelected ? '#fff' : '#1E1E2F',
       width: "17rem",
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: 'white', // Change this to your desired selected value color
+      color: '#1E1E2F', // Change this to your desired selected value color
     }),
   }
   const handleBlock = (id) => {
@@ -155,16 +155,16 @@ function Icons() {
     }
     // setRefresh(!refresh)
   }
-  const filterChange=async(state)=>{
-    if (state==="Banned Only") {
+  const filterChange = async (state) => {
+    if (state === "Banned Only") {
       const filtered = staticAllUsers.filter((e) => {
-        return e.stateBlocked==="true"
+        return e.stateBlocked === "true"
       })
       filtered[0] && dispatch(filterUsers(filtered));
 
-    }else if (state==="Active Only") {
+    } else if (state === "Active Only") {
       const filtered = staticAllUsers.filter((e) => {
-        return e.stateBlocked==="fqlse"
+        return e.stateBlocked === "fqlse"
       })
       filtered[0] && dispatch(filterUsers(filtered));
     }
@@ -262,6 +262,7 @@ function Icons() {
                   (
                     <>
                       <div style={{
+                        color: "#30416b",
                         fontSize: "1rem"
                       }}>
                         All Clients:
@@ -287,8 +288,7 @@ function Icons() {
                                  <b>phoneNumber: </b>${user.phoneNumber}
                                  <br>
                                  <b>type: </b>${user.type}
-                                 <br>
-                                 <b>id number: </b>${user.idCard}`,
+                                `,
                                   imageUrl: `${user.avatar}`,
                                   imageWidth: 200,
                                   imageHeight: 200,
@@ -303,6 +303,9 @@ function Icons() {
                                   confirmButtonAriaLabel: "Thumbs up, great!",
                                   customClass: {
                                     text: "swal-secondary-text",
+                                    text: {
+                                      color: "#30416b"
+                                    },
                                     container: 'my-modal',
                                     confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
                                     cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
@@ -345,8 +348,9 @@ function Icons() {
                                 <img src={user.avatar} style={{
                                   height: "50%", width: "35%"
                                 }} />
-                                <p className="userNameCol">{user.userName}<br></br>(
-                                  {user.email})</p>
+                                <p className="userNameCol">{user.userName}
+                                  <br></br>
+                                  {user.email}</p>
                               </div>
                             </Col>) : null
                         )}
@@ -357,11 +361,11 @@ function Icons() {
                         <div style={{
                           width: "100%",
                           height: ".005rem",
-                          backgroundColor: "#4ca9e4"
+                          backgroundColor: "#30416b"
                         }}></div>
                       </div>
                       <div style={{
-
+                        color: "#30416b",
                         fontSize: "1rem"
                       }}>
                         All Agencies:
@@ -388,8 +392,7 @@ function Icons() {
                                  <b>phoneNumber: </b>${user.phoneNumber}
                                  <br>
                                  <b>type: </b>${user.type}
-                                 <br>
-                                 <b>id number: </b>${user.idCard}
+                                
                                 `,
                                   imageUrl: `${user.avatar}`,
                                   imageWidth: 200,
@@ -450,8 +453,8 @@ function Icons() {
                                 <img src={user.avatar} style={{
                                   height: "50%", width: "35%"
                                 }} />
-                                <p className="userNameCol">{user.userName}<br></br>(
-                                  {user.email})</p>
+                                <p className="userNameCol">{user.userName}<br></br>
+                                  {user.email}</p>
                               </div>
                             </Col>) : null
 
@@ -460,6 +463,7 @@ function Icons() {
                     </>) : selectedOption.label === "Clients Only" ? (
                       <>
                         <div style={{
+                          color: "#30416b",
                           fontSize: "1rem"
                         }}>
                           All Clients:
@@ -485,8 +489,6 @@ function Icons() {
                                    <b>phoneNumber: </b>${user.phoneNumber}
                                    <br>
                                    <b>type: </b>${user.type}
-                                   <br>
-                                   <b>id number: </b>${user.idCard}
                                   `,
                                     imageUrl: `${user.avatar}`,
                                     imageWidth: 200,
@@ -546,8 +548,8 @@ function Icons() {
                                   <img src={user.avatar} style={{
                                     height: "50%", width: "35%"
                                   }} />
-                                  <p className="userNameCol">{user.userName}<br></br>(
-                                    {user.email})</p>
+                                  <p className="userNameCol">{user.userName}<br></br>
+                                    {user.email}</p>
                                 </div>
                               </Col>
                             ) : null
@@ -558,7 +560,7 @@ function Icons() {
                     ) : selectedOption.label === "Agencies Only" ? (
                       <>
                         <div style={{
-
+                          color: "#30416b",
                           fontSize: "1rem"
                         }}>
                           All Agencies:
@@ -584,8 +586,7 @@ function Icons() {
                                    <b>phoneNumber: </b>${user.phoneNumber}
                                    <br>
                                    <b>type: </b>${user.type}
-                                   <br>
-                                   <b>id number: </b>${user.idCard}
+
                                   `,
                                     imageUrl: `${user.avatar}`,
                                     imageWidth: 200,
@@ -680,8 +681,6 @@ function Icons() {
                                    <b>phoneNumber: </b>${user.phoneNumber}
                                    <br>
                                    <b>type: </b>${user.type}
-                                   <br>
-                                   <b>id number: </b>${user.idCard}
                                   `,
                                     imageUrl: `${user.avatar}`,
                                     imageWidth: 200,
@@ -741,16 +740,16 @@ function Icons() {
                                   <img src={user.avatar} style={{
                                     height: "50%", width: "35%"
                                   }} />
-                                  <p className="userNameCol">{user.userName}<br></br>(
-                                    {user.email})</p>
+                                  <p className="userNameCol">{user.userName}<br></br>
+                                    {user.email}</p>
                                 </div>
                               </Col>
-                             ) : null
+                            ) : null
                           )}
                         </Row>
 
                       </>
-                    ): selectedOption.label === "Active Only" ? (
+                    ) : selectedOption.label === "Active Only" ? (
                       <>
                         <div style={{
                           fontSize: "1rem"
@@ -778,8 +777,6 @@ function Icons() {
                                    <b>phoneNumber: </b>${user.phoneNumber}
                                    <br>
                                    <b>type: </b>${user.type}
-                                   <br>
-                                   <b>id number: </b>${user.idCard}
                                   `,
                                     imageUrl: `${user.avatar}`,
                                     imageWidth: 200,
@@ -839,16 +836,16 @@ function Icons() {
                                   <img src={user.avatar} style={{
                                     height: "50%", width: "35%"
                                   }} />
-                                  <p className="userNameCol">{user.userName}<br></br>(
-                                    {user.email})</p>
+                                  <p className="userNameCol">{user.userName}<br></br>
+                                    {user.email}</p>
                                 </div>
                               </Col>
-                             ) : null
+                            ) : null
                           )}
                         </Row>
 
                       </>
-                    ):null
+                    ) : null
                 }
               </CardBody>
             </Card>

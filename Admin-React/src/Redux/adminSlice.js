@@ -90,6 +90,21 @@ export const getAllRequests = createAsyncThunk(
         }
     }
 );
+export const SignUpCompany = createAsyncThunk(
+    "admin/SignUpCompany",
+    async (companyDetails) => {
+        try {
+            console.log(companyDetails,"companyDetails from SignUpCompany");
+            const response = await axios.post(
+                `http://127.0.0.1:5000/api/users/SignUpCompany`,
+                companyDetails
+            )
+            return response.companyDetails
+        } catch (er) {
+            console.error(er);
+        }
+    }
+)
 export const getApprovedServices = createAsyncThunk(
     "admin/approvedHistory",
     async () => {

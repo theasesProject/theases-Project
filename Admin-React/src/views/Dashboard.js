@@ -544,7 +544,7 @@ function Dashboard() {
                         <td>{u.Users[0].userName}</td>
                         <td>{u.Car.model}</td>
                         <td>{u.amount} DT</td>
-                        <td className="text-center">{u.endDate.slice(0, 10)}</td>
+                        <td className="text-center">{u.endDate?.slice(0, 10)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -572,7 +572,7 @@ function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {allUsers.slice(startIndex, allUsers.length > 10 ? startIndex + 10 : undefined)?.map((u, i) => (
+                    {allUsers?.slice(startIndex, allUsers.length > 10 ? startIndex + 10 : undefined)?.map((u, i) => (
                       <tr key={i}>
                         <td>{u.id}</td>
                         <td>{u.userName}</td>

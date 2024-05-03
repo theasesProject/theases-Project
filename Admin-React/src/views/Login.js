@@ -113,7 +113,9 @@ export default function LoginPage() {
             <CardBody className="all-icons" >
               <div className="wrapper_log_cust">
                 <div className="container_log_cust">
-                  <h1>Welcome back Admin</h1>
+                  <h1 style={{
+                    color:"#fff"
+                  }}>Welcome back Admin</h1>
 
                   <form style={{
 

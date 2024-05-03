@@ -21,7 +21,7 @@ var routes = [
   },
   {
     path: "/icons",
-    name: "Users",
+    name: "User Managements",
     rtlName: "الرموز",
     icon: "tim-icons icon-badge",
     component: <Icons />,
@@ -68,10 +68,10 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/Add-New-Entities",
-    name: "Add New Entities",
+    path: "/Add-Cars/Agencies",
+    name: "Add Cars/Agencies",
     rtlName: "قائمة الجدول",
-    icon: "tim-icons icon-laptop",
+    icon: "tim-icons icon-simple-add",
     component: <AddNewEntities />,
     layout: "/admin",
   },

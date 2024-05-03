@@ -12,7 +12,6 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import AddAgencyCar from "./pages/AddAgencyCar.jsx";
-import Messages from "./pages/Messages.jsx";
 const LazyComponent = lazy(() => import("./pages/Messages.jsx"));
 import AdvancedSearch from "./pages/AdvancedSearch.jsx";
 import FiltredCar from "./pages/filtredCar.jsx";
@@ -23,7 +22,6 @@ import Conversation from "./pages/Conversation.jsx";
 import MapComponent from "./pages/MapForAdminLoc.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import Report from "./pages/Report.jsx";
-// import Remobg from "./pages/removeBackground.jsx";
 ("DO NOT TOUCH THIS IMPORT OR CHANGE ANYTHING ABOUT IT");
 import Notification from "./pages/Notifcation.jsx";
 import Booking from "./pages/Booking.jsx";
@@ -44,14 +42,19 @@ import EditAgencyProfile from "./pages/EditAgencyProfile.jsx";
 import Userprofile1 from "./pages/UserProfile1.jsx";
 import Welcome from "./pages/Welcome.jsx";
 import SignUpAgency from "./pages/SignUpAgency.jsx";
-import NewSignUp from "./pages/NewSignUp.jsx";
-import NewLogIn from "./pages/NewLogIn.jsx"
 import NewHome from "./pages/NewHome.jsx";
 import CarsList from "./pages/CarsList.jsx";
 import NewCarDetails from "./pages/NewCarDetails.jsx";
+import NewSignUp from "./pages/NewSignUp.jsx";
+import NewLogIn from "./pages/NewLogIn.jsx"
 import NewProfile from "./pages/NewProfile.jsx";
 import TermsAndConditions from "./pages/TermsAndConditions.jsx";
 import ReviewAndBook from "./pages/ReviewAndBook.jsx";
+import BookingHistory from "./pages/BookingHistory.jsx";
+import MyInformation from "./pages/MyInformation.jsx";
+import FAQS from "./pages/FAQS.jsx";
+// import NewSignUp from "./pages/NewSignUp.jsx";
+
 
 const Stack = createStackNavigator();
 
@@ -63,15 +66,25 @@ function App() {
       >
         
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Welcome">
+          <Stack.Navigator initialRouteName="NewHome">
             <Stack.Screen
               name="CarsList"
               component={CarsList}
               options={{ headerShown: false }}
             />
+             <Stack.Screen
+              name="MyInformation"
+              component={MyInformation}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="ReviewAndBook"
               component={ReviewAndBook}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="FAQS"
+              component={FAQS}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -90,6 +103,21 @@ function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="BookingHistory"
+              component={BookingHistory}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="newSignUp"
+              component={NewSignUp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="newLogIn"
+              component={NewLogIn}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="NewHome"
               component={NewHome}
               options={{ headerShown: false }}
@@ -103,16 +131,6 @@ function App() {
             <Stack.Screen
               name="Welcome"
               component={Welcome}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="newSignUp"
-              component={NewSignUp}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="newLogIn"
-              component={NewLogIn}
               options={{ headerShown: false }}
             />
             <Stack.Screen

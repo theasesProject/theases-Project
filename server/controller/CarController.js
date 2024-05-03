@@ -44,6 +44,9 @@ module.exports = {
         typevehicle: req.body.typevehicle,
         characteristics: req.body.characteristics,
         AgencyId: req.body.AgencyId,
+        numberPeople:req.body.numberPeople,
+        numberDoors:req.body.numberDoors,
+        numberBags:req.body.numberBags
       });
 
       res.status(200).send(newCar);
@@ -185,4 +188,5 @@ module.exports = {
       throw error;
     }
   },
+  
 };

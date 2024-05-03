@@ -1,26 +1,37 @@
-import { StyleSheet, Text, View, Dimensions, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Pressable,Linking } from 'react-native';
 import React from 'react';
 import ArrowBack from '../assets/Svg/blackArrow.svg';
 import { Ionicons } from '@expo/vector-icons';
+// import * as Cellular from 'expo-cellular';
 
 const { height, width } = Dimensions.get("screen");
 
 const FAQS = () => {
 
     const handleCallCustomerSupport = () => {
-        // Implement call customer support functionality
+        const phoneNumber=93933343
+        Linking.openURL(`tel:${phoneNumber}`);
     };
 
-    const handleCustomerSupportMail = () => {
-        // Implement customer support mail functionality
-    };
+    const handleCustomerSupportMail = (initialBody = '') => {
+        const emailAddress = 'ksiksihakim0@gmail.com';
+        const subject = 'Customer Support Request';
+        const encodedBody = encodeURIComponent(initialBody);
+        const mailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodedBody}`;
+        Linking.openURL(mailtoUrl);
+      };
 
     const handleReportDamage = () => {
-        // Implement report damage functionality
+        const phoneNumber=51977081
+        Linking.openURL(`tel:${phoneNumber}`);
     };
 
     const handleRentalSupportMail = () => {
-        // Implement rental support mail functionality
+        const emailAddress = 'hakimjaycee@gmail.com';
+        const subject = 'Rental Support Request';
+        const encodedBody = encodeURIComponent(initialBody);
+        const mailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodedBody}`;
+        Linking.openURL(mailtoUrl);
     };
 
     return (
@@ -67,17 +78,17 @@ const styles = StyleSheet.create({
     pressable: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10, // Add vertical spacing between buttons
+        marginVertical: 10,
     },
     separator: {
         borderBottomWidth: 1,
-        borderBottomColor: '#e1e1e1', // Update border color
-        paddingBottom: 10, // Adjust spacing as needed
+        borderBottomColor: '#e1e1e1', 
+        paddingBottom: 10, 
     },
     text: {
-        marginLeft: 15, // Increase left margin for text
+        marginLeft: 15, 
         fontSize: 16,
-        fontWeight: '700', // Adjust font weight
+        fontWeight: '700',
     },
     list: {
         paddingHorizontal: width * 0.06,

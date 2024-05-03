@@ -45,12 +45,16 @@ import SignUpAgency from "./pages/SignUpAgency.jsx";
 import NewHome from "./pages/NewHome.jsx";
 import CarsList from "./pages/CarsList.jsx";
 import NewCarDetails from "./pages/NewCarDetails.jsx";
+import NewSignUp from "./pages/NewSignUp.jsx";
+import NewLogIn from "./pages/NewLogIn.jsx"
 import NewProfile from "./pages/NewProfile.jsx";
 import TermsAndConditions from "./pages/TermsAndConditions.jsx";
 import ReviewAndBook from "./pages/ReviewAndBook.jsx";
 import BookingHistory from "./pages/BookingHistory.jsx";
 import MyInformation from "./pages/MyInformation.jsx";
 import FAQS from "./pages/FAQS.jsx";
+// import NewSignUp from "./pages/NewSignUp.jsx";
+
 
 const Stack = createStackNavigator();
 
@@ -62,7 +66,7 @@ function App() {
       >
         
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="FAQS">
+          <Stack.Navigator initialRouteName="NewHome">
             <Stack.Screen
               name="CarsList"
               component={CarsList}
@@ -101,6 +105,16 @@ function App() {
             <Stack.Screen
               name="BookingHistory"
               component={BookingHistory}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="newSignUp"
+              component={NewSignUp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="newLogIn"
+              component={NewLogIn}
               options={{ headerShown: false }}
             />
             <Stack.Screen

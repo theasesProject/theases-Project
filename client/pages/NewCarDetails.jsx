@@ -11,33 +11,35 @@ import Options from '../components/Options';
 import Options2 from '../components/Options2';
 import Checkbox from '../components/CheckBox';
 
-const NewCarDetails = () => {
+const NewCarDetails = ({route}) => {
+    const car = route.params.car
+
   return (
-    <View style={{flexGrow:1,}}>
+    <View style={{flexGrow:1}}>
     <ScrollView contentContainerStyle={styles.container}>
-      <ImageBackground resizeMode='cover' style={styles.bg} source={require('../assets/cardCover.png')}>
+      <ImageBackground resizeMode='cover' style={styles.bg} source={{ uri: car.Media[0]?.media }}>
         <Pressable style={styles.arrowContainer}>
       <ArrowBack />
       </Pressable>
       <View style={styles.secondRow}>
                 <Tick/>
-         <Text style={styles.footerDetails}>Incl. 900km</Text>
+         <Text style={styles.footerDetails}>{car.typeOfFuel}</Text>
          </View> 
       </ImageBackground>
       <View style={styles.info}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Audi A10 Automatique</Text>
+        <Text style={styles.title}>{car.model} {car.brand}</Text>
         <Text style={styles.titleDetails}>or similar | convertible</Text>
         </View>
         <View style={styles.contentWrapper}>
         <View style={styles.rowOne}>
         <View style={styles.section}>
         <Ionicons name="people" size={24} color="black" style={styles.icon} />
-        <Text style={styles.text}>5 People</Text>
+        <Text style={styles.text}>{car.numberPeople} people</Text>
         </View>
         <View style={styles.section}>
         <CarDoor/>
-        <Text style={styles.text}>5 Doors</Text>
+        <Text style={styles.text}>{car.numberDoors} doors</Text>
         </View>
         
         </View>
@@ -45,11 +47,11 @@ const NewCarDetails = () => {
         <View style={styles.rowOne}>
         <View style={styles.section}>
         <Bag/>
-        <Text style={styles.text}>3 bags</Text>
+        <Text style={styles.text}>{car.numberBags} bags</Text>
         </View>
         <View style={styles.section}>
         <BlackGear/>
-        <Text style={styles.text}>Manual</Text>
+        <Text style={styles.text}>{car.characteristics}</Text>
         </View>
         
         </View>
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
        alignItems:'center',
        gap:10,
-       maxWidth:'60%'
+       maxWidth:'80%'
     },
     contentWrapper:{
         gap:10,

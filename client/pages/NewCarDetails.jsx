@@ -28,7 +28,7 @@ const NewCarDetails = ({route}) => {
       </ImageBackground>
       <View style={styles.info}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>{car.model} {car.brand}</Text>
+        <Text style={styles.title}>{car.brand} {car.model}</Text>
         <Text style={styles.titleDetails}>or similar | convertible</Text>
         </View>
         <View style={styles.contentWrapper}>

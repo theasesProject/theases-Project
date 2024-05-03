@@ -32,7 +32,7 @@ const CarCard = ({car,markedDates}) => {
       <ImageBackground style={styles.bg} resizeMode='cover' source={{ uri: car.Media[0]?.media }}>
         <View style={styles.content}>
             <View style={styles.titleWrapper}>
-        <Text style={styles.title}>{car.model} {car.brand}</Text>
+        <Text style={styles.title}>{car.brand} {car.model}</Text>
         <Text style={styles.titleDetails}>or similar | convertible</Text>
         </View>
         <View style={styles.iconsRow}>

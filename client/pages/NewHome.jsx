@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Platform,TextInput, TouchableOpacity, ImageBackground, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Platform,TextInput, TouchableOpacity, ImageBackground, Pressable,ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import ToggleSwitch from '../components/ToggleSwitch';
@@ -7,11 +7,14 @@ import NavBar from '../components/NavBar';
 import { Calendar } from 'react-native-calendars';
 import ModalFooter from '../components/ModalFooter';
 import { useNavigation } from '@react-navigation/native';
+import {getAllCarByDate } from '../store/bookingSlice'
+import { useDispatch, useSelector } from 'react-redux';
 
 const { width, height } = Dimensions.get("window");
 const backgroundHeight = Platform.OS === 'android' ? height * 0.59 : height * 0.55;
 
 const NewHome = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(new Date().toISOString().split('T')[0]);
@@ -20,8 +23,9 @@ const NewHome = () => {
     nextDay.setDate(nextDay.getDate() + 1);
     return nextDay.toISOString().split('T')[0];
   });
+  const [loading, setLoading] = useState(false);
   const [disabledDates, setDisabledDates] = useState({});
-  const [markedDates, setMarkedDates] = useState({});
+  const [markedDates, setMarkedDates] = useState([]);
 
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -97,10 +101,27 @@ const NewHome = () => {
 
   const [showAdditionalRow, setShowAdditionalRow] = useState(false);
 
-  const handleTogglePress = () => {
-    console.log('befooooore',showAdditionalRow)
-    setShowAdditionalRow(!showAdditionalRow);
-    console.log('afteeeeeer',showAdditionalRow)
+
+  const fetchAvailableCars = async () => {
+    try {
+      setLoading(true);
+      const body = {
+        startDate: selectedStartDate,
+        endDate: selectedFinishDate,
+      };
+      const filteredCars = await dispatch(getAllCarByDate(body));
+      console.log('Filtered Cars:', filteredCars.payload);
+      navigation.navigate('CarsList',{ filteredCars: filteredCars.payload,markedDates:markedDates });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  const handleFindCars = () => {
+    fetchAvailableCars();
   };
 
   return (
@@ -144,9 +165,13 @@ const NewHome = () => {
               </View>
             </TouchableOpacity>
             <View style={styles.BtnContainer}>
-              <TouchableOpacity style={styles.find}>
-                <Text style={styles.textButton}>Book a car</Text>
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.find} onPress={handleFindCars}>
+  {loading ? (
+    <ActivityIndicator size="small" color="#ffffff" />
+  ) : (
+    <Text style={styles.textButton}>Book a car</Text>
+  )}
+</TouchableOpacity>
               <Pressable onPress={() => navigation.navigate('Welcome')}>
                 <Text style={styles.secondText}>Sign in or create account</Text>
               </Pressable>
@@ -344,5 +369,10 @@ const styles = StyleSheet.create({
   additionalText: {
     fontSize: 15,
     fontWeight: '600',
-  }
+  },
+  loadingIndicator: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: height * 0.1,
+  },
 });

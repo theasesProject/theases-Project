@@ -4,41 +4,61 @@ import { Ionicons } from '@expo/vector-icons';
 import GearIcon from '../assets/Svg/gear.svg'
 import CarDoor from '../assets/Svg/carDoor.svg'
 import Tick from '../assets/Svg/tick.svg'
+import { useNavigation } from '@react-navigation/native';
 const { height, width } = Dimensions.get("screen");
 
-const CarCard = () => {
+const CarCard = ({car,markedDates}) => {
+    const navigation = useNavigation();
+
+    const markedDatesArray = Object.entries(markedDates).map(([date, properties]) => ({
+        date,
+        ...properties
+      }));
+
+
+    const calculateTotalPrice = () => {
+        return markedDatesArray.length * car.price;
+      };
+    
+      const totalPrice = calculateTotalPrice();
+      console.log(totalPrice)
+
+      const handlePress = () => {
+        navigation.navigate('NewCarDetails', { car:car, markedDates });
+      };
+
   return (
-    <Pressable style={styles.cardContianer}>
-      <ImageBackground style={styles.bg} resizeMode='cover' source={require('../assets/cardCover.png')}>
+    <Pressable style={styles.cardContianer} onPress={handlePress}>
+      <ImageBackground style={styles.bg} resizeMode='cover' source={{ uri: car.Media[0]?.media }}>
         <View style={styles.content}>
             <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Audi A10 Automatique</Text>
+        <Text style={styles.title}>{car.model} {car.brand}</Text>
         <Text style={styles.titleDetails}>or similar | convertible</Text>
         </View>
         <View style={styles.iconsRow}>
         <View style={styles.firstRow}>
         <Ionicons name="person" size={15} color="white" style={styles.icon} />   
-        <Text style={styles.details}>4</Text>
+        <Text style={styles.details}>{car.numberPeople}</Text>
         </View>
         <View style={styles.firstRow}>
         <GearIcon/>
-        <Text style={styles.details}>Manual</Text>
+        <Text style={styles.details}>{car.characteristics}</Text>
         </View>
         <View style={styles.firstRow}>
         <CarDoor/>
  
-        <Text style={styles.details}>2</Text>
+        <Text style={styles.details}>{car.numberDoors}</Text>
         </View>
         </View>
         </View>
         <View style={styles.cardFooter}>
             <View style={styles.secondRow}>
                 <Tick/>
-         <Text style={styles.footerDetails}>Incl. 900km</Text>
+         <Text style={styles.footerDetails}>{car.typeOfFuel}</Text>
          </View> 
          <View style={styles.thirdRow}>
-            <Text style={styles.price}>TND 120/day</Text>
-            <Text style={styles.totalPrice}>TND 360 total</Text>
+            <Text style={styles.price}>TND {car.price}/day</Text>
+            <Text style={styles.totalPrice}>{totalPrice} DT Total</Text>
             </View> 
         </View>
       </ImageBackground>

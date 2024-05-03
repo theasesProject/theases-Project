@@ -12,15 +12,10 @@ module.exports = (DataTypes, connection) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    priceWeekly: {
+    totalPrice: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
-    priceMonthly: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
     status: {
       type: DataTypes.ENUM("available", "rented"),
       allowNull: true,
@@ -57,6 +52,15 @@ module.exports = (DataTypes, connection) => {
     characteristics: {
       type: DataTypes.ENUM("Automatic", "Manual", "Semi-Automatic"),
     },
+    numberPeople:{
+      type: DataTypes.INTEGER
+    },
+    numberDoors:{
+      type:DataTypes.INTEGER
+    },
+    numberBags:{
+      type:DataTypes.INTEGER
+    }
   });
   return Car;
 };

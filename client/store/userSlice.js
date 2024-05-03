@@ -3,6 +3,7 @@ import axios from "axios";
 // import { process.env.EXPO_PUBLIC_SERVER_IP } from "../env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 const initialState = {
   data: {},
   loggedIn: false,
@@ -60,36 +61,52 @@ export const MakeReport = createAsyncThunk(
     }
   }
 );
-export const SignUpClick = createAsyncThunk(
-  "user/SignUps",
-  async (inputForm, thunkAPI) => {
-    try {
-      const task = await axios.post(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`,
-        inputForm
-      );
-      const response = await axios.post(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/emailLogin`,
-        {
-          email: inputForm.email,
-          password: inputForm.password,
-        }
-      );
-      thunkAPI.dispatch(fetchUser(response.data));
-
-      // Store the token in AsyncStorage
-      try {
-        await AsyncStorage.setItem("UserToken", response.data);
-      } catch (e) {
-        console.error(JSON.stringify(e));
-      }
-
-      return task.data;
-    } catch (er) {
-      console.error("error coming from sign function", JSON.stringify(er));
-    }
-  }
-);
+// export const SignUpClick = createAsyncThunk(
+//   "user/SignUps",
+//   async (data, thunkAPI) => {
+//      try {
+//       console.log("jiheeed",data);
+//        const task = await axios.post(
+//          `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`,
+//          {
+//            userName: data.userDetails.name,
+//            phoneNumber: data.userDetails.phone,
+//            password: data.userDetails.password,
+//            email: data.userDetails.email,
+//            dateOfBirth: data.userDetails.dateOfBirth,
+//            selfie: data.picDetail.selfie,
+//            drivingLicenseFront: data.picDetail.license,
+//            drivingLicenseBack: data.picDetail.backLicense,
+//            passport: data.picDetail.passport
+//          }
+//        );
+ 
+//        const response = await axios.post(
+//          `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/emailLogin`,
+//          {
+//            email: data.userDetails.email,
+//            password: data.userDetails.password,
+//          }
+//        );
+ 
+//        // Dispatch fetchUser action with the response data
+//        thunkAPI.dispatch(fetchUser(response.data));
+ 
+//        // Store the token in a more secure storage
+//        try {
+//          await AsyncStorage.setItem("UserToken", JSON.stringify(response.data));
+//        } catch (e) {
+//          console.error(JSON.stringify(e));
+//          return thunkAPI.rejectWithValue(e);
+//        }
+ 
+//        return task.data;
+//      } catch (er) {
+//        console.error("error coming from sign function", JSON.stringify(er));
+//        return thunkAPI.rejectWithValue(er);
+//      }
+//   }
+//  );
 export const logUserOut = createAsyncThunk("user/logout", async () => {
   try {
     await AsyncStorage.removeItem("UserToken");

@@ -56,7 +56,7 @@ const Welcome = () => {
       );
     }, 4000);
 
-    return () => clearInterval(timer); // Cleanup on component unmount
+    return () => clearInterval(timer); 
   }, []);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const Welcome = () => {
     }
   }, [image]);
   if (!fontLoaded) {
-    return null; // or a loading indicator
+    return null; 
   }
   return (
     <View style={{ flex: 1 }}>

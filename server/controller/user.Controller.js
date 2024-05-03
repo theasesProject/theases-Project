@@ -20,16 +20,14 @@ module.exports = {
       console.log("Type : ", req.params.DataType === "createdAt");
       const list = await db.User.findAll({
         order: [
-          req.params.DataType === "A-Z"
-            ? ["userName", "ASC"]
-            : req.params.DataType === "createdAt"
-            ? ["createdAt", "ASC"]
-            : req.params.DataType === "carsRented"
-            ? ["carsRented", "ASC"]
-            : null,
-        ],
-      });
-      list ? res.json(list) : res.json([]);
+          req.params.DataType === "A-Z" ?
+            ['userName', 'ASC'] : req.params.DataType === "createdAt" ?
+              ['createdAt', 'ASC'] : req.params.DataType === "carsRented" ?
+                ["carsRented", 'ASC'] : null
+        ]
+      })
+      list ?
+        res.json(list) : res.json([])
     } catch (error) {
       next(error);
     }

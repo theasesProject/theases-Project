@@ -378,4 +378,23 @@ module.exports = {
       throw new Error("Failed to mark dates as unavailable.");
     }
   },
+  calculateTotalPrice: async function (req, res) {
+    try {
+      const { startDate, endDate, CarId } = req.body;
+
+      // Calculate the duration between start date and end date in days
+      const durationInDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+
+      // Retrieve the price of the car
+      const car = await db.Car.findOne({ where: { id: CarId } });
+      const carPrice = car.price;
+
+      // Calculate the total price
+      const totalPrice = durationInDays * carPrice;
+
+      res.status(200).send({ totalPrice });
+    } catch (error) {
+      res.json(error);
+    }
+  },
 };

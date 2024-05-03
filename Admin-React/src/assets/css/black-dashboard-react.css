@@ -15494,7 +15494,7 @@ img {
     display: flex;
   }
   .navbar .navbar-nav .btn i {
-    margin-right: 12px;
+    /* margin-right: 12px; */
   }
   .navbar .navbar-nav .btn span {
     margin: 0;

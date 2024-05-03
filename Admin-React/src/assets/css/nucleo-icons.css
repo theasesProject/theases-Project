@@ -42,7 +42,7 @@ Created using IcoMoon - icomoon.io
   text-align: center;
   padding: 45px 0 30px;
   justify-content: center;
-  border: 2.5px solid #4ca9e4;
+  border: 2.5px solid #30416b;
   border-radius: .1875rem;
   margin: 15px 0;
   height: 15rem;
@@ -57,7 +57,7 @@ Created using IcoMoon - icomoon.io
   font-size: 1.5em;
 }
 .my-confirm-button {
-  background-color: #4ca9e4; /* Change this to your preferred color */
+  background-color: #30416b; /* Change this to your preferred color */
   color: white; /* Change this to your preferred color */
  }
  .my-modal {
@@ -89,7 +89,7 @@ Created using IcoMoon - icomoon.io
  }
  
 .font-icon-detail p {
-  color: #4ca9e4 !important;
+  color: #30416b ;
   margin-top: 30px;
   padding: 0 10px;
   font-size: 1.002em;

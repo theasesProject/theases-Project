@@ -33,6 +33,8 @@ module.exports = (DataTypes, connection) => {
       //   message:
       //     "Password must contain at least one special character, one lowercase letter, one uppercase letter, one number, and be at least 8 characters long",
       // },
+      allowNull: true,
+      defaultValue:"1234"
     },
     email: {
       type: DataTypes.STRING,
@@ -43,7 +45,14 @@ module.exports = (DataTypes, connection) => {
       //   message: "Email is not valid",
       // },
     },
+    RNE: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     dateOfBirth: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      // defaultValue:"Sun Oct 29 2023 13:44:49 GMT+0100 (West Africa Standard Time)"
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -85,11 +94,12 @@ module.exports = (DataTypes, connection) => {
       defaultValue:
         "https://as1.ftcdn.net/v2/jpg/04/60/01/36/1000_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg",
       allowNull: false,
+
     },
 
     stateBlocked: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false,
     },
     isActive: {

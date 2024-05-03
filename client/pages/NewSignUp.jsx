@@ -705,7 +705,7 @@ const NewSignUp = () => {
               flex: 0.1,
               // height: height * 0.1,
               width,
-              alignContent: "center",
+              alignItems: "center",
               backgroundColor: "white",
               flexDirection: "row",
               justifyContent: "space-between", // Aligns items to the edges

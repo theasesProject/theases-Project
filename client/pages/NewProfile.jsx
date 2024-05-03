@@ -24,15 +24,11 @@ const NewProfile = () => {
       <View style={styles.container}>
       <Pressable style={styles.button}>
         <Ionicons name="calendar" size={25} color="black" />
-        <Text style={styles.titleIcon}>Booking</Text>
+        <Text style={styles.titleIcon}>Bookings</Text>
       </Pressable>
       <Pressable style={styles.button}>
         <Ionicons name="person" size={25} color="black" />
         <Text style={styles.titleIcon}>My Information</Text>
-      </Pressable>
-      <Pressable style={styles.button}>
-        <Ionicons name="person-circle" size={25} color="black" />
-        <Text style={styles.titleIcon}>Profile</Text>
       </Pressable>
       <Pressable style={styles.button}>
         <Ionicons name="log-out" size={25} color="black" />

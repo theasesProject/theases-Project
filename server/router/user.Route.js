@@ -23,6 +23,7 @@ const {
   sendWelcomeEmail,
   forgetPassword,
   changePassword
+  SignUpCompany
 } = require("../controller/user.Controller");
 
 // Define routes for user operations
@@ -35,6 +36,7 @@ router.post("/token", handleToken);
 router.get("/BringUserData", bringUsersData);
 router.get("/getInfoByMail", getUserInfoByEmail);
 router.post("/SignUpUser", SignUpUser);
+router.post("/SignUpCompany", SignUpCompany);
 router.get("/getOneByEmail/:email", getUserByEmail);
 router.get("/getOneByPhone/:phoneNumber", getUserByPhoneNumber);
 

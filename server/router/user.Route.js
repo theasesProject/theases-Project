@@ -17,6 +17,12 @@ const {
   reniewToken,
   bringSortedData,
   bringInvertedSortedData,
+  sendOTPVerification,
+  accountVerification,
+  sendOTPForgetPassword,
+  sendWelcomeEmail,
+  forgetPassword,
+  changePassword
 } = require("../controller/user.Controller");
 
 // Define routes for user operations
@@ -27,7 +33,7 @@ router.post("/emailLogin", emailLogin);
 router.post("/phoneLogin", phoneLogin);
 router.post("/token", handleToken);
 router.get("/BringUserData", bringUsersData);
-router.get("/getInfoByMail/:email", getUserInfoByEmail);
+router.get("/getInfoByMail", getUserInfoByEmail);
 router.post("/SignUpUser", SignUpUser);
 router.get("/getOneByEmail/:email", getUserByEmail);
 router.get("/getOneByPhone/:phoneNumber", getUserByPhoneNumber);
@@ -41,5 +47,11 @@ router.post(
   sendResetPasswordConfirmationCode
 );
 router.post("/reniewToken", reniewToken);
+router.post("/sendVerificationEmail", sendOTPVerification)
+router.post("/sendWelcomEmail", sendWelcomeEmail)
+router.post("/sendForgetCode", sendOTPForgetPassword)
+router.post("/verificationAccount", accountVerification)
+router.post("/forgetPassword", forgetPassword)
+router.post("/changePassword", changePassword)
 
 module.exports = router;

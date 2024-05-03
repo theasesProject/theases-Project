@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as Font from "expo-font";
 import * as ImagePicker from "expo-image-picker";
+import axios  from "axios";
 import {
   View,
   TextInput,
@@ -12,7 +13,9 @@ import {
   Keyboard,
   ScrollView,
   Pressable,
+  Button,
 } from "react-native";
+import {showToast} from "./../Helpers.js"
 import { LinearGradient } from "expo-linear-gradient";
 import { Image } from "react-native";
 import Arrowright from "../assets/Svg/arrowright.svg";
@@ -22,6 +25,12 @@ import Add from "../assets/Svg/add-picture.svg";
 import Change from "../assets/Svg/change-picture.svg";
 import { Camera } from "expo-camera";
 import * as CameraPermissions from "expo-camera";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useSelector, useDispatch } from "react-redux";
+import { SignUpClick } from "../store/userSlice";
+import { useNavigation } from "@react-navigation/native";
+// import { useNavigation } from '@react-navigation/native';
+
 const { width, height } = Dimensions.get("screen");
 const NewSignUp = () => {
   const flatListRef = useRef(null);
@@ -33,18 +42,102 @@ const NewSignUp = () => {
   const [Document, setDocument] = useState("");
   const [portait, setPortrait] = useState("");
   const [userDetails, setUserDetails] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    password: "",
+    name: "aymen",
+    phone: "556685",
+    email: "aymen@gmail.com",
+    password: "Azerty123 @",
+    dateOfBirth: "Select your birth date",
   });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [picsDetail, setPicsDetails] = useState({
-    selfie: "",
-    license: "",
-    backLicense: "",
-    passport: "",
+    selfie: "zdfz",
+    license: "fzef",
+    backLicense: "zefzef",
+    passport: "zefzef",
   });
+  const [date, setDate] = useState(new Date());
+  const [dateNow, setDateNow] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+  const navigation = useNavigation()
+
+  // const SignUpHandle = () => {
+  //   if (userDetails.password === confirmPassword) {
+  //      console.log(userDetails.password, "thisss");
+  //      const data ={
+  //       userDetails,
+  //       picsDetail,
+  //      }
+  //      // Dispatch the SignUpClick action with combined userDetails and picsDetail
+  //      dispatch(SignUpClick( data ))
+  //        .then((response) => {
+  //          // Assuming response.payload is the data you're interested in
+  //          if (response.payload) {
+  //           console.log(response, "payload")
+  //            navigation.navigate("NewHome");
+  //          } else {
+  //            // Handle the case where the request is not fulfilled
+  //            console.error("Sign-up failed");
+  //          }
+  //        })
+  //        .catch((error) => {
+  //          console.error(error);
+  //        });
+  //   }
+  //  };
+
+  const SignUpHandle = async () => {
+    try {
+      const response = await axios.post(
+        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`,
+        {
+          userName: userDetails.name,
+          phoneNumber: userDetails.phone,
+          password: userDetails.password,
+          email: userDetails.email,
+          dateOfBirth: userDetails.dateOfBirth,
+          selfie: picsDetail.selfie,
+          drivingLicenseFront: picsDetail.license,
+          drivingLicenseBack: picsDetail.backLicense,
+          passport: picsDetail.passport
+        },
+      );
+
+      if (response.status === 201) {
+        showToast("Success","Success","Registration Successfully done 😃!")
+
+        navigation.navigate("NewHome");
+      }
+      console.log("dddd",response);
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        setToastMessage("Email is already registered. Please use a different emailll.");
+        setShowToast(!showToast)
+
+      } else {
+        console.error("Error registering user:", error);
+      }
+    }
+  };
+   
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+    setShow(false);
+    if (currentDate) {
+      const formattedDate = currentDate.toISOString().split("T")[0];
+      setUserDetails({ ...userDetails, dateOfBirth: formattedDate });
+      console.log(formattedDate, "formdata");
+    }
+  };
+  const onDismiss = () => {
+    setShow(false);
+  };
+  console.log(userDetails, "lllll");
+
+  const showMode = () => {
+    setShow(true);
+  };
   const cameraRef = useRef(null);
   const takePicture = async (portrait) => {
     try {
@@ -63,8 +156,14 @@ const NewSignUp = () => {
       // For example: setError("Error taking picture");
     }
   };
-
   useEffect(() => {
+    async function requestCameraPermission() {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      if (status !== "granted") {
+        alert("Sorry, we need camera permissions to make this work!");
+      }
+    }
+    requestCameraPermission();
     const loadFonts = async () => {
       await Font.loadAsync({
         "League-Spartan": require("../assets/fonts/LeagueSpartan-ExtraBold.ttf"),
@@ -73,13 +172,12 @@ const NewSignUp = () => {
     };
     loadFonts();
   }, []);
-  function isFormComplete(userDetails, picsDetail, Document) {
+  function isFormComplete(userDetails, picsDetail) {
     return (
-      Object.values(userDetails).length === 4 &&
+      Object.values(userDetails).length === 5 &&
       Object.values(picsDetail).length === 4 &&
       Object.values(userDetails).every((value) => value !== "") &&
-      Object.values(picsDetail).every((value) => value !== "") &&
-      Document
+      Object.values(picsDetail).every((value) => value !== "") 
     );
   }
 
@@ -89,14 +187,14 @@ const NewSignUp = () => {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-      },
+      }
     );
 
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-      },
+      }
     );
 
     return () => {
@@ -216,7 +314,7 @@ const NewSignUp = () => {
                   value={userDetails.phone}
                   keyboardType="phone-pad"
                 />
-                <Pressable onPress={() => console.log("haha")}>
+                {/* <Pressable onPress={() => console.log("haha")}>
                   <TextInput
                     style={styles.FirstInput}
                     placeholder="Date Of Birth"
@@ -225,7 +323,26 @@ const NewSignUp = () => {
                     // value={userDetails.email}
                     keyboardType="email-address"
                   />
-                </Pressable>
+                </Pressable> */}
+                <TouchableOpacity onPress={showMode}
+                style={styles.birthText}
+                >
+                    <Text
+                                    style={styles.birthBtn}
+
+                    >{userDetails.dateOfBirth}</Text>
+                </TouchableOpacity>
+                {show && (
+                  
+                  <DateTimePicker
+                  
+                    value={date}
+                    mode="date"
+                    display="default"
+                    onChange={onChange}
+                    onDismiss={onDismiss}
+                  />
+                )}
                 <TextInput
                   style={styles.FirstInput}
                   placeholder="Type Your Password"
@@ -513,8 +630,8 @@ const NewSignUp = () => {
               activeOpacity={0.5}
               style={[styles.FlatBtn, { backgroundColor: "#321947" }]} // Adjusted to use a solid color
               onPress={() =>
-                isFormComplete(userDetails, picsDetail, Document)
-                  ? console.log("form Submitted")
+                isFormComplete(userDetails, picsDetail)
+                  ? SignUpHandle()
                   : handleButtonPress()
               }
             >
@@ -528,8 +645,7 @@ const NewSignUp = () => {
               >
                 {isFormComplete(
                   userDetails,
-                  picsDetail,
-                  Document,
+                  picsDetail
                 ) ? null : activeIndex === 1 ? (
                   <RotatableSvg rotation={180} />
                 ) : null}
@@ -542,7 +658,7 @@ const NewSignUp = () => {
                     paddingBottom: height * 0.01,
                   }}
                 >
-                  {isFormComplete(userDetails, picsDetail, Document)
+                  {isFormComplete(userDetails, picsDetail)
                     ? "Submit"
                     : activeIndex === 0
                       ? "Next"
@@ -550,7 +666,7 @@ const NewSignUp = () => {
                         ? "Previous"
                         : null}
                 </Text>
-                {isFormComplete(userDetails, picsDetail, Document) ? (
+                {isFormComplete(userDetails, picsDetail) ? (
                   <Arrowright />
                 ) : activeIndex === 0 ? (
                   <Arrowright />
@@ -732,6 +848,9 @@ const styles = StyleSheet.create({
     // justifyContent: "space-evenly",
     flexGrow: 1,
   },
+  birthText:{
+    color: "white",
+  }
 });
 
 export default NewSignUp;

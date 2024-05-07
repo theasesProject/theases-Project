@@ -71,7 +71,7 @@ module.exports = {
       const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
       res.status(200).send(token);
     } catch (err) {
-      throw (err)
+       next(err)
     }
   },
   // gets Admin token from the front to verify it and sends it back to front
@@ -82,7 +82,7 @@ module.exports = {
       // delete response.password;
       res.status(200).json(response);
     } catch (err) {
-      throw(err)
+      next(err)
     }
   },
 
@@ -95,7 +95,7 @@ module.exports = {
       }
       res.status(200).send("Admin exists");
     } catch (err) {
-      res.json(err);
+     next(err);
     }
   },
 
@@ -110,7 +110,7 @@ module.exports = {
       }
       res.status(200).send("Admin exists");
     } catch (err) {
-      res.json(err);
+     next(err);
     }
   },
 
@@ -125,7 +125,7 @@ module.exports = {
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      res.json(err);
+      next(err);
     }
   },
 
@@ -143,7 +143,7 @@ module.exports = {
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      res.json(err);
+      next(err);
     }
   },
 
@@ -168,7 +168,19 @@ module.exports = {
       const allUsers = await db.User.findAll();
       res.send(allUsers);
     } catch (error) {
-      throw error;
+      next(error);
+    }
+  },
+  getAllCompanies: async (req, res) => {
+    try {
+      const allCompanies = await db.User.findAll({
+        where:{
+          type:"company"
+        }
+      });
+      res.send(allCompanies);
+    } catch (error) {
+      next(error);
     }
   },
   updateOneUserblockState: async (req, res) => {
@@ -184,7 +196,7 @@ module.exports = {
       );
       res.send(oneUser);
     } catch (error) {
-      throw error;
+      next(error);
     }
   },
 };

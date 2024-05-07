@@ -18,19 +18,20 @@ import { Provider } from "react-redux";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 Modal.setAppElement('#root');
 root.render(
-  
+
   <ThemeContextWrapper>
     <BackgroundColorWrapper>
       <BrowserRouter>
-    <Provider store={store}>
-        <Routes>
-          <Route path="/admin/*" element={<AdminLayout />} />
-          <Route path="/rtl/*" element={<RTLLayout />} />
-          <Route
-            path="*"
-            element={<Navigate to="/admin/dashboard" replace />}
-          />
-        </Routes>
+      
+        <Provider store={store}>
+          <Routes>
+            <Route path="/admin/*" element={<AdminLayout />} />
+            <Route path="/rtl/*" element={<RTLLayout />} />
+            <Route
+              path="*"
+              element={<Navigate to="/admin/dashboard" replace />}
+            />
+          </Routes>
         </Provider>
       </BrowserRouter>
     </BackgroundColorWrapper>

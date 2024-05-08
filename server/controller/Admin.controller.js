@@ -53,7 +53,7 @@ module.exports = {
     }
   },
   // checks if a Admin exists using email
-  emailLogin: async (req, res) => {
+  emailLogin: async (req, res,next) => {
     try {
       console.log(req.body);
       const admin = await Admin.findOne({ where: { email: req.body.email } });
@@ -71,23 +71,23 @@ module.exports = {
       const token = jwt.sign(admin.dataValues, process.env.JWT_SECRET_KEY);
       res.status(200).send(token);
     } catch (err) {
-      throw (err)
+       next(err)
     }
   },
   // gets Admin token from the front to verify it and sends it back to front
-  handleToken: async (req, res) => {
+  handleToken: async (req, res,next) => {
     try {
       console.log("lllllllllllllllllllllllllll",req.body);
       const response = jwt.verify(req.body.token, process.env.JWT_SECRET_KEY);
       // delete response.password;
       res.status(200).json(response);
     } catch (err) {
-      throw(err)
+      next(err)
     }
   },
 
   // Get Admin by email
-  getAdminByEmail: async (req, res) => {
+  getAdminByEmail: async (req, res,next) => {
     try {
       const Admin = await Admin.findOne({ where: { email: req.params.email } });
       if (!Admin) {
@@ -95,12 +95,12 @@ module.exports = {
       }
       res.status(200).send("Admin exists");
     } catch (err) {
-      res.json(err);
+     next(err);
     }
   },
 
   // Get Admin by phone number
-  getAdminByPhoneNumber: async (req, res) => {
+  getAdminByPhoneNumber: async (req, res,next) => {
     try {
       const Admin = await Admin.findOne({
         where: { phoneNumber: req.params.phoneNumber },
@@ -110,12 +110,12 @@ module.exports = {
       }
       res.status(200).send("Admin exists");
     } catch (err) {
-      res.json(err);
+     next(err);
     }
   },
 
   // Get a specific Admin by ID
-  getAdminById: async (req, res) => {
+  getAdminById: async (req, res,next) => {
     const AdminId = req.params.id;
     try {
       const Admin = await Admin.findByPk(AdminId);
@@ -125,12 +125,12 @@ module.exports = {
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      res.json(err);
+      next(err);
     }
   },
 
   // Update a Admin by ID
-  updateAdmin: async (req, res) => {
+  updateAdmin: async (req, res,next) => {
     const AdminId = req.params.id;
     try {
       const [updated] = await Admin.update(req.body, {
@@ -143,7 +143,7 @@ module.exports = {
         res.status(404).json({ message: "Admin not found" });
       }
     } catch (err) {
-      res.json(err);
+      next(err);
     }
   },
 
@@ -163,15 +163,64 @@ module.exports = {
       res.json(err);
     }
   },
-  getAllUsers: async (req, res) => {
+  getAllUsers: async (req, res,next) => {
     try {
       const allUsers = await db.User.findAll();
       res.send(allUsers);
     } catch (error) {
-      throw error;
+      next(error);
     }
   },
-  updateOneUserblockState: async (req, res) => {
+  getAllCompanies: async (req, res,next) => {
+    try {
+      const allCompanies = await db.User.findAll({
+        where:{
+          type:"company"
+        }
+      });
+      res.send(allCompanies);
+    } catch (error) {
+      next(error);
+    }
+  },
+  getLimitedCompanies: async (req, res,next) => {
+    try {
+       const allCompanies = await db.User.findAll({
+         where: {
+           type: "company"
+         },
+         order: [['createdAt', 'DESC']], // Order by the 'createdAt' column in descending order
+         limit: 10 // Limit the results to the latest 10 companies
+       });
+       res.send(allCompanies);
+    } catch (error) {
+       next(error);
+    }
+   },
+   
+  getAllCars: async (req, res,next) => {
+    try {
+       const allCars = await db.Car.findAll({
+       });
+       res.send(allCars);
+    } catch (error) {
+       next(error);
+    }
+   },
+   
+  getLimitedCars: async (req, res,next) => {
+    try {
+       const allCars = await db.Car.findAll({
+         order: [['createdAt', 'DESC']], // Order by the 'createdAt' column in descending order
+         limit: 10 // Limit the results to the latest 10 companies
+       });
+       res.send(allCars);
+    } catch (error) {
+       next(error);
+    }
+   },
+   
+  updateOneUserblockState: async (req, res,next) => {
     try {
       const user = await db.User.findOne({ where: { id: req.params.id } });
       const oneUser = await db.User.update(
@@ -184,7 +233,7 @@ module.exports = {
       );
       res.send(oneUser);
     } catch (error) {
-      throw error;
+      next(error);
     }
   },
 };

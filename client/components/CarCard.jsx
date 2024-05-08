@@ -29,35 +29,35 @@ const CarCard = ({car,markedDates}) => {
 
   return (
     <Pressable style={styles.cardContianer} onPress={handlePress}>
-      <ImageBackground style={styles.bg} resizeMode='cover' source={{ uri: car.Media[0]?.media }}>
+      <ImageBackground style={styles.bg} resizeMode='stretch' source={{ uri: car?.Media[0]?.media }}>
         <View style={styles.content}>
             <View style={styles.titleWrapper}>
-        <Text style={styles.title}>{car.model} {car.brand}</Text>
+        <Text style={styles.title}>{car.brand} {car.model}</Text>
         <Text style={styles.titleDetails}>or similar | convertible</Text>
         </View>
         <View style={styles.iconsRow}>
         <View style={styles.firstRow}>
         <Ionicons name="person" size={15} color="white" style={styles.icon} />   
-        <Text style={styles.details}>{car.numberPeople}</Text>
+        <Text style={styles.details}>{car?.numberPeople}</Text>
         </View>
         <View style={styles.firstRow}>
         <GearIcon/>
-        <Text style={styles.details}>{car.characteristics}</Text>
+        <Text style={styles.details}>{car?.characteristics}</Text>
         </View>
         <View style={styles.firstRow}>
         <CarDoor/>
  
-        <Text style={styles.details}>{car.numberDoors}</Text>
+        <Text style={styles.details}>{car?.numberDoors}</Text>
         </View>
         </View>
         </View>
         <View style={styles.cardFooter}>
             <View style={styles.secondRow}>
                 <Tick/>
-         <Text style={styles.footerDetails}>{car.typeOfFuel}</Text>
+         <Text style={styles.footerDetails}>{car?.typeOfFuel}</Text>
          </View> 
          <View style={styles.thirdRow}>
-            <Text style={styles.price}>TND {car.price}/day</Text>
+            <Text style={styles.price}>TND {car?.price}/day</Text>
             <Text style={styles.totalPrice}>{totalPrice} DT Total</Text>
             </View> 
         </View>

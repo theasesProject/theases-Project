@@ -47,11 +47,12 @@ module.exports = (DataTypes, connection) => {
     },
     RNE: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
+      defaultValue:"",
     },
     dateOfBirth: {
-      type: DataTypes.DATE,
-      allowNull: true,
+      // type: DataTypes.DATE,
+      // allowNull: true,
       // defaultValue:"Sun Oct 29 2023 13:44:49 GMT+0100 (West Africa Standard Time)"
       type: DataTypes.STRING,
       allowNull: false,

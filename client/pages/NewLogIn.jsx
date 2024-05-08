@@ -1,427 +1,216 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as Font from "expo-font";
-import * as ImagePicker from "expo-image-picker";
-import { Camera } from "expo-camera";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import React, { useState, useEffect } from "react";
 import {
-  View,
-  TextInput,
-  Button,
   StyleSheet,
-  FlatList,
-  Dimensions,
   Text,
-  TouchableOpacity,
-  Keyboard,
+  View,
+  Dimensions,
   ScrollView,
+  Image,
+  TextInput,
+  TouchableOpacity,
   Pressable,
-  TouchableWithoutFeedback,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-// import { Camera } from "expo-camera";
-import { Image } from "react-native";
-import Arrowright from "../assets/Svg/arrowright.svg";
-import RotatableSvg from "../components/RotatedArrow";
+import { Feather } from "@expo/vector-icons";
+import axios from "axios";
+import appConfig from "../appConfig";
+import Toast from "react-native-toast-message";
+
 const { width, height } = Dimensions.get("screen");
-const NewLogIn = () => {
-  const flatListRef = useRef(null);
-  const [fontLoaded, setFontLoaded] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [Document, setDocument] = useState("");
-  const [companyDetails, setCompanyDetails] = useState({
-    name: "",
-    address: "",
-    phone: "",
-    email: "",
-  });
-  const [managerDetails, setManagerDetails] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    password: ""
-  });
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "League-Spartan": require("../assets/fonts/LeagueSpartan-ExtraBold.ttf"),
-      });
-      setFontLoaded(true);
-    };
 
-    loadFonts();
-  }, []);
-  function isFormComplete(companyDetails, managerDetails, Document) {
-    return (
-      Object.values(companyDetails).length === 4 &&
-      Object.values(managerDetails).length === 4 &&
-      Object.values(companyDetails).every((value) => value !== "") &&
-      Object.values(managerDetails).every((value) => value !== "") &&
-      Document
-    );
-  }
+const NewLogin = () => {
+  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardVisible(true);
-      },
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardVisible(false);
-      },
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
-  const handleCompanyChange = (field, value) => {
-    setCompanyDetails({ ...companyDetails, [field]: value });
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
-  const handleManagerChange = (field, value) => {
-    setManagerDetails({ ...managerDetails, [field]: value });
+  useEffect(() => {
+    validateEmail();
+    validatePassword();
+  }, [email, password]);
+
+  const validateEmail = () => {
+    const re = /\S+@\S+\.\S+/;
+    const isValid = re.test(email);
+    setEmailError(isValid ? "" : "Invalid email format");
   };
 
-  const handleButtonPress = () => {
-    if (activeIndex === 0) {
-      setActiveIndex(1);
-      flatListRef.current.scrollToIndex({ animated: true, index: 1 });
-    } else if (activeIndex === 1) {
-      setActiveIndex(0);
-      flatListRef.current.scrollToIndex({ animated: true, index: 0 });
-    } else {
-      console.log("Submitting form...");
-      // Perform your submission logic here
+  const validatePassword = () => {
+    let error = "";
+    if (password.length < 8) {
+      error = "Password must be at least 8 characters long";
+    } else if (!/[a-z]/.test(password)) {
+      error = "Password must contain at least one lowercase letter";
+    } else if (!/[A-Z]/.test(password)) {
+      error = "Password must contain at least one uppercase letter";
+    } else if (!/\d/.test(password)) {
+      error = "Password must contain at least one digit";
+    } else if (!/[@$!%*?&]/.test(password)) {
+      error = "Password must contain at least one special character";
     }
+    setPasswordError(error);
   };
 
-  const handleScrollEnd = (e) => {
-    const contentOffset = e.nativeEvent.contentOffset;
-    const viewSize = e.nativeEvent.layoutMeasurement;
-    const pageNum = Math.floor(contentOffset.x / viewSize.width);
-    setActiveIndex(pageNum);
-  };
+  const submitLogin = async () => {
+    // If both email and password are valid, proceed with login
+    if (!emailError && !passwordError) {
+      try {
+        const response = await axios.post(
+          `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/emailLogin`,
+          {
+            email: email,
+            password: password,
+          }
+        );
 
-  const pickImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: false,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      console.log(result);
-      if (!result.canceled) {
-        setDocument(result.assets[0].uri);
+        if (response.status === 200 && response.data.result && response.data.result.id) {
+          const { id, token } = response.data.result;
+
+          await AsyncStorage.setItem("userId", id.toString());
+          await AsyncStorage.setItem("token", token);
+
+          navigation.navigate("NewHome");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 422) {
+          console.log("422", error);
+        } else {
+          console.error("Error registering user:", error);
+        }
       }
-    } catch (error) {
-      console.error("Error picking image: ", error);
-    }
-  };
-
-  if (!fontLoaded) {
-    return null; // or a loading indicator
-  }
-
-  const renderItem = ({ item }) => {
-    if (item.id === "company") {
-      return (
-        <LinearGradient
-          locations={[0.2, 1]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 0 }}
-          colors={["#321947", "#000000"]}
-          // style={styles.formContainer}
-        >
-          <ScrollView
-            contentContainerStyle={styles.ScrollContainer}
-            keyboardShouldPersistTaps="always"
-          >
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "space-evenly",
-                // backgroundColor:"red",
-                height,
-              }}
-            >
-              <View style={{
-                height:height*.2,
-                // backgroundColor:"green"
-              }}>
-              <Image
-                style={styles.img}
-                source={require("../assets/aqwaWhite.png")}
-              /></View>
-              <View
-                style={{
-                  height: height * 0.4,
-                  // backgroundColor:"yellow"
-                }}
-              >
-                <TextInput
-                  style={styles.input}
-                  placeholder="Company Name"
-                  placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => handleCompanyChange("name", text)}
-                  value={companyDetails.name}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Company Address"
-                  placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => handleCompanyChange("address", text)}
-                  value={companyDetails.address}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Company Phone Number"
-                  placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => handleCompanyChange("phone", text)}
-                  value={companyDetails.phone}
-                  keyboardType="phone-pad"
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Company Email"
-                  placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => handleCompanyChange("email", text)}
-                  value={companyDetails.email}
-                  keyboardType="email-address"
-                />
-                <Pressable onPress={pickImage}>
-                  <TextInput
-                    style={[styles.input,{opacity:Document?0.5:1}]}
-                    placeholder={
-                      Document
-                        ? "Tap here to change Image  ☑️"
-                        : "Upload a photo of your work license  🖨️"
-                    }
-                    placeholderTextColor={"#cccccc"}
-                    // keyboardType="email-address"
-                    editable={false} // Make the TextInput not editable
-                  />
-                </Pressable>
-              </View>
-            </View>
-          </ScrollView>
-        </LinearGradient>
-      );
-    } else if (item.id === "manager") {
-      return (
-        <LinearGradient
-          locations={[0.2, 1]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 0 }}
-          colors={["#321947", "#000000"]}
-          // style={styles.formContainer}
-        >
-          <ScrollView
-            contentContainerStyle={styles.ScrollContainer}
-            keyboardShouldPersistTaps="always"
-          >
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "space-evenly",
-                // backgroundColor:"red",
-                height,
-              }}
-            >
-              <View style={{
-                height:height*.2,
-                // backgroundColor:"green"
-              }}>
-              <Image
-                style={styles.img}
-                source={require("../assets/aqwaWhite.png")}
-              /></View>
-              <View
-                style={{
-                  height: height * 0.4,
-                  // backgroundColor:"yellow"
-                }}
-              >
-                <TextInput
-                  style={styles.input}
-                  placeholder="Manager's Name"
-                  placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => handleManagerChange("name", text)}
-                  value={managerDetails.name}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Manager's Phone Number"
-                  placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => handleManagerChange("phone", text)}
-                  value={managerDetails.phone}
-                  keyboardType="phone-pad"
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Manager's Email"
-                  placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => handleManagerChange("email", text)}
-                  value={managerDetails.email}
-                  keyboardType="email-address"
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Manager's Password"
-                  placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => handleManagerChange("password", text)}
-                  value={managerDetails.password}
-                  keyboardType="default"
-                  secureTextEntry={true}
-                />
-              </View>
-            </View>
-          </ScrollView>
-        </LinearGradient>
-      );
+    } else {
+      console.log("Verify email and password");
     }
   };
 
   return (
-    <LinearGradient
-      locations={[0.1, 0.9]}
-      start={{ x: 0, y: 1 }}
-      end={{ x: 1, y: 0 }}
-      colors={["#321947", "#000000"]}
-      style={styles.container}
-    >
-      <FlatList
-        ref={flatListRef}
-        data={[{ id: "company" }, { id: "manager" }]}
-        renderItem={renderItem}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        onMomentumScrollEnd={handleScrollEnd}
-      />
-      {keyboardVisible ? null : (
-        <Pressable
-          activeOpacity={0.5}
-          style={[styles.FlatBtn, { backgroundColor: "#321947" }]} // Adjusted to use a solid color
-          onPress={() =>
-            isFormComplete(companyDetails, managerDetails, Document)
-              ? console.log("form Submitted")
-              : handleButtonPress()
-          }
+    <View>
+      <LinearGradient
+        locations={[0.2, 1]}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 1, y: 0 }}
+        colors={["#321947", "#000000"]}
+      >
+        <ScrollView
+          contentContainerStyle={styles.ScrollContainer}
+          keyboardShouldPersistTaps="always"
         >
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "flex-end",
-              flexDirection: "row",
-              backgroundColor: "transparent",
-            }}
-          >
-            {isFormComplete(
-              companyDetails,
-              managerDetails,
-              Document,
-            ) ? null : activeIndex === 1 ? (
-              <RotatableSvg rotation={180} />
-            ) : null}
-            <Text
-              style={{
-                color: "#fff",
-                backgroundColor: "transparent",
-                fontSize: 18,
-                fontFamily: "League-Spartan",
-                paddingBottom: height * 0.01,
-              }}
-            >
-              {isFormComplete(companyDetails, managerDetails, Document)
-                ? "Submit"
-                : activeIndex === 0
-                  ? "Next"
-                  : activeIndex === 1
-                    ? "Previous"
-                    : null}
-            </Text>
-            {isFormComplete(companyDetails, managerDetails, Document) ? (
-              <Arrowright />
-            ) : activeIndex === 0 ? (
-              <Arrowright />
-            ) : null}
+          <View style={{ alignItems: "center", justifyContent: "space-evenly", height }}>
+            <View style={{ height: height * 0.2 }}>
+              <Image style={styles.img} source={require("../assets/aqwaWhite.png")} />
+            </View>
+            <View style={{ height: height * 0.4 }}>
+              <View style={styles.container}>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.title}>Login</Text>
+                </View>
+                <View>
+                  <TextInput
+                    style={[styles.FirstInput, emailError ? styles.errorInput : null]}
+                    placeholder="Enter Your Email"
+                    placeholderTextColor={"#cccccc"}
+                    onChangeText={(text) => setEmail(text)}
+                    keyboardType="email-address"
+                  />
+                  {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+                  <TextInput
+                    style={[styles.FirstInput, passwordError ? styles.errorInput : null]}
+                    placeholder="Type Your Password"
+                    placeholderTextColor={"#cccccc"}
+                    secureTextEntry={!showPassword}
+                    onChangeText={(text) => setPassword(text)}
+                    value={password}
+                  />
+                  {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+                  <TouchableOpacity
+                    style={styles.eyeIconContainer}
+                    onPress={togglePasswordVisibility}
+                  >
+                    <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#cccccc" />
+                  </TouchableOpacity>
+                </View>
+                <Pressable style={styles.btnSignIn} onPress={submitLogin}>
+                  <Text style={styles.textSignIn}>Sign In</Text>
+                </Pressable>
+              </View>
+            </View>
           </View>
-        </Pressable>
-      )}
-    </LinearGradient>
+        </ScrollView>
+      </LinearGradient>
+    </View>
   );
 };
 
+export default NewLogin;
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  FlatBtn: {
-    height: height * 0.08,
-    width: width,
-    // paddingRight:width*.15,
-    // borderBottomEndRadius: 100,
-    // backgroundColor:"red",
-    // borderBottomLeftRadius: 100,
-    // backgroundColor: "transparent",
+  ScrollContainer: {
+    height,
     alignItems: "center",
-    // justifyContent: "flex-end",
-    // flexDirection: "row",
-    // borderTopColor: "#000000",
-    // justifyContent: "center",
-    paddingBottom: height * 0.005,
-    paddingLeft: width * 0.6,
-  },
-  formContainer: {
-    width: Dimensions.get("window").width,
-    height: height,
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  input: {
-    height: Dimensions.get("window").height * 0.05,
-    width: width * 0.75,
-    borderColor: "gray",
-    borderBottomWidth: 1,
-    color: "white",
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 5,
-  },
-  cameraButton: {
-    alignItems: "center",
-    width: width * 0.75,
-    backgroundColor: "#fff",
-    padding: height * 0.01,
-    borderRadius: 100,
-    // marginTop: 10,
-    borderColor: "#000000",
-    borderWidth: 0.5,
-  },
-  cameraButtonText: {
-    fontSize: 16,
+    flexGrow: 1,
   },
   img: {
     height: height * 0.2,
     width: width,
   },
-  ScrollContainer: {
-    height,
+  container: {
+    justifyContent: "center",
     alignItems: "center",
-    // justifyContent: "space-evenly",
-    flexGrow:1
+    gap: 30,
+  },
+  title: {
+    paddingBottom: 20,
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "white",
+  },
+  FirstInput: {
+    height: Dimensions.get("window").height * 0.05,
+    width: width * 0.75,
+    color: "white",
+    marginBottom: 10,
+    padding: 5,
+    borderRadius: 5,
+    borderColor: "gray",
+    borderBottomWidth: 1,
+    position: "relative",
+  },
+  eyeIconContainer: {
+    position: "absolute",
+    top: "70%",
+    right: 10,
+    transform: [{ translateY: -12 }],
+  },
+  btnSignIn: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 40,
+    borderWidth: 1,
+    borderColor: "white",
+    width: width * 0.3,
+    height: 50,
+  },
+  textSignIn: {
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+    fontWeight: "500",
+    fontSize: 20,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
+  },
+  errorInput: {
+    borderColor: "red",
   },
 });
-
-export default NewLogIn;

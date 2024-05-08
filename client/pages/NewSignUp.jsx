@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as Font from "expo-font";
 import * as ImagePicker from "expo-image-picker";
-import axios  from "axios";
+import axios from "axios";
+import ImagePreviewModal from "../components/ImagePreviewModal.jsx";
 import {
   View,
   TextInput,
@@ -14,8 +15,13 @@ import {
   ScrollView,
   Pressable,
   Button,
+  Platform,
+  Alert,
+  Linking,
+  Image as RNImage,
 } from "react-native";
-import {showToast} from "./../Helpers.js"
+
+import { showToast } from "./../Helpers.js";
 import { LinearGradient } from "expo-linear-gradient";
 import { Image } from "react-native";
 import Arrowright from "../assets/Svg/arrowright.svg";
@@ -29,97 +35,130 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector, useDispatch } from "react-redux";
 import { SignUpClick } from "../store/userSlice";
 import { useNavigation } from "@react-navigation/native";
+import appConfig from "../appConfig.js";
 // import { useNavigation } from '@react-navigation/native';
-
+import { MaterialCommunityIcons,MaterialIcons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("screen");
 const NewSignUp = () => {
   const flatListRef = useRef(null);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [Ratio, setRatio] = useState(0);
   const [isCameraVisible, setIsCameraVisible] = useState(false);
-  const [type, setType] = useState(CameraPermissions.CameraType.front);
+  const [type, setType] = useState(CameraPermissions.CameraType.back);
+  const [typeSelfie, setTypeSelfie] = useState(
+    CameraPermissions.CameraType.front
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const [Document, setDocument] = useState("");
+  const [showImageModal, setShowImageModal] = useState(false);
   const [portait, setPortrait] = useState("");
+
   const [userDetails, setUserDetails] = useState({
     name: "aymen",
     phone: "556685",
     email: "aymen@gmail.com",
     password: "Azerty123 @",
-    dateOfBirth: "Select your birth date",
+    confirmPassword: "Azerty123 @",
+    dateOfBirth: "",
   });
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [picsDetail, setPicsDetails] = useState({
-    selfie: "zdfz",
-    license: "fzef",
-    backLicense: "zefzef",
-    passport: "zefzef",
+    selfie: "",
+    license: "",
+    backLicense: "",
+    passport: "",
   });
+  console.log("piiiiiics", picsDetail);
   const [date, setDate] = useState(new Date());
   const [dateNow, setDateNow] = useState(new Date());
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [cameraPermission, setCameraPermission] = useState(null);
+  const [capturedImage, setCapturedImage] = useState("");
+  const [showImage, setShowImage] = useState(false);
 
-  // const SignUpHandle = () => {
-  //   if (userDetails.password === confirmPassword) {
-  //      console.log(userDetails.password, "thisss");
-  //      const data ={
-  //       userDetails,
-  //       picsDetail,
-  //      }
-  //      // Dispatch the SignUpClick action with combined userDetails and picsDetail
-  //      dispatch(SignUpClick( data ))
-  //        .then((response) => {
-  //          // Assuming response.payload is the data you're interested in
-  //          if (response.payload) {
-  //           console.log(response, "payload")
-  //            navigation.navigate("NewHome");
-  //          } else {
-  //            // Handle the case where the request is not fulfilled
-  //            console.error("Sign-up failed");
-  //          }
-  //        })
-  //        .catch((error) => {
-  //          console.error(error);
-  //        });
-  //   }
-  //  };
+  useEffect(() => {
+    const handleCameraPermission = async () => {
+      const { status } =
+        await CameraPermissions.requestCameraPermissionsAsync();
+      setCameraPermission(status);
+      if (status === "granted") {
+        return;
+      } else if (status === "denied") {
+        Alert.alert(
+          "Camera Permission Required",
+          "Please enable camera permissions in your device settings to use Aqwa-Cars.",
+          [
+            { text: "Cancel", style: "cancel" },
+            { text: "Open Settings", onPress: openAppSettings },
+          ]
+        );
+      } else {
+        const { status: newStatus } =
+          await Camera.requestCameraPermissionsAsync();
+        setCameraPermission(newStatus);
+        if (newStatus === "granted") {
+          return;
+        } else {
+          Alert.alert(
+            "Camera Permission Required",
+            "Please enable camera permissions in your device settings.",
+            [
+              { text: "Cancel", style: "cancel" },
+              { text: "Open Settings", onPress: openAppSettings },
+            ]
+          );
+        }
+      }
+    };
+
+    const openAppSettings = () => {
+      Linking.openSettings().catch(() =>
+        Alert.alert(
+          "Unable to open settings.",
+          "Please open settings manually to grant camera permission."
+        )
+      );
+    };
+    handleCameraPermission();
+  }, []);
 
   const SignUpHandle = async () => {
     try {
       const response = await axios.post(
-        `http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`,
+        `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`,
         {
           userName: userDetails.name,
           phoneNumber: userDetails.phone,
           password: userDetails.password,
+          confirmPassword: userDetails.confirmPassword,
           email: userDetails.email,
           dateOfBirth: userDetails.dateOfBirth,
           selfie: picsDetail.selfie,
           drivingLicenseFront: picsDetail.license,
           drivingLicenseBack: picsDetail.backLicense,
-          passport: picsDetail.passport
-        },
+          passport: picsDetail.passport,
+        }
       );
 
       if (response.status === 201) {
-        showToast("Success","Success","Registration Successfully done 😃!")
+        // showToast("Success","Success","Registration Successfully done 😃!")
 
-        navigation.navigate("NewHome");
+        console.log("successfully registered");
+        navigation.navigate("OtpVerification");
       }
-      console.log("dddd",response);
+      console.log("dddd", response);
     } catch (error) {
       if (error.response && error.response.status === 422) {
-        setToastMessage("Email is already registered. Please use a different emailll.");
-        setShowToast(!showToast)
-
+        // setToastMessage("Email is already registered. Please use a different emailll.");
+        // setShowToast(!showToast)
+        console.log("422", error);
       } else {
         console.error("Error registering user:", error);
       }
     }
   };
-   
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
@@ -127,43 +166,55 @@ const NewSignUp = () => {
     if (currentDate) {
       const formattedDate = currentDate.toISOString().split("T")[0];
       setUserDetails({ ...userDetails, dateOfBirth: formattedDate });
-      console.log(formattedDate, "formdata");
+      // console.log(formattedDate, "formdata");
     }
   };
   const onDismiss = () => {
     setShow(false);
   };
-  console.log(userDetails, "lllll");
+  // console.log(userDetails, "lllll");
 
   const showMode = () => {
     setShow(true);
   };
   const cameraRef = useRef(null);
+
   const takePicture = async (portrait) => {
     try {
+      const { status } =
+        await CameraPermissions.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Sorry, we need camera permissions to make this work!");
+        return;
+      }
+
       if (cameraRef.current) {
         const options = { quality: 0.5, base64: true };
         const data = await cameraRef.current.takePictureAsync(options);
-        // Assuming picsDetail is an object, use the spread operator to create a new object
-        // with the existing picsDetail and the new portrait data
-        setPicsDetails({ ...picsDetail, [portrait]: data.uri });
-        // Here you can save the image URI to your state or handle it as needed
-        setIsCameraVisible(false);
+        setCapturedImage(data.uri);
+        setShowImageModal(true);
+        // setIsCameraVisible(false);
       }
     } catch (error) {
       console.error("Error taking picture:", error);
-      // Optionally, you can set some state to indicate an error occurred
-      // For example: setError("Error taking picture");
     }
   };
+
+  const handleConfirmImage = () => {
+    setPicsDetails({ ...picsDetail, [portait]: capturedImage });
+    console.log("Image confirmed:", capturedImage);
+    setShowImageModal(false);
+    setIsCameraVisible(false);
+    setCapturedImage("");
+  };
+
+  const handleRetakePicture = () => {
+    setShowImageModal(false);
+    setIsCameraVisible(true);
+    setCapturedImage("");
+  };
+
   useEffect(() => {
-    async function requestCameraPermission() {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
-      if (status !== "granted") {
-        alert("Sorry, we need camera permissions to make this work!");
-      }
-    }
-    requestCameraPermission();
     const loadFonts = async () => {
       await Font.loadAsync({
         "League-Spartan": require("../assets/fonts/LeagueSpartan-ExtraBold.ttf"),
@@ -172,12 +223,13 @@ const NewSignUp = () => {
     };
     loadFonts();
   }, []);
+
   function isFormComplete(userDetails, picsDetail) {
     return (
-      Object.values(userDetails).length === 5 &&
+      Object.values(userDetails).length === 6 &&
       Object.values(picsDetail).length === 4 &&
       Object.values(userDetails).every((value) => value !== "") &&
-      Object.values(picsDetail).every((value) => value !== "") 
+      Object.values(picsDetail).every((value) => value !== "")
     );
   }
 
@@ -209,6 +261,13 @@ const NewSignUp = () => {
 
   const handlePics = (field, value) => {
     setPicsDetails({ ...picsDetail, [field]: value });
+    setShowImageModal(false);
+    setIsCameraVisible(false);
+  };
+  const handleCanceledPics = (field, value) => {
+    setCapturedImage("");
+    setShowImageModal(false);
+    setIsCameraVisible(true);
   };
 
   const handleButtonPress = () => {
@@ -219,7 +278,7 @@ const NewSignUp = () => {
       setActiveIndex(0);
       flatListRef.current.scrollToIndex({ animated: true, index: 0 });
     } else {
-      console.log("Submitting form...");
+      // console.log("Submitting form...");
       // Perform your submission logic here
     }
   };
@@ -239,7 +298,7 @@ const NewSignUp = () => {
         aspect: [4, 3],
         quality: 1,
       });
-      console.log(result);
+      // console.log(result);
       if (!result.canceled) {
         setDocument(result.assets[0].uri);
       }
@@ -314,28 +373,16 @@ const NewSignUp = () => {
                   value={userDetails.phone}
                   keyboardType="phone-pad"
                 />
-                {/* <Pressable onPress={() => console.log("haha")}>
-                  <TextInput
-                    style={styles.FirstInput}
-                    placeholder="Date Of Birth"
-                    editable={false}
-                    placeholderTextColor={"#cccccc"}
-                    // value={userDetails.email}
-                    keyboardType="email-address"
-                  />
-                </Pressable> */}
-                <TouchableOpacity onPress={showMode}
-                style={styles.birthText}
-                >
-                    <Text
-                                    style={styles.birthBtn}
 
-                    >{userDetails.dateOfBirth}</Text>
+                <TouchableOpacity onPress={showMode} style={styles.birthText}>
+                  <Text style={styles.birthBtn}>
+                    {!userDetails.dateOfBirth
+                      ? "Select your date"
+                      : userDetails.dateOfBirth}
+                  </Text>
                 </TouchableOpacity>
                 {show && (
-                  
                   <DateTimePicker
-                  
                     value={date}
                     mode="date"
                     display="default"
@@ -356,24 +403,13 @@ const NewSignUp = () => {
                   style={styles.FirstInput}
                   placeholder="Confirm Your Password"
                   placeholderTextColor={"#cccccc"}
-                  onChangeText={(text) => setConfirmPassword(text)}
-                  value={confirmPassword}
+                  onChangeText={(text) =>
+                    handleUserChange("confirmPassword", text)
+                  }
+                  value={userDetails.confirmPassword}
                   keyboardType="default"
                   secureTextEntry={true}
                 />
-                {/* <Pressable onPress={pickImage}>
-                  <TextInput
-                    style={[styles.input,{opacity:Document?0.5:1}]}
-                    placeholder={
-                      Document
-                        ? "Tap here to change Image  ☑️"
-                        : "Upload a photo of your work license  🖨️"
-                    }
-                    placeholderTextColor={"#cccccc"}
-                    // keyboardType="email-address"
-                    editable={false} // Make the TextInput not editable
-                  />
-                </Pressable> */}
               </View>
             </View>
           </ScrollView>
@@ -676,96 +712,101 @@ const NewSignUp = () => {
           )}
         </LinearGradient>
       )}
-      {isCameraVisible && (
+      {/* {isCameraVisible && (
         <>
           <Camera
             ref={cameraRef}
-            style={{
-              flex: 0.9,
-              height: height * 0.4,
-              width: height * 0.4,
-              justifyContent: "flex-end",
-            }}
-            focusable={true}
+            style={{ width: width, height: height * 0.8 }}
+            // type={Camera.Constants.Type.back}
             type={type}
-            onCameraReady={() => console.log("Camera is ready")}
-            onBarCodeScanned={() => {}}
-            onFacesDetected={() => {}}
             ratio="16:9"
-            onTextRecognized={() => {}}
-            onPictureSaved={() => {}}
-            onSubjectAreaChanged={() => {}}
-            onFocusChanged={() => {}}
-            onZoomChanged={() => {}}
-            onFrameProcessed={() => {}}
-            onError={() => {}}
-          ></Camera>
+          />
+
+          {showImageModal && (
+            <ImagePreviewModal
+              visible={showImageModal}
+              imageUri={capturedImage}
+              onConfirm={handleConfirmImage}
+              onRetake={handleRetakePicture}
+            />
+          )}
           <View
             style={{
-              flex: 0.1,
-              // height: height * 0.1,
-              width,
-              alignItems: "center",
-              backgroundColor: "white",
+              position: "absolute",
+              bottom: 20,
+              left: "35%",
               flexDirection: "row",
-              justifyContent: "space-between", // Aligns items to the edges
-              padding: width * 0.04, // Adds some padding around the buttons
-              alignSelf: "flex-end",
+              justifyContent: "center",
             }}
           >
-            <TouchableOpacity
-              style={{
-                alignItems: "center",
-                marginRight: 20,
-                // flex: 0.2,
-                alignSelf: "center",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "black", // Background color
-                borderRadius: 50, // Rounded corners
-                // paddingHorizontal: height * 0.03, // Padding inside the button
-                width: height * 0.1, // Width of the button
-                height: height * 0.06, // Height of the button
-              }}
-              onPress={() => setIsCameraVisible(false)}
-            >
-              <BackARrow />
+            <TouchableOpacity onPress={() => setIsCameraVisible(false)}>
+              <Text style={{ color: "#fff", fontSize: 18 }}>Cancel</Text>
             </TouchableOpacity>
-            <View
+            <Pressable
               style={{
-                position: "absolute",
-                right: width * 0.385,
-                bottom: height * 0.1,
-                alignSelf: "flex-end",
+                marginLeft: 20,
+                // backgroundColor: "black",
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+                borderRadius: 50,
+                height: 100,
+                width: 100,
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "#fff", // Background color
-                borderRadius: 50, // Rounded corners
-                width: height * 0.1, // Width of the button
-                height: height * 0.1, // Height of the button
               }}
+              onPress={() => takePicture(portait)}
             >
-              <TouchableOpacity
-                onPress={() => takePicture(portait)}
-                style={{
-                  flex: 1, // Adjusted to fill the container
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderColor: "black",
-                  borderWidth: 4, // Corrected to a number
-                  backgroundColor: "#fff", // Background color
-                  borderRadius: 50, // Rounded corners
-                  width: "100%", // Adjusted to fill the container
-                  height: "100%", // Adjusted to fill the container
-                }}
-              >
-                {/* Placeholder for button content */}
-                {/* <Text>Take Picture</Text> */}
-              </TouchableOpacity>
-            </View>
+              <MaterialCommunityIcons
+                name="camera-iris"
+                size={24}
+                color="black"
+              />
+            </Pressable>
           </View>
         </>
+      )} */}
+  {isCameraVisible && (
+      <View style={styles.containerCCamera}>
+    <View style={styles.cameraContainer}>
+      <Camera
+        ref={cameraRef}
+        style={styles.camera}
+        type={type}
+        ratio="16:9"
+      />
+      {showImageModal && (
+        <ImagePreviewModal
+          visible={showImageModal}
+          imageUri={capturedImage}
+          onConfirm={handleConfirmImage}
+          onRetake={handleRetakePicture}
+        />
       )}
+      <TouchableOpacity
+          style={styles.cancelButtonContainer}
+          onPress={() => setIsCameraVisible(false)}
+        >
+          <MaterialIcons name="cancel" size={24} color="white" />
+        </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+        {/* <TouchableOpacity onPress={() => setIsCameraVisible(false)}>
+        <MaterialIcons name="cancel" size={24} color="white" />
+        </TouchableOpacity> */}
+        <TouchableOpacity
+          style={styles.captureButton}
+          onPress={() => takePicture(portait)}
+        >
+          <MaterialCommunityIcons
+            name="camera-iris"
+            size={75}
+            color="white"
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+</View>
+  )}
+
     </>
   );
 };
@@ -848,9 +889,53 @@ const styles = StyleSheet.create({
     // justifyContent: "space-evenly",
     flexGrow: 1,
   },
-  birthText:{
+  birthText: {
     color: "white",
-  }
+  },
+  containerCCamera: {
+    flex: 1,
+    // height,
+    // width
+  },
+  cameraContainer: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'space-between',
+  },
+  camera: {
+    // flex: 1,
+    width: width, 
+    height: height * 0.8 
+  },
+  buttonContainer: {
+    height:height*0.2,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems:"center",
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    backgroundColor: 'rgba(34, 34, 34, 0.9)', 
+  },
+  cancelButton: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  captureButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)', 
+    // paddingHorizontal: 20,
+    // paddingVertical: 10,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height:90,
+    width:90,
+  },
+  cancelButtonContainer: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 1,
+  },
 });
 
 export default NewSignUp;

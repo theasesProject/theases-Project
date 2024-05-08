@@ -49,7 +49,7 @@ const NewHome = () => {
     todayTextColor: '#8c52ff',
     arrowColor: '#8c52ff',
   };
-console.log('zaaaaaaab',returnLocation,returnPredictions)
+
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const styles = StyleSheet.create({
     container: {

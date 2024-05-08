@@ -53,9 +53,9 @@ module.exports = (DataTypes, connection) => {
     RNE: {
       type: DataTypes.STRING,
       allowNull: true,
+      defaultValue:"",
     },
     dateOfBirth: {
-
       type: DataTypes.STRING,
       allowNull: true,
     },

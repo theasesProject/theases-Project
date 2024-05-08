@@ -9,84 +9,97 @@ import "../../assets/css/nucleo-icons.css";
 import requestImg from "../../assets/img/request.jpg";
 import { approveRequest } from "Redux/adminSlice";
 import { declineRequest } from "Redux/adminSlice";
-const ReqRow = ({ request,setRefresh, handlePapers, openLocationInGoogleMaps }) => {
+const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal }) => {
   const dispatch = useDispatch();
   const refresh=(input)=>{
     setRefresh(input)
   }
-  const handleSwalToast = () => {
-    Swal.fire({
-      title: `<strong>do u want to accept or reject this request</strong>`,
-      html: `
-      `,
-      imageUrl: `${requestImg}`,
-      imageWidth: 200,
-      imageHeight: 200,
-      imageAlt: "Custom image",
-      backdrop: `rgba(0,0,123,0.4)`,
-      showCloseButton: true,
-      showCancelButton: true,
-      focusConfirm: false,
-      confirmButtonText: `
-       <i class="fa fa-reject"></i> Consent
-      `,
-      confirmButtonAriaLabel: "Thumbs up, great!",
-      rejectButtonText: `
-       <i class="fa fa-reject"></i> Accept
-      `,
-      rejectButtonAriaLabel: "Thumbs up, great!",
-      customClass: {
-        text: "swal-secondary-text",
-        container: "my-modal",
-      },
-      cancelButtonText: `
-       <i class="fa fa-close"></i> close
-      `,
-      // cancelButtonAriaLabel: "Thumbs down"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Are you sure?",
-          html: `You will accept  <strong>${request.agencyName}</strong>'s request`,
-          // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Yes, accept it!",
-          cancelButtonText: "No, Reject this Request!",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            {
-              dispatch(approveRequest(request));
-              refresh(false)
-            }
-            Swal.fire({
-              title: `User <b>${request.agencyName}</b>'s request accept!`,
-              text: "This user's Request has been Accepted, he now is an Agency",
-              icon: "success",
-            });
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            dispatch(declineRequest(request));
-            refresh(false)
-            {
-            }
-            Swal.fire({
-              title: "Cancelled",
-              text: "This user's Request has been Rejected, he will remain a User",
-              icon: "error",
-            });
-          }
-        });
-      }
-    });
-  };
+  // const handleSwalToast = () => {
+  //   Swal.fire({
+  //     title: `<strong>do u want to accept or reject this request</strong>`,
+  //     html: `
+  //     `,
+  //     imageUrl: `${requestImg}`,
+  //     imageWidth: 200,
+  //     imageHeight: 200,
+  //     imageAlt: "Custom image",
+  //     backdrop: `rgba(0,0,123,0.4)`,
+  //     showCloseButton: true,
+  //     showCancelButton: true,
+  //     focusConfirm: false,
+  //     confirmButtonText: `
+  //      <i class="fa fa-reject"></i> Consent
+  //     `,
+  //     confirmButtonAriaLabel: "Thumbs up, great!",
+  //     rejectButtonText: `
+  //      <i class="fa fa-reject"></i> Accept
+  //     `,
+  //     rejectButtonAriaLabel: "Thumbs up, great!",
+  //     customClass: {
+  //       text: "swal-secondary-text",
+  //       container: "my-modal",
+  //     },
+  //     cancelButtonText: `
+  //      <i class="fa fa-close"></i> close
+  //     `,
+  //     // cancelButtonAriaLabel: "Thumbs down"
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       Swal.fire({
+  //         title: "Are you sure?",
+  //         html: `You will accept  <strong>${request.agencyName}</strong>'s request`,
+  //         // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
+  //         icon: "warning",
+  //         showCancelButton: true,
+  //         confirmButtonText: "Yes, accept it!",
+  //         cancelButtonText: "No, Reject this Request!",
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           {
+  //             dispatch(approveRequest(request));
+  //             refresh(false)
+  //           }
+  //           Swal.fire({
+  //             title: `User <b>${request.agencyName}</b>'s request accept!`,
+  //             text: "This user's Request has been Accepted, he now is an Agency",
+  //             icon: "success",
+  //           });
+  //         } else if (result.dismiss === Swal.DismissReason.cancel) {
+  //           dispatch(declineRequest(request));
+  //           refresh(false)
+  //           {
+  //           }
+  //           Swal.fire({
+  //             title: "Cancelled",
+  //             text: "This user's Request has been Rejected, he will remain a User",
+  //             icon: "error",
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
+  // };
 
   return (
-    <tr>
+    <tr res hover onClick={()=>{
+      setCar(request)
+      openModal()
+    }} >
       {console.log(request, "<=Request List")}
       <td>{request.id}</td>
-      <td>{request.agencyName}</td>
-      <td>{request.companyNumber}</td>
-      <td>
+      <td>{request.model}</td>
+      <td>{request.brand}</td>
+      <td>{request.price}</td>
+      <td>{request.typeOfFuel}</td>
+      <td>{request.acceptation}</td>
+      <td>{request.Owner}</td>
+      <td>{request.Category}</td>
+      <td>{request.Type}</td>
+      <td>{request.peopleCount}</td>
+      <td>{request.DoorNumber}</td>
+      <td>{request.Capacity}</td>
+      <td>{request.Year}</td>
+      {/* <td>
         <Button
           className="btn"
           // style={{
@@ -109,8 +122,8 @@ const ReqRow = ({ request,setRefresh, handlePapers, openLocationInGoogleMaps }) 
         >
           Check papers
         </Button>
-      </td>
-      <td>
+      </td> */}
+      {/* <td>
         <Button
           className="btn"
           onClick={() => {
@@ -119,7 +132,7 @@ const ReqRow = ({ request,setRefresh, handlePapers, openLocationInGoogleMaps }) 
         >
           Consent
         </Button>
-      </td>
+      </td> */}
       {/* <td>
         <div style={{ display: "flex", gap: "1rem" }}>
           <button

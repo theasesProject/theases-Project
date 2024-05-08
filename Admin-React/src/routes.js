@@ -53,9 +53,9 @@ var routes = [
   // },
   {
     path: "/tables",
-    name: "Inquiries",
+    name: "Cars",
     rtlName: "قائمة الجدول",
-    icon: "tim-icons icon-notes",
+    icon: "tim-icons icon-delivery-fast",
     component: <TableList />,
     layout: "/admin",
   },

@@ -26,6 +26,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { selectLoadingStatus } from 'Redux/adminSlice';
 import { Companies } from 'Redux/adminSlice';
 import { addCar } from 'Redux/adminSlice';
+import { getLimitedCars } from 'Redux/adminSlice';
+import { getLimitedCompanies } from 'Redux/adminSlice';
+import { selectAllCars } from 'Redux/adminSlice';
+import { LimitedCars } from 'Redux/adminSlice';
+import { LimitedCompanies } from 'Redux/adminSlice';
+import { getAllCars } from 'Redux/adminSlice';
 const data = {
   "Al-Kāf": {
     "key1": "value1",
@@ -185,6 +191,8 @@ const customStyles2 = {
 };
 const AddNewEntities = () => {
   const companies = useSelector(Companies)
+  const limitedCompanies = useSelector(LimitedCompanies)
+  const cars = useSelector(LimitedCars)
   const options = companies.map(company => ({
     label: company.userName, // Display the userName as the label
     value: company.id, // Use the id as the value
@@ -230,11 +238,11 @@ const AddNewEntities = () => {
       handleSelectChange("avatar", URL.createObjectURL(image));
     }
   };
-  function openModal() {
-    setIsOpen(true);
-  }
   function openModal2() {
     setIsOpen2(true);
+  }
+  function openModal() {
+    setIsOpen(true);
   }
   function closeModal() {
     setIsOpen(false);
@@ -256,11 +264,33 @@ const AddNewEntities = () => {
   };
   function notify(modalType) {
     const checkAndNotify = (details, type) => {
+      let emptyCount = 0;
+      const emptyFields = [];
+
       Object.entries(details).forEach(([key, value]) => {
         if (value === '' || value === undefined) {
-          toast.error(`Please fill in the ${key} field for ${type}.`);
+          emptyCount++;
+          emptyFields.push(key);
         }
       });
+
+      // Define a unique ID for the toast
+      const toastId = `emptyFields-${type}`;
+
+      // Check if the specific toast is already active
+      if (toast.isActive(toastId)) {
+        console.log(`A toast for ${type} is already active. Not showing another toast.`);
+        return; // Exit the function if the specific toast is already active
+      }
+
+      if (emptyCount >= 4) {
+        toast.error(`Please fill in all the empty fields for ${type}.`, { toastId });
+      } else if (emptyCount > 0) {
+        // If there are less than 4 empty fields, show a toast for each empty field
+        emptyFields.forEach(field => {
+          toast.error(`Please fill in the ${field} field for ${type}.`, { toastId });
+        });
+      }
     };
 
     // Determine which details to check based on the modal type
@@ -272,9 +302,6 @@ const AddNewEntities = () => {
       checkAndNotify(companyDetails, 'company');
     }
   }
-
-
-
 
   const handleCompanyChange = (id, value) => {
     console.log(`Updating ${id} with value: ${value}`);
@@ -343,11 +370,18 @@ const AddNewEntities = () => {
     };
   }, [modalIsOpen, carDetails]);
   useEffect(() => {
-    if (!companies.length) {
+    if (!companies?.length) {
       dispatch(getAllCompanies())
     }
-  }, [companies])
+    if (!cars?.length) {
+      dispatch(getLimitedCars())
+    }
+    if (!limitedCompanies?.length) {
+      dispatch(getLimitedCompanies())
+    }
+  }, [limitedCompanies,cars,companies])
   console.log(companies);
+  console.log(cars);
   const fileInputRef = useRef(null);
   const [imageSelected, setImageSelected] = useState(false);
 
@@ -396,36 +430,33 @@ const AddNewEntities = () => {
                     marginTop: "5rem",
                     gap: "1rem"
                   }} flush>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Cras justo odio</ListGroupItem>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Dapibus ac facilisis in</ListGroupItem>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Morbi leo risus </ListGroupItem>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Porta ac consectetur ac </ListGroupItem>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Vestibulum at eros</ListGroupItem>
+                    {cars?.map((item, index) => (
+                      <ListGroupItem key={index} style={{
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        borderColor: "#e0e0e0",
+                        borderRadius: "10px",
+                        backgroundColor: "#f8f9fa",
+                        height: "5rem",
+                        width:"30rem",
+                        padding: "1rem",
+                        marginBottom: "1rem",
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: '0.3s',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                      }}>
+                        {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                        {/* <img src={null} alt={`Image`} style={{ width: '2rem', height: '1rem', marginRight: '10px' }} /> */}
+                        <div>
+                          <p style={{ fontSize: '18px', color: '#30416B' }}>{item.model}{item.brand}</p>
+                          <p style={{ fontSize: '14px', color: '#30416B' }}>{item.Owner}</p>
+                        </div>
+                        {/* </div> */}
+                      </ListGroupItem>
+                    ))}
                   </ListGroup>
                 </div>
                 <div className='separator'></div>
@@ -444,36 +475,33 @@ const AddNewEntities = () => {
                     marginTop: "5rem",
                     gap: "1rem"
                   }} flush>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Cras justo odio</ListGroupItem>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Dapibus ac facilisis in</ListGroupItem>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Morbi leo risus </ListGroupItem>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Porta ac consectetur ac </ListGroupItem>
-                    <ListGroupItem style={{
-                      borderStyle: "ridge",
-                      borderWidth: ".1rem",
-                      borderColor: "#30416B",
-                      borderRadius: "5px"
-                    }}>Vestibulum at eros</ListGroupItem>
+                    {companies?.map((item, index) => (
+                      <ListGroupItem key={index} style={{
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        borderColor: "#e0e0e0",
+                        borderRadius: "10px",
+                        backgroundColor: "#f8f9fa",
+                        height: "5rem",
+                        width:"30rem",
+                        padding: "1rem",
+                        marginBottom: "1rem",
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: '0.3s',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                      }}>
+                        {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                        {/* <img src={null} alt={`Image`} style={{ width: '2rem', height: '1rem', marginRight: '10px' }} /> */}
+                        <div>
+                          <p style={{ fontSize: '18px', color: '#30416B' }}>{item.model}{item.brand}</p>
+                          <p style={{ fontSize: '14px', color: '#30416B' }}>{item.Owner}</p>
+                        </div>
+                        {/* </div> */}
+                      </ListGroupItem>
+                    ))}
                   </ListGroup>
                 </div>
               </CardBody>
@@ -481,7 +509,7 @@ const AddNewEntities = () => {
           </Col>
         </Row>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
       <Modal
         isOpen={modalIsOpen}
         // onAfterOpen={afterOpenModal}
@@ -500,7 +528,7 @@ const AddNewEntities = () => {
             {carDetails.media ? (
               <>
                 <img src={carDetails.media} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
-                <div className="image-preview-text">Image selected</div>
+                {/* <div className="image-preview-text">Image selected</div> */}
               </>
             ) : (
               <div style={{
@@ -724,12 +752,13 @@ const AddNewEntities = () => {
                 <Select
                   className="select-box"
                   options={[
-                    { label: "1", value: 1 },
-                    { label: "2", value: 2 },
-                    { label: "3", value: 3 },
-                    { label: "4", value: 4 },
-                    { label: "5", value: 5 }
-                  ]}
+                    { label: "2 Seats", value: 2 },
+                    { label: "4 Seats", value: 4 },
+                    { label: "5 Seats", value: 5 },
+                    { label: "15 Seats", value: 15 },
+                   ]
+                   
+                   }
                   onChange={(selectedOption) => handleCarChange("peopleCount", selectedOption.value)}
                   menuportaltarget={document.body}
                   styles={{
@@ -744,6 +773,7 @@ const AddNewEntities = () => {
             console.log(carDetails);
             if (Object.values(carDetails).every(value => value)) {
               dispatch(addCar(carDetails))
+              dispatch(getAllCars())
               closeModal()
             }
             notify('car');
@@ -796,7 +826,7 @@ const AddNewEntities = () => {
             {carDetails.media ? (
               <>
                 <img src={carDetails.media} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
-                <div className="image-preview-text">Image selected</div>
+                {/* <div className="image-preview-text">Image selected</div> */}
               </>
             ) : (
               <div style={{

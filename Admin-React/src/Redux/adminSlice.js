@@ -8,6 +8,7 @@ const initialState = {
     allUsers: [],
     staticAllUsers: [],
     allCars: [],
+    limitedCars: [],
     requests: [],
     TempoRequest: {},
     oneUser: {},
@@ -20,7 +21,10 @@ const initialState = {
     RejectedRental: [],
     foreignUser: {},
     loadingStatus: {},
-    companies: []
+    companies: [],
+    limitedCompanies: [],
+
+
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -76,16 +80,7 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
         console.log(error);
     }
 });
-export const getAllCompanies = createAsyncThunk("user/getAllCompanies", async () => {
-    try {
-        const response = await axios.get(
-            `http://localhost:5000/api/admin/allCompanies`
-        );
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-})
+
 export const addCar = createAsyncThunk("admin/addCar", async (carDetails) => {
     try {
         console.log(carDetails);
@@ -174,12 +169,45 @@ export const getPendingServices = createAsyncThunk(
         }
     }
 )
+export const getAllCompanies = createAsyncThunk("user/getAllCompanies", async () => {
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/api/admin/allCompanies`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+})
+export const getLimitedCompanies = createAsyncThunk("user/getLimitedCompanies", async () => {
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/api/admin/getLimitedCompanies`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+})
 export const getAllCars = createAsyncThunk(
     "admin/getAllCars",
     async () => {
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/car/allCars`
+            )
+            return response.data
+        } catch (er) {
+            console.error(er);
+        }
+    }
+)
+export const getLimitedCars = createAsyncThunk(
+    "admin/getLimitedCars",
+    async () => {
+        try {
+            const response = await axios.get(
+                `http://127.0.0.1:5000/api/admin/getLimitedCars`
             )
             return response.data
         } catch (er) {
@@ -449,6 +477,30 @@ export const adminSlicer = createSlice({
             state.loadingStatus.getAllCompanies = false;
             state.error = action.error.message;
         });
+        builder.addCase(getLimitedCompanies.pending, (state) => {
+            state.loadingStatus.getLimitedCompanies = true;
+            state.error = null;
+        });
+        builder.addCase(getLimitedCompanies.fulfilled, (state, action) => {
+            state.loadingStatus.getLimitedCompanies = false;
+            state.limitedCompanies = action.payload;
+        });
+        builder.addCase(getLimitedCompanies.rejected, (state, action) => {
+            state.loadingStatus.getLimitedCompanies = false;
+            state.error = action.error.message;
+        });
+        builder.addCase(getLimitedCars.pending, (state) => {
+            state.loadingStatus.getLimitedCars = true;
+            state.error = null;
+        });
+        builder.addCase(getLimitedCars.fulfilled, (state, action) => {
+            state.loadingStatus.getLimitedCars = false;
+            state.limitedCars = action.payload;
+        });
+        builder.addCase(getLimitedCars.rejected, (state, action) => {
+            state.loadingStatus.getLimitedCars = false;
+            state.error = action.error.message;
+        });
 
         // builder.addCase(fetchReviews.fulfilled, (state, action) => {
         //     state.reviews = action.payload
@@ -465,6 +517,8 @@ export const selectApproved = (state) => state.Admin.approvedRental;
 export const selectPending = (state) => state.Admin.PendingRental;
 export const selectRejected = (state) => state.Admin.RejectedRental;
 export const selectAllCars = (state) => state.Admin.allCars;
+export const LimitedCars = (state) => state.Admin.limitedCars;
+export const LimitedCompanies = (state) => state.Admin.limitedCompanies;
 export const selectReviews = (state) => state.Admin.reviews;
 export const selectLoggedIn = (state) => state.Admin.loggedIn;
 export const selectLoadingStatus = (state) => state.Admin.loadingStatus;

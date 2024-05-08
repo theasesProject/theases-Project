@@ -30,9 +30,8 @@ import * as Font from "expo-font";
 import { Animated } from "react-native";
 const { height, width } = Dimensions.get("screen");
 import CarDetails from "./carDetails.jsx";
-const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+// const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
 import { selectUser, setUser, logUserOut } from "../store/userSlice";
-import io from "socket.io-client";
 
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
@@ -151,42 +150,42 @@ function Home({ navigation }) {
     }
   }, [loading]);
 
-  useEffect(() => {
-    // dispatch(autoLogin());
-    if (activeUser?.stateBlocked === true) {
-      alert(
-        "Sorry, your account is banned. Please contact  costumer support for assistance."
-      );
-      setUser(null);
-      dispatch(logUserOut());
+  // useEffect(() => {
+  //   // dispatch(autoLogin());
+  //   if (activeUser?.stateBlocked === true) {
+  //     alert(
+  //       "Sorry, your account is banned. Please contact  costumer support for assistance."
+  //     );
+  //     setUser(null);
+  //     dispatch(logUserOut());
 
-      navigation.navigate("Login");
-    }
-    if (activeUser?.id) {
-      socket.emit("login", { userId: activeUser?.id });
+  //     navigation.navigate("Login");
+  //   }
+  //   if (activeUser?.id) {
+  //     socket.emit("login", { userId: activeUser?.id });
 
-      socket.on("receive-notification", (notification) => {
-        schedulePushNotification(notification.title);
+  //     socket.on("receive-notification", (notification) => {
+  //       schedulePushNotification(notification.title);
 
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            _id: notification.id,
-            text: notification.message,
-            createdAt: new Date(),
-            user: {
-              _id: notification.senderId,
-              name: "Services",
-            },
-          },
-        ]);
-      });
-    } else {
-      return () => {
-        socket.disconnect();
-      };
-    }
-  }, [socket, expoPushToken, activeUser?.id, activeUser?.stateBlocked]);
+  //       setMessages((prevMessages) => [
+  //         ...prevMessages,
+  //         {
+  //           _id: notification.id,
+  //           text: notification.message,
+  //           createdAt: new Date(),
+  //           user: {
+  //             _id: notification.senderId,
+  //             name: "Services",
+  //           },
+  //         },
+  //       ]);
+  //     });
+  //   } else {
+  //     return () => {
+  //       socket.disconnect();
+  //     };
+  //   }
+  // }, [socket, expoPushToken, activeUser?.id, activeUser?.stateBlocked]);
 
   return (
     <View style={styles.homePage}>

@@ -19,7 +19,6 @@ import { StatusBar } from "expo-status-bar";
 import CalendarPicker from "react-native-calendar-picker";
 import { GetUnavailableDatesForCar } from "../store/bookingSlice";
 import { useNavigation } from "@react-navigation/native";
-import io from "socket.io-client";
 import moment from "moment";
 import { selectUser, setUser } from "../store/userSlice";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
@@ -39,7 +38,7 @@ function Booking() {
   const activeUser = useSelector(selectUser);
   const error = useSelector((state) => state.booking.error);
   const [total, setTotal] = useState(0);
-  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+  // const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const isTransportationAvailable = oneCar?.Agency.transportation;
   // console.log(unavailableDate, oneCar.id, "unvaibledate");
   const [selectedTime, setSelectedTime] = useState(null);
@@ -112,28 +111,28 @@ function Booking() {
     }
   };
 
-  const handleRoleResponse = (response) => {
-    setRoleModalVisible(false);
-    if (response === "agree") {
-      createBooking();
-      alert("Congratulations! Your booking was successful.");
-      const notificationData = {
-        UserId: oneCar.AgencyId,
-        notification: `You have request  for the car:${oneCar.model}`,
-        type: "request",
-      };
+  // const handleRoleResponse = (response) => {
+  //   setRoleModalVisible(false);
+  //   if (response === "agree") {
+  //     createBooking();
+  //     alert("Congratulations! Your booking was successful.");
+  //     const notificationData = {
+  //       UserId: oneCar.AgencyId,
+  //       notification: `You have request  for the car:${oneCar.model}`,
+  //       type: "request",
+  //     };
 
-      dispatch(createNotifcationForSpecifiqueUser(notificationData));
-      socket.emit("request", {
-        senderId: activeUser.id,
-        receiverId: oneCar.AgencyId,
-        message: `Service request accepted: ${oneCar.model}`,
-      });
-      navigation.navigate("Home");
-    } else {
-      setRoleModalVisible(false);
-    }
-  };
+  //     dispatch(createNotifcationForSpecifiqueUser(notificationData));
+  //     socket.emit("request", {
+  //       senderId: activeUser.id,
+  //       receiverId: oneCar.AgencyId,
+  //       message: `Service request accepted: ${oneCar.model}`,
+  //     });
+  //     navigation.navigate("Home");
+  //   } else {
+  //     setRoleModalVisible(false);
+  //   }
+  // };
   const calculTotalPrice = () => {
     const startDate = moment(selectedStartDate);
     const endDate = moment(selectedEndDate);

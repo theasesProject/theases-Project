@@ -19,7 +19,7 @@ connection
 const db = {};
 db.connection = connection;
 db.Sequelize = Sequelize;
-db.UnavailableDate = require("./avaibilityDate.Model")(DataTypes, connection);
+db.BookedPeriods = require("./BookedPeriods.Model")(DataTypes, connection);
 db.Admin = require("./admin.Model")(DataTypes, connection);
 db.User = require("./user.Model")(DataTypes, connection);
 db.Car = require("./car.Model")(DataTypes, connection);
@@ -42,6 +42,12 @@ db.Agency.belongsTo(db.User);
 
 db.User.hasOne(db.Request);
 db.Request.belongsTo(db.User);
+
+db.BookedPeriods.hasOne(db.Car)
+db.Car.belongsTo(db.BookedPeriods)
+
+db.BookedPeriods.hasOne(db.User)
+db.User.belongsTo(db.BookedPeriods)
 
 db.Request.hasMany(db.Media);
 db.Media.belongsTo(db.Request);

@@ -8,62 +8,42 @@ module.exports = {
       const allCars = await db.Car.findAll({
         include: [
           { model: db.Media, as: "Media" },
-          { 
-            model: db.Agency, 
+          {
+            model: db.Agency,
             as: "Agency",
             include: [{
-              model: db.User, 
+              model: db.User,
               as: "User"
             }]
           },
         ],
       });
-   
+
       res.status(200).send(allCars);
     } catch (error) {
       res.json(error);
     }
-   },
-   
+  },
 
-  CreateCar: async function (req, res) {
+
+  CreateCar: async function (req, res,next) {
     try {
-      const newCar = await db.Car.create({
-        model: req.body.model,
-        brand: req.body.brand,
-        price: req.body.price,
-        priceWeekly: req.body.priceWeekly,
-        priceMonthly: req.body.priceMonthly,
-        status: "available",
-        horsePower: req.body.horse,
-        typeOfFuel: req.body.typeOfFuel,
-        description: req.body.description,
-        warrantyInsurance: req.body.warrantyInsurance,
-        deposit: req.body.deposit,
-        acceptation: "pending",
-        typevehicle: req.body.typevehicle,
-        characteristics: req.body.characteristics,
-        AgencyId: req.body.AgencyId,
-        numberPeople:req.body.numberPeople,
-        numberDoors:req.body.numberDoors,
-        numberBags:req.body.numberBags
-      });
-
+      const newCar = await db.Car.create(
+        req.body
+      );
       res.status(200).send(newCar);
     } catch (error) {
-      res.json(error);
+      next(error);
     }
   },
-  createImage: async function (req, res) {
+  createImage: async function (req, res,next) {
     try {
-      const image = await db.Media.create({
-        media: req.body.media,
-        CarId: req.body.CarId,
-      });
-
+      const image = await db.Media.create(
+        req.body
+      );
       res.status(200).send(image);
     } catch (error) {
-      res.json(error);
+      next(error);
     }
   },
   filterCarByBrand: async function (req, res) {
@@ -188,5 +168,5 @@ module.exports = {
       throw error;
     }
   },
-  
+
 };

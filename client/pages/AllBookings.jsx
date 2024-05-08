@@ -22,7 +22,6 @@ import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import Modal from "react-native-modal";
 import { LinearGradient } from "expo-linear-gradient";
 import { selectUser, setUser } from "../store/userSlice";
-import io from "socket.io-client";
 import car from "../assets/car2.png";
 import charIcon from "../assets/chat.png";
 import PaymentBtn from "../components/PaymentBtn";
@@ -39,7 +38,7 @@ const AllBookings = () => {
   // console.log("userrrrr", userBookings);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
-  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+  // const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   useEffect(() => {
     dispatch(allServiceForUser(activeUser.id));
   }, [dispatch, activeUser?.id]);
@@ -54,30 +53,30 @@ const AllBookings = () => {
     setCancelModalVisible(true);
   };
 
-  const confirmCancelBooking = (id) => {
-    setCancelModalVisible(false);
-    const notificationData = {
-      UserId: selectedBooking.Car.AgencyId,
-      notification: ` the client ${activeUser?.userName}  cancel his booking for the car ${selectedBooking.Car.model}`,
-      type: "reject",
-    };
+  // const confirmCancelBooking = (id) => {
+  //   setCancelModalVisible(false);
+  //   const notificationData = {
+  //     UserId: selectedBooking.Car.AgencyId,
+  //     notification: ` the client ${activeUser?.userName}  cancel his booking for the car ${selectedBooking.Car.model}`,
+  //     type: "reject",
+  //   };
 
-    dispatch(createNotifcationForSpecifiqueUser(notificationData));
-    // console.log(activeUser?.id, selectedBooking?.id, "selectedBooking.id");
-    dispatch(
-      deletedServiceByUser({ UserId: activeUser?.id, id: selectedBooking?.id })
-    );
-    socket.emit("request", {
-      senderId: activeUser.id,
-      receiverId: selectedBooking?.Car.AgencyId,
-      message: `Service cancel ${selectedBooking?.Car.model}`,
-    });
+  //   dispatch(createNotifcationForSpecifiqueUser(notificationData));
+  //   // console.log(activeUser?.id, selectedBooking?.id, "selectedBooking.id");
+  //   dispatch(
+  //     deletedServiceByUser({ UserId: activeUser?.id, id: selectedBooking?.id })
+  //   );
+  //   socket.emit("request", {
+  //     senderId: activeUser.id,
+  //     receiverId: selectedBooking?.Car.AgencyId,
+  //     message: `Service cancel ${selectedBooking?.Car.model}`,
+  //   });
 
-    Alert.alert(
-      "Booking Canceled",
-      `Booking with ID ${selectedBooking?.id} canceled successfully.`
-    );
-  };
+  //   Alert.alert(
+  //     "Booking Canceled",
+  //     `Booking with ID ${selectedBooking?.id} canceled successfully.`
+  //   );
+  // };
   // const scheduleNotification = (endDate) => {
   //   const daysUntilEnd = Math.ceil(
   //     (new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24)

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon library you prefer
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Feather } from '@expo/vector-icons';
 const { width, height } = Dimensions.get("window");
 
 const ImagePreviewModal = ({ visible, imageUri, onConfirm, onRetake }) => {
@@ -10,11 +11,11 @@ const ImagePreviewModal = ({ visible, imageUri, onConfirm, onRetake }) => {
         <View style={styles.innerContainer}>
           <Image source={{ uri: imageUri }} style={styles.image} />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={onConfirm} style={[styles.button, { backgroundColor: 'green' }]}>
+            <TouchableOpacity onPress={onConfirm} style={styles.button}>
               <Icon name="check" size={20} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onRetake} style={[styles.button, { backgroundColor: 'red' }]}>
-              <Icon name="times" size={20} color="#fff" />
+            <TouchableOpacity onPress={onRetake} style={styles.button}>
+            <Feather name="x-circle" size={24} color="white" />
             </TouchableOpacity>
           </View>
         </View>

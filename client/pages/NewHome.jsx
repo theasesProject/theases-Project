@@ -19,7 +19,9 @@ const backgroundHeight = Platform.OS === 'android' ? height * 0.59 : height * 0.
 
 
 const NewHome = () => {
-
+  useEffect(()=>{
+    console.log(process.env.EXPO_PUBLIC_SERVER_IP_2);
+  },[])
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -49,7 +51,6 @@ const NewHome = () => {
     todayTextColor: '#8c52ff',
     arrowColor: '#8c52ff',
   };
-console.log('zaaaaaaab',returnLocation,returnPredictions)
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const styles = StyleSheet.create({
     container: {

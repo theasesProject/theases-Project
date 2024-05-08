@@ -195,7 +195,7 @@ const AddNewEntities = () => {
   const cars = useSelector(LimitedCars)
   const options = companies.map(company => ({
     label: company.userName, // Display the userName as the label
-    value: company.id, // Use the id as the value
+    value: company.userName, // Use the id as the value
   }));
   // const loadingStatus = useSelector(selectLoadingStatus.getAllCompanies)
   const dispatch = useDispatch()
@@ -222,7 +222,7 @@ const AddNewEntities = () => {
     Category: "",
     DoorNumber: "",
     Capacity: "",
-    media: ""
+    media: []
   })
   const [selectedImage, setSelectedImage] = useState(null);
   // const [selectedImageCompany, setSelectedImageCompany] = useState(null);
@@ -306,14 +306,26 @@ const AddNewEntities = () => {
   const handleCompanyChange = (id, value) => {
     console.log(`Updating ${id} with value: ${value}`);
     setCompanyDetails(prevDetails => {
-      const newDetails = {
-        ...prevDetails,
-        [id]: value
-      };
-      console.log('New state:', newDetails);
-      return newDetails;
+       let newDetails = { ...prevDetails };
+   
+       // Check if the id is 'media'
+       if (id === 'media') {
+         // Initialize the 'media' array if it doesn't exist
+         if (!newDetails.media) {
+           newDetails.media = [];
+         }
+         // Push the value into the 'media' array
+         newDetails.media.push(value);
+       } else {
+         // For other ids, just set the value directly
+         newDetails[id] = value;
+       }
+   
+       console.log('New state:', newDetails);
+       return newDetails;
     });
-  };
+   };
+   
   const handleCarChange = (id, value) => {
     console.log(`Field: ${id}, Value: ${value}`);
     setCarDetails(prevDetails => {
@@ -424,7 +436,7 @@ const AddNewEntities = () => {
                     gap: "0.5rem",
                     alignItems: "center",
                     width: "17rem",
-                    marginTop: "2rem",
+                    marginTop: "1.6rem",
                   }}><Add />Add a New Car</Button>
                   <ListGroup style={{
                     marginTop: "5rem",
@@ -469,7 +481,7 @@ const AddNewEntities = () => {
                     gap: "0.5rem",
                     alignItems: "center",
                     width: "17rem",
-                    marginTop: "2rem",
+                    marginTop: "1.6rem",
                   }}><Add />Add a New Company</Button>
                   <ListGroup style={{
                     marginTop: "5rem",
@@ -593,7 +605,6 @@ const AddNewEntities = () => {
                 <input
                   className="input-box"
                   placeholder='Type here...'
-                  options={Object.keys(data).map(key => ({ label: key, value: key }))}
                   onChange={(e) => handleCarChange("price", e.target.value)}
                   menuportaltarget={document.body}
                   styles={{
@@ -952,7 +963,6 @@ const AddNewEntities = () => {
                 className="select-box"
                 placeholder='Input The Phone Number Here...'
                 type="number"
-                options={Object.keys(data).map(key => ({ label: key, value: key }))}
                 onChange={(e) => handleCompanyChange("phoneNumber", e.target.value)}
                 menuportaltarget={document.body}
                 styles={{

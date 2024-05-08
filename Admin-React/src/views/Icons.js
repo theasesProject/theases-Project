@@ -279,7 +279,7 @@ function Icons() {
                               onClick={() => {
                                 console.log(user);
                                 Swal.fire({
-                                  title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                  title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
                                   html: `
                                  <b>UserName: </b>${user.userName}
                                  <br>
@@ -372,7 +372,7 @@ function Icons() {
                       </div>
                       <Row>
                         {allUsers?.map((user, i) =>
-                          user.type === "agency" ? (
+                          user.type === "company" ? (
 
                             <Col
                               key={i}
@@ -383,7 +383,7 @@ function Icons() {
                               onClick={() => {
                                 console.log(user);
                                 Swal.fire({
-                                  title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                  title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
                                   html: `
                                  <b>UserName: </b>${user.userName}
                                  <br>
@@ -480,7 +480,7 @@ function Icons() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                    title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -567,7 +567,7 @@ function Icons() {
                         </div>
                         <Row>
                           {allUsers?.map((user, i) =>
-                            user.type === "agency" ? (
+                            user.type === "company" ? (
                               <Col
                                 key={i}
                                 className="font-icon-list col-xs-6 col-xs-6"
@@ -577,7 +577,7 @@ function Icons() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                    title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -672,7 +672,7 @@ function Icons() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                    title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -768,7 +768,7 @@ function Icons() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "Client" : "Agency"} Profile Details</strong>`,
+                                    title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>

@@ -23,8 +23,7 @@ const initialState = {
     loadingStatus: {},
     companies: [],
     limitedCompanies: [],
-
-
+    Media:[]
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -85,7 +84,7 @@ export const addCar = createAsyncThunk("admin/addCar", async (carDetails) => {
     try {
         console.log(carDetails);
         const carResp = await axios.post(`http://localhost:5000/api/car/newCar`, carDetails);
-        const imgResp = await axios.post(`http://localhost:5000/api/car/imageCar`, carDetails);
+        const imgResp = await axios.post(`http://localhost:5000/api/media/add/request/${carResp.data.id}`, carDetails.media);
 
         // Combine responses if needed
         const combinedResponse = {
@@ -276,6 +275,17 @@ export const getUserById = createAsyncThunk("user/getById", async (id) => {
         return task.data
     } catch (er) {
         console.error(er);
+    }
+})
+export const getSingleMedia=createAsyncThunk("admin/getSingleMedia",async(id)=>{
+    try {
+        const response = axios.get(
+            console.log("getSignleMedia",id)
+            `http://localhost:5000/api/media/getAll/carId/${id}`
+        )
+        return response.data
+    } catch (er) {
+        console.log(JSON.stringify(er))
     }
 })
 export const adminSlicer = createSlice({
@@ -501,6 +511,18 @@ export const adminSlicer = createSlice({
             state.loadingStatus.getLimitedCars = false;
             state.error = action.error.message;
         });
+        builder.addCase(getSingleMedia.pending, (state) => {
+            state.loadingStatus.getSingleMedia = true;
+            state.error = null;
+        });
+        builder.addCase(getSingleMedia.fulfilled, (state, action) => {
+            state.loadingStatus.getSingleMedia = false;
+            state.Media = action.payload;
+        });
+        builder.addCase(getSingleMedia.rejected, (state, action) => {
+            state.loadingStatus.getSingleMedia = false;
+            state.error = action.error.message;
+        });
 
         // builder.addCase(fetchReviews.fulfilled, (state, action) => {
         //     state.reviews = action.payload
@@ -523,6 +545,7 @@ export const selectReviews = (state) => state.Admin.reviews;
 export const selectLoggedIn = (state) => state.Admin.loggedIn;
 export const selectLoadingStatus = (state) => state.Admin.loadingStatus;
 export const Companies = (state) => state.Admin.companies;
+export const Media = (state) => state.Admin.Media;
 export const selectForeignUser = (state) => state.Admin.foreignUser;
 export const { filterUsers, triggerRefresh, setAdminData, logout, setLoggedIn, setReqForSwal } = adminSlicer.actions;
 export default adminSlicer.reducer;

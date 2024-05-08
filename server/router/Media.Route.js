@@ -12,5 +12,5 @@ router.post("/add/car/:id", addCarMedia);
 router.post("/add/request/:id", addReqMedia);
 router.get("/getAll", getAll);
 router.get("/getAll/reqId", getAllByRequestId);
-router.get("/getAll/carId", getAllByCarId);
+router.get("/getAll/:id", getAllByCarId);
 module.exports = router;

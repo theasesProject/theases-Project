@@ -1,7 +1,7 @@
 // import { getAllRequests } from "@/Redux/dachboardAdmin";
 import { setReqForSwal } from "Redux/adminSlice";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import { Button } from "reactstrap";
 import Swal from "sweetalert2";
@@ -9,7 +9,9 @@ import "../../assets/css/nucleo-icons.css";
 import requestImg from "../../assets/img/request.jpg";
 import { approveRequest } from "Redux/adminSlice";
 import { declineRequest } from "Redux/adminSlice";
-const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal }) => {
+import { Media } from "Redux/adminSlice";
+import { getSingleMedia } from "Redux/adminSlice";
+const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal,setMedia }) => {
   const dispatch = useDispatch();
   const refresh=(input)=>{
     setRefresh(input)
@@ -79,10 +81,19 @@ const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal }) => {
   //     }
   //   });
   // };
-
+  const images = useSelector(Media)
+  const getMedia =async()=>{
+    try {
+      dispatch(getSingleMedia(request.id))
+      setMedia(images)
+    } catch (error) {
+      
+    }
+  }
   return (
     <tr res hover onClick={()=>{
       setCar(request)
+      getMedia()
       openModal()
     }} >
       {console.log(request, "<=Request List")}
@@ -91,7 +102,7 @@ const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal }) => {
       <td>{request.brand}</td>
       <td>{request.price}</td>
       <td>{request.typeOfFuel}</td>
-      <td>{request.acceptation}</td>
+      {/* <td>{request.acceptation}</td> */}
       <td>{request.Owner}</td>
       <td>{request.Category}</td>
       <td>{request.Type}</td>

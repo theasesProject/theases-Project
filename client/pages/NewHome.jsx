@@ -9,7 +9,6 @@ import ModalFooter from '../components/ModalFooter';
 import { useNavigation } from '@react-navigation/native';
 import { getAllCarByDate } from '../store/bookingSlice'
 import { useDispatch, useSelector } from 'react-redux';
-import { googleMaps } from '../config.jsx'
 import axios from 'axios'
 import * as Location from 'expo-location';
 
@@ -19,9 +18,9 @@ const backgroundHeight = Platform.OS === 'android' ? height * 0.59 : height * 0.
 
 
 const NewHome = () => {
-  useEffect(()=>{
-    console.log(process.env.EXPO_PUBLIC_SERVER_IP_2);
-  },[])
+
+
+
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -373,7 +372,7 @@ const NewHome = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${searchText}&components=country:tn&key=${googleMaps}`
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${searchText}&components=country:tn&key=${process.env.EXPO_PUBLIC_SERVER_IP_2}`
       );
       if(locationModalVisible===true){
         setPredictions(response.data.predictions);
@@ -444,7 +443,7 @@ const NewHome = () => {
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location);
 
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${googleMaps}`)
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${process.env.EXPO_PUBLIC_SERVER_IP_2}`)
         .then((response) => response.json())
         .then((json) => {
           if (json.results.length > 0) {

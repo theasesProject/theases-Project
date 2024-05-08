@@ -2,26 +2,25 @@ module.exports = (DataTypes, connection) => {
   const Car = connection.define("Car", {
     model: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     brand: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     price: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     totalPrice: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    status: {
-      type: DataTypes.ENUM("available", "rented"),
-      allowNull: true,
-      defaultValue: "available",
+    Owner: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
-    horsePower: {
+    Year: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -29,37 +28,25 @@ module.exports = (DataTypes, connection) => {
       type: DataTypes.ENUM("Gasoline", "Diesel", "Electric"),
       allowNull: true,
     },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    warrantyInsurance: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    deposit: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     acceptation: {
       type: DataTypes.ENUM("rejected", "accepted", "pending"),
-      allowNull: false,
+      allowNull: true,
       defaultValue: "pending",
     },
-    typevehicle: {
-      type: DataTypes.ENUM("Economical", "Luxury", "Sports", "Commercial"),
+    Category: {
+      type: DataTypes.ENUM("Economic Class", "Luxery Car", "Sports"),
     },
-    characteristics: {
-      type: DataTypes.ENUM("Automatic", "Manual", "Semi-Automatic"),
+    Type: {
+      type: DataTypes.ENUM("Automatic", "Manual"),
     },
-    numberPeople:{
+    peopleCount: {
       type: DataTypes.INTEGER
     },
-    numberDoors:{
-      type:DataTypes.INTEGER
+    DoorNumber: {
+      type: DataTypes.INTEGER
     },
-    numberBags:{
-      type:DataTypes.INTEGER
+    Capacity: {
+      type: DataTypes.INTEGER
     }
   });
   return Car;

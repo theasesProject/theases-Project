@@ -32,7 +32,7 @@ const CarsList = () => {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
         
         {filteredCars?.map((car, index) => (
-          <CarCard key={index} car={car} markedDates={markedDates} />
+          <CarCard key={index} car={car} markedDates={markedDates}/>
         ))}
       </ScrollView>
     </View>

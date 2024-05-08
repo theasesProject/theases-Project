@@ -24,7 +24,6 @@ import { useEffect, useState } from "react";
 import { createNotifcationForSpecifiqueUser } from "../store/notificationSlice";
 import price from "../assets/price.jpg";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import io from "socket.io-client";
 // import PushNotification from "react-native-push-notification";
 import axios from "axios";
 import { setRoom } from "../store/chatSlice";
@@ -35,7 +34,7 @@ function AgencyService() {
   const dispatch = useDispatch();
   const activeUser = useSelector(selectUser);
   const allService = useSelector((state) => state.booking.allServiceByAgency);
-  const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
+  // const socket = io(`http://${process.env.EXPO_PUBLIC_SERVER_IP}:5000`);
   const [selectedService, setSelectedService] = useState(null);
   const [requestMakerId, setRequestMakerId] = useState(null);
   // const [avatarUrl, setAvatarUrl] = useState(null);
@@ -83,28 +82,28 @@ function AgencyService() {
     }
   };
 
-  useEffect(() => {
-    dispatch(allServiceForAgency(activeUser.id));
+  // useEffect(() => {
+  //   dispatch(allServiceForAgency(activeUser.id));
 
-    socket.on("receive-notification", (data) => {
-      // console.log("Received Notification:", data);
+  //   socket.on("receive-notification", (data) => {
+  //     // console.log("Received Notification:", data);
 
-      PushNotification.localNotification({
-        channelId: "default",
-        title: data.title,
-        message: data.message,
-      });
-    });
+  //     PushNotification.localNotification({
+  //       channelId: "default",
+  //       title: data.title,
+  //       message: data.message,
+  //     });
+  //   });
 
-    socket.on("disconnect", () => {
-      // console.log("Socket disconnected");
-    });
+  //   socket.on("disconnect", () => {
+  //     // console.log("Socket disconnected");
+  //   });
 
-    return () => {
-      socket.off("receive-notification");
-      socket.off("disconnect");
-    };
-  }, [dispatch]);
+  //   return () => {
+  //     socket.off("receive-notification");
+  //     socket.off("disconnect");
+  //   };
+  // }, [dispatch]);
 
   const handleChatting = async (id) => {
     // setRequestMakerId(id)

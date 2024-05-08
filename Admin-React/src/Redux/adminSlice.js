@@ -8,8 +8,9 @@ const initialState = {
     allUsers: [],
     staticAllUsers: [],
     allCars: [],
+    limitedCars: [],
     requests: [],
-    TempoRequest:{},
+    TempoRequest: {},
     oneUser: {},
     refreshed: false,
     loggedIn: false,
@@ -19,7 +20,11 @@ const initialState = {
     PendingRental: [],
     RejectedRental: [],
     foreignUser: {},
-    loadingStatus:{}
+    loadingStatus: {},
+    companies: [],
+    limitedCompanies: [],
+
+
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -37,7 +42,7 @@ export const updateStateBlock = createAsyncThunk(
 );
 export const approveRequest = createAsyncThunk(
     "user/approveRequest",
-    async (request,thunkAPI) => {
+    async (request, thunkAPI) => {
         try {
             const response = await axios.post(
                 `http://127.0.0.1:5000/api/agency/addAgency/${request.id}`,
@@ -52,7 +57,7 @@ export const approveRequest = createAsyncThunk(
 );
 export const declineRequest = createAsyncThunk(
     "user/declineRequest",
-    async (request,thunkAPI) => {
+    async (request, thunkAPI) => {
         try {
             const response = await axios.delete(
                 `http://127.0.0.1:5000/api/request/decline/${request.id}`
@@ -76,6 +81,26 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
     }
 });
 
+export const addCar = createAsyncThunk("admin/addCar", async (carDetails) => {
+    try {
+        console.log(carDetails);
+        const carResp = await axios.post(`http://localhost:5000/api/car/newCar`, carDetails);
+        const imgResp = await axios.post(`http://localhost:5000/api/car/imageCar`, carDetails);
+
+        // Combine responses if needed
+        const combinedResponse = {
+            car: carResp.carDetails,
+            image: imgResp.carDetails,
+        };
+
+        return combinedResponse;
+    } catch (error) {
+        console.error(JSON.stringify(error));
+        // Throw the error so it can be caught by the Redux middleware
+        // return rejectWithValue(error.response.data);
+    }
+});
+
 export const getAllRequests = createAsyncThunk(
     "user/getAllRequests",
     async () => {
@@ -94,7 +119,7 @@ export const SignUpCompany = createAsyncThunk(
     "admin/SignUpCompany",
     async (companyDetails) => {
         try {
-            console.log(companyDetails,"companyDetails from SignUpCompany");
+            console.log(companyDetails, "companyDetails from SignUpCompany");
             const response = await axios.post(
                 `http://127.0.0.1:5000/api/users/SignUpCompany`,
                 companyDetails
@@ -144,12 +169,45 @@ export const getPendingServices = createAsyncThunk(
         }
     }
 )
+export const getAllCompanies = createAsyncThunk("user/getAllCompanies", async () => {
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/api/admin/allCompanies`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+})
+export const getLimitedCompanies = createAsyncThunk("user/getLimitedCompanies", async () => {
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/api/admin/getLimitedCompanies`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+})
 export const getAllCars = createAsyncThunk(
     "admin/getAllCars",
     async () => {
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/car/allCars`
+            )
+            return response.data
+        } catch (er) {
+            console.error(er);
+        }
+    }
+)
+export const getLimitedCars = createAsyncThunk(
+    "admin/getLimitedCars",
+    async () => {
+        try {
+            const response = await axios.get(
+                `http://127.0.0.1:5000/api/admin/getLimitedCars`
             )
             return response.data
         } catch (er) {
@@ -169,11 +227,11 @@ export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
 });
 export const getData = createAsyncThunk("user/getADminData", async () => {
     try {
-        const token=localStorage.getItem("Token")
+        const token = localStorage.getItem("Token")
         // const token = JSON.stringify(localStorage.getItem("Token"))
         const response = await axios.post(
             `http://localhost:5000/api/admin/useToken`,
-            { token:token }
+            { token: token }
         )
         // setAdminData(response.data)
         return response.data;
@@ -181,7 +239,7 @@ export const getData = createAsyncThunk("user/getADminData", async () => {
         console.error(err);
     }
 });
-export const Login = createAsyncThunk("user/Login", async ({ email, password },thunkAPI) => {
+export const Login = createAsyncThunk("user/Login", async ({ email, password }, thunkAPI) => {
     try {
         const data = { email, password }
         const response = await axios.post(
@@ -242,8 +300,8 @@ export const adminSlicer = createSlice({
         setLoggedIn: (state, action) => {
             state.loggedIn = action.payload;
         },
-        setReqForSwal:(state,action)=>{
-            state.TempoRequest=action.payload
+        setReqForSwal: (state, action) => {
+            state.TempoRequest = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -253,23 +311,23 @@ export const adminSlicer = createSlice({
             state.error = null;
         });
         builder.addCase(getData.fulfilled, (state, action) => {
-           state.loadingStatus.getData  = false;
+            state.loadingStatus.getData = false;
             state.admin = action.payload;
         });
         builder.addCase(getData.rejected, (state, action) => {
-           state.loadingStatus.getData  = false;
+            state.loadingStatus.getData = false;
             state.error = action.error.message;
         });
         builder.addCase(Login.pending, (state) => {
-            state.loadingStatus.Login  = true;
+            state.loadingStatus.Login = true;
             state.error = null;
         });
         builder.addCase(Login.fulfilled, (state) => {
-            state.loadingStatus.Login  = false;
+            state.loadingStatus.Login = false;
             state.loggedIn = false;
         });
         builder.addCase(Login.rejected, (state, action) => {
-            state.loadingStatus.Login  = false;
+            state.loadingStatus.Login = false;
             state.error = action.error.message;
             // state.loggedIn = false;
         });
@@ -286,15 +344,15 @@ export const adminSlicer = createSlice({
             state.error = action.error.message;
         });
         builder.addCase(getAllCars.pending, (state) => {
-           state.loadingStatus.getAllCars = true;
+            state.loadingStatus.getAllCars = true;
             state.error = null;
         });
         builder.addCase(getAllCars.fulfilled, (state, action) => {
-           state.loadingStatus.getAllCars = false;
+            state.loadingStatus.getAllCars = false;
             state.allCars = action.payload;
         });
         builder.addCase(getAllCars.rejected, (state, action) => {
-           state.loadingStatus.getAllCars = false;
+            state.loadingStatus.getAllCars = false;
             state.error = action.error.message;
         });
         builder.addCase(getApprovedServices.pending, (state) => {
@@ -310,103 +368,140 @@ export const adminSlicer = createSlice({
             state.error = action.error.message;
         });
         builder.addCase(getRejectedServices.pending, (state) => {
-           state.loadingStatus.getRejectedServices = true;
+            state.loadingStatus.getRejectedServices = true;
             state.error = null;
         });
         builder.addCase(getRejectedServices.fulfilled, (state, action) => {
-           state.loadingStatus.getRejectedServices = false;
+            state.loadingStatus.getRejectedServices = false;
             state.RejectedRental = action.payload;
         });
         builder.addCase(getRejectedServices.rejected, (state, action) => {
-           state.loadingStatus.getRejectedServices = false;
+            state.loadingStatus.getRejectedServices = false;
             state.error = action.error.message;
         });
         builder.addCase(getPendingServices.pending, (state) => {
-           state.loadingStatus.getPendingServices = true;
+            state.loadingStatus.getPendingServices = true;
             state.error = null;
         });
         builder.addCase(getPendingServices.fulfilled, (state, action) => {
-           state.loadingStatus.getPendingServices = false;
+            state.loadingStatus.getPendingServices = false;
             state.PendingRental = action.payload;
         });
         builder.addCase(getPendingServices.rejected, (state, action) => {
-           state.loadingStatus.getPendingServices = false;
+            state.loadingStatus.getPendingServices = false;
             state.error = action.error.message;
         });
         builder.addCase(Sort.pending, (state) => {
-           state.loadingStatus.Sort = true;
+            state.loadingStatus.Sort = true;
             state.error = null;
         });
         builder.addCase(Sort.fulfilled, (state, action) => {
-           state.loadingStatus.Sort = false;
+            state.loadingStatus.Sort = false;
             state.allUsers = action.payload;
         });
         builder.addCase(Sort.rejected, (state, action) => {
-           state.loadingStatus.Sort = false;
+            state.loadingStatus.Sort = false;
             state.error = action.error.message;
         });
         builder.addCase(getAllUsers.pending, (state) => {
-           state.loadingStatus.getAllUsers = true;
+            state.loadingStatus.getAllUsers = true;
             state.error = null;
         });
         builder.addCase(getAllUsers.fulfilled, (state, action) => {
-           state.loadingStatus.getAllUsers = false;
+            state.loadingStatus.getAllUsers = false;
             state.allUsers = action.payload;
             state.staticAllUsers = action.payload;
         });
         builder.addCase(getAllUsers.rejected, (state, action) => {
-           state.loadingStatus.getAllUsers = false;
+            state.loadingStatus.getAllUsers = false;
             state.error = action.error.message;
         });
 
         builder.addCase(updateStateBlock.pending, (state) => {
-           state.loadingStatus.updateStateBlock = true;
+            state.loadingStatus.updateStateBlock = true;
             state.error = null;
         });
         builder.addCase(updateStateBlock.fulfilled, (state, action) => {
-           state.loadingStatus.updateStateBlock = false;
+            state.loadingStatus.updateStateBlock = false;
             state.oneUser = action.payload;
         });
         builder.addCase(updateStateBlock.rejected, (state, action) => {
-           state.loadingStatus.updateStateBlock = false;
+            state.loadingStatus.updateStateBlock = false;
             state.error = action.error.message;
         });
         builder.addCase(approveRequest.pending, (state) => {
-           state.loadingStatus.approveRequest = true;
+            state.loadingStatus.approveRequest = true;
             state.error = null;
         });
         builder.addCase(approveRequest.fulfilled, (state, action) => {
-           state.loadingStatus.approveRequest = false;
+            state.loadingStatus.approveRequest = false;
             // state.oneUser = action.payload;
         });
         builder.addCase(approveRequest.rejected, (state, action) => {
-           state.loadingStatus.approveRequest = false;
+            state.loadingStatus.approveRequest = false;
             state.error = action.error.message;
         });
         builder.addCase(declineRequest.pending, (state) => {
-           state.loadingStatus.declineRequest = true;
+            state.loadingStatus.declineRequest = true;
             state.error = null;
         });
         builder.addCase(declineRequest.fulfilled, (state, action) => {
-           state.loadingStatus.declineRequest = false;
+            state.loadingStatus.declineRequest = false;
             // state.oneUser = action.payload;
         });
         builder.addCase(declineRequest.rejected, (state, action) => {
-           state.loadingStatus.declineRequest = false;
+            state.loadingStatus.declineRequest = false;
             state.error = action.error.message;
         });
         builder.addCase(getAllRequests.pending, (state) => {
-           state.loadingStatus.getAllRequests = true;
+            state.loadingStatus.getAllRequests = true;
             state.error = null;
         });
         builder.addCase(getAllRequests.fulfilled, (state, action) => {
-           state.loadingStatus.getAllRequests = false;
+            state.loadingStatus.getAllRequests = false;
             state.requests = action.payload;
         });
         builder.addCase(getAllRequests.rejected, (state, action) => {
-           state.loadingStatus.getAllRequests = false;
+            state.loadingStatus.getAllRequests = false;
             state.error = action.error.message;
         });
+        builder.addCase(getAllCompanies.pending, (state) => {
+            state.loadingStatus.getAllCompanies = true;
+            state.error = null;
+        });
+        builder.addCase(getAllCompanies.fulfilled, (state, action) => {
+            state.loadingStatus.getAllCompanies = false;
+            state.companies = action.payload;
+        });
+        builder.addCase(getAllCompanies.rejected, (state, action) => {
+            state.loadingStatus.getAllCompanies = false;
+            state.error = action.error.message;
+        });
+        builder.addCase(getLimitedCompanies.pending, (state) => {
+            state.loadingStatus.getLimitedCompanies = true;
+            state.error = null;
+        });
+        builder.addCase(getLimitedCompanies.fulfilled, (state, action) => {
+            state.loadingStatus.getLimitedCompanies = false;
+            state.limitedCompanies = action.payload;
+        });
+        builder.addCase(getLimitedCompanies.rejected, (state, action) => {
+            state.loadingStatus.getLimitedCompanies = false;
+            state.error = action.error.message;
+        });
+        builder.addCase(getLimitedCars.pending, (state) => {
+            state.loadingStatus.getLimitedCars = true;
+            state.error = null;
+        });
+        builder.addCase(getLimitedCars.fulfilled, (state, action) => {
+            state.loadingStatus.getLimitedCars = false;
+            state.limitedCars = action.payload;
+        });
+        builder.addCase(getLimitedCars.rejected, (state, action) => {
+            state.loadingStatus.getLimitedCars = false;
+            state.error = action.error.message;
+        });
+
         // builder.addCase(fetchReviews.fulfilled, (state, action) => {
         //     state.reviews = action.payload
         // })
@@ -422,9 +517,12 @@ export const selectApproved = (state) => state.Admin.approvedRental;
 export const selectPending = (state) => state.Admin.PendingRental;
 export const selectRejected = (state) => state.Admin.RejectedRental;
 export const selectAllCars = (state) => state.Admin.allCars;
+export const LimitedCars = (state) => state.Admin.limitedCars;
+export const LimitedCompanies = (state) => state.Admin.limitedCompanies;
 export const selectReviews = (state) => state.Admin.reviews;
 export const selectLoggedIn = (state) => state.Admin.loggedIn;
 export const selectLoadingStatus = (state) => state.Admin.loadingStatus;
+export const Companies = (state) => state.Admin.companies;
 export const selectForeignUser = (state) => state.Admin.foreignUser;
-export const { filterUsers,triggerRefresh, setAdminData, logout, setLoggedIn,setReqForSwal } = adminSlicer.actions;
+export const { filterUsers, triggerRefresh, setAdminData, logout, setLoggedIn, setReqForSwal } = adminSlicer.actions;
 export default adminSlicer.reducer;

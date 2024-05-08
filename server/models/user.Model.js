@@ -5,11 +5,11 @@ module.exports = (DataTypes, connection) => {
   const User = connection.define("User", {
     userName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true,
     },
     carsRented: {
@@ -19,7 +19,7 @@ module.exports = (DataTypes, connection) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       // validate: {
       //   validator: function (v) {
       //     return validator.isStrongPassword(v, {
@@ -38,12 +38,17 @@ module.exports = (DataTypes, connection) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true,
       // validate: {
       //   validator: validator.isEmail,
       //   message: "Email is not valid",
       // },
+    },
+    type:{
+      type:DataTypes.ENUM("user","company"),
+      allowNull: true,
+      defaultValue: "user",
     },
     RNE: {
       type: DataTypes.STRING,
@@ -51,53 +56,49 @@ module.exports = (DataTypes, connection) => {
       defaultValue:"",
     },
     dateOfBirth: {
-      // type: DataTypes.DATE,
-      // allowNull: true,
-      // defaultValue:"Sun Oct 29 2023 13:44:49 GMT+0100 (West Africa Standard Time)"
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
       defaultValue:false,
-      allowNull: false
+      allowNull: true
     },
     isArchived: {
       type: DataTypes.BOOLEAN,
       defaultValue:false,
-      allowNull: false
+      allowNull: true
     },
     isBlocked: {
       type: DataTypes.BOOLEAN,
       defaultValue:false,
-      allowNull: false
+      allowNull: true
     },
     selfie: {
       type: DataTypes.STRING,
       defaultValue:
         "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=626&ext=jpg&uid=R68467429&ga=GA1.1.970682958.1696962532&semt=ais",
-      allowNull: false,
+      allowNull: true,
     },
     drivingLicenseFront: {
       type: DataTypes.STRING,
       defaultValue:
         "https://as1.ftcdn.net/v2/jpg/04/60/01/36/1000_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg",
-      allowNull: false,
+      allowNull: true,
     },
     drivingLicenseBack: {
       type: DataTypes.STRING,
       defaultValue:
         "https://as1.ftcdn.net/v2/jpg/04/60/01/36/1000_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg",
-      allowNull: false,
+      allowNull: true,
     },
     passport: {
       type: DataTypes.STRING,
       defaultValue:
         "https://as1.ftcdn.net/v2/jpg/04/60/01/36/1000_F_460013622_6xF8uN6ubMvLx0tAJECBHfKPoNOR5cRa.jpg",
-      allowNull: false,
+      allowNull: true,
 
     },
-
     stateBlocked: {
       type: DataTypes.BOOLEAN,
       allowNull: true,

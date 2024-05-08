@@ -91,7 +91,6 @@ module.exports = {
   // },
   SignUpCompany: async (req, res, next) => {
     try {
-      req.body.type = "agency"
       const NameCheck = await db.User.findAll({
         where: {
           userName: req.body.userName,

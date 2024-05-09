@@ -46,7 +46,7 @@ import NewHome from "./pages/NewHome.jsx";
 import CarsList from "./pages/CarsList.jsx";
 import NewCarDetails from "./pages/NewCarDetails.jsx";
 import NewSignUp from "./pages/NewSignUp.jsx";
-import NewLogIn from "./pages/NewLogIn.jsx"
+import NewLogIn from "./pages/NewLogIn.jsx";
 import NewProfile from "./pages/NewProfile.jsx";
 import TermsAndConditions from "./pages/TermsAndConditions.jsx";
 import ReviewAndBook from "./pages/ReviewAndBook.jsx";
@@ -56,16 +56,30 @@ import FAQS from "./pages/FAQS.jsx";
 import SignUpNew from "./pages/SignUpNew.jsx";
 // import NewSignUp from "./pages/NewSignUp.jsx";
 import OtpVerificationEmail from "./pages/OtpVerificationEmail.jsx";
-
+import Emailaccount from "./pages/Emailaccount.jsx";
+import OtpForgotEmail from "./pages/OtpForgotEmail.jsx"
+import ChangePassword from "./pages/ChangePassword.jsx";
 const Stack = createStackNavigator();
+import Toast from 'react-native-toast-message';
+
 
 function App() {
+  // const toastConfig = {
+  //   success: (props) => (
+  //     <Toast
+  //       {...props}
+  //       style={{ backgroundColor: 'green' }}
+  //       // contentContainerStyle={{ paddingHorizontal: 15 }}
+  //       // text1Style={{ fontSize: 15, fontWeight: '400' }}
+  //     />
+  //   ),
+  //   // Add more custom toast types here
+  // };
   return (
     <Provider store={store}>
       <StripeProvider
         publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
       >
-        
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Welcome">
             <Stack.Screen
@@ -73,7 +87,7 @@ function App() {
               component={CarsList}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="MyInformation"
               component={MyInformation}
               options={{ headerShown: false }}
@@ -111,7 +125,10 @@ function App() {
             <Stack.Screen
               name="newSignUp"
               component={NewSignUp}
-              options={{ headerShown: false }}
+              options={{
+                headerShown: false,
+                headerStatusBarHeight: 0,
+              }}
             />
             <Stack.Screen
               name="newLogIn"
@@ -322,7 +339,24 @@ function App() {
               component={OtpVerificationEmail}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="EmailAccount"
+              component={Emailaccount}
+              options={{ headerShown: false }}
+            />
+           
+            <Stack.Screen
+              name="OtpForgotEmail"
+              component={OtpForgotEmail}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChangePassword"
+              component={ChangePassword}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
+          <Toast  />
         </NavigationContainer>
       </StripeProvider>
     </Provider>

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Feather } from '@expo/vector-icons';
+import { Modal, View, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import { Feather, FontAwesome6 } from '@expo/vector-icons';
 const { width, height } = Dimensions.get("window");
 
 const ImagePreviewModal = ({ visible, imageUri, onConfirm, onRetake }) => {
@@ -9,13 +8,15 @@ const ImagePreviewModal = ({ visible, imageUri, onConfirm, onRetake }) => {
     <Modal visible={visible} transparent>
       <View style={styles.container}>
         <View style={styles.innerContainer}>
-          <Image source={{ uri: imageUri }} style={styles.image} />
+        <View style={styles.imageContainer}>
+            <Image source={{ uri: imageUri }} style={styles.image} resizeMode="contain" />
+          </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={onConfirm} style={styles.button}>
-              <Icon name="check" size={20} color="#fff" />
-            </TouchableOpacity>
             <TouchableOpacity onPress={onRetake} style={styles.button}>
-            <Feather name="x-circle" size={24} color="white" />
+              <Feather name="x-circle" size={35} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onConfirm} style={styles.button}>
+              <FontAwesome6 name="circle-check" size={35} color="white" />
             </TouchableOpacity>
           </View>
         </View>
@@ -29,32 +30,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color to transparent
+    backgroundColor: 'rgba(0, 0, 0, 0.93)', // Set the background color to transparent
     padding: 20,
   },
   innerContainer: {
     backgroundColor: 'transparent',
-    padding: 20,
     borderRadius: 10,
-    padding: 20
+    padding: 20,
   },
   image: {
-    width: 350,
-    height: 350,
-    // resizeMode: 'contain',
+    width: width - 40, 
+    height: height * 0.7, 
+    // borderRadius: 30,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
+    gap: 20,
   },
   button: {
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
   },
-  buttonText: {
-    color: '#fff',
+  imageContainer: {
+    borderRadius: 20, // Set border radius to 20
+    // overflow: 'hidden', // Ensure the image stays within the bounds of the container
   },
 });
 

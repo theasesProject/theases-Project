@@ -38,29 +38,32 @@ const NewLogin = () => {
   }, [email, password]);
 
   const validateEmail = () => {
-    const re = /\S+@\S+\.\S+/;
-    const isValid = re.test(email);
-    setEmailError(isValid ? "" : "Invalid email format");
+    const trimmedEmail = email.trim()
+    const re = /^\S+@\S+\.\S+$/
+    const isValid = re.test(trimmedEmail);
+    setEmail(trimmedEmail)
+    setEmailError(isValid ? "" : (trimmedEmail ? "Invalid email format" : ""));
   };
 
   const validatePassword = () => {
     let error = "";
-    if (password.length < 8) {
-      error = "Password must be at least 8 characters long";
-    } else if (!/[a-z]/.test(password)) {
-      error = "Password must contain at least one lowercase letter";
-    } else if (!/[A-Z]/.test(password)) {
-      error = "Password must contain at least one uppercase letter";
-    } else if (!/\d/.test(password)) {
-      error = "Password must contain at least one digit";
-    } else if (!/[@$!%*?&]/.test(password)) {
-      error = "Password must contain at least one special character";
+    if (password.length > 0) {
+      if (password.length < 8) {
+        error = "Password must be at least 8 characters long";
+      } else if (!/[a-z]/.test(password)) {
+        error = "Password must contain at least one lowercase letter";
+      } else if (!/[A-Z]/.test(password)) {
+        error = "Password must contain at least one uppercase letter";
+      } else if (!/\d/.test(password)) {
+        error = "Password must contain at least one digit";
+      } else if (!/[@$!%*?&]/.test(password)) {
+        error = "Password must contain at least one special character";
+      }
     }
     setPasswordError(error);
   };
 
   const submitLogin = async () => {
-    // If both email and password are valid, proceed with login
     if (!emailError && !passwordError) {
       try {
         const response = await axios.post(
@@ -121,24 +124,35 @@ const NewLogin = () => {
                     keyboardType="email-address"
                   />
                   {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+                  <View
+                  style={styles.contPassEyeShow}
+                  >
+
                   <TextInput
-                    style={[styles.FirstInput, passwordError ? styles.errorInput : null]}
+                    style={[styles.FirstInputPass, passwordError ? styles.errorInput : null]}
                     placeholder="Type Your Password"
                     placeholderTextColor={"#cccccc"}
                     secureTextEntry={!showPassword}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
                   />
-                  {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
                   <TouchableOpacity
                     style={styles.eyeIconContainer}
                     onPress={togglePasswordVisibility}
-                  >
+                    >
                     <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#cccccc" />
                   </TouchableOpacity>
+                  </View>
+                    {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
                 </View>
+                <View style={styles.resendContainer}>
+                  <TouchableOpacity style={styles.resendBtnContainer} onPress={()=>navigation.navigate("EmailAccount")}>
+                    <Text style={styles.resendText}>Forgot password</Text>
+                  </TouchableOpacity>
+                </View>
+             
                 <Pressable style={styles.btnSignIn} onPress={submitLogin}>
-                  <Text style={styles.textSignIn}>Sign In</Text>
+                  <Text style={styles.textSignIn}>Login</Text>
                 </Pressable>
               </View>
             </View>
@@ -164,7 +178,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    gap: 30,
+    gap: 10,
   },
   title: {
     paddingBottom: 20,
@@ -183,26 +197,36 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     position: "relative",
   },
+  FirstInputPass: {
+    height: Dimensions.get("window").height * 0.05,
+    width: width * 0.75,
+    color: "white",
+    padding: 5,
+    borderRadius: 5,
+    borderColor: "gray",
+    borderBottomWidth: 1,
+    position: "relative",
+  },
   eyeIconContainer: {
     position: "absolute",
-    top: "70%",
+    top: "50%",
     right: 10,
     transform: [{ translateY: -12 }],
   },
   btnSignIn: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 40,
+    borderRadius: 15,
     borderWidth: 1,
     borderColor: "white",
-    width: width * 0.3,
-    height: 50,
+    width: width * 0.80,
+    height: height*0.065,
   },
   textSignIn: {
     justifyContent: "center",
     alignItems: "center",
     color: "white",
-    fontWeight: "500",
+    fontWeight: "700",
     fontSize: 20,
   },
   errorText: {
@@ -212,5 +236,28 @@ const styles = StyleSheet.create({
   },
   errorInput: {
     borderColor: "red",
+  },
+  resendContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingRight: 10,
+    width:"100%",
+    paddingBottom:30,
+    
+  },
+  resendCodeText:{
+    color: "gray",
+  },
+  resendText: {
+    color: "white",
+    paddingLeft: 5,
+    textDecorationLine: 'underline', 
+
+  },
+  resendBtnContainer:{
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection:"row",
   },
 });

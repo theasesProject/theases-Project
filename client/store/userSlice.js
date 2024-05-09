@@ -11,6 +11,8 @@ const initialState = {
   error: null,
   reporter: {},
   oneUser: [{}],
+  emailForget:""
+
 };
 
 const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
@@ -143,6 +145,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    saveEmailForgot:(state,action)=>{
+      state.emailForget=action.payload
+    },
     // Add a logout action that resets the user state
     logoutUser: (state) => {
       state.status = "idle";
@@ -206,4 +211,4 @@ export const logStatus = (state) => state.user.loggedIn;
 
 export const OneUserbid = (state) => state.agency.oneUser;
 export { fetchUser };
-export const { logoutUser, setUser } = userSlice.actions;
+export const { logoutUser, setUser, saveEmailForgot} = userSlice.actions;

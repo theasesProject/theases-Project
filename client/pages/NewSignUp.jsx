@@ -44,10 +44,8 @@ const NewSignUp = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [Ratio, setRatio] = useState(0);
   const [isCameraVisible, setIsCameraVisible] = useState(false);
-  const [type, setType] = useState(CameraPermissions.CameraType.back);
-  const [typeSelfie, setTypeSelfie] = useState(
-    CameraPermissions.CameraType.front
-  );
+  const [type, setType] = useState("");
+  const [typeSelfie, setTypeSelfie] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [Document, setDocument] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);
@@ -374,8 +372,8 @@ const NewSignUp = () => {
                   keyboardType="phone-pad"
                 />
 
-                <TouchableOpacity onPress={showMode} style={styles.birthText}>
-                  <Text style={styles.birthBtn}>
+                <TouchableOpacity onPress={showMode} style={styles.birthBtn}>
+                  <Text style={styles.birthText}>
                     {!userDetails.dateOfBirth
                       ? "Select your date"
                       : userDetails.dateOfBirth}
@@ -479,7 +477,7 @@ const NewSignUp = () => {
                       },
                       {
                         backgroundColor: picsDetail.selfie
-                          ? "lightgreen"
+                          ? "transparent" 
                           : "transparent",
                       },
                     ]}
@@ -489,9 +487,9 @@ const NewSignUp = () => {
                         : "Take a Selfie"
                     }
                     placeholderTextColor={
-                      picsDetail.selfie ? "#ff0000" : "#cccccc"
-                    } // Assuming you meant "#ff0000" for red
-                    editable={false} // Make the TextInput not editable
+                      picsDetail.selfie ? "#cccccc" : "#cccccc"
+                    } 
+                    editable={false} 
                   />
                   {!picsDetail.selfie && (
                     <Text
@@ -712,59 +710,7 @@ const NewSignUp = () => {
           )}
         </LinearGradient>
       )}
-      {/* {isCameraVisible && (
-        <>
-          <Camera
-            ref={cameraRef}
-            style={{ width: width, height: height * 0.8 }}
-            // type={Camera.Constants.Type.back}
-            type={type}
-            ratio="16:9"
-          />
-
-          {showImageModal && (
-            <ImagePreviewModal
-              visible={showImageModal}
-              imageUri={capturedImage}
-              onConfirm={handleConfirmImage}
-              onRetake={handleRetakePicture}
-            />
-          )}
-          <View
-            style={{
-              position: "absolute",
-              bottom: 20,
-              left: "35%",
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
-            <TouchableOpacity onPress={() => setIsCameraVisible(false)}>
-              <Text style={{ color: "#fff", fontSize: 18 }}>Cancel</Text>
-            </TouchableOpacity>
-            <Pressable
-              style={{
-                marginLeft: 20,
-                // backgroundColor: "black",
-                paddingHorizontal: 20,
-                paddingVertical: 10,
-                borderRadius: 50,
-                height: 100,
-                width: 100,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => takePicture(portait)}
-            >
-              <MaterialCommunityIcons
-                name="camera-iris"
-                size={24}
-                color="black"
-              />
-            </Pressable>
-          </View>
-        </>
-      )} */}
+   
   {isCameraVisible && (
       <View style={styles.containerCCamera}>
     <View style={styles.cameraContainer}>
@@ -888,6 +834,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // justifyContent: "space-evenly",
     flexGrow: 1,
+  },
+  birthBtn:{
+    height: Dimensions.get("window").height * 0.05,
+    width: width * 0.75,
+    color: "white",
+    marginBottom: 10,
+    padding: 5,
+    borderRadius: 5,
+    borderColor: "gray",
+    borderBottomWidth: 1,
   },
   birthText: {
     color: "white",

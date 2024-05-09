@@ -36,6 +36,7 @@ db.Request = require("./request.Model")(DataTypes, connection);
 db.RentelRequest = require("./rentelRequest.Model")(DataTypes, connection);
 db.Availability = require("./available")(DataTypes, connection);
 db.Notifcation = require("./notification.Model")(DataTypes, connection);
+db.Token = require("./token.Model")(DataTypes, connection);
 
 db.User.hasOne(db.Agency);
 db.Agency.belongsTo(db.User);
@@ -111,5 +112,8 @@ db.BookMark.belongsTo(db.User);
 
 db.BookMark.hasMany(db.Car);
 db.Car.belongsTo(db.BookMark);
+
+db.User.hasMany(db.Token);
+db.Token.belongsTo(db.User);
 
 module.exports.db = db;

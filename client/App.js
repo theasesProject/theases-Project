@@ -53,9 +53,10 @@ import ReviewAndBook from "./pages/ReviewAndBook.jsx";
 import BookingHistory from "./pages/BookingHistory.jsx";
 import MyInformation from "./pages/MyInformation.jsx";
 import FAQS from "./pages/FAQS.jsx";
+import SignUpNew from "./pages/SignUpNew.jsx";
 // import NewSignUp from "./pages/NewSignUp.jsx";
-
-
+import OtpVerificationEmail from "./pages/OtpVerificationEmail.jsx";
+import LocationModal from "./components/LocationModal.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -75,6 +76,11 @@ function App() {
              <Stack.Screen
               name="MyInformation"
               component={MyInformation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="LocationModal"
+              component={LocationModal}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -309,6 +315,16 @@ function App() {
             <Stack.Screen
               name="AddCarAgency3"
               component={AddCarAgency3}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SignUpNew"
+              component={SignUpNew}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="OtpVerification"
+              component={OtpVerificationEmail}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

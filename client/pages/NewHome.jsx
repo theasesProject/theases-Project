@@ -42,6 +42,9 @@ const NewHome = () => {
   const [disabledDates, setDisabledDates] = useState({});
   const [markedDates, setMarkedDates] = useState([]);
   const [showAdditionalRow, setShowAdditionalRow] = useState(false);
+
+
+
   const calendarTheme = {
     backgroundColor: '#ffffff',
     calendarBackground: '#ffffff',
@@ -50,7 +53,12 @@ const NewHome = () => {
     todayTextColor: '#8c52ff',
     arrowColor: '#8c52ff',
   };
+
+
+
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -374,12 +382,10 @@ const NewHome = () => {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${searchText}&components=country:tn&key=${process.env.EXPO_PUBLIC_SERVER_IP_2}`
       );
-      if(locationModalVisible===true){
+    
         setPredictions(response.data.predictions);
-      }
-      else{
-        setReturnLocation(response.data.predictions)
-      }
+        setReturnPredictions(response.data.predictions)
+   
     } catch (error) {
       console.error('Error fetching locations:', error);
     } finally {
@@ -407,7 +413,7 @@ const NewHome = () => {
   };
 
   const handleReturnChangeText = async (text) => {
-    setReturnLocation(text);
+    setReturnLocation(String(text));
     if (text) {
       await fetchLocations(text);
     } else {
@@ -432,8 +438,11 @@ const NewHome = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  useEffect(() => {
-    (async () => {
+  const getLocation = async () => {
+    try {
+      setLoading(true);
+      setErrorMsg(null);
+
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -441,34 +450,25 @@ const NewHome = () => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setCurrentLocation(location);
+      const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${process.env.EXPO_PUBLIC_SERVER_IP_2}`);
+      const json = response.data;
 
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${process.env.EXPO_PUBLIC_SERVER_IP_2}`)
-        .then((response) => response.json())
-        .then((json) => {
-          if (json.results.length > 0) {
-            const addressComponent1 = json.results[0].address_components[1].short_name;
-          const addressComponent2 = json.results[0].address_components[2].short_name;
-            const concatenatedAddress = addressComponent1 +', ' +addressComponent2;
-            setLocation(concatenatedAddress);
-          } else {
-            if (!location) {
-              setLocation('Location not found');
-            }
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching location name:', error);
-        });
-    })();
-  }, []);
-
-  let text = 'Waiting..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (currentLocation) {
-    text = JSON.stringify(currentLocation);
-  }
+      if (json.results.length > 0) {
+        const addressComponent1 = json.results[0].address_components[1].short_name;
+        const addressComponent2 = json.results[0].address_components[2].short_name;
+        const concatenatedAddress = addressComponent1 + ', ' + addressComponent2;
+        setLocation(concatenatedAddress);
+        setLocationModalVisible(false);
+      } else {
+        setLocation('Location not found');
+      }
+    } catch (error) {
+      console.error('Error getting location:', error);
+      setErrorMsg('Error getting location. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
 
@@ -487,15 +487,20 @@ const NewHome = () => {
               <ToggleSwitch isEnabled={showAdditionalRow} onToggle={setShowAdditionalRow} />
             </View>
 
-            <Pressable style={styles.secondRow} onPress={() => setLocationModalVisible(true)}>
+            <Pressable style={styles.secondRow} onPress={() => {setLocationModalVisible(true)
+              setPredictions([])
+            }
+            
+            }>
               <Ionicons name="car-outline" size={25} color="grey" />
               {location ? (
                 <Text style={styles.firstText}>{location}</Text>
               ) : (
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <ActivityIndicator size="small" color="grey" />
-                  <Text style={{ marginLeft: 5, color: 'grey' }}>We are trying to get your location</Text>
-                </View>
+                <TextInput
+                  style={[styles.additionalText, { color: 'grey' }]}
+                  editable={false}
+                  placeholder="Choose Pick-up Station"
+                />
               )}
             </Pressable>
             {showAdditionalRow && (
@@ -504,6 +509,7 @@ const NewHome = () => {
                 <TextInput
                   style={[styles.additionalText, { color: 'grey' }]}
                   editable={false}
+                  value={returnLocation}
                   placeholder="Another Return Station"
                 />
               </Pressable>
@@ -574,7 +580,6 @@ const NewHome = () => {
             <TextInput
               style={styles.searchInput}
               placeholder="Search..."
-              value={location}
               onChangeText={handleChangeText}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
@@ -597,16 +602,20 @@ const NewHome = () => {
               <Ionicons name="search" size={20} color="black" />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.useLocationButton}
-            onPress={() => {/* Handle use current location action */ }}
-          >
-            <Ionicons name="location-outline" size={20} color="black" />
-            <Text style={styles.useLocationButtonText}>Use My Current Location</Text>
-          </TouchableOpacity>
-          {loading ? (
-            <ActivityIndicator size="small" color="#0000ff" />
-          ) : (
+              <TouchableOpacity
+      style={styles.useLocationButton}
+      onPress={() => { getLocation(); }}
+    >
+      {loading ? (
+        <ActivityIndicator size="small" color="black" style={{ marginRight: 10 }} />
+      ) : (
+        <Ionicons name="location-outline" size={20} color="black" />
+      )}
+      <Text style={styles.useLocationButtonText}>
+        {loading ? 'This may take some time' : 'Use My Current Location'}
+      </Text>
+    </TouchableOpacity>
+          
             <FlatList
               data={predictions}
               renderItem={({ item }) => (
@@ -619,22 +628,24 @@ const NewHome = () => {
               )}
               keyExtractor={(item) => item.place_id}
             />
-          )}
+        
         </View>
       </Modal>
       <Modal
         isVisible={returnModalVisible}
         swipeDirection={['down']}
         style={styles.modal}
-        onSwipeComplete={() => setReturnModalVisible(false)}
-        onBackdropPress={() => setReturnModalVisible(false)}
+        onSwipeComplete={() => {setReturnModalVisible(false)
+        }}
+        onBackdropPress={() => {setReturnModalVisible(false)
+        }}
       >
         <View style={styles.modalContent2}>
           <View style={styles.searchContainer}>
             <TextInput
               style={styles.searchInput}
               placeholder="Search..."
-              value={returnLocation}
+              // value={returnLocation}
               onChangeText={handleReturnChangeText}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
@@ -657,13 +668,7 @@ const NewHome = () => {
               <Ionicons name="search" size={20} color="black" />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.useLocationButton}
-            onPress={() => {/* Handle use current location action */ }}
-          >
-            <Ionicons name="location-outline" size={20} color="black" />
-            <Text style={styles.useLocationButtonText}>Use My Current Location</Text>
-          </TouchableOpacity>
+
           {loading ? (
             <ActivityIndicator size="small" color="#0000ff" />
           ) : (

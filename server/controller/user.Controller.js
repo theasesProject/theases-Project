@@ -269,9 +269,11 @@ module.exports = {
         return res.status(422).json({ error: "Invalid email or password" });
       }
 
-      const token = jwt.sign(userValid.id, process.env.JWT_SECRET_KEY);
+      // const token = jwt.sign(userValid.id, process.env.JWT_SECRET_KEY);
+      const token = jwt.sign({ id: userValid.id }, process.env.JWT_SECRET_KEY);
       const result = {
-        userValid,
+        id:userValid.id,
+        email:userValid.email,
         token,
       };
 

@@ -56,7 +56,7 @@ import FAQS from "./pages/FAQS.jsx";
 import SignUpNew from "./pages/SignUpNew.jsx";
 // import NewSignUp from "./pages/NewSignUp.jsx";
 import OtpVerificationEmail from "./pages/OtpVerificationEmail.jsx";
-
+import LocationModal from "./components/LocationModal.jsx";
 const Stack = createStackNavigator();
 
 function App() {
@@ -67,7 +67,7 @@ function App() {
       >
         
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Welcome">
+          <Stack.Navigator initialRouteName="NewHome">
             <Stack.Screen
               name="CarsList"
               component={CarsList}
@@ -76,6 +76,11 @@ function App() {
              <Stack.Screen
               name="MyInformation"
               component={MyInformation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="LocationModal"
+              component={LocationModal}
               options={{ headerShown: false }}
             />
             <Stack.Screen

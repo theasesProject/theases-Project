@@ -4,6 +4,7 @@ import ArrowBack from '../assets/Svg/blackArrow.svg'
 import { Ionicons } from '@expo/vector-icons';
 const { height, width } = Dimensions.get("screen");
 import Tick from '../assets/Svg/tick.svg'
+import NavTab from '../components/NavBar';
 
 
 const BookingHistory = () => {
@@ -73,6 +74,7 @@ const BookingHistory = () => {
 )}
     </Pressable>
       </ScrollView>
+      <NavTab/>
     </View>
   )
 }

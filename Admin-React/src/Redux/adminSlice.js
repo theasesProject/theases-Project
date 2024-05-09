@@ -23,7 +23,8 @@ const initialState = {
     loadingStatus: {},
     companies: [],
     limitedCompanies: [],
-    Media:[]
+    Media: [],
+    carBookedPeriods: []
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -84,7 +85,8 @@ export const addCar = createAsyncThunk("admin/addCar", async (carDetails) => {
     try {
         console.log(carDetails);
         const carResp = await axios.post(`http://localhost:5000/api/car/newCar`, carDetails);
-        const imgResp = await axios.post(`http://localhost:5000/api/media/add/request/${carResp.data.id}`, carDetails.media);
+        console.log(carResp.data);
+        const imgResp = await axios.post(`http://localhost:5000/api/media/add/car/${carResp.data.id}`, carDetails.media);
 
         // Combine responses if needed
         const combinedResponse = {
@@ -277,17 +279,50 @@ export const getUserById = createAsyncThunk("user/getById", async (id) => {
         console.error(er);
     }
 })
-export const getSingleMedia=createAsyncThunk("admin/getSingleMedia",async(id)=>{
+
+export const getSingleMedia = createAsyncThunk("admin/getSingleMedia", async (id) => {
     try {
-        const response = axios.get(
-            console.log("getSignleMedia",id)
-            `http://localhost:5000/api/media/getAll/carId/${id}`
-        )
+        console.log("getSingleMedia", id);
+        // Use await to wait for the axios.get call to complete
+        const response = await axios.get(`http://localhost:5000/api/media/getAll/31`, {
+            // Specify responseType as 'blob' to tell axios to treat the response as a blob
+            responseType: 'blob',
+        });
+        // Log the response data after it has been received
+        console.log(response.data);
+        // Create a blob URL from the blob data
+        const blobUrl = URL.createObjectURL(response.data);
+        // Return the blob URL
+        return blobUrl;
+    } catch (er) {
+        console.log(JSON.stringify(er));
+        // If there's an error, return it as a rejected promise
+        return Promise.reject(er);
+    }
+});
+
+export const getBookedDates = createAsyncThunk("admin/getBookedDates", async (id) => {
+    try {
+        console.log("getBookedDates", id);
+        const response = await axios.get(`http://localhost:5000/api/bookedPeriods/getOneCar/${id}`)
         return response.data
     } catch (er) {
-        console.log(JSON.stringify(er))
+        console.log(JSON.stringify(er));
     }
 })
+
+export const addBookedDate = createAsyncThunk("admin/getBookedDates", async (data) => {
+    try {
+        console.log("getBookedDates", data.CarId);
+        console.log("getBookedDates", data.BookedPeriod);
+        console.log("getBookedDates", data);
+        await axios.post(`http://localhost:5000/api/bookedPeriods/addOneCar`,
+            data)
+    } catch (er) {
+        console.log(JSON.stringify(er));
+    }
+})
+
 export const adminSlicer = createSlice({
     name: "admin",
     initialState,
@@ -523,10 +558,20 @@ export const adminSlicer = createSlice({
             state.loadingStatus.getSingleMedia = false;
             state.error = action.error.message;
         });
+        builder.addCase(getBookedDates.pending, (state) => {
+            state.loadingStatus.getBookedDates = true;
+            state.error = null;
+        });
+        builder.addCase(getBookedDates.fulfilled, (state, action) => {
+            state.loadingStatus.getBookedDates = false;
+            state.carBookedPeriods = action.payload;
+        });
+        builder.addCase(getBookedDates.rejected, (state, action) => {
+            state.loadingStatus.getBookedDates = false;
+            state.error = action.error.message;
+        });
 
-        // builder.addCase(fetchReviews.fulfilled, (state, action) => {
-        //     state.reviews = action.payload
-        // })
+
     }
 })
 
@@ -546,6 +591,7 @@ export const selectLoggedIn = (state) => state.Admin.loggedIn;
 export const selectLoadingStatus = (state) => state.Admin.loadingStatus;
 export const Companies = (state) => state.Admin.companies;
 export const Media = (state) => state.Admin.Media;
+export const CarBookedPeriods = (state) => state.Admin.carBookedPeriods;
 export const selectForeignUser = (state) => state.Admin.foreignUser;
 export const { filterUsers, triggerRefresh, setAdminData, logout, setLoggedIn, setReqForSwal } = adminSlicer.actions;
 export default adminSlicer.reducer;

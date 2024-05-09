@@ -31,6 +31,8 @@ import {
 } from "reactstrap";
 import { getAllCars } from "Redux/adminSlice";
 import Select from "react-select";
+import { Media } from "Redux/adminSlice";
+import { addBookedDate } from "Redux/adminSlice";
 
 const customStyles = {
   overlay: {
@@ -68,6 +70,7 @@ const fuels = ["Gasoline", "Diesel", "Electric"]
 const yearOptions = years.map(year => ({ label: year.toString(), value: year.toString() }));
 const fuelOptions = fuels.map(fuel => ({ label: fuel.toString(), value: fuel.toString() }));
 function Tables() {
+  const dispatch = useDispatch()
   const [carDetails, setCarDetails] = useState({
     model: "",
     price: "",
@@ -81,9 +84,7 @@ function Tables() {
     Capacity: "",
     media: []
   })
-  const handleSelect = (ranges) => {
-    setDate(ranges.selection)
-  };
+
   // const options = companies.map(company => ({
   //   label: company.userName, // Display the userName as the label
   //   value: company.id, // Use the id as the value
@@ -93,6 +94,44 @@ function Tables() {
     endDate: new Date(),
     key: 'selection',
   })
+  const handleSelect = (ranges) => {
+    setDate(ranges.selection)
+  };
+  const [selectedDates, setSelectedDates] = useState([]);
+
+  
+   const handleButtonClick = () => {
+      try {
+        // Initialize an empty array to hold all the dates
+        const datesArray = [];
+  
+        if (date.startDate && date.endDate) {
+          // If a range is selected, iterate through the range and add each date to the array
+          for (let d = new Date(date.startDate); d <= new Date(date.endDate); d.setDate(d.getDate() + 1)) {
+            datesArray.push(new Date(d));
+          }
+        } else if (date.startDate) {
+          // If only a single day is selected, add it to the array
+          datesArray.push(new Date(date.startDate));
+        }
+  
+        // Update the state with the array of dates
+        setSelectedDates(datesArray);
+      } catch (error) {
+        console.log(error);
+      }
+   };
+  
+   useEffect(() => {
+      // This effect runs after selectedDates has been updated
+      if (selectedDates.length > 0) {
+        dispatch(addBookedDate({ CarId: car.id, BookedPeriod: selectedDates }));
+      }
+   }, [selectedDates, dispatch]); // Depend on selectedDates and dispatch to re-run the effect when they change
+  
+   // Rest of your component...
+  
+
   const handleCarChange = (id, value) => {
     console.log(`Field: ${id}, Value: ${value}`);
     setCarDetails(prevDetails => {
@@ -109,8 +148,7 @@ function Tables() {
   const [refresh, setRefresh] = useState(false)
   const [car, setCar] = useState({})
   console.log("car is in tableList", car);
-  const [media, setMedia] = useState({})
-  const dispatch = useDispatch()
+  const [media, setMedia] = useState(null)
   function openModal() {
     setIsOpen(true);
   }
@@ -138,6 +176,9 @@ function Tables() {
   useEffect(() => {
     dispatch(getAllCars())
   }, [])
+  useEffect(() => {
+
+  }, [media])
   const selectedYearOption = yearOptions.find(option => option.value === car.Year);
   const selectedTypeOption = [
     { value: 'Automatic', label: 'Automatic' },
@@ -167,6 +208,8 @@ function Tables() {
     { label: "15 Seats", value: 15 },
   ].find(option => option.value === car.peopleCount);
   // const companies = useSelector(Companies)
+  console.log(media)
+  // const blobUrl = URL.createObjectURL(media);
   return (
     <>
       <div className="content">
@@ -174,7 +217,9 @@ function Tables() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4"><Button >List Of All Affiliated Cars</Button></CardTitle>
+                <CardTitle ><Button style={{
+                  fontSize: "1.2rem"
+                }}>List Of All Affiliated Cars</Button></CardTitle>
               </CardHeader>
               <CardBody style={{ overflowX: 'auto', width: '100%' }}>
                 <Table striped responsive style={{
@@ -218,7 +263,7 @@ function Tables() {
         style={customStyles}
         onRequestClose={closeModal}>
         <CardTitle style={{
-          fontSize:"1.5rem"
+          fontSize: "1.5rem"
         }}>Change Availability for {car.brand + " " + car.model} :</CardTitle>
         <div style={{
           display: "flex",
@@ -231,12 +276,16 @@ function Tables() {
             // justifyContent: "space-evenly",
             gap: "1rem"
           }}>
-            <CardImg style={{
+            {true ? <img style={{
               height: "20rem",
               width: "30rem"
-            }} src={
-              media
-            } />
+            }} src={require("../assets/img/image-placeholder.jpeg")} /> : <img
+              style={{
+                height: "20rem",
+                width: "30rem"
+              }}
+              src={media}
+            />}
             <div className="calender_Ctr">
               <div
                 style={{
@@ -250,8 +299,9 @@ function Tables() {
                   onChange={(handleSelect)}
                   minDate={new Date()}
                 />
-                <Button style={{}}>{
-                  `${format(date.startDate, "MMM,dd,yyyy")} to ${format(date.endDate, "MMM,dd,yyyy")}`
+                <Button onClick={()=>handleButtonClick()}>{
+                  // `${format(date.startDate, "MMM,dd,yyyy")} to ${format(date.endDate, "MMM,dd,yyyy")}`
+                  "Change The Car's Availability Timeline"
                 }</Button>
               </div>
             </div>
@@ -477,7 +527,7 @@ function Tables() {
               </div>
             </div>
             <Button style={{
-              marginTop:"1rem"
+              marginTop: "1rem"
             }}>Update Car Details</Button>
           </div>
         </div>

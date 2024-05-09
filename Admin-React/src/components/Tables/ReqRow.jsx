@@ -11,92 +11,41 @@ import { approveRequest } from "Redux/adminSlice";
 import { declineRequest } from "Redux/adminSlice";
 import { Media } from "Redux/adminSlice";
 import { getSingleMedia } from "Redux/adminSlice";
+import { getBookedDates } from "Redux/adminSlice";
+import { CarBookedPeriods } from "Redux/adminSlice";
 const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal,setMedia }) => {
   const dispatch = useDispatch();
   const refresh=(input)=>{
     setRefresh(input)
   }
-  // const handleSwalToast = () => {
-  //   Swal.fire({
-  //     title: `<strong>do u want to accept or reject this request</strong>`,
-  //     html: `
-  //     `,
-  //     imageUrl: `${requestImg}`,
-  //     imageWidth: 200,
-  //     imageHeight: 200,
-  //     imageAlt: "Custom image",
-  //     backdrop: `rgba(0,0,123,0.4)`,
-  //     showCloseButton: true,
-  //     showCancelButton: true,
-  //     focusConfirm: false,
-  //     confirmButtonText: `
-  //      <i class="fa fa-reject"></i> Consent
-  //     `,
-  //     confirmButtonAriaLabel: "Thumbs up, great!",
-  //     rejectButtonText: `
-  //      <i class="fa fa-reject"></i> Accept
-  //     `,
-  //     rejectButtonAriaLabel: "Thumbs up, great!",
-  //     customClass: {
-  //       text: "swal-secondary-text",
-  //       container: "my-modal",
-  //     },
-  //     cancelButtonText: `
-  //      <i class="fa fa-close"></i> close
-  //     `,
-  //     // cancelButtonAriaLabel: "Thumbs down"
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       Swal.fire({
-  //         title: "Are you sure?",
-  //         html: `You will accept  <strong>${request.agencyName}</strong>'s request`,
-  //         // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
-  //         icon: "warning",
-  //         showCancelButton: true,
-  //         confirmButtonText: "Yes, accept it!",
-  //         cancelButtonText: "No, Reject this Request!",
-  //       }).then((result) => {
-  //         if (result.isConfirmed) {
-  //           {
-  //             dispatch(approveRequest(request));
-  //             refresh(false)
-  //           }
-  //           Swal.fire({
-  //             title: `User <b>${request.agencyName}</b>'s request accept!`,
-  //             text: "This user's Request has been Accepted, he now is an Agency",
-  //             icon: "success",
-  //           });
-  //         } else if (result.dismiss === Swal.DismissReason.cancel) {
-  //           dispatch(declineRequest(request));
-  //           refresh(false)
-  //           {
-  //           }
-  //           Swal.fire({
-  //             title: "Cancelled",
-  //             text: "This user's Request has been Rejected, he will remain a User",
-  //             icon: "error",
-  //           });
-  //         }
-  //       });
-  //     }
-  //   });
-  // };
   const images = useSelector(Media)
-  const getMedia =async()=>{
+  const carBookedPeriods = useSelector(CarBookedPeriods)
+  const fetchBookedDates= async()=>{
     try {
-      dispatch(getSingleMedia(request.id))
-      setMedia(images)
-    } catch (error) {
-      
+     dispatch(getBookedDates(request.id))
+    } catch (er) {
+      console.log("fetchBookedDates",error);
     }
   }
+  const fetchMedia = async () => {
+    try {
+      const actionResult = await dispatch(getSingleMedia(request.id));
+      // Assuming you're using Redux Toolkit and the blob URL is returned in the payload
+      setMedia(actionResult.payload);
+    } catch (error) {
+      console.error('Failed to fetch media:', error);
+    }
+  };
+
   return (
     <tr res hover onClick={()=>{
       setCar(request)
-      getMedia()
-      openModal()
+      fetchMedia();
+      openModal();
+      fetchBookedDates();
+      console.log(carBookedPeriods);
     }} >
-      {console.log(request, "<=Request List")}
+      {/* {console.log(request, "<=Request List")} */}
       <td>{request.id}</td>
       <td>{request.model}</td>
       <td>{request.brand}</td>

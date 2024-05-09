@@ -56,7 +56,9 @@ function Dashboard() {
   const pending = useSelector(selectPending)?.historyData
   const rejected = useSelector(selectRejected)?.historyData
   const loading = useSelector((state) => state.Admin.loading);
-  const allUsers = useSelector(selectAllUsers)
+  const users = useSelector(selectAllUsers)
+  const allUsers = users.filter((user) => user.type === "user")
+  const allCompanies = users.filter((user) => user.type === "company")
   const allCars = useSelector(selectAllCars)
   const [refresh, setRefresh] = useState(false);
   const [bigChartData, setbigChartData] = React.useState("data1");
@@ -203,13 +205,13 @@ function Dashboard() {
               <CardHeader>
                 <h5 className="card-category">Total Users Count</h5>
                 <CardTitle tag="h3">
-                  <i className="tim-icons icon-bell-55 text-info" /> {allUsers?.length}
+                  <i className="tim-icons icon-bell-55 text-info" /> {users?.length}
                 </CardTitle>
               </CardHeader>
               <CardBody>
                 <div className="chart-area">
                   <Line
-                    data={chartExample2.data(allUsers)}
+                    data={chartExample2.data(users)}
                     options={chartExample1.options}
                   />
 
@@ -524,27 +526,27 @@ function Dashboard() {
             </Card> */}
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Rental History</CardTitle>
+                <CardTitle tag="h4">Agencies List</CardTitle>
               </CardHeader>
               <CardBody >
                 <Table className="tablesorter" responsive>
                   <thead className="text-primary">
                     <tr>
-                      <th>brand</th>
-                      <th>Returned by</th>
-                      <th>Rental Fee </th>
-                      <th className="text-center">Returned on</th>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>E-mail</th>
+                      <th>Phone-Number</th>
+                      <th className="text-center">state</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {rentalHistory?.slice(startIndexCar, rentalHistory?.length > 10 ? startIndexCar + 10 : undefined)?.map((u, i) =>
-                    (
+                    {allCompanies?.slice(startIndex, allCompanies.length > 10 ? startIndex + 10 : undefined)?.map((u, i) => (
                       <tr key={i}>
-                        {/* console.log(u) */}
-                        <td>{u.Users[0].userName}</td>
-                        <td>{u.Car.model}</td>
-                        <td>{u.amount} DT</td>
-                        <td className="text-center">{u.endDate?.slice(0, 10)}</td>
+                        <td>{u.id}</td>
+                        <td>{u.userName}</td>
+                        <td>{u.email}</td>
+                        <td>{u.phoneNumber}</td>
+                        <td className="text-center">{u.stateBlocked ? "Blocked" : "Active"}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -558,7 +560,7 @@ function Dashboard() {
           <Col lg="6" md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">User List</CardTitle>
+                <CardTitle tag="h4">Users List</CardTitle>
               </CardHeader>
               <CardBody >
                 <Table className="tablesorter" responsive>

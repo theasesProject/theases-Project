@@ -226,18 +226,18 @@ const AddNewEntities = () => {
   })
   const [selectedImage, setSelectedImage] = useState(null);
   // const [selectedImageCompany, setSelectedImageCompany] = useState(null);
-  const handleImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const image = event.target.files[0];
-      setSelectedImage(URL.createObjectURL(image));
-    }
-  };
-  const handleImageChangeCompany = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const image = event.target.files[0];
-      handleSelectChange("avatar", URL.createObjectURL(image));
-    }
-  };
+  // const handleImageChange = (event) => {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const image = event.target.files[0];
+  //     setSelectedImage(URL.createObjectURL(image));
+  //   }
+  // };
+  // const handleImageChangeCompany = (event) => {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const image = event.target.files[0];
+  //     handleSelectChange("avatar", URL.createObjectURL(image));
+  //   }
+  // };
   function openModal2() {
     setIsOpen2(true);
   }
@@ -304,35 +304,35 @@ const AddNewEntities = () => {
   }
 
   const handleCompanyChange = (id, value) => {
-    console.log(`Updating ${id} with value: ${value}`);
-    setCompanyDetails(prevDetails => {
-       let newDetails = { ...prevDetails };
-   
-       // Check if the id is 'media'
-       if (id === 'media') {
-         // Initialize the 'media' array if it doesn't exist
-         if (!newDetails.media) {
-           newDetails.media = [];
-         }
-         // Push the value into the 'media' array
-         newDetails.media.push(value);
-       } else {
-         // For other ids, just set the value directly
-         newDetails[id] = value;
-       }
-   
-       console.log('New state:', newDetails);
-       return newDetails;
-    });
-   };
-   
-  const handleCarChange = (id, value) => {
     console.log(`Field: ${id}, Value: ${value}`);
-    setCarDetails(prevDetails => {
+    setCompanyDetails(prevDetails => {
       const newDetails = {
         ...prevDetails,
         [id]: value
       };
+      console.log('New state:', newDetails);
+      return newDetails;
+    });
+  };
+
+  const handleCarChange = (id, value) => {
+    console.log(`Updating ${id} with value: ${value}`);
+    setCarDetails(prevDetails => {
+      let newDetails = { ...prevDetails };
+
+      // Check if the id is 'media'
+      if (id === 'media') {
+        // Initialize the 'media' array if it doesn't exist
+        //  if (!newDetails.media) {
+        //    newDetails.media = [];
+        //  }
+        // Push the value into the 'media' array
+        newDetails.media.push(value);
+      } else {
+        // For other ids, just set the value directly
+        newDetails[id] = value;
+      }
+
       console.log('New state:', newDetails);
       return newDetails;
     });
@@ -391,7 +391,7 @@ const AddNewEntities = () => {
     if (!limitedCompanies?.length) {
       dispatch(getLimitedCompanies())
     }
-  }, [limitedCompanies,cars,companies])
+  }, [dispatch,limitedCompanies, cars, companies])
   console.log(companies);
   console.log(cars);
   const fileInputRef = useRef(null);
@@ -430,6 +430,14 @@ const AddNewEntities = () => {
                 }}>
                   <div id='Title'>Recently Added Cars</div>
                   <Button onClick={() => {
+                    setCarDetails(prevDetails => {
+                      const newDetails = {
+                        ...prevDetails,
+                        "media": []
+                      };
+                      console.log('New state:', newDetails);
+                      return newDetails;
+                    });
                     openModal()
                   }} style={{
                     display: "flex",
@@ -450,7 +458,7 @@ const AddNewEntities = () => {
                         borderRadius: "10px",
                         backgroundColor: "#f8f9fa",
                         height: "5rem",
-                        width:"30rem",
+                        width: "20rem",
                         padding: "1rem",
                         marginBottom: "1rem",
                         display: 'flex',
@@ -487,6 +495,7 @@ const AddNewEntities = () => {
                     marginTop: "5rem",
                     gap: "1rem"
                   }} flush>
+                    {console.log(companies)}
                     {companies?.map((item, index) => (
                       <ListGroupItem key={index} style={{
                         borderStyle: "solid",
@@ -495,7 +504,7 @@ const AddNewEntities = () => {
                         borderRadius: "10px",
                         backgroundColor: "#f8f9fa",
                         height: "5rem",
-                        width:"30rem",
+                        width: "20rem",
                         padding: "1rem",
                         marginBottom: "1rem",
                         display: 'flex',
@@ -508,8 +517,8 @@ const AddNewEntities = () => {
                         {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                         {/* <img src={null} alt={`Image`} style={{ width: '2rem', height: '1rem', marginRight: '10px' }} /> */}
                         <div>
-                          <p style={{ fontSize: '18px', color: '#30416B' }}>{item.model}{item.brand}</p>
-                          <p style={{ fontSize: '14px', color: '#30416B' }}>{item.Owner}</p>
+                          <p style={{ fontSize: '18px', color: '#30416B' }}>{item.userName}</p>
+                          <p style={{ fontSize: '14px', color: '#30416B' }}>{item.email}</p>
                         </div>
                         {/* </div> */}
                       </ListGroupItem>
@@ -520,7 +529,7 @@ const AddNewEntities = () => {
             </Card>
           </Col>
         </Row>
-      </div>
+      </div >
       <ToastContainer />
       <Modal
         isOpen={modalIsOpen}
@@ -537,8 +546,9 @@ const AddNewEntities = () => {
             padding: 0,
             cursor: "pointer",
           }} onClick={() => document.getElementById('imageInput').click()}>
-            {carDetails.media ? (
+            {carDetails.media.length > 0 ? (
               <>
+                {console.log(carDetails.media)}
                 <img src={carDetails.media} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
                 {/* <div className="image-preview-text">Image selected</div> */}
               </>
@@ -767,9 +777,9 @@ const AddNewEntities = () => {
                     { label: "4 Seats", value: 4 },
                     { label: "5 Seats", value: 5 },
                     { label: "15 Seats", value: 15 },
-                   ]
-                   
-                   }
+                  ]
+
+                  }
                   onChange={(selectedOption) => handleCarChange("peopleCount", selectedOption.value)}
                   menuportaltarget={document.body}
                   styles={{
@@ -834,7 +844,7 @@ const AddNewEntities = () => {
             padding: 0,
             cursor: "pointer",
           }} onClick={() => document.getElementById('imageInput').click()}>
-            {carDetails.media ? (
+            {companyDetails.avatar ? (
               <>
                 <img src={carDetails.media} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
                 {/* <div className="image-preview-text">Image selected</div> */}

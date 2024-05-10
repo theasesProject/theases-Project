@@ -33,7 +33,7 @@ const OtpVerificationEmail = () => {
   
       try {
         const response = await axios.post(
-          `http://192.168.1.102:5000/api/users/verificationAccount`,
+          `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/verificationAccount`,
           {
             email,
             otpCode: enteredCode,

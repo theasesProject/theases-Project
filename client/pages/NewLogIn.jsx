@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -27,6 +28,7 @@ const NewLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -64,7 +66,8 @@ const NewLogin = () => {
   };
 
   const submitLogin = async () => {
-    if (!emailError && !passwordError) {
+    if (!emailError && !passwordError && email && password) {
+      setLoading(true);
       try {
         const response = await axios.post(
           `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/emailLogin`,
@@ -73,26 +76,73 @@ const NewLogin = () => {
             password: password,
           }
         );
-
+  
         if (response.status === 200 && response.data.result && response.data.result.id) {
           const { id, token } = response.data.result;
-
+  
           await AsyncStorage.setItem("userId", id.toString());
           await AsyncStorage.setItem("token", token);
-
+  
           navigation.navigate("NewHome");
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Welcome, you are successfully logged in',
+          });
         }
       } catch (error) {
-        if (error.response && error.response.status === 422) {
-          console.log("422", error);
+        if (error.response) {
+          if (error.response.status === 422) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Invalid email or password',
+            });
+          } else if (error.response.status === 404) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found',
+            });
+          } else if (error.response.status === 403 && error.response.data.error === "Account not verified. Please verify your email address") {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Account not verified. Please verify your email address',
+            });
+          } else if (error.response.status === 403) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Account is blocked or archived',
+            });
+          } else if (error.response.status === 500) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Internal server error',
+            });
+          }
         } else {
-          console.error("Error registering user:", error);
+          console.error("Error logging in:", error);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'An error occurred, please try again later',
+          });
         }
+      } finally {
+        setLoading(false);
       }
     } else {
-      console.log("Verify email and password");
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a valid email and password',
+      });
     }
   };
+  
 
   return (
     <View>
@@ -124,35 +174,35 @@ const NewLogin = () => {
                     keyboardType="email-address"
                   />
                   {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-                  <View
-                  style={styles.contPassEyeShow}
-                  >
-
-                  <TextInput
-                    style={[styles.FirstInputPass, passwordError ? styles.errorInput : null]}
-                    placeholder="Type Your Password"
-                    placeholderTextColor={"#cccccc"}
-                    secureTextEntry={!showPassword}
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeIconContainer}
-                    onPress={togglePasswordVisibility}
+                  <View style={styles.contPassEyeShow}>
+                    <TextInput
+                      style={[styles.FirstInputPass, passwordError ? styles.errorInput : null]}
+                      placeholder="Type Your Password"
+                      placeholderTextColor={"#cccccc"}
+                      secureTextEntry={!showPassword}
+                      onChangeText={(text) => setPassword(text)}
+                      value={password}
+                    />
+                    <TouchableOpacity
+                      style={styles.eyeIconContainer}
+                      onPress={togglePasswordVisibility}
                     >
-                    <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#cccccc" />
-                  </TouchableOpacity>
+                      <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#cccccc" />
+                    </TouchableOpacity>
                   </View>
-                    {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+                  {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
                 </View>
                 <View style={styles.resendContainer}>
                   <TouchableOpacity style={styles.resendBtnContainer} onPress={()=>navigation.navigate("EmailAccount")}>
                     <Text style={styles.resendText}>Forgot password</Text>
                   </TouchableOpacity>
                 </View>
-             
-                <Pressable style={styles.btnSignIn} onPress={submitLogin}>
-                  <Text style={styles.textSignIn}>Login</Text>
+                <Pressable style={styles.btnSignIn} onPress={submitLogin} disabled={loading}>
+                  {loading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text style={styles.textSignIn}>Login</Text>
+                  )}
                 </Pressable>
               </View>
             </View>
@@ -207,6 +257,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     position: "relative",
   },
+  contPassEyeShow: {
+    flexDirection: "row",
+    position: "relative",
+  },
   eyeIconContainer: {
     position: "absolute",
     top: "50%",
@@ -244,7 +298,6 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     width:"100%",
     paddingBottom:30,
-    
   },
   resendCodeText:{
     color: "gray",
@@ -253,7 +306,6 @@ const styles = StyleSheet.create({
     color: "white",
     paddingLeft: 5,
     textDecorationLine: 'underline', 
-
   },
   resendBtnContainer:{
     justifyContent: "center",

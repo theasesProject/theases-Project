@@ -256,7 +256,7 @@ module.exports = {
         return res.status(404).json({ error: "User not found" });
       }
       const isMatch = await bcrypt.compare(password, userValid.password);
-      if ((!isMatch && userValid.isBlocked) || userValid.isArchived) {
+      if ((isMatch && userValid.isBlocked) || userValid.isArchived) {
         return res.status(403).json({
           error: "Account is blocked or archived",
         });
@@ -713,5 +713,28 @@ module.exports = {
       res.status(500).json({ error: "Internal server error" });
     }
   },
+  // deconnection: async (req, res) => {
+  //   const { token } = req.body;
   
+  //   try {
+  //     const verifyToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  
+  //     const tokens = await Token.findAll({ where: { UserId: verifyToken.id, token: token } });
+  
+  //     if (tokens.length > 0) {
+  //       await Token.destroy({ where: { UserId: verifyToken.id, token: token } });
+  //       res.status(200).json({ status: 200, message: 'Token successfully deleted' });
+  //     } else {
+  //       res.status(404).json({ error: 'Token not found' });
+  //     }
+  //   } catch (error) {
+  //     if (error.name === 'JsonWebTokenError') {
+  //       res.status(403).json({ error: 'Invalid token' });
+  //     } else {
+  //       console.error("Error during deconnection:", error);
+  //       res.status(500).json({ error: "Internal server error" });
+  //     }
+  //   }
+  // };
+
 };

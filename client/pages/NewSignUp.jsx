@@ -44,8 +44,12 @@ const NewSignUp = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [Ratio, setRatio] = useState(0);
   const [isCameraVisible, setIsCameraVisible] = useState(false);
-  const [type, setType] = useState("");
-  const [typeSelfie, setTypeSelfie] = useState("");
+  // const [type, setType] = useState("");
+  // const [typeSelfie, setTypeSelfie] = useState("");
+  const [type, setType] = useState(CameraPermissions.CameraType.back);
+  const [typeSelfie, setTypeSelfie] = useState(
+    CameraPermissions.CameraType.front
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const [Document, setDocument] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);

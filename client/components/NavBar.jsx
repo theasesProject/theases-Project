@@ -31,8 +31,8 @@ const NavTab = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.tab} onPress={() => handlePress('NewHome')}>
-        <Icon name="home" size={20} color={route.name === 'Home' ? '#8c52ff' : '#bdbdbd'} />
-        {route.name === 'Home' && <Text style={[styles.tabText, { color: '#8c52ff' }]}>Home</Text>}
+        <Icon name="home" size={20} color={route.name === 'NewHome' ? '#8c52ff' : '#bdbdbd'} />
+        {route.name === 'NewHome' && <Text style={[styles.tabText, { color: '#8c52ff' }]}>Home</Text>}
       </TouchableOpacity>
       <TouchableOpacity style={styles.tab} onPress={() => handlePress('Search')}>
         <Icon name="search" size={20} color={route.name === 'Search' ? '#8c52ff' : '#bdbdbd'} />

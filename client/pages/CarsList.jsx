@@ -5,13 +5,19 @@ const { height, width } = Dimensions.get("screen");
 import { useNavigation, useRoute } from '@react-navigation/native';
 import CarCard from '../components/CarCard';
 import FilterButtons from '../components/FilterButtons';
-
+import moment from 'moment';
 const CarsList = () => {
   const route = useRoute();
-  const { filteredCars,markedDates } = route.params;
+  const { filteredCars,markedDates,location,body } = route.params;
+  console.log(body)
+  
 
+  const formattedStartDate = moment(body.startDate).format('DD MMM | HH:mm');
+  const formattedEndDate = moment(body.endDate).format('DD MMM | HH:mm');
 
+  const formattedDates = `${formattedStartDate} - ${formattedEndDate}`;
 
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -22,8 +28,8 @@ const CarsList = () => {
       <View style={{ alignItems: 'center' }}>
         <Pressable style={styles.update}>
           <View>
-            <Text style={styles.location}>Frankfurt Airport</Text>
-            <Text style={styles.date}>27 Apr | 12:00 - 29 Apr | 12:00</Text>
+            <Text style={styles.location}>{location}</Text>
+            <Text style={styles.date}>{formattedDates}</Text>
           </View>
           <Ionicons name="create" size={24} color="black" style={styles.icon} />
         </Pressable>

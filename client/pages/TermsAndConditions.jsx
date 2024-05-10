@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View, Pressable, Dimensions, ScrollView } from 'react-native'
 import React,{useState} from 'react'
 import ArrowBack from '../assets/Svg/blackArrow.svg'
-
+import { useNavigation } from '@react-navigation/native';
 const { height, width } = Dimensions.get("screen");
 
 const TermsAndConditions = () => {
+  const navigation = useNavigation()
+
   const [isButtonEnabled, setButtonEnabled] = useState(false);
 
   const handleScroll = (event) => {
@@ -67,9 +69,9 @@ const TermsAndConditions = () => {
       <View style={styles.footer}>
         <View style={styles.optionWrapper}>
           <Text style={styles.optionsTitle}>Total</Text>
-          <Text style={styles.optionsTitle}>360 DT</Text>
+          <Text style={styles.optionsTitle}>1750 DT</Text>
         </View>
-        <Pressable style={[styles.find, { backgroundColor: isButtonEnabled ? 'black' : 'grey' }]} disabled={!isButtonEnabled}>
+        <Pressable style={[styles.find, { backgroundColor: isButtonEnabled ? 'black' : 'grey' }]} disabled={!isButtonEnabled} onPress={()=>navigation.navigate('ReviewAndBook')}>
           <Text style={styles.textButton}>Accept and Continue</Text>
         </Pressable>
       </View>

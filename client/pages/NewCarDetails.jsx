@@ -10,14 +10,18 @@ import BlackGear from '../assets/Svg/blackGear.svg'
 import Options from '../components/Options';
 import Options2 from '../components/Options2';
 import Checkbox from '../components/CheckBox';
+import { useNavigation } from '@react-navigation/native';
 
 const NewCarDetails = ({route}) => {
+    const navigation = useNavigation()
     const car = route.params.car
+    const total = route.params.totalPrice
 
+console.log('lel details',total)
   return (
     <View style={{flexGrow:1}}>
     <ScrollView contentContainerStyle={styles.container}>
-      <ImageBackground resizeMode='cover' style={styles.bg} source={{ uri: car.Media[0]?.media }}>
+      <ImageBackground resizeMode='cover' style={styles.bg} source={require('../assets/5.png')}>
         <Pressable style={styles.arrowContainer}>
       <ArrowBack />
       </Pressable>
@@ -35,11 +39,11 @@ const NewCarDetails = ({route}) => {
         <View style={styles.rowOne}>
         <View style={styles.section}>
         <Ionicons name="people" size={24} color="black" style={styles.icon} />
-        <Text style={styles.text}>{car.numberPeople} people</Text>
+        <Text style={styles.text}>{car.peopleCount} People</Text>
         </View>
         <View style={styles.section}>
         <CarDoor/>
-        <Text style={styles.text}>{car.numberDoors} doors</Text>
+        <Text style={styles.text}>{car.DoorNumber} Doors</Text>
         </View>
         
         </View>
@@ -47,11 +51,11 @@ const NewCarDetails = ({route}) => {
         <View style={styles.rowOne}>
         <View style={styles.section}>
         <Bag/>
-        <Text style={styles.text}>{car.numberBags} bags</Text>
+        <Text style={styles.text}>{car.Capacity} Bags</Text>
         </View>
         <View style={styles.section}>
         <BlackGear/>
-        <Text style={styles.text}>{car.characteristics}</Text>
+        <Text style={styles.text}>{car.Type}</Text>
         </View>
         
         </View>
@@ -73,10 +77,10 @@ const NewCarDetails = ({route}) => {
         </View>
         <View style={styles.optionWrapper}>
         <Text style={styles.optionsTitle}>Total</Text>
-        <Text style={styles.optionsTitle}>360 DT</Text>
+        <Text style={styles.optionsTitle}>{total} DT</Text>
         </View>
         <View style={{alignItems:'center',paddingBottom:height*0.025}}>
-        <TouchableOpacity style={styles.find}>
+        <TouchableOpacity style={styles.find} onPress={()=>navigation.navigate("TermsAndConditions")}>
               <Text style={styles.textButton}>Continue</Text>
             </TouchableOpacity>
             </View>

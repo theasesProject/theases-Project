@@ -3,10 +3,22 @@ import { View, StyleSheet, Text, Pressable, Dimensions, ScrollView, Image, Image
 import { Ionicons } from '@expo/vector-icons';
 import NavTab from '../components/NavBar';
 import ArrowBack from '../assets/Svg/goBack.svg';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
 
 const { height, width } = Dimensions.get("screen");
 
 const NewProfile = () => {
+  const navigation = useNavigation()
+  
+
+  const handleLogOut=async()=>{
+    await AsyncStorage.removeItem("userId");
+    await AsyncStorage.removeItem("token");
+    navigation.navigate('Welcome')
+  }
+
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -22,15 +34,15 @@ const NewProfile = () => {
         </ImageBackground>
         <Text style={styles.information}>Personal Information</Text>
         <View style={styles.container}>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={()=>navigation.navigate('BookingHistory')}>
             <Ionicons name="calendar" size={25} color="black" />
             <Text style={styles.titleIcon}>Bookings</Text>
           </Pressable>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={()=>navigation.navigate('MyInformation')}>
             <Ionicons name="person" size={25} color="black" />
             <Text style={styles.titleIcon}>My Information</Text>
           </Pressable>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={handleLogOut}>
             <Ionicons name="log-out" size={25} color="black" />
             <Text style={styles.titleIcon}>Logout</Text>
           </Pressable>
@@ -38,7 +50,7 @@ const NewProfile = () => {
 
         <Text style={styles.information}>Support</Text>
         <View style={styles.container}>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={()=>navigation.navigate('FAQS')}>
             <Ionicons name="help-circle" size={25} color="black" />
             <Text style={styles.titleIcon}>FAQs</Text>
           </Pressable>

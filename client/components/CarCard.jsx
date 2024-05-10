@@ -24,13 +24,13 @@ const CarCard = ({car,markedDates}) => {
       console.log(totalPrice)
 
       const handlePress = () => {
-        navigation.navigate('NewCarDetails', { car:car, markedDates });
+        navigation.navigate('NewCarDetails', { car:car, markedDates,totalPrice });
       };
 
   return (
     <Pressable style={styles.cardContianer} onPress={handlePress}>
-      <ImageBackground style={styles.bg} resizeMode='stretch' source={{ uri: car?.Media[0]?.media }}>
-        <View style={styles.content}>
+      <ImageBackground style={styles.bg} resizeMode='stretch' source={require('../assets/5.png')}>
+      <View style={styles.content}>
             <View style={styles.titleWrapper}>
         <Text style={styles.title}>{car.brand} {car.model}</Text>
         <Text style={styles.titleDetails}>or similar | convertible</Text>
@@ -38,19 +38,19 @@ const CarCard = ({car,markedDates}) => {
         <View style={styles.iconsRow}>
         <View style={styles.firstRow}>
         <Ionicons name="person" size={15} color="white" style={styles.icon} />   
-        <Text style={styles.details}>{car?.numberPeople}</Text>
+        <Text style={styles.details}>{car?.peopleCount}</Text>
         </View>
         <View style={styles.firstRow}>
         <GearIcon/>
-        <Text style={styles.details}>{car?.characteristics}</Text>
+        <Text style={styles.details}>{car?.Type}</Text>
         </View>
         <View style={styles.firstRow}>
         <CarDoor/>
  
-        <Text style={styles.details}>{car?.numberDoors}</Text>
+        <Text style={styles.details}>{car?.DoorNumber}</Text>
         </View>
         </View>
-        </View>
+        </View> 
         <View style={styles.cardFooter}>
             <View style={styles.secondRow}>
                 <Tick/>

@@ -143,7 +143,7 @@ const ReviewAndBook = () => {
   <View style={styles.footer}>
   <View style={styles.optionWrapper}>
           <Text style={styles.optionsTitle}>Total</Text>
-          <Text style={styles.optionsTitle}>360 DT</Text>
+          <Text style={styles.optionsTitle}>1750 DT</Text>
         </View>
         <Text style={styles.important}>
           IMPORTANT INFORMATION about your PREPAID reservation:

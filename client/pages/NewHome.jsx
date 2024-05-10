@@ -28,6 +28,7 @@ const NewHome = () => {
   const [loading, setLoading] = useState('')
   const [locationModalVisible, setLocationModalVisible] = useState(false)
   const [location, setLocation] = useState('')
+  const [locationExists, setLocationExists] = useState(true); // New state variable
   const [predictions, setPredictions] = useState([])
   const [isFocused, setIsFocused] = useState(false);
   const [returnModalVisible, setReturnModalVisible] = useState(false);
@@ -78,10 +79,12 @@ const NewHome = () => {
       justifyContent: 'flex-start',
       alignItems: 'center',
       width: width * 1,
-      gap: -90
+      // gap:-500
     },
     filterCardWrapper: {
       flex: 1,
+      position:'absolute',
+      bottom:30,
       alignItems: 'center',
       justifyContent: 'center',
       ...Platform.select({
@@ -292,6 +295,11 @@ const NewHome = () => {
       fontWeight: '500',
       marginLeft: 10,
     },
+    errorText: {
+      color: 'red',
+      fontSize: 12,
+      paddingHorizontal:width*0.065
+    },
   });
 
   const disablePastDates = () => {
@@ -363,7 +371,7 @@ const NewHome = () => {
       };
       const filteredCars = await dispatch(getAllCarByDate(body));
       console.log('Filtered Cars:', filteredCars.payload);
-      navigation.navigate('CarsList', { filteredCars: filteredCars.payload, markedDates: markedDates });
+      navigation.navigate('CarsList', { filteredCars: filteredCars.payload, markedDates: markedDates,location:location,body});
     } catch (error) {
       console.error(error);
     } finally {
@@ -373,6 +381,10 @@ const NewHome = () => {
 
 
   const handleFindCars = () => {
+    if (!location) {
+      setLocationExists(false); // Update locationExists state if location is not specified
+      return;
+    }
     fetchAvailableCars();
   };
 
@@ -405,9 +417,9 @@ const NewHome = () => {
 
   const handlePredictionPress = (item) => {
     console.log('Selected Location:', item);
-    // if (!location) {
+  
       setLocation(item.description)
-    // }
+      setLocationExists(true)
     setPredictions([])
     setLocationModalVisible(false)
   };
@@ -423,9 +435,9 @@ const NewHome = () => {
   
   const handleReturnPredictionPress = (item) => {
     console.log('Selected Return Location:', item);
-    // if (!returnLocation) {
+
     setReturnLocation(item.description);
-    // }
+    
     setReturnPredictions([]);
     setReturnModalVisible(false);
   };
@@ -486,23 +498,30 @@ const NewHome = () => {
               <Text style={styles.firstText}>Different return station</Text>
               <ToggleSwitch isEnabled={showAdditionalRow} onToggle={setShowAdditionalRow} />
             </View>
-
-            <Pressable style={styles.secondRow} onPress={() => {setLocationModalVisible(true)
-              setPredictions([])
-            }
+            <View style={{
+              gap:-12
+            }}>
+            <Pressable
+        style={styles.secondRow}
+        onPress={() => {
+          setLocationModalVisible(true);
+          setPredictions([]);
+        }}
+      >
+        <Ionicons name="car-outline" size={25} color="grey" />
+        {location ? (
+          <Text style={styles.firstText}>{location}</Text>
+        ) : (
+          <TextInput
+            style={[styles.additionalText, { color: 'grey' }]}
+            editable={false}
+            placeholder="Choose Pick-up Station"
+          />
+        )}
+      </Pressable>
+      {!locationExists && <Text style={styles.errorText}>You should specify a pickup location</Text>}
+      </View>
             
-            }>
-              <Ionicons name="car-outline" size={25} color="grey" />
-              {location ? (
-                <Text style={styles.firstText}>{location}</Text>
-              ) : (
-                <TextInput
-                  style={[styles.additionalText, { color: 'grey' }]}
-                  editable={false}
-                  placeholder="Choose Pick-up Station"
-                />
-              )}
-            </Pressable>
             {showAdditionalRow && (
               <Pressable style={styles.additionalRow} onPress={()=>{setReturnModalVisible(true)}}>
                 <Ionicons name="add" size={20} color="grey" />
@@ -583,6 +602,7 @@ const NewHome = () => {
               onChangeText={handleChangeText}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
+              autoFocus={true}
             />
             {location !== '' && (
               <TouchableOpacity
@@ -645,10 +665,10 @@ const NewHome = () => {
             <TextInput
               style={styles.searchInput}
               placeholder="Search..."
-              // value={returnLocation}
               onChangeText={handleReturnChangeText}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
+              autoFocus={true}
             />
             {returnLocation !== '' && (
               <TouchableOpacity

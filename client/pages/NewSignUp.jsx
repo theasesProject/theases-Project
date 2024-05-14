@@ -19,6 +19,7 @@ import {
   Alert,
   Linking,
   Image as RNImage,
+  ActivityIndicator
 } from "react-native";
 
 import { showToast } from "./../Helpers.js";
@@ -36,6 +37,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { SignUpClick } from "../store/userSlice";
 import { useNavigation } from "@react-navigation/native";
 import appConfig from "../appConfig.js";
+import { saveEmailForgot,savePasswordUser } from "../store/userSlice";
+import Toast from "react-native-toast-message";
+
 // import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons,MaterialIcons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("screen");
@@ -54,6 +58,7 @@ const NewSignUp = () => {
   const [Document, setDocument] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);
   const [portait, setPortrait] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [userDetails, setUserDetails] = useState({
     name: "aymen",
@@ -79,6 +84,69 @@ const NewSignUp = () => {
   const [capturedImage, setCapturedImage] = useState("");
   const [showImage, setShowImage] = useState(false);
 
+  const userEmail = (value) => {
+    dispatch(saveEmailForgot(value));
+  };
+  const userPassword = (value) => {
+    dispatch(savePasswordUser(value));
+  };
+  const otpVerifSend = async () => {
+    if (userDetails.email) {
+      try {
+        setLoading(true); 
+        const response = await axios.post(
+          `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/sendVerificationEmail`,
+          { email:userDetails.email }
+        );
+
+        if (response.status === 200) {
+          console.log("Successfully OTP Verified")
+        
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Code sent successfully',
+          });
+        }
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("User not found");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found',
+            });
+          } else if (error.response.status === 500) {
+            console.log("Failed to send email");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Failed to send email',
+            });
+          } else {
+            console.log("Other error:", error);
+          }
+        } else {
+          console.error("Network error:", error);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Network error',
+          });
+        }
+      } finally {
+        setLoading(false); 
+      }
+    } else {
+      console.log("Please enter a valid email");
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a valid email',
+      });
+    }
+  };
   useEffect(() => {
     const handleCameraPermission = async () => {
       const { status } =
@@ -126,6 +194,8 @@ const NewSignUp = () => {
   }, []);
 
   const SignUpHandle = async () => {
+    setLoading(true); // Start loader
+  
     try {
       const response = await axios.post(
         `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/SignUpUser`,
@@ -142,24 +212,55 @@ const NewSignUp = () => {
           passport: picsDetail.passport,
         }
       );
-
+  
       if (response.status === 201) {
-        // showToast("Success","Success","Registration Successfully done 😃!")
-
-        console.log("successfully registered");
-        navigation.navigate("OtpVerification");
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Registration Successfully done 😃!',
+        });
+        console.log("Successfully registered");
+        await userEmail(userDetails.email);
+        await userPassword(userDetails.password);
+        await otpVerifSend();
+        await navigation.navigate("OtpVerification");
       }
-      console.log("dddd", response);
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-        // setToastMessage("Email is already registered. Please use a different emailll.");
-        // setShowToast(!showToast)
-        console.log("422", error);
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 409) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: error.response.data.error || 'Conflict occurred. Please try again.',
+          });
+        } else if (status === 422) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: error.response.data.error || 'Validation error. Please check your input.',
+          });
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'An unexpected error occurred. Please try again.',
+          });
+        }
+        // console.error("Error registering user:", error.response.data.error);
       } else {
-        console.error("Error registering user:", error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Network error. Please try again.',
+        });
+        // console.error("Network error:", error);
       }
+    } finally {
+      setLoading(false)
     }
   };
+  
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -712,6 +813,11 @@ const NewSignUp = () => {
               </View>
             </Pressable>
           )}
+          {loading && ( 
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        )}
         </LinearGradient>
       )}
    
@@ -753,7 +859,9 @@ const NewSignUp = () => {
           />
         </TouchableOpacity>
       </View>
+       
     </View>
+   
 </View>
   )}
 
@@ -895,6 +1003,16 @@ const styles = StyleSheet.create({
     top: 20,
     right: 20,
     zIndex: 1,
+  },
+  loader: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
 });
 

@@ -7,70 +7,245 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Feather,SimpleLineIcons } from '@expo/vector-icons';const { width, height } = Dimensions.get("screen");
+import { Feather, SimpleLineIcons } from '@expo/vector-icons';
+const { width, height } = Dimensions.get("screen");
 import axios from "axios"
 import appConfig from "../appConfig";
-const OtpVerificationEmail = () => {
+import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
+import { saveEmailForgot,savePasswordUser } from "../store/userSlice";
+import {LoginContext} from "../context/AuthContext.jsx"
+
+const OtpVerificationFromEmail = () => {
   const navigation = useNavigation();
   const codeInputRefs = useRef([]);
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [codeError, setCodeError] = useState("");
-  const [email, setEmail] = useState("makhloufaymen.fr@gmail.com");
+  // const [email, setEmail] = useState("makhloufaymen.fr@gmail.com");
+  const [loading, setLoading] = useState(false); 
+  const { logindata, setLoginData } = useContext(LoginContext);
 
-  const handleCodeChange = async (text, index) => {
-    const newCode = [...code];
-    newCode[index] = text;
-    setCode(newCode);
-  
-    const isCodeComplete = newCode.every((item) => item !== "");
-    if (isCodeComplete) {
-      const enteredCode = newCode.join("");
-  
+  const dispatch = useDispatch();
+
+  const userEmail = (value) => {
+    dispatch(saveEmailForgot(value));
+  };
+  const userPassword = (value) => {
+    dispatch(savePasswordUser(value));
+  };
+  const email = useSelector((state) => state.user?.emailForget);
+  const password = useSelector((state) => state.user?.passwordUser);
+  const submitLogin = async () => {
+    if ( email && password) {
+      setLoading(true);
       try {
         const response = await axios.post(
-          `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/verificationAccount`,
+          `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/emailLogin`,
           {
-            email,
-            otpCode: enteredCode,
+            email: email,
+            password: password,
           }
         );
   
-        if (response.status === 404) {
-          console.log("User not found");
-          setCode(["", "", "", "", "", ""]);
-          codeInputRefs.current[0]?.focus();
-
-
-        } else if (response.status === 400) {
-          console.log("Incorrect OTP code");
-          setCode(["", "", "", "", "", ""]);
-          codeInputRefs.current[0]?.focus();
-
-
-        } else if (response.status === 200) {
-          console.log("Your account verified successfully");
-          setCode(["", "", "", "", "", ""]);
-          codeInputRefs.current[0]?.focus();
-
-
+        if (response.status === 200 && response.data.result && response.data.result.id) {
+          const { id, token } = response.data.result;
+         await userEmail("")
+          await userPassword("")
+  
+          await AsyncStorage.setItem("userId", id.toString());
+          await AsyncStorage.setItem("token", token);
+          await setLoginData(true)
+        await  navigation.navigate("NewHome");
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Welcome, you are successfully logged in',
+          });
         }
-        console.log("Code Verification done!");
       } catch (error) {
-        console.error("Error during code verification:", error);
-        setCode(["", "", "", "", "", ""]);
-        codeInputRefs.current[0]?.focus();
+        if (error.response) {
+          if (error.response.status === 422) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Invalid email or password',
+            });
+          } else if (error.response.status === 404) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found',
+            });
+          } else if (error.response.status === 403 && error.response.data.error === "Account not verified. Please verify your email address") {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Account not verified. Please verify your email address',
+            });
+            await userEmail(email)
 
+            await otpVerifSend()
+            await navigation.navigate("OtpVerification");
+
+          } else if (error.response.status === 403) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Account is blocked or archived',
+            });
+          } else if (error.response.status === 500) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Internal server error',
+            });
+          }
+        } else {
+          console.error("Error logging in:", error);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'An error occurred, please try again later',
+          });
+        }
+      } finally {
+        setLoading(false);
       }
-    } else if (text !== "") {
-      codeInputRefs.current[index + 1]?.focus();
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a valid email and password',
+      });
     }
   };
+  const handleCodeChange = async (text, index) => {
+      const newCode = [...code];
+      newCode[index] = text;
+      setCode(newCode);
   
+      const isCodeComplete = newCode.every((item) => item !== "");
+      if (isCodeComplete) {
+        const enteredCode = newCode.join("");
+  
+        try {
+          setLoading(true);
+          const response = await axios.post(
+            `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/verificationAccount`,
+            {
+              email,
+              otpCode: enteredCode,
+            }
+          );
+  
+          if (response.status === 200) {
+            console.log("Your code is correct ");
+            setCode(["", "", "", "", "", ""]);
+            codeInputRefs.current[0]?.focus();
+            userEmail("")
+            Toast.show({
+              type: 'success',
+              text1: 'Success',
+              text2: 'Your email is verified ',
+            });
+            await submitLogin()
+        
+          }
+        } catch (error) {
+          if (error.response) {
+            if (error.response.status === 404) {
+              console.log("User not found");
+              setCode(["", "", "", "", "", ""]);
+              Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'User not found',
+              });
+              codeInputRefs.current[0]?.focus();
+            } else if (error.response.status === 400) {
+              console.log("Incorrect OTP code");
+              setCode(["", "", "", "", "", ""]);
+              codeInputRefs.current[0]?.focus();
+              Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Incorrect OTP code',
+              });
+            }
+          }
+        } finally {
+          setLoading(false);
+        }
+      } else if (text !== "") {
+        codeInputRefs.current[index + 1]?.focus();
+      }
+    }
+
+  const otpVerifSend = async () => {
+    if (email) {
+      try {
+        setLoading(true); 
+        const response = await axios.post(
+          `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/sendVerificationEmail`,
+          { email }
+        );
+
+        if (response.status === 200) {
+          console.log("Successfully OTP Verified")
+          setCode(["", "", "", "", "", ""]);
+          codeInputRefs.current[0]?.focus();
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Code sent successfully',
+          });
+        }
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("User not found");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found',
+            });
+          } else if (error.response.status === 500) {
+            console.log("Failed to send email");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Failed to send email',
+            });
+          } else {
+            console.log("Other error:", error);
+          }
+        } else {
+          console.error("Network error:", error);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Network error',
+          });
+        }
+      } finally {
+        setLoading(false); 
+      }
+    } else {
+      console.log("Please enter a valid email");
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a valid email',
+      });
+    }
+  };
+
   return (
     <View>
       <LinearGradient
@@ -78,7 +253,6 @@ const OtpVerificationEmail = () => {
         start={{ x: 0, y: 1 }}
         end={{ x: 1, y: 0 }}
         colors={["#321947", "#000000"]}
-        // style={styles.formContainer}
       >
         <ScrollView
           contentContainerStyle={styles.ScrollContainer}
@@ -88,14 +262,12 @@ const OtpVerificationEmail = () => {
             style={{
               alignItems: "center",
               justifyContent: "space-evenly",
-              // backgroundColor:"red",
               height,
             }}
           >
             <View
               style={{
                 height: height * 0.2,
-                // backgroundColor:"green"
               }}
             >
               <Image
@@ -106,7 +278,6 @@ const OtpVerificationEmail = () => {
             <View
               style={{
                 height: height * 0.4,
-                // backgroundColor:"yellow"
               }}
             >
               <View style={styles.container}>
@@ -128,7 +299,7 @@ const OtpVerificationEmail = () => {
                         keyboardType="numeric"
                         maxLength={1}
                         value={code}
-                          onChangeText={(text) => handleCodeChange(text, index)}
+                        onChangeText={(text) => handleCodeChange(text, index)}
                       />
                     ))}
                   </View>
@@ -137,38 +308,40 @@ const OtpVerificationEmail = () => {
                   ) : null}
                 </View>
                 <View style={styles.bigResendContainer}>
-                <View style={styles.resendContainer}>
-                  <Text style={styles.resendCodeText}>Have you not received the verification code?</Text>
-                  <TouchableOpacity style={styles.resendBtnContainer}>
-                    <Text style={styles.resendText}>Resend</Text>
-                    <Feather name="refresh-cw" size={13} color="white" />
+                  <TouchableOpacity style={styles.resendContainer} onPress={otpVerifSend}>
+                    <Text style={styles.resendCodeText}>Have you not received the verification code?</Text>
+                    <View style={styles.resendBtnContainer}>
+                      <Text style={styles.resendText}>Resend</Text>
+                      <Feather name="refresh-cw" size={13} color="gray" />
+                    </View>
                   </TouchableOpacity>
-                </View>
-                <View style={styles.resendContainer}>
-                  {/* <Text style={styles.resendCodeText}>You would to try later?</Text> */}
-                  <TouchableOpacity style={styles.resendBtnContainer} onPress={()=>navigation.navigate("NewHome")}>
-                    <Text style={styles.resendText}>Press here to return to the home page</Text>
-                    <SimpleLineIcons name="home" size={16} color="white" />
-                  </TouchableOpacity>
-                </View>
-
+                  <View style={styles.resendContainer}>
+                    <TouchableOpacity style={styles.resendBtnContainer} onPress={()=>navigation.navigate("NewHome")}>
+                      <Text style={styles.resendTextOne}>Press here to return to the home page</Text>
+                      <SimpleLineIcons name="home" size={10} color="white" />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
           </View>
         </ScrollView>
+        {loading && ( 
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" color="white" />
+        </View>
+      )}
       </LinearGradient>
     </View>
   );
 };
 
-export default OtpVerificationEmail;
+export default OtpVerificationFromEmail;
 
 const styles = StyleSheet.create({
   ScrollContainer: {
     height,
     alignItems: "center",
-    // justifyContent: "space-evenly",
     flexGrow: 1,
   },
   img: {
@@ -236,7 +409,24 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   resendText: {
-    color: "white",
+    color: "gray",
     paddingLeft: 5,
   },
+  resendTextOne: {
+      color: "white",
+      paddingLeft: 5,
+      textDecorationLine: "underline",
+      fontSize: 10,
+      fontWeight: "400",
+    },
+    loader: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
 });

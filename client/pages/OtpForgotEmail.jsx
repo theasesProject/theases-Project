@@ -19,13 +19,14 @@ import axios from "axios";
 import appConfig from "../appConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { saveEmailForgot } from "../store/userSlice";
+import Toast from 'react-native-toast-message'; 
 
 const OtpVerificationEmail = () => {
   const navigation = useNavigation();
   const codeInputRefs = useRef([]);
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [codeError, setCodeError] = useState("");
-  const [loading, setLoading] = useState(false); // Added loading state
+  const [loading, setLoading] = useState(false); 
   const dispatch = useDispatch();
 
   const userEmail = (value) => {
@@ -53,9 +54,14 @@ const OtpVerificationEmail = () => {
         );
 
         if (response.status === 200) {
-          console.log("Your account verified successfully");
+          console.log("Your code is correct ");
           setCode(["", "", "", "", "", ""]);
           codeInputRefs.current[0]?.focus();
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Your code is correct, you can change your password ',
+          });
           navigation.navigate("ChangePassword")
         }
       } catch (error) {
@@ -63,11 +69,21 @@ const OtpVerificationEmail = () => {
           if (error.response.status === 404) {
             console.log("User not found");
             setCode(["", "", "", "", "", ""]);
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found',
+            });
             codeInputRefs.current[0]?.focus();
           } else if (error.response.status === 400) {
             console.log("Incorrect OTP code");
             setCode(["", "", "", "", "", ""]);
             codeInputRefs.current[0]?.focus();
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Incorrect OTP code',
+            });
           }
         }
       } finally {
@@ -89,25 +105,51 @@ const OtpVerificationEmail = () => {
 
         if (response.status === 200) {
           console.log("Successfully OTP Verified")
-
+          setCode(["", "", "", "", "", ""]);
+          codeInputRefs.current[0]?.focus();
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Code sended successfully',
+          });
         }
       } catch (error) {
         if (error.response) {
           if (error.response.status === 404) {
             console.log("User not found");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found',
+            });
           } else if (error.response.status === 500) {
             console.log("Failed to send email");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Failed to send email',
+            });
           } else {
             console.log("Other error:", error);
           }
         } else {
           console.error("Network error:", error);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Network error',
+          });
         }
       } finally {
         setLoading(false);
       }
     } else {
       console.log("Please enter a valid email");
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a valid email',
+      });
     }
   };
 
@@ -176,16 +218,16 @@ const OtpVerificationEmail = () => {
                     <Text style={styles.errorText}>{codeError}</Text>
                   ) : null}
                 </View>
-                <View style={styles.bigResendContainer}>
-                  <View style={styles.resendContainer}>
+                <View style={styles.bigResendContainer} >
+                  <TouchableOpacity style={styles.resendContainer} onPress={otpForgetSend}>
                     <Text style={styles.resendCodeText}>
                       Have you not received the verification code?
                     </Text>
-                    <TouchableOpacity style={styles.resendBtnContainer} onPress={otpForgetSend}>
-                      <Text style={styles.resendText}>Resend</Text>
-                      <Feather name="refresh-cw" size={13} color="white" />
-                    </TouchableOpacity>
-                  </View>
+                    <View style={styles.resendBtnContainer} >
+                      <Text style={styles.resendTextOne}>Resend</Text>
+                      <Feather name="refresh-cw" size={13} color="gray" />
+                    </View>
+                  </TouchableOpacity>
                   <View style={styles.resendContainer}>
                     {/* <Text style={styles.resendCodeText}>You would to try later?</Text> */}
                     <TouchableOpacity
@@ -207,7 +249,7 @@ const OtpVerificationEmail = () => {
             </View>
           </View>
         </ScrollView>
-        {loading && ( // Added activity indicator loader
+        {loading && ( 
           <View style={styles.loader}>
             <ActivityIndicator size="large" color="white" />
           </View>
@@ -293,6 +335,9 @@ const styles = StyleSheet.create({
   resendText: {
     color: "white",
     paddingLeft: 5,
+    textDecorationLine: "underline",
+    fontSize: 10,
+    fontWeight: "400",
   },
   loader: {
     position: "absolute",
@@ -303,5 +348,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  resendTextOne: {
+    color: "grey",
+    paddingLeft: 5,
+    textDecorationLine: "underline",
   },
 });

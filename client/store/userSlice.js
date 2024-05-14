@@ -11,7 +11,8 @@ const initialState = {
   error: null,
   reporter: {},
   oneUser: [{}],
-  emailForget:""
+  emailForget:"",
+  passwordUser:""
 
 };
 
@@ -148,6 +149,9 @@ const userSlice = createSlice({
     saveEmailForgot:(state,action)=>{
       state.emailForget=action.payload
     },
+    savePasswordUser:(state,action)=>{
+      state.passwordUser=action.payload
+    },
     // Add a logout action that resets the user state
     logoutUser: (state) => {
       state.status = "idle";
@@ -211,4 +215,4 @@ export const logStatus = (state) => state.user.loggedIn;
 
 export const OneUserbid = (state) => state.agency.oneUser;
 export { fetchUser };
-export const { logoutUser, setUser, saveEmailForgot} = userSlice.actions;
+export const { logoutUser, setUser, saveEmailForgot,savePasswordUser} = userSlice.actions;

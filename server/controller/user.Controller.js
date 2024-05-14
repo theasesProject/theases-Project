@@ -713,28 +713,45 @@ module.exports = {
       res.status(500).json({ error: "Internal server error" });
     }
   },
-  // deconnection: async (req, res) => {
-  //   const { token } = req.body;
+  deconnection: async (req, res) => {
+    const { token } = req.body;
   
-  //   try {
-  //     const verifyToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    try {
+      const verifyToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      // console.log(verifyToken.id,"This is token");
   
-  //     const tokens = await Token.findAll({ where: { UserId: verifyToken.id, token: token } });
+      const tokens = await Token.findAll({ where: { UserId: verifyToken.id, token: token } });
   
-  //     if (tokens.length > 0) {
-  //       await Token.destroy({ where: { UserId: verifyToken.id, token: token } });
-  //       res.status(200).json({ status: 200, message: 'Token successfully deleted' });
-  //     } else {
-  //       res.status(404).json({ error: 'Token not found' });
-  //     }
-  //   } catch (error) {
-  //     if (error.name === 'JsonWebTokenError') {
-  //       res.status(403).json({ error: 'Invalid token' });
-  //     } else {
-  //       console.error("Error during deconnection:", error);
-  //       res.status(500).json({ error: "Internal server error" });
-  //     }
-  //   }
-  // };
+      if (tokens.length > 0) {
+        await Token.destroy({ where: { UserId: verifyToken.id, token: token } });
+        res.status(200).json({ status: 200, message: 'Token successfully deleted' });
+      } else {
+        res.status(404).json({ error: 'Token not found' });
+      }
+    } catch (error) {
+      if (error.name === 'JsonWebTokenError') {
+        res.status(403).json({ error: 'Invalid token' });
+      } else {
+        console.error("Error during deconnection:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    }
+  },
+  validatorUser: async (req, res) => {
+    const { token } = req.body
+    try {
+      const verifyToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      console.log(verifyToken.id,"This is token");
+
+      const tokens = await Token.findAll({ where: { UserId: verifyToken.id, token: token } });
+      if (tokens.length > 0) {
+        res.status(200).json({ status: 200, message: 'Valid user' });
+      } else {
+        res.status(404).json({ error: 'Token not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
 
 };

@@ -46,25 +46,55 @@ const Emailaccount = () => {
         if (response.status === 200) {
           userEmail();
           navigation.navigate("OtpForgotEmail");
+          Toast.show({
+            type: 'success',
+            text1: 'Code sended',
+            text2: 'Code sended, verify your email',
+          });
           setEmail("");
         }
       } catch (error) {
         if (error.response) {
           if (error.response.status === 404) {
             console.log("User not found");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found',
+            });
           } else if (error.response.status === 500) {
             console.log("Failed to send email");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Failed to send email',
+            });
           } else {
             console.log("Other error:", error);
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Error',
+            });
           }
         } else {
           console.error("Network error:", error);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Network error',
+          });
         }
       } finally {
         setLoading(false);
       }
     } else {
       console.log("Please enter a valid email");
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a valid email',
+      });
     }
   };
 
@@ -138,7 +168,7 @@ const Emailaccount = () => {
                     )}
                   </Pressable>
                   <View style={styles.bigResendContainer}>
-                    <TouchableOpacity style={styles.resendBtnContainer}>
+                    {/* <TouchableOpacity style={styles.resendBtnContainer}>
                       <View style={styles.resendContainer}>
                         <Text style={styles.resendCodeText}>
                           Have you not received the verification code?
@@ -148,7 +178,7 @@ const Emailaccount = () => {
                           <Feather name="refresh-cw" size={13} color="gray" />
                         </View>
                       </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                 </View>
                 <View style={styles.resendContainer}>
@@ -325,7 +355,7 @@ const styles = StyleSheet.create({
   contbtnTxt: {
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: 30,
     paddingTop: 20,
     paddingBottom: 100,
   },

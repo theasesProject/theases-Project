@@ -5,7 +5,7 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Carou from "./pages/Carou.jsx";
 import store from "./store/store";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect,useContext } from "react";
 import { Provider, useDispatch } from "react-redux";
 import UserProfile from "./pages/UserProfile.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
@@ -59,11 +59,14 @@ import OtpVerificationEmail from "./pages/OtpVerificationEmail.jsx";
 import Emailaccount from "./pages/Emailaccount.jsx";
 import OtpForgotEmail from "./pages/OtpForgotEmail.jsx"
 import ChangePassword from "./pages/ChangePassword.jsx";
+import OtpVerificationFromEmail from "./pages/OtpVerificationFromEmail.jsx"
 const Stack = createStackNavigator();
 import Toast from 'react-native-toast-message';
-
-
+import Context from './context/AuthContext.jsx';
+import {LoginContext} from "./context/AuthContext.jsx"
 function App() {
+    const { logindata, setLoginData } = useContext(LoginContext);
+
   // const toastConfig = {
   //   success: (props) => (
   //     <Toast
@@ -76,12 +79,13 @@ function App() {
   //   // Add more custom toast types here
   // };
   return (
+    <Context>
     <Provider store={store}>
       <StripeProvider
         publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHBLE_KEY}
       >
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Welcome">
+          <Stack.Navigator initialRouteName="NewHome">
             <Stack.Screen
               name="CarsList"
               component={CarsList}
@@ -355,11 +359,17 @@ function App() {
               component={ChangePassword}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="OtpVerificationFromEmail"
+              component={OtpVerificationFromEmail}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
           <Toast  />
         </NavigationContainer>
       </StripeProvider>
     </Provider>
+    </Context>
   );
 }
 

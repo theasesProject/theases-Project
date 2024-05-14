@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -18,6 +18,9 @@ import { Feather } from "@expo/vector-icons";
 import axios from "axios";
 import appConfig from "../appConfig";
 import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
+import { saveEmailForgot,savePasswordUser } from "../store/userSlice";
+import {LoginContext} from "../context/AuthContext.jsx"
 
 const { width, height } = Dimensions.get("screen");
 
@@ -29,7 +32,16 @@ const NewLogin = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { logindata, setLoginData } = useContext(LoginContext);
+console.log("context",logindata);
+  const dispatch = useDispatch();
 
+  const userEmail = (value) => {
+    dispatch(saveEmailForgot(value));
+  };
+  const userPassword = (value) => {
+    dispatch(savePasswordUser(value));
+  };
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -64,7 +76,63 @@ const NewLogin = () => {
     }
     setPasswordError(error);
   };
+  const otpVerifSend = async () => {
+    if (email) {
+      try {
+        setLoading(true); 
+        const response = await axios.post(
+          `http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/sendVerificationEmail`,
+          { email }
+        );
 
+        if (response.status === 200) {
+          console.log("Successfully OTP Verified")
+        
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Code sent successfully',
+          });
+        }
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("User not found");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found',
+            });
+          } else if (error.response.status === 500) {
+            console.log("Failed to send email");
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Failed to send email',
+            });
+          } else {
+            console.log("Other error:", error);
+          }
+        } else {
+          console.error("Network error:", error);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Network error',
+          });
+        }
+      } finally {
+        setLoading(false); 
+      }
+    } else {
+      console.log("Please enter a valid email");
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a valid email',
+      });
+    }
+  };
   const submitLogin = async () => {
     if (!emailError && !passwordError && email && password) {
       setLoading(true);
@@ -79,10 +147,13 @@ const NewLogin = () => {
   
         if (response.status === 200 && response.data.result && response.data.result.id) {
           const { id, token } = response.data.result;
+         await setEmail("")
+          await setPassword("")
   
           await AsyncStorage.setItem("userId", id.toString());
           await AsyncStorage.setItem("token", token);
-  
+          await setLoginData(true)
+          console.log(logindata,"after");
           navigation.navigate("NewHome");
           Toast.show({
             type: 'success',
@@ -110,6 +181,13 @@ const NewLogin = () => {
               text1: 'Error',
               text2: 'Account not verified. Please verify your email address',
             });
+            await userEmail(email)
+            await userPassword(password)
+            await otpVerifSend()
+            await navigation.navigate("OtpVerification");
+            setEmail("")
+            setPassword("")
+
           } else if (error.response.status === 403) {
             Toast.show({
               type: 'error',
@@ -172,6 +250,7 @@ const NewLogin = () => {
                     placeholderTextColor={"#cccccc"}
                     onChangeText={(text) => setEmail(text)}
                     keyboardType="email-address"
+                    value={email}
                   />
                   {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
                   <View style={styles.contPassEyeShow}>

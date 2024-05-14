@@ -163,12 +163,12 @@ const ChangePassword = () => {
                     onChangeText={(text) => setPassword(text)}
                     value={password}
                   />
-                  <TouchableOpacity
+                  <Pressable
                     style={styles.eyeIconContainer}
                     onPress={toggleNewPasswordVisibility}
                   >
                     <Feather name={showNewPassword ? "eye" : "eye-off"} size={20} color="#cccccc" />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
                   {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
                 <View>
@@ -183,12 +183,12 @@ const ChangePassword = () => {
                   <View>
                     
                   </View>
-                  <TouchableOpacity
+                  <Pressable
                     style={styles.eyeIconContainer}
                     onPress={toggleConfirmPasswordVisibility}
                   >
                     <Feather name={showConfirmPassword ? "eye" : "eye-off"} size={20} color="#cccccc" />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
                   {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
                 <View style={styles.pressableBtnSubmit}>

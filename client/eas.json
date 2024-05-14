@@ -14,5 +14,11 @@
   },
   "submit": {
     "production": {}
+  },
+  "extra": {
+    "eas": {
+      "projectId": "23c0b65b-8ab5-4a64-9a56-0ff2118515ad",
+      "owner": "theasesrbk"
+    }
   }
 }

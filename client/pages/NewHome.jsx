@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Platform, TextInput, TouchableOpacity, ImageBackground, FlatList, Pressable, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { googleMaps } from '../config.jsx'
 import axios from 'axios'
 import * as Location from 'expo-location';
+import appConfig from '../appConfig.js';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {LoginContext} from "../context/AuthContext.jsx"
 
 
 const { width, height } = Dimensions.get("window");
@@ -19,6 +22,7 @@ const backgroundHeight = Platform.OS === 'android' ? height * 0.59 : height * 0.
 
 
 const NewHome = () => {
+  const { logindata, setLoginData } = useContext(LoginContext);
 
 
   const dispatch = useDispatch();
@@ -38,6 +42,51 @@ const NewHome = () => {
     nextDay.setDate(nextDay.getDate() + 1);
     return nextDay.toISOString().split('T')[0];
   });
+  const [loadingValidate,setLoadingValidate]=useState(false)
+  useEffect(() => {
+    const verifyUser = async () => {
+      setLoadingValidate(true);
+  
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        console.log('No token found');
+        await AsyncStorage.removeItem("token");
+        await AsyncStorage.removeItem("userId");
+        await setLoginData(false);
+        // await navigation.navigate("newLogIn");
+      } else {
+        try {
+          const response = await axios.post(`http://${appConfig.PUBLIC_SERVER_IP}:5000/api/users/VerifyUser`, { token });
+          if (response.status === 200) {
+            setLoginData(true);
+          }
+        } catch (error) {
+          if (error.response) {
+            const { status, data } = error.response;
+            if (status === 404) {
+              await AsyncStorage.removeItem("token");
+              await AsyncStorage.removeItem("userId");
+              await setLoginData(false);
+              await navigation.navigate("newLogIn");
+            }
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Internal server error',
+            });
+            
+            setLoadingValidate(false);
+          }
+        }
+      }
+  
+      setLoadingValidate(false); 
+    };
+  
+    verifyUser();
+  }, []);
+  
   const [disabledDates, setDisabledDates] = useState({});
   const [markedDates, setMarkedDates] = useState([]);
   const [showAdditionalRow, setShowAdditionalRow] = useState(false);
@@ -284,6 +333,16 @@ const NewHome = () => {
       fontWeight: '500',
       marginLeft: 10,
     },
+    loaderValidate: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "rgba(0,0,0,0.5)",
+    },
   });
 
   const disablePastDates = () => {
@@ -529,9 +588,9 @@ const NewHome = () => {
                   <Text style={styles.textButton}>Book a car</Text>
                 )}
               </TouchableOpacity>
-              <Pressable onPress={() => navigation.navigate('Welcome')}>
+             {!logindata ? <Pressable onPress={() => navigation.navigate('Welcome')}>
                 <Text style={styles.secondText}>Sign in or create account</Text>
-              </Pressable>
+              </Pressable> : null}
             </View>
           </View>
         </View>
@@ -682,6 +741,11 @@ const NewHome = () => {
           )}
         </View>
       </Modal>
+      {loadingValidate && ( 
+          <View style={styles.loaderValidate}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        )}
     </View>
   );
 }
